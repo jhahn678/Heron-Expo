@@ -3,12 +3,12 @@ import ExploreStack from "./ExploreStack";
 import MyCatchesScreen from "../screens/catch/MyCatchesScreen";
 import MyLocationsScreen from "../screens/location/MyLocationsScreen";
 import MyProfileScreen from '../screens/profile/MyProfileScreen'
-import { MainTabsParams } from "./types";
+import { BottomTabsParams } from "./types";
 
 
-const MainTabs = (): JSX.Element => {
+const BottomTabs = (): JSX.Element => {
 
-    const Tabs = createBottomTabNavigator<MainTabsParams>();
+    const Tabs = createBottomTabNavigator<BottomTabsParams>();
 
     return(
         <Tabs.Navigator>
@@ -20,4 +20,4 @@ const MainTabs = (): JSX.Element => {
     )
 }
 
-export default MainTabs;
+export default BottomTabs;

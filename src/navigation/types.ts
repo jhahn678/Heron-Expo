@@ -2,7 +2,7 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps } from "@react-navigation/native"
 
-export type AppStackParams = {
+export type RootStackParams = {
     HomeAuthScreen: undefined,
     LoginAuthScreen: undefined,
     RegisterAuthScreenOne: undefined,
@@ -16,8 +16,8 @@ export type AppStackParams = {
     SaveMapScreen: undefined
 }
 
-export type AppStackScreenProps<T extends keyof AppStackParams> = 
-    NativeStackScreenProps<AppStackParams, T>
+export type RootStackScreenProps<T extends keyof RootStackParams> = 
+    NativeStackScreenProps<RootStackParams, T>
 
 export type ExploreStackParams = {
     ExploreScreen: undefined,
@@ -29,22 +29,22 @@ export type ExploreStackScreenProps<T extends keyof ExploreStackParams> =
     CompositeScreenProps<
         NativeStackScreenProps<ExploreStackParams, T>,
         CompositeScreenProps<
-            BottomTabScreenProps<MainTabsParams>,
-            NativeStackScreenProps<AppStackParams>   
+            BottomTabScreenProps<BottomTabsParams>,
+            NativeStackScreenProps<RootStackParams>   
         >
     >
 
-export type MainTabsParams = {
+export type BottomTabsParams = {
     ExploreStack: undefined,
     MyLocationsScreen: undefined,
     MyCatchesScreen: undefined,
     MyProfileScreen: undefined
 }
 
-export type MainTabsScreenProps<T extends keyof MainTabsParams> = 
+export type BottomTabsScreenProps<T extends keyof BottomTabsParams> = 
     CompositeScreenProps<
-        BottomTabScreenProps<MainTabsParams, T>,
-        NativeStackScreenProps<AppStackParams>
+        BottomTabScreenProps<BottomTabsParams, T>,
+        NativeStackScreenProps<RootStackParams>
     >
     
 

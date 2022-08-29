@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { AppStackScreenProps } from '../../navigation/types'
+import { RootStackScreenProps } from '../../navigation/types'
 
-const HomeAuthScreen = (props: AppStackScreenProps<'HomeAuthScreen'>): JSX.Element => {
+const HomeAuthScreen = (props: RootStackScreenProps<'HomeAuthScreen'>): JSX.Element => {
   return (
     <View>
       <Text>HomeAuthScreen</Text>

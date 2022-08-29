@@ -1,9 +1,9 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { AppStackScreenProps } from '../../../navigation/types'
+import { RootStackScreenProps } from '../../../navigation/types'
 
 
-const NewLocationScreen = (props: AppStackScreenProps<'NewLocationScreen'>) => {
+const NewLocationScreen = (props: RootStackScreenProps<'NewLocationScreen'>) => {
   return (
     <View>
       <Text>NewLocationScreen</Text>

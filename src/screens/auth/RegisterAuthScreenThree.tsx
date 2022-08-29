@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { AppStackScreenProps } from '../../navigation/types'
+import { RootStackScreenProps } from '../../navigation/types'
 
-const RegisterAuthScreenThree = (props: AppStackScreenProps<'RegisterAuthScreenThree'>) => {
+const RegisterAuthScreenThree = (props: RootStackScreenProps<'RegisterAuthScreenThree'>) => {
   return (
     <View>
       <Text>RegisterAuthScreenThree</Text>

@@ -3,7 +3,7 @@ import * as SplashScreen from 'expo-splash-screen'
 import * as SecureStore from 'expo-secure-store'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { useAuth } from './store/auth/useAuth'
-import AppStack from './navigation/AppStack'
+import AppStack from './navigation/RootStack'
 
 
 export default function App() { 

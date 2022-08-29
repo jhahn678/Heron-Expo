@@ -1,8 +1,8 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { AppStackScreenProps } from '../../../navigation/types'
+import { RootStackScreenProps } from '../../../navigation/types'
 
-const SaveMapScreen = (props: AppStackScreenProps<'SaveMapScreen'>) => {
+const SaveMapScreen = (props: RootStackScreenProps<'SaveMapScreen'>) => {
   return (
     <View>
       <Text>SaveMapScreen</Text>

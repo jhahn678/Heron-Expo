@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
-import MainTabs from "./MainTabs";
+import MainTabs from "./BottomTabs";
 import CameraScreen from "../screens/camera/CameraScreen";
 import NewCatchScreen from "../screens/catch/NewCatch/NewCatchScreen";
 import NewLocationScreen from "../screens/location/NewLocation/NewLocationScreen";
@@ -11,12 +11,12 @@ import RegisterAuthScreenOne from "../screens/auth/RegisterAuthScreenOne";
 import RegisterAuthScreenTwo from "../screens/auth/RegisterAuthScreenTwo";
 import RegisterAuthScreenThree from "../screens/auth/RegisterAuthScreenThree";
 import { useAuth } from "../store/auth/useAuth";
-import { AppStackParams } from "./types";
+import { RootStackParams } from "./types";
 
-const AppStack = (): JSX.Element => {
+const RootStack = (): JSX.Element => {
     
     const isUnauthenticated = useAuth(state => !state.isAuthenticated)
-    const Stack = createNativeStackNavigator<AppStackParams>();
+    const Stack = createNativeStackNavigator<RootStackParams>();
 
     return (
         <Stack.Navigator>
@@ -39,4 +39,4 @@ const AppStack = (): JSX.Element => {
     );
 }
 
-export default AppStack;
+export default RootStack;
