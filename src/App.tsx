@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
-import { View } from 'react-native'
 import * as SplashScreen from 'expo-splash-screen'
 import * as SecureStore from 'expo-secure-store'
-import { NavigationContainer } from '@react-navigation/native'
+import { Provider as PaperProvider } from 'react-native-paper'
 import { useAuth } from './store/auth/useAuth'
+import AppStack from './navigation/AppStack'
 
 
-export default function App() { const [appIsReady, setAppIsReady] = useState(false)
+export default function App() { 
+  const [appIsReady, setAppIsReady] = useState(false)
 
   const { autoSignIn } = useAuth()
 
@@ -26,11 +27,9 @@ export default function App() { const [appIsReady, setAppIsReady] = useState(fal
     prepareApp()
   },[])
 
-
   const hideSplashScreen = async () => {
     await SplashScreen.hideAsync()
   }
-
 
   useEffect(() => {
     if(appIsReady) {
@@ -42,12 +41,10 @@ export default function App() { const [appIsReady, setAppIsReady] = useState(fal
     return null;
   }
 
-
   return (
-    <NavigationContainer>
-
-          <View></View>
-    </NavigationContainer>
+    <PaperProvider>
+      <AppStack/>
+    </PaperProvider>
   );
 }
 
