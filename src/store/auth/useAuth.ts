@@ -1,4 +1,3 @@
-import { API_BASE_URL } from '@env'
 import create from 'zustand'
 import { axios } from '../../config/axios'
 import * as SecureStore from 'expo-secure-store'
