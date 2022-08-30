@@ -3,8 +3,18 @@ import * as SplashScreen from 'expo-splash-screen'
 import * as SecureStore from 'expo-secure-store'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { useAuth } from './store/auth/useAuth'
-import AppStack from './navigation/RootStack'
+import RootStack from './navigation/RootStack'
+import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
 
+const queryClient = new QueryClient({
+  defaultOptions: { 
+    queries: { 
+      refetchOnMount: false, 
+      refetchOnWindowFocus: false, 
+      refetchOnReconnect: false
+    } 
+  } 
+})
 
 export default function App() { 
   const [appIsReady, setAppIsReady] = useState(false)
@@ -42,9 +52,11 @@ export default function App() {
   }
 
   return (
-    <PaperProvider>
-      <AppStack/>
-    </PaperProvider>
+    <QueryClientProvider client={queryClient}>
+      <PaperProvider>
+        <RootStack/>
+      </PaperProvider>
+    </QueryClientProvider>
   );
 }
 
