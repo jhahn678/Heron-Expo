@@ -7,7 +7,7 @@ interface Credentials {
     password: string
 }
 
-interface AuthResponse {
+export interface AuthResponse {
     id: number
     token: string, 
     firstname: string
@@ -22,7 +22,7 @@ export interface AuthStore {
     avatar: string | null
     token: string | null
     isAuthenticated: boolean,
-    signIn: (credentials: Credentials) => Promise<void>
+    setUser: (data: AuthResponse) => Promise<void>,
     signOut: () => void,
     autoSignIn: (token: string) => Promise<void>
 }
@@ -35,15 +35,9 @@ export const useAuth = create<AuthStore>((set) => ({
     avatar: null,
     token: null,
     isAuthenticated: false,
-    signIn: async (credentials: Credentials) => {
-        try{
-            const res = await axios.post<AuthResponse>('/auth/login', credentials)
-            const { data } = res;
-            await SecureStore.setItemAsync('AUTH_TOKEN', data.token)
-            set({ isAuthenticated: true, ...data })
-        }catch(err){
-            alert('Could not authenticate')
-        }
+    setUser: async (data: AuthResponse) => {
+        await SecureStore.setItemAsync('AUTH_TOKEN', data.token)
+        set({ isAuthenticated: true, ...data})
     },
     signOut: async () => {
         await SecureStore.deleteItemAsync('AUTH_TOKEN')
