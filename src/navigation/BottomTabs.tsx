@@ -3,7 +3,7 @@ import ExploreStack from "./ExploreStack";
 import MyCatchesScreen from "../screens/catch/MyCatchesScreen";
 import MyLocationsScreen from "../screens/location/MyLocationsScreen";
 import MyProfileScreen from '../screens/profile/MyProfileScreen'
-import { BottomTabsParams } from "./types";
+import { BottomTabsParams } from "../types/navigation";
 
 
 const BottomTabs = (): JSX.Element => {
@@ -11,7 +11,7 @@ const BottomTabs = (): JSX.Element => {
     const Tabs = createBottomTabNavigator<BottomTabsParams>();
 
     return(
-        <Tabs.Navigator>
+        <Tabs.Navigator screenOptions={{ headerShown: false }}>
             <Tabs.Screen name='ExploreStack' component={ExploreStack}/>
             <Tabs.Screen name='MyCatchesScreen' component={MyCatchesScreen}/>
             <Tabs.Screen name='MyLocationsScreen' component={MyLocationsScreen}/>

@@ -11,7 +11,8 @@ import RegisterAuthScreenOne from "../screens/auth/RegisterAuthScreenOne";
 import RegisterAuthScreenTwo from "../screens/auth/RegisterAuthScreenTwo";
 import RegisterAuthScreenThree from "../screens/auth/RegisterAuthScreenThree";
 import { useAuth } from "../store/auth/useAuth";
-import { RootStackParams } from "./types";
+import { RootStackParams } from "../types/navigation";
+import { NavigationContainer } from "@react-navigation/native";
 
 const RootStack = (): JSX.Element => {
     
@@ -19,23 +20,33 @@ const RootStack = (): JSX.Element => {
     const Stack = createNativeStackNavigator<RootStackParams>();
 
     return (
-        <Stack.Navigator>
-            { isUnauthenticated &&
-                <Stack.Group>
-                    <Stack.Screen name="HomeAuthScreen" component={HomeAuthScreen}/>
-                    <Stack.Screen name="LoginAuthScreen" component={LoginAuthScreen}/>
-                    <Stack.Screen name="RegisterAuthScreenOne" component={RegisterAuthScreenOne}/>
-                    <Stack.Screen name="RegisterAuthScreenTwo" component={RegisterAuthScreenTwo}/>
-                    <Stack.Screen name="RegisterAuthScreenThree" component={RegisterAuthScreenThree}/>
-                </Stack.Group>
-            }
-            <Stack.Screen name='MainTabs' component={MainTabs}/>
-            <Stack.Screen name='NewCatchScreen' component={NewCatchScreen}/>
-            <Stack.Screen name='NewLocationScreen' component={NewLocationScreen}/>
-            <Stack.Screen name='CameraScreen' component={CameraScreen}/>
-            <Stack.Screen name='ViewMapScreen' component={ViewMapScreen}/>
-            <Stack.Screen name='SaveMapScreen' component={SaveMapScreen}/>
-        </Stack.Navigator>
+        <NavigationContainer>
+            <Stack.Navigator screenOptions={{ headerShown: false }}>
+                { isUnauthenticated &&
+                    <Stack.Group>
+                        <Stack.Screen name="HomeAuthScreen" component={HomeAuthScreen}/>
+                        <Stack.Screen name="LoginAuthScreen" component={LoginAuthScreen}
+                            options={{ headerShown: true, headerTitle: 'Sign In' }}
+                        />
+                        <Stack.Screen name="RegisterAuthScreenOne" component={RegisterAuthScreenOne} 
+                            options={{ headerShown: true, headerTitle: 'Step 1 of 3' }}
+                        />
+                        <Stack.Screen name="RegisterAuthScreenTwo" component={RegisterAuthScreenTwo}
+                            options={{ headerShown: true, headerTitle: 'Step 2 of 3' }}
+                        />
+                        <Stack.Screen name="RegisterAuthScreenThree" component={RegisterAuthScreenThree}
+                             options={{ headerShown: true, headerTitle: 'Step 3 of 3' }}
+                        />
+                    </Stack.Group>
+                }
+                <Stack.Screen name='MainTabs' component={MainTabs}/>
+                <Stack.Screen name='NewCatchScreen' component={NewCatchScreen}/>
+                <Stack.Screen name='NewLocationScreen' component={NewLocationScreen}/>
+                <Stack.Screen name='CameraScreen' component={CameraScreen}/>
+                <Stack.Screen name='ViewMapScreen' component={ViewMapScreen}/>
+                <Stack.Screen name='SaveMapScreen' component={SaveMapScreen}/>
+            </Stack.Navigator>
+        </NavigationContainer>
     );
 }
 
