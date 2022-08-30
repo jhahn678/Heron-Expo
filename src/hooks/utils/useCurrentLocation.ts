@@ -1,17 +1,26 @@
-import { useState, useEffect } from 'react'
+import { useEffect } from 'react'
 import { 
     LocationObject,
     getCurrentPositionAsync, 
     getForegroundPermissionsAsync, 
-    requestForegroundPermissionsAsync 
+    requestForegroundPermissionsAsync
 } from 'expo-location'
-    
-type GetCurrentLocationFunction = () => Promise<LocationObject>
+import { useLocationStore } from '../../store/location/useLocationStore'
 
-export const useCurrentLocation = (): GetCurrentLocationFunction => {
+interface GetCurrentLocationResult {
+    getCurrentLocation: () => Promise<LocationObject>
+    hasPermission: boolean
+}
 
-    const [hasPermission, setHasPermission] = useState(false)
-    
+export const useCurrentLocation = (): GetCurrentLocationResult => {
+
+    const { 
+        setCoordinates,
+        setIsFetching,
+        setHasPermission,
+        hasPermission
+    } = useLocationStore()
+
     useEffect(() => {
         (async () => {
             const res = await getForegroundPermissionsAsync()
@@ -20,12 +29,18 @@ export const useCurrentLocation = (): GetCurrentLocationFunction => {
     },[])
 
     const getCurrentLocation = async () => {
+        setIsFetching(true)
         if(!hasPermission){
             const res = await requestForegroundPermissionsAsync()
             setHasPermission(res.status === 'granted')
         }
-        return (await getCurrentPositionAsync())
+        const result = await getCurrentPositionAsync()
+        setIsFetching(false)
+        setCoordinates(result.coords)
+        return result;
     }
-    
-    return getCurrentLocation;
+    return {
+        getCurrentLocation,
+        hasPermission
+    }
 }
