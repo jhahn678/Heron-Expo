@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/core'
 import { useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar'
 import uuid from 'react-native-uuid'
-import { RootStackScreenProps } from '../../navigation/types'
+import { RootStackScreenProps } from '../../types/navigation'
 
 
 const CameraScreen = (props: RootStackScreenProps<'CameraScreen'>): JSX.Element => {

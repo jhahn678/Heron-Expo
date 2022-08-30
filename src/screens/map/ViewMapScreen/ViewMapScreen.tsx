@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { RootStackScreenProps } from '../../../navigation/types'
+import { RootStackScreenProps } from '../../../types/navigation'
 
 const ViewMapScreen = (props: RootStackScreenProps<'ViewMapScreen'>) => {
   

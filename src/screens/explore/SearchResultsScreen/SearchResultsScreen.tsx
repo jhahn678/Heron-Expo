@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { ExploreStackScreenProps } from '../../../navigation/types'
+import { ExploreStackScreenProps } from '../../../types/navigation'
 
 const SearchResultsScreen = (props: ExploreStackScreenProps<'SearchResultsScreen'>) => {
   return (

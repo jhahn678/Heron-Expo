@@ -1,6 +1,6 @@
 import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
-import { BottomTabsScreenProps } from '../../navigation/types'
+import { BottomTabsScreenProps } from '../../types/navigation'
 
 const MyProfileScreen = (props: BottomTabsScreenProps<'MyProfileScreen'>) => {
   return (
