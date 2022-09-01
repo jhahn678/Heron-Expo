@@ -8,7 +8,12 @@ export type WaterbodyClassification =
     'marsh' | 'oxbow' | 'pond' | 'reservoir' | 'river' | 
     'slough' | 'stream' | 'strait' | 'unknown'
 
-
+export const waterbodyClassifications: WaterbodyClassification[] = [
+    'bay', 'beach', 'bayou', 'bend', 'channel', 'creek',
+    'dock', 'harbor', 'lagoon', 'lake', 'marsh', 'oxbow',
+    'pond', 'reservoir', 'river', 'slough', 'stream', 
+    'strait', 'unknown'
+]
 
 export interface IWaterbody {
     id: number,
