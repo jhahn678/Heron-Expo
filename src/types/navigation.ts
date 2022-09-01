@@ -22,7 +22,7 @@ export type RootStackScreenProps<T extends keyof RootStackParams> =
 export type ExploreStackParams = {
     ExploreScreen: undefined,
     SearchBarScreen: undefined,
-    SearchResultsScreen: undefined
+    SearchResultsScreen: { classification?: string }
 }
 
 export type ExploreStackScreenProps<T extends keyof ExploreStackParams> = 
