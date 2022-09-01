@@ -3,13 +3,18 @@ import React from 'react'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 
 const SearchResultsScreen = (props: ExploreStackScreenProps<'SearchResultsScreen'>) => {
+
   return (
-    <View>
-      <Text>SearchResultsScreen</Text>
+    <View style={styles.container}>
+
     </View>
   )
 }
 
 export default SearchResultsScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    height: '100%'
+  }
+})
