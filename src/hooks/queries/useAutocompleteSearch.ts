@@ -31,7 +31,7 @@ const autocompleteGeoplaces = async (
 }
 
 
-export const useAutoCompleteQuery = (
+export const useAutoCompleteSearch = (
     { value, lng, lat }: AutocompleteQuery
 ) => {
 
