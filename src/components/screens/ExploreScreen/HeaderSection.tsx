@@ -28,6 +28,7 @@ export default HeaderSection
 const styles = StyleSheet.create({
     header: {
         paddingTop: 72,
+        paddingHorizontal: '6%',
         display: 'flex',
     },
     titleGroup: {

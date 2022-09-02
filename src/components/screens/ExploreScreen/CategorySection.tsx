@@ -1,16 +1,21 @@
 import { useState } from 'react'
-import { StyleSheet, Text, View, Dimensions } from 'react-native'
-import { Surface } from 'react-native-paper'
+import { StyleSheet, View} from 'react-native'
 import CategoryChip from '../../buttons/CategoryChip'
 import { ExploreStackScreenProps } from '../../../types/navigation'
+import { WaterbodyClassification } from '../../../types/Waterbody'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
 }
 
+interface data {
+    label: string
+    value: WaterbodyClassification
+}
+
 const CategorySection = ({ navigation }: Props) => {
 
-    const [classifications] = useState([
+    const [classifications] = useState<data[]>([
         { label: 'Rivers', value: 'river' },
         { label: 'Lakes', value: 'lake' },
         { label: 'Creeks', value: 'creek' },
@@ -19,8 +24,8 @@ const CategorySection = ({ navigation }: Props) => {
 
     return (
         <View style={styles.container}>
-            { classifications.map(({ label, value}) =>
-                <CategoryChip 
+            { classifications.map(({ label, value }) =>
+                <CategoryChip key={label}
                     navigation={navigation}
                     value={value} 
                     label={label}
@@ -34,10 +39,12 @@ export default CategorySection
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
         flexDirection: 'row',
         flexWrap: 'wrap',
+        alignItems: 'center',
         justifyContent: 'space-around',
-        marginTop: 16
+        width: '100%',
+        marginTop: 16,
+        paddingHorizontal: '5%'
     }
 })
