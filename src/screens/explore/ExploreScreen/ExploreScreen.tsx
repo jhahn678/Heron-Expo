@@ -1,4 +1,4 @@
-import { StyleSheet, View } from 'react-native'
+import { StyleSheet, ScrollView } from 'react-native'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import CategorySection from '../../../components/screens/ExploreScreen/CategorySection'
 import HeaderSection from '../../../components/screens/ExploreScreen/HeaderSection'
@@ -7,7 +7,7 @@ import NearbySection from '../../../components/screens/ExploreScreen/NearbySecti
 const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>) => {
 
   return (
-    <View style={styles.container}>
+    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: '10%'}}>
       <HeaderSection navigation={navigation}/>
       <CategorySection navigation={navigation}/>
       <NearbySection navigation={navigation}/>
@@ -15,7 +15,7 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
       {/* <ContactsActivity/> */}
       {/* <LakesNearby/> */}
       {/* <RiversNearby/> */}
-    </View>
+    </ScrollView>
   )
 }
 
@@ -23,7 +23,6 @@ export default ExploreScreen
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    paddingHorizontal: '6%',
+
   }
 })
