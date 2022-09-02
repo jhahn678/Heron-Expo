@@ -6,6 +6,7 @@ import { ExploreStackParams } from "../types/navigation";
 import { useCurrentLocation } from "../hooks/utils/useCurrentLocation";
 import { useEffect } from "react";
 import { useLocationStore } from "../store/location/useLocationStore";
+import WaterbodyScreen from "../screens/waterbody/WaterbodyScreen";
 
 const ExploreStack = () => {
 
@@ -23,6 +24,7 @@ const ExploreStack = () => {
             <Stack.Screen name='ExploreScreen' component={ExploreScreen}/>
             <Stack.Screen name='SearchBarScreen' component={SearchBarScreen}/>
             <Stack.Screen name='SearchResultsScreen' component={SearchResultsScreen}/>
+            <Stack.Screen name='WaterbodyScreen' component={WaterbodyScreen}/>
         </Stack.Navigator>
     )   
 }
