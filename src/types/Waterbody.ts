@@ -1,5 +1,6 @@
 import { GeometryCollection, MultiLineString, MultiPolygon } from "geojson"
 import { AdminOneName } from "./AdminOne"
+import { IMedia } from "./Media"
 
 
 export type WaterbodyClassification = 
@@ -34,12 +35,25 @@ export interface AutocompleteWaterbody extends IWaterbody{
     type: 'WATERBODY'
 }
 
+export interface PopulatedWaterbody extends IWaterbody {
+    geometries: GeometryCollection | MultiLineString | MultiPolygon,
+}
+
 export interface SearchWaterbody extends IWaterbody {
     distance?: number
     rank: number
 }
 
-
-export interface PopulatedWaterbody extends IWaterbody {
-    geometries: GeometryCollection | MultiLineString | MultiPolygon,
+export interface WaterbodyListItem extends Omit<SearchWaterbody, 'weight' | 'oid'>{
+    media: Pick<IMedia, 'url'>[]
+    total_catches: number
+    total_locations: number
 }
+
+export interface NearbyWaterbody extends WaterbodyListItem {
+    distance: number
+}
+
+
+
+
