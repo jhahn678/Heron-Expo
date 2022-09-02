@@ -4,9 +4,11 @@ import * as SecureStore from 'expo-secure-store'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { useAuth } from './store/auth/useAuth'
 import RootStack from './navigation/RootStack'
+import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
+const { API_GRAPH_URL } = process.env;
 
-const queryClient = new QueryClient({
+const reactQueryClient = new QueryClient({
   defaultOptions: { 
     queries: { 
       refetchOnMount: false, 
@@ -14,6 +16,23 @@ const queryClient = new QueryClient({
       refetchOnReconnect: false
     } 
   } 
+})
+
+const apolloClient = new ApolloClient({
+  uri: API_GRAPH_URL!,
+  cache: new InMemoryCache({
+    typePolicies: {
+      Waterbody: {
+        fields: {
+          classification: {
+            read(value){
+              return value.charAt(0).toUpperCase() + value.slice(1)
+            }
+          }
+        }
+      }
+    }
+  })
 })
 
 export default function App() { 
@@ -52,11 +71,13 @@ export default function App() {
   }
 
   return (
-    <QueryClientProvider client={queryClient}>
-      <PaperProvider>
-        <RootStack/>
-      </PaperProvider>
-    </QueryClientProvider>
+    <ApolloProvider client={apolloClient}>
+      <QueryClientProvider client={reactQueryClient}>
+        <PaperProvider>
+          <RootStack/>
+        </PaperProvider>
+      </QueryClientProvider>
+    </ApolloProvider>
   );
 }
 
