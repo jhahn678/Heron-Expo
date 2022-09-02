@@ -1,11 +1,13 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
-import { Surface, Text, useTheme } from 'react-native-paper'
+import { StyleSheet, TouchableOpacity } from 'react-native'
+import { Text, useTheme } from 'react-native-paper'
+import { useSearchParamStore } from '../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../types/navigation'
+import { WaterbodyClassification } from '../../types/Waterbody'
 
 interface Props {
   /** value to be send to for query */
-  value: string,
+  value: WaterbodyClassification,
   /** label to be displayed */
   label: string
   navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -14,15 +16,22 @@ interface Props {
 const CategoryChip = ({ value, label, navigation }: Props) => {
 
   const { colors } = useTheme()
+  const { classificationsAppend } = useSearchParamStore()
+
+  const handleSelect = () => {
+    classificationsAppend(value)
+    navigation.navigate('SearchResultsScreen')
+  }
 
   return (
-      <View style={[styles.container, { 
-        shadowColor: colors.backdrop, 
+    <TouchableOpacity onPress={handleSelect} 
+      style={[styles.container, {
+        elevation: 3, shadowColor: colors.backdrop, 
         shadowOffset: { height: 2, width: 0 }, 
-        shadowRadius: 2, shadowOpacity: .2 }
-      ]}>
-        <Text>{label}</Text>
-      </View>
+        shadowRadius: 2, shadowOpacity: .2 
+    }]}>
+        <Text style={styles.label}>{label}</Text>
+    </TouchableOpacity>
   )
 }
 
@@ -30,14 +39,15 @@ export default CategoryChip
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center',
     height: 72,
     width: '45%',
     backgroundColor: 'white',
     marginTop: '5%',
-    borderRadius: 12
+    borderRadius: 12,
+  },
+  label: {
+    fontWeight: '700'
   }
 })
