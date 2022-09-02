@@ -1,7 +1,7 @@
 import React from 'react'
 import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { useCurrentLocation } from '../../hooks/utils/useCurrentLocation'
-import { Text, Button } from 'react-native-paper'
+import { Text, Button, useTheme } from 'react-native-paper'
 
 interface Props {
     for: 'waterbodies',
@@ -11,9 +11,10 @@ interface Props {
 const EnableLocationButton = (props: Props) => {
 
     const { getCurrentLocation } = useCurrentLocation()
+    const { colors } = useTheme()
 
     return (
-        <View style={[styles.container, props.style]}>
+        <View style={[styles.container, { shadowColor: colors.backdrop, }, props.style]}>
             <Text style={styles.caption}>
                 { props.for === 'waterbodies' ?
                     'Turn on location to see nearby waterbodies':
@@ -34,13 +35,21 @@ export default EnableLocationButton
 
 const styles = StyleSheet.create({
     container: {
-        height: 200,
         width: '100%',
         alignItems: 'center',
         alignSelf: 'center',
+        backgroundColor: 'white',
+        elevation: 3,
+        shadowOffset: { height: 2, width: 0 }, 
+        shadowRadius: 2, 
+        shadowOpacity: .2,
+        borderRadius: 12,
+        justifyContent: 'center',
+        padding: 32
     },
     caption: {
-        fontSize: 14,
-        marginVertical: 12,
+        fontSize: 16,
+        marginBottom: 12,
+        textAlign: 'center',
     }
 })
