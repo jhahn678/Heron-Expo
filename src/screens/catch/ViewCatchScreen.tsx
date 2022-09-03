@@ -1,7 +1,12 @@
 import { StyleSheet, Text, View } from 'react-native'
+import { RootStackScreenProps } from '../../types/navigation'
 import React from 'react'
 
-const ViewCatchScreen = () => {
+interface Props {
+  navigation: RootStackScreenProps<'ViewCatchScreen'>['navigation']
+}
+
+const ViewCatchScreen = ({ navigation }: Props) => {
   return (
     <View>
       <Text>ViewCatchScreen</Text>
