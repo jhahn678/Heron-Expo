@@ -4,46 +4,21 @@ import * as SecureStore from 'expo-secure-store'
 import { Provider as PaperProvider } from 'react-native-paper'
 import { useAuth } from './store/auth/useAuth'
 import RootStack from './navigation/RootStack'
-import { ApolloClient, InMemoryCache, ApolloProvider } from '@apollo/client'
-import { QueryClient, QueryClientProvider } from '@tanstack/react-query'
-const { API_GRAPH_URL } = process.env;
-
-const reactQueryClient = new QueryClient({
-  defaultOptions: { 
-    queries: { 
-      refetchOnMount: false, 
-      refetchOnWindowFocus: false, 
-      refetchOnReconnect: false
-    } 
-  } 
-})
-
-const apolloClient = new ApolloClient({
-  uri: API_GRAPH_URL!,
-  cache: new InMemoryCache({
-    typePolicies: {
-      Waterbody: {
-        fields: {
-          classification: {
-            read(value){
-              return value.charAt(0).toUpperCase() + value.slice(1)
-            }
-          }
-        }
-      }
-    }
-  })
-})
+import { ApolloProvider } from '@apollo/client'
+import { apolloClient } from './config/apollo'
+import { QueryClientProvider } from '@tanstack/react-query'
+import { reactQueryClient } from './config/react-query'
+import { SecureStoreKeys } from './types/SecureStore'
 
 export default function App() { 
   const [appIsReady, setAppIsReady] = useState(false)
 
-  const { autoSignIn } = useAuth()
+  const autoSignIn = useAuth(state => state.autoSignIn)
 
   const prepareApp = async () => {
     try{
       await SplashScreen.preventAutoHideAsync()
-      const token = await SecureStore.getItemAsync('AUTH_TOKEN')
+      const token = await SecureStore.getItemAsync(SecureStoreKeys.REFRESH_TOKEN)
       if(token) await autoSignIn(token)
     }catch(err){
       console.warn(err)
@@ -69,6 +44,8 @@ export default function App() {
   if(!appIsReady){
     return null;
   }
+
+
 
   return (
     <ApolloProvider client={apolloClient}>
