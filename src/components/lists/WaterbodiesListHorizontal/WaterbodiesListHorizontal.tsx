@@ -1,29 +1,28 @@
 import { FlashList } from '@shopify/flash-list'
 import WaterbodiesListItem from './WaterbodiesListItem'
-import { ExploreStackScreenProps } from '../../../types/navigation'
 import { WaterbodyListItem } from '../../../types/Waterbody'
 import ListFooterSeeMore from '../shared/ListFooterSeeMore'
 
 interface Props<T> {
     data: T[]
-    navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation'],
+    navigateToWaterbody: (id: number) => void
     navigateViewMore: () => void
 }
 
 const WaterbodiesListHorizontal = <T extends WaterbodyListItem>({ 
-    navigation, data, navigateViewMore 
+    data, navigateViewMore, navigateToWaterbody 
 }: Props<T>) => {
-    
-    const navigateWaterbody = (id: number) => navigation.navigate('WaterbodyScreen', { id })
 
     return (
-        <FlashList horizontal data={data}
-            contentContainerStyle={{ paddingHorizontal: '1%' }}
+        <FlashList 
+            horizontal data={data}
             estimatedItemSize={300}
+            showsHorizontalScrollIndicator={false}
+            contentContainerStyle={{ paddingHorizontal: '1%' }}
             renderItem={({ item }) => (
                 <WaterbodiesListItem 
-                    navigate={navigateWaterbody}
                     data={item}
+                    navigate={() => navigateToWaterbody(item.id)}
                 />
             )} 
             ListFooterComponent={() => <ListFooterSeeMore onPress={navigateViewMore}/>}
