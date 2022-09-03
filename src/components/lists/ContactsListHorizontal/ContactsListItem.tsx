@@ -1,7 +1,8 @@
 import React from 'react'
 import { StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native'
-import { Avatar, Text } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { IContact } from '../../../types/User'
+import Avatar from '../../users/Avatar'
 
 interface Props<T> {
   data: T
@@ -15,11 +16,7 @@ const ContactsListItem = <T extends IContact>({
 
   return (
     <Pressable onPress={onPress} style={[styles.container, style]}>
-      {
-        data.avatar ?  
-        <Avatar.Image source={{ uri: data.avatar }}/> : 
-        <Avatar.Text label={data.fullname.split(' ').map(x => x[0]).join('')}/> 
-      }
+      <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname}/>
       <Text style={styles.name}>{data.fullname}</Text>
     </Pressable>
   )
