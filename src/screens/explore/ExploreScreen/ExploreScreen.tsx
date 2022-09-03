@@ -1,8 +1,9 @@
 import { StyleSheet, ScrollView } from 'react-native'
 import { ExploreStackScreenProps } from '../../../types/navigation'
-import CategorySection from '../../../components/screens/ExploreScreen/CategorySection'
-import HeaderSection from '../../../components/screens/ExploreScreen/HeaderSection'
-import NearbySection from '../../../components/screens/ExploreScreen/NearbySection'
+import CategorySection from './sections/CategorySection'
+import HeaderSection from './sections/HeaderSection'
+import NearbySection from './sections/NearbySection'
+import ContactsSection from './sections/ContactsSection'
 
 const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>) => {
 
@@ -11,7 +12,7 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
       <HeaderSection navigation={navigation}/>
       <CategorySection navigation={navigation}/>
       <NearbySection navigation={navigation}/>
-      {/* <BrowseContacts/> */}
+      <ContactsSection navigation={navigation}/>
       {/* <ContactsActivity/> */}
       {/* <LakesNearby/> */}
       {/* <RiversNearby/> */}
