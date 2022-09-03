@@ -11,15 +11,6 @@ export interface ILocation {
     hexcolor: string
 }
 
-export interface LocationMedia {
-    id: number,
-    user: number,
-    location: number,
-    key: string,
-    url: string,
-    created_at: Date
-}
-
 export interface NewLocation {
     title?: string
     description?: string

@@ -1,6 +1,6 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
-import { CompositeScreenProps } from "@react-navigation/native"
+import { CompositeScreenProps, NavigationProp } from "@react-navigation/native"
 
 export type RootStackParams = {
     HomeAuthScreen: undefined,
@@ -14,6 +14,8 @@ export type RootStackParams = {
     CameraScreen: undefined
     ViewMapScreen: undefined
     SaveMapScreen: undefined
+    UserProfileScreen: { id: number },
+    UserSearchScreen: undefined
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 
@@ -48,4 +50,5 @@ export type BottomTabsScreenProps<T extends keyof BottomTabsParams> =
         NativeStackScreenProps<RootStackParams>
     >
     
+export type UseNavigateParams = NavigationProp<RootStackParams & BottomTabsParams & ExploreStackParams>
 

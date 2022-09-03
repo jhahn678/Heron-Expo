@@ -3,7 +3,6 @@ export interface MediaInput {
     key: string
 }
 
-
 export interface IMedia {
     id: number,
     user: number,
@@ -11,3 +10,17 @@ export interface IMedia {
     key: string,
     created_at: Date
 }
+
+export interface CatchMedia extends IMedia{
+    catch: number
+}
+
+export interface LocationMedia extends IMedia {
+    location: number
+}
+
+export interface WaterbodyMedia extends IMedia {
+    waterbody: number
+}
+
+export interface UserAvatar extends IMedia{}
