@@ -6,11 +6,11 @@ import { ExploreStackScreenProps } from '../../types/navigation'
 import { WaterbodyClassification } from '../../types/Waterbody'
 
 interface Props {
+  navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
   /** value to be send to for query */
   value: WaterbodyClassification,
   /** label to be displayed */
   label: string
-  navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
 }
 
 const CategoryChip = ({ value, label, navigation }: Props) => {
