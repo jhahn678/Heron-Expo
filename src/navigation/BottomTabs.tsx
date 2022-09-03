@@ -2,7 +2,7 @@ import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ExploreStack from "./ExploreStack";
 import MyCatchesScreen from "../screens/catch/MyCatchesScreen";
 import MyLocationsScreen from "../screens/location/MyLocationsScreen";
-import MyProfileScreen from '../screens/profile/MyProfileScreen'
+import MyProfileScreen from '../screens/profile/MyProfileScreen/MyProfileScreen'
 import { BottomTabsParams } from "../types/navigation";
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
