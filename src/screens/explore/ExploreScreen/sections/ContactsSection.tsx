@@ -48,7 +48,7 @@ const styles = StyleSheet.create({
     container: {
         height: 150,
         width: '100%',
-        marginTop: 24,
+        marginTop: 32,
     },
     title: {
         fontWeight: '600',

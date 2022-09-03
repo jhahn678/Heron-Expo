@@ -4,8 +4,12 @@ import CategorySection from './sections/CategorySection'
 import HeaderSection from './sections/HeaderSection'
 import NearbySection from './sections/NearbySection'
 import ContactsSection from './sections/ContactsSection'
+import ContactsActivity from './sections/ContactsActivity'
+import { useAuth } from '../../../store/auth/useAuth'
 
 const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>) => {
+
+  const isAuthenticated = useAuth(state => state.isAuthenticated)
   
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: '10%'}}>
@@ -13,7 +17,7 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
       <CategorySection navigation={navigation}/>
       <NearbySection navigation={navigation}/>
       <ContactsSection navigation={navigation}/>
-      {/* <ContactsActivity/> */}
+      { !isAuthenticated && <ContactsActivity navigation={navigation}/> }
       {/* <LakesNearby/> */}
       {/* <RiversNearby/> */}
     </ScrollView>

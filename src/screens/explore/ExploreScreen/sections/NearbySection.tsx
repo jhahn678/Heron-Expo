@@ -67,7 +67,7 @@ export default NearbySection
 const styles = StyleSheet.create({
     container: {
         height: 370,
-        marginTop: 24,
+        marginTop: 32,
     },
     title: {
         fontSize: 24,
