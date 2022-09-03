@@ -6,7 +6,7 @@ import NearbySection from './sections/NearbySection'
 import ContactsSection from './sections/ContactsSection'
 
 const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>) => {
-
+  
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: '10%'}}>
       <HeaderSection navigation={navigation}/>
