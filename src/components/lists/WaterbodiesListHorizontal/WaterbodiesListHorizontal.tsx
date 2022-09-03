@@ -18,7 +18,7 @@ const WaterbodiesListHorizontal = <T extends WaterbodyListItem>({
             horizontal data={data}
             estimatedItemSize={300}
             showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingHorizontal: '1%' }}
+            contentContainerStyle={{ paddingLeft: 20 }}
             renderItem={({ item }) => (
                 <WaterbodiesListItem 
                     data={item}
