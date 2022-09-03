@@ -10,12 +10,14 @@ export type RootStackParams = {
     RegisterAuthScreenThree: undefined,
     MainTabs: undefined,
     NewCatchScreen: undefined
+    ViewCatchScreen: { id: number }
     NewLocationScreen: undefined
-    CameraScreen: undefined
-    ViewMapScreen: undefined
-    SaveMapScreen: undefined
+    ViewLocationScreen: { id: number }
     UserProfileScreen: { id: number },
     UserSearchScreen: undefined
+    ViewMapScreen: undefined
+    SaveMapScreen: undefined
+    CameraScreen: undefined
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 
