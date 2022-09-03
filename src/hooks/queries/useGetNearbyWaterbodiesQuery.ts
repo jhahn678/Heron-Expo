@@ -3,7 +3,7 @@ import { NearbyWaterbody } from '../../types/Waterbody'
 
 const GET_WATERBODIES = gql`
     query GetWaterbodies($queryLocation: QueryLocation, $limit: Int, $sort: Sort) {
-        getWaterbodies(queryLocation: $queryLocation, limit: $limit, sort: $sort) {
+        waterbodies(queryLocation: $queryLocation, limit: $limit, sort: $sort) {
             id
             name
             classification
@@ -28,11 +28,13 @@ interface GetNearbyWaterbodiesArgs {
     latitude: number | null
 }
 
+type GetNearbyWaterbodies= { waterbodies: NearbyWaterbody[] }
+
 export const useGetNearbyWaterbodiesQuery = ({
     longitude, latitude
 }: GetNearbyWaterbodiesArgs) => {
 
-    const result = useQuery<NearbyWaterbody[]>(GET_WATERBODIES, {
+    const result = useQuery<GetNearbyWaterbodies>(GET_WATERBODIES, {
         fetchPolicy: 'cache-first',
         skip: !Boolean(latitude && longitude),
         variables: { 
