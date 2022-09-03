@@ -32,7 +32,7 @@ export interface RecentActivity extends Pick<
 >{
     user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
     waterbody: Pick<IWaterbody, 'id' | 'name'>
-    media: Pick<IMedia, 'url'>
+    media: Pick<IMedia, 'url'>[]
 }
 
 export interface GetRecentActivity {
