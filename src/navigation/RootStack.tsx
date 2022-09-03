@@ -1,4 +1,7 @@
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import { useAuth } from "../store/auth/useAuth";
+import { RootStackParams } from "../types/navigation";
+import { NavigationContainer } from "@react-navigation/native";
 import MainTabs from "./BottomTabs";
 import CameraScreen from "../screens/camera/CameraScreen";
 import NewCatchScreen from "../screens/catch/NewCatch/NewCatchScreen";
@@ -10,11 +13,10 @@ import LoginAuthScreen from "../screens/auth/LoginAuthScreen";
 import RegisterAuthScreenOne from "../screens/auth/RegisterAuthScreenOne";
 import RegisterAuthScreenTwo from "../screens/auth/RegisterAuthScreenTwo";
 import RegisterAuthScreenThree from "../screens/auth/RegisterAuthScreenThree";
-import { useAuth } from "../store/auth/useAuth";
-import { RootStackParams } from "../types/navigation";
-import { NavigationContainer } from "@react-navigation/native";
 import UserProfileScreen from "../screens/profile/UserProfileScreen/UserProfileScreen";
 import SearchUsersScreen from "../screens/contacts/UserSearchScreen/UserSearchScreen";
+import ViewCatchScreen from "../screens/catch/ViewCatchScreen";
+import ViewLocationScreen from "../screens/location/ViewLocationScreen";
 
 const RootStack = (): JSX.Element => {
     
@@ -49,6 +51,8 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='SaveMapScreen' component={SaveMapScreen}/>
                 <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}/>
                 <Stack.Screen name='UserSearchScreen' component={SearchUsersScreen}/>
+                <Stack.Screen name='ViewCatchScreen' component={ViewCatchScreen}/>
+                <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
