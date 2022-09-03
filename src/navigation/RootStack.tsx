@@ -13,6 +13,8 @@ import RegisterAuthScreenThree from "../screens/auth/RegisterAuthScreenThree";
 import { useAuth } from "../store/auth/useAuth";
 import { RootStackParams } from "../types/navigation";
 import { NavigationContainer } from "@react-navigation/native";
+import UserProfileScreen from "../screens/profile/UserProfileScreen/UserProfileScreen";
+import SearchUsersScreen from "../screens/contacts/UserSearchScreen/UserSearchScreen";
 
 const RootStack = (): JSX.Element => {
     
@@ -45,6 +47,8 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='CameraScreen' component={CameraScreen}/>
                 <Stack.Screen name='ViewMapScreen' component={ViewMapScreen}/>
                 <Stack.Screen name='SaveMapScreen' component={SaveMapScreen}/>
+                <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}/>
+                <Stack.Screen name='UserSearchScreen' component={SearchUsersScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
