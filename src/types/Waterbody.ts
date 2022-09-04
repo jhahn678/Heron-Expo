@@ -16,6 +16,8 @@ export const waterbodyClassifications: WaterbodyClassification[] = [
     'strait', 'unknown'
 ]
 
+
+
 export interface IWaterbody {
     id: number,
     name: string
