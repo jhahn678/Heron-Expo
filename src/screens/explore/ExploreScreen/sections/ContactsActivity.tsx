@@ -15,7 +15,8 @@ const ContactsActivity = ({
 }: Props): JSX.Element => {
 
     // const { data, loading, error } = useGetRecentActivityQuery()
-    const data = useGetRecentActivityQueryMock;
+    // const data = useGetRecentActivityQueryMock;
+    const data = { activityFeed: [] }
     const loading = true;
     const error = false;
 
@@ -23,7 +24,7 @@ const ContactsActivity = ({
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
 
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, { height: data?.activityFeed.length > 0 ? 370 : 130 }]}>
             <Title style={styles.title}>Recent activity</Title>
             { 
                 data ? data.activityFeed.length > 0 ?
@@ -33,7 +34,7 @@ const ContactsActivity = ({
                         onNavigateToProfile={handleNavigateToProfile}
                     />
                 : 
-                    <Text>No recent activity</Text>
+                    <Text style={styles.message}>Your friends have not logged any catches yet 🐟</Text>
                 : loading ?
                     <ActivityIndicator size='large'/>
                 : error &&
@@ -47,7 +48,6 @@ export default ContactsActivity
 
 const styles = StyleSheet.create({
     container: {
-        height: 370,
         width: '100%',
         marginTop: 32,
     },
@@ -59,8 +59,10 @@ const styles = StyleSheet.create({
     },
     message: {
         paddingLeft: 24,
-        paddingTop: 24,
+        paddingTop: 24, 
         fontWeight: '600',
-        textAlign: 'center'
+        textAlign: 'center',
+        width: '70%',
+        alignSelf: 'center'
     }
 })

@@ -5,23 +5,34 @@ import { useLocationStore } from '../../../../store/location/useLocationStore'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import EnableLocationButton from '../../../../components/buttons/EnableLocationButton'
 import WaterbodiesListHorizontal from '../../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListHorizontal'
-import { useGetNearbyWaterbodiesQuery } from '../../../../hooks/queries/useGetNearbyWaterbodiesQuery'
-import { useGetNearbyWaterbodiesQueryMock } from '../../../../../__mocks'
 import { useSearchParamStore } from '../../../../store/search/useSearchParamStore'
+import { WaterbodyClassification } from '../../../../types/Waterbody'
+import { useGetNearbyWaterbodiesQuery } from '../../../../hooks/queries/useGetNearbyWaterbodiesQuery'
+import { classificationToCategory } from '../../../../utils/conversions/classificationToCategory'
+import { useGetNearbyWaterbodiesQueryMock } from '../../../../../__mocks'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
+    classification: WaterbodyClassification
 }
 
-const NearbySection = ({ navigation }: Props) => {
+const NearbyCategorySection = ({ navigation, classification }: Props) => {
 
-    const { setSort } = useSearchParamStore()
+    const { classificationsAppend } = useSearchParamStore()
     const { hasCoordinates, latitude, longitude } = useLocationStore()
-    
-    const { data, loading, error } = useGetNearbyWaterbodiesQuery({ latitude, longitude })
+    const {
+        data,
+        loading,
+        error
+    } = useGetNearbyWaterbodiesQuery({
+        latitude,
+        longitude,
+        classification,
+        sort: 'rank'
+    })
 
     const navigateViewMore = (): void => {
-        setSort('distance')
+        classificationsAppend(classification)
         navigation.navigate('SearchResultsScreen')
     }
 
@@ -31,11 +42,12 @@ const NearbySection = ({ navigation }: Props) => {
 
     return (
         <View style={[styles.container, { height: (!hasCoordinates || error) ? 130 : 370}]}>
-            <Title style={styles.title}>What's nearby</Title>
+            <Title style={styles.title}>Nearby {classificationToCategory(classification)}</Title>
             { hasCoordinates ? 
                 data ? 
                     //data available
-                    <WaterbodiesListHorizontal data={data.waterbodies}
+                    <WaterbodiesListHorizontal 
+                        data={data.waterbodies}
                         navigateViewMore={navigateViewMore}
                         navigateToWaterbody={navigateToWaterbody}
                     /> 
@@ -43,14 +55,14 @@ const NearbySection = ({ navigation }: Props) => {
                     //loading state
                     : loading ? 
                         <ActivityIndicator 
-                            style={{ marginTop: 128 }}
+                            style={{ marginTop: 36 }}
                             animating 
                             size='large'
                         />
                     
                     //Error state    
                     : error &&
-                        <Text style={styles.error}>Could not load nearby waterbodies</Text> 
+                        <Text style={styles.error}>There was an error</Text> 
                 
                     //Location not available
                     : 
@@ -63,7 +75,7 @@ const NearbySection = ({ navigation }: Props) => {
     )
 }
 
-export default NearbySection
+export default NearbyCategorySection
 
 const styles = StyleSheet.create({
     container: {

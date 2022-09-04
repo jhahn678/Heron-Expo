@@ -6,10 +6,13 @@ import NearbySection from './sections/NearbySection'
 import ContactsSection from './sections/ContactsSection'
 import ContactsActivity from './sections/ContactsActivity'
 import { useAuth } from '../../../store/auth/useAuth'
+import NearbyCategorySection from './sections/NearbyCategorySection'
+import { useLocationStore } from '../../../store/location/useLocationStore'
 
 const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>) => {
 
   const isAuthenticated = useAuth(state => state.isAuthenticated)
+  const { hasCoordinates } = useLocationStore()
   
   return (
     <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: '10%'}}>
@@ -18,8 +21,12 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
       <NearbySection navigation={navigation}/>
       <ContactsSection navigation={navigation}/>
       { !isAuthenticated && <ContactsActivity navigation={navigation}/> }
-      {/* <LakesNearby/> */}
-      {/* <RiversNearby/> */}
+      { hasCoordinates &&
+        <>
+          <NearbyCategorySection navigation={navigation} classification='lake'/>
+          <NearbyCategorySection navigation={navigation} classification='river'/>
+        </>
+      }
     </ScrollView>
   )
 }
