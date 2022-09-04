@@ -57,7 +57,7 @@ const styles = StyleSheet.create({
     height: '60%',
     width: '100%',
     backgroundColor: 'gray',
-    borderRadius: 16
+    borderRadius: 12
   },
   totals: {
     marginTop: 4,
