@@ -18,7 +18,6 @@ const SearchResultsScreen = ({
   const { width } = Dimensions.get('screen')
 
   const {
-    hasCoordinates,
     latitude,
     longitude
   } = useLocationStore()
