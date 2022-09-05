@@ -26,7 +26,7 @@ export type RootStackScreenProps<T extends keyof RootStackParams> =
 export type ExploreStackParams = {
     ExploreScreen: undefined,
     SearchBarScreen: undefined,
-    SearchResultsScreen: undefined,
+    SearchResultsScreen: { placeholder: string} | undefined,
     WaterbodyScreen: { id: number }
 }
 
