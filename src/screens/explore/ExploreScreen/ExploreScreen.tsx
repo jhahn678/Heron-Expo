@@ -20,7 +20,7 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
       <CategorySection navigation={navigation}/>
       <NearbySection navigation={navigation}/>
       <ContactsSection navigation={navigation}/>
-      { !isAuthenticated && <ContactsActivity navigation={navigation}/> }
+      { isAuthenticated && <ContactsActivity navigation={navigation}/> }
       { hasCoordinates &&
         <>
           <NearbyCategorySection navigation={navigation} classification='lake'/>

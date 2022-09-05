@@ -14,17 +14,13 @@ const ContactsActivity = ({
     navigation
 }: Props): JSX.Element => {
 
-    // const { data, loading, error } = useGetRecentActivityQuery()
-    // const data = useGetRecentActivityQueryMock;
-    const data = { activityFeed: [] }
-    const loading = true;
-    const error = false;
+    const { data, loading, error } = useGetRecentActivityQuery()
 
     const handleNavigateToCatch = (id: number) => navigation.navigate('ViewCatchScreen', { id })
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
-
+    
     return (
-        <View style={[styles.container, { height: data?.activityFeed.length > 0 ? 370 : 130 }]}>
+        <View style={[styles.container, { height: data && data.activityFeed.length > 0 ? 370 : 130 }]}>
             <Title style={styles.title}>Recent activity</Title>
             { 
                 data ? data.activityFeed.length > 0 ?

@@ -20,11 +20,8 @@ const NearbyCategorySection = ({ navigation, classification }: Props) => {
 
     const { classificationsAppend } = useSearchParamStore()
     const { hasCoordinates, latitude, longitude } = useLocationStore()
-    const {
-        data,
-        loading,
-        error
-    } = useGetNearbyWaterbodiesQuery({
+
+    const { data, loading, error } = useGetNearbyWaterbodiesQuery({
         latitude,
         longitude,
         classification,

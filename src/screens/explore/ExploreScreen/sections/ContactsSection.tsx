@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ActivityIndicator, Title, Text } from 'react-native-paper'
+import { ActivityIndicator, Title, Text, Button } from 'react-native-paper'
 import NavigateToUserSearch from '../../../../components/buttons/NavigateToUserSearch'
 import ContactsListHorizontal from '../../../../components/lists/ContactsListHorizontal/ContactsListHorizontal'
 import { useGetMyContactsQuery } from '../../../../hooks/queries/useGetMyContactsQuery'
@@ -15,10 +15,10 @@ interface Props {
 const ContactsSection = ({ navigation }: Props): JSX.Element => {
 
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
-    const data = useGetMyContactsQueryMock;
-    const { loading, error } = useGetMyContactsQuery()
-    const notAuthenticated = useAuth(state => !state.isAuthenticated)
+    const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen')
 
+    const isAuthenticated = useAuth(state => state.isAuthenticated)
+    const { data, loading, error } = useGetMyContactsQuery(isAuthenticated)
 
     return (
         <View style={styles.container}>
@@ -31,11 +31,19 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                 : 
                     <NavigateToUserSearch/>
                 : loading ?
-                    <ActivityIndicator size='large' style={{ marginTop: 12 }}/>
+                    <ActivityIndicator size='large' style={{ marginTop: 16 }}/>
                 : error ? 
-                    <Text style={styles.message}>Error loading contacts</Text>
-                : notAuthenticated &&
-                    <Text style={styles.message}>Login to connect with other fishermen🎣</Text>
+                    <Text style={styles.error}>Error loading contacts</Text>
+                : !isAuthenticated &&
+                    <>
+                        <Text style={styles.message}>Login to connect with other fishermen🎣</Text>
+                        <Button 
+                            theme={{ roundness: 2 }}
+                            mode='contained-tonal' 
+                            style={styles.button} 
+                            onPress={handleNavigateToAuth}
+                        >Sign in</Button>
+                    </>
 
             }
         </View>
@@ -55,9 +63,19 @@ const styles = StyleSheet.create({
         paddingLeft: 24,
         marginBottom: 16
     },
-    message: {
+    error: {
         marginTop: 24,
         textAlign: 'center',
         fontWeight: '500'
+    },
+    message: {
+        marginTop: 16,
+        textAlign: 'center',
+        fontWeight: '500'
+    },
+    button: {
+        marginTop: 8,
+        width: 120,
+        alignSelf: 'center'
     }
 })

@@ -32,7 +32,7 @@ const NearbySection = ({ navigation }: Props) => {
     return (
         <View style={[styles.container, { height: (!hasCoordinates || error) ? 150 : 370}]}>
             <Title style={styles.title}>What's nearby</Title>
-            { !hasCoordinates ? 
+            { hasCoordinates ? 
                 data ? 
                     //data available
                     <WaterbodiesListHorizontal data={data.waterbodies}
