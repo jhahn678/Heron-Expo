@@ -14,7 +14,7 @@ const BottomTabs = (): JSX.Element => {
     const Tabs = createBottomTabNavigator<BottomTabsParams>();
 
     return(
-        <Tabs.Navigator screenOptions={{ headerShown: false }}>
+        <Tabs.Navigator screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}>
             <Tabs.Screen name='ExploreStack' component={ExploreStack} options={{ 
                 tabBarLabel: 'Explore',
                 tabBarIcon: ({ color, size }) => <MCIcon name='map-search-outline' color={color} size={size}/>
