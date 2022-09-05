@@ -38,14 +38,9 @@ const styles = StyleSheet.create({
         width: '100%',
         alignItems: 'center',
         alignSelf: 'center',
-        backgroundColor: 'white',
-        elevation: 3,
-        shadowOffset: { height: 2, width: 0 }, 
-        shadowRadius: 2, 
-        shadowOpacity: .2,
-        borderRadius: 12,
         justifyContent: 'center',
-        padding: 32
+        paddingHorizontal: 16,
+        paddingVertical: 32
     },
     caption: {
         fontSize: 16,
