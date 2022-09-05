@@ -20,8 +20,10 @@ export interface GetMyContacts {
     me: Contacts
 }
 
-export const useGetMyContactsQuery = () => {
-    const result = useQuery<GetMyContacts>(GET_MY_CONTACTS)
+export const useGetMyContactsQuery = (isAuthenticated: boolean) => {
+    const result = useQuery<GetMyContacts>(GET_MY_CONTACTS, {
+        skip: !isAuthenticated
+    })
     return result
 }
 
