@@ -4,35 +4,35 @@ import { AutocompleteWaterbody } from "../../types/Waterbody"
 import { useQueries, UseQueryResult } from '@tanstack/react-query'
 import { useEffect, useState } from "react"
 
-type AutocompleteResult = AutocompleteGeoplace | AutocompleteWaterbody
+export type AutocompleteResult = AutocompleteGeoplace | AutocompleteWaterbody
 
 interface AutocompleteQuery  {
     value: string
-    lng: number
-    lat: number
+    longitude: number | null
+    latitude: number | null
 }
 
 const autocompleteWaterbodies = async (
-    { value, lng, lat }: AutocompleteQuery
+    { value, longitude, latitude }: AutocompleteQuery
 ): Promise<AutocompleteWaterbody[]> => {
     let endpoint = `/autocomplete/waterbodies?value=${value}`
-    if(lng && lat) endpoint += `&lnglat=${lng},${lat}`
+    if(longitude && latitude) endpoint += `&lnglat=${longitude},${latitude}`
     const res = await axios.get(endpoint)
     return res.data;
 }
 
 const autocompleteGeoplaces = async (
-    { value, lng, lat }: AutocompleteQuery 
+    { value, longitude, latitude }: AutocompleteQuery 
 ): Promise<AutocompleteGeoplace[]> => {
     let endpoint = `/autocomplete/geoplaces?value=${value}`
-    if(lng && lat) endpoint += `&lnglat=${lng},${lat}`
+    if(longitude && latitude) endpoint += `&lnglat=${longitude},${latitude}`
     const res = await axios.get(endpoint)
     return res.data;
 }
 
 
 export const useAutoCompleteSearch = (
-    { value, lng, lat }: AutocompleteQuery
+    { value, longitude, latitude }: AutocompleteQuery
 ) => {
 
     const [enabled, setEnabled] = useState(false)
@@ -54,13 +54,13 @@ export const useAutoCompleteSearch = (
     ]>({
         queries: [
             { 
-                queryKey: ['geoplaces', value, lng, lat],
-                queryFn: () => autocompleteGeoplaces({ value, lng, lat }),
+                queryKey: ['geoplaces', value, longitude, latitude],
+                queryFn: () => autocompleteGeoplaces({ value, longitude, latitude }),
                 enabled
             },
             {  
-                queryKey: ['waterbodies', value, lng, lat],
-                queryFn: () => autocompleteWaterbodies({ value, lng, lat}),
+                queryKey: ['waterbodies', value, longitude, latitude ],
+                queryFn: () => autocompleteWaterbodies({ value, longitude, latitude }),
                 enabled
             }
         ]
