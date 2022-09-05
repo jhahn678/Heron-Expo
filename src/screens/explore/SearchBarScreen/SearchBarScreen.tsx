@@ -33,7 +33,6 @@ const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScree
       </View>
       <FlashList 
         estimatedItemSize={200}
-        contentContainerStyle={styles.contentContainer}
         showsVerticalScrollIndicator={false}
         data={autocomplete.results} 
         keyboardShouldPersistTaps='handled'
@@ -69,7 +68,5 @@ const styles = StyleSheet.create({
     paddingBottom: 24,
     flexDirection: 'row',
     alignItems: 'center',
-  },
-  contentContainer: {
   }
 })
