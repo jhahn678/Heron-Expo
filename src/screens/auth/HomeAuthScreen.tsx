@@ -16,14 +16,14 @@ const HomeAuthScreen = ({ navigation, route }: RootStackScreenProps<'HomeAuthScr
     <View style={styles.container}>
       {
         route?.params?.showBack === true ? 
+          <Button icon='arrow-left' onPress={navigation.goBack}
+            style={styles.backButton}
+          >Back</Button>
+        :
           <Button icon='arrow-right' onPress={handleSkipAuthentication}
             contentStyle={{ flexDirection: 'row-reverse'}}
             style={styles.skipButton}
           >Skip</Button>
-        :
-          <Button icon='arrow-left' onPress={navigation.goBack}
-            style={styles.backButton}
-          >Back</Button>
       }
       <View style={styles.buttonContainer}>
         <GoogleLoginButton/>
