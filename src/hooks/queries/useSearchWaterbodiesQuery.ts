@@ -20,6 +20,7 @@ query Waterbodies($classifications: [ClassificationEnum!], $queryLocation: Query
       rank
       total_catches
       total_locations
+      total_media
     }
   }
 `
@@ -38,8 +39,13 @@ interface UseSearchWaterbodiesArgs {
     sort?: 'rank' | 'distance'
 }
 
+
+export interface WaterbodyResult extends WaterbodyListItem{
+    total_media: number
+}
+
 interface UseSearchWaterbodies {
-    waterbodies: WaterbodyListItem[]
+    waterbodies: WaterbodyResult[]
 }
 
 export const useSearchWaterbodiesQuery = ({
