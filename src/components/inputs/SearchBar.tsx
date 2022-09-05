@@ -17,24 +17,26 @@ interface Props {
     /** @default true */
     enabled?: boolean
     style?: StyleProp<ViewStyle>,
-    placeholder?: string
+    placeholder?: string,
+    multiline?: boolean
 }
 
-const SearchBar = ({
-    style, value, setValue, onPress, autofocus=false, enabled=true, placeholder
-}: Props): JSX.Element => {
+const SearchBar = (props: Props): JSX.Element => {
     
     return (
-        <Pressable onPress={onPress}>
-            <Searchbar 
-                placeholder={placeholder}
+        <Pressable onPress={props.onPress}>
+            <Searchbar
+                enablesReturnKeyAutomatically={true}
+                maxLength={1}
+                multiline={props.multiline}
+                placeholder={props.placeholder}
                 inputStyle={{ fontSize: 14 }}
-                editable={enabled}
-                autoFocus={autofocus}
-                style={[styles.searchbar, style]} 
+                editable={props.enabled}
+                autoFocus={props.autofocus}
+                style={[styles.searchbar, props.style]} 
                 theme={{ roundness:  12 }}
-                value={value || ''}
-                onChangeText={setValue}
+                value={props.value || ''}
+                onChangeText={props.setValue}
             />
         </Pressable>
     )
