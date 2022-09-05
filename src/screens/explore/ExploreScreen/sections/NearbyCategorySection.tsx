@@ -30,7 +30,9 @@ const NearbyCategorySection = ({ navigation, classification }: Props) => {
 
     const navigateViewMore = (): void => {
         classificationsAppend(classification)
-        navigation.navigate('SearchResultsScreen')
+        navigation.navigate('SearchResultsScreen',{
+            placeholder: `${classificationToCategory(classification)} near you`
+        })
     }
 
     const navigateToWaterbody = (id: number): void => {

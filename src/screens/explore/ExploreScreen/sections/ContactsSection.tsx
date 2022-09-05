@@ -4,7 +4,6 @@ import { ActivityIndicator, Title, Text, Button } from 'react-native-paper'
 import NavigateToUserSearch from '../../../../components/buttons/NavigateToUserSearch'
 import ContactsListHorizontal from '../../../../components/lists/ContactsListHorizontal/ContactsListHorizontal'
 import { useGetMyContactsQuery } from '../../../../hooks/queries/useGetMyContactsQuery'
-import { useGetMyContactsQueryMock } from '../../../../../__mocks'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import { useAuth } from '../../../../store/auth/useAuth'
 
@@ -15,7 +14,7 @@ interface Props {
 const ContactsSection = ({ navigation }: Props): JSX.Element => {
 
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
-    const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen')
+    const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen', { showBack: true })
 
     const isAuthenticated = useAuth(state => state.isAuthenticated)
     const { data, loading, error } = useGetMyContactsQuery(isAuthenticated)
