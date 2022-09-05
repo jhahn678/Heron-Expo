@@ -12,37 +12,41 @@ import WaterbodySearchResult from '../../../components/lists/WaterbodySearch/Wat
 
 
 const SearchResultsScreen = ({
-  navigation
+  navigation, route
 }: ExploreStackScreenProps<'SearchResultsScreen'>) => {
 
   const { width } = Dimensions.get('screen')
+  const { params } = route; 
+  const { latitude, longitude } = useLocationStore()
+  const { value, classifications, adminOne, geoplace, sort, resetSearchParams } = useSearchParamStore()
 
-  const {
-    latitude,
-    longitude
-  } = useLocationStore()
-
-  const {
-    value,
-    classifications,
-    adminOne,
-    geoplace,
-    sort
-  } = useSearchParamStore()
-
-  const { data, loading, error } = useSearchWaterbodiesQuery({
+  const { data, loading, error, fetchMore } = useSearchWaterbodiesQuery({
     value, classifications, adminOne, sort, 
     longitude: geoplace ? geoplace.geom.coordinates[0] : longitude, 
     latitude: geoplace ? geoplace.geom.coordinates[1] : latitude
   })
 
+  const handleBack = () => {
+    resetSearchParams()
+    navigation.goBack()
+  }
+
+  const navigateToWaterbody = (id: number) => () => {
+    resetSearchParams()
+    navigation.navigate('WaterbodyScreen', { id })
+  }
+
   return (
     <View style={styles.container}>
       <View style={[styles.header, { width: width * .94 }]}>
-        <Icon name='arrow-left' size={30} onPress={navigation.goBack}/>
+        <Icon name='arrow-left' size={30} onPress={handleBack}/>
         <SearchBar 
-          value={geoplace ? geoplace.name : (value || '')} 
-          placeholder='Search place or waterbody'
+          value={value || undefined}
+          placeholder={
+            params ? params.placeholder : 
+            geoplace ? geoplace.name : 
+            'Search place or waterbody'
+          }
           style={{ marginLeft: 12, width: (width*.9) - 48}}
         />
       </View>
@@ -55,12 +59,18 @@ const SearchResultsScreen = ({
               <WaterbodySearchResult 
                 key={item.id}
                 data={item} 
-                onPress={() => navigation.navigate('WaterbodyScreen', { id: item.id })}
+                onPress={navigateToWaterbody(item.id)}
               />
             )}
             ListEmptyComponent={() => (
               <Text style={styles.empty}>0 results matched</Text>
             )}
+            onEndReachedThreshold={.5}
+            onEndReached={() => fetchMore({ 
+              variables: { 
+                offset: data?.waterbodies.length 
+              }
+            })}
           />
         : loading ? <ActivityIndicator size={48}/>
         : error && <Text style={styles.empty}>There was an error</Text>
