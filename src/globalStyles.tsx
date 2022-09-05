@@ -1,6 +1,10 @@
 import { StyleSheet } from "react-native";
-import { useTheme } from "react-native-paper";
 
 export default StyleSheet.create({
-    
+    frsb: {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        alignItems: 'center'
+    }
 })
