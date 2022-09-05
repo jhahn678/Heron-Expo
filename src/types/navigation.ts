@@ -3,7 +3,7 @@ import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, NavigationProp } from "@react-navigation/native"
 
 export type RootStackParams = {
-    HomeAuthScreen: undefined,
+    HomeAuthScreen: { showBack: boolean } | undefined,
     LoginAuthScreen: undefined,
     RegisterAuthScreenOne: undefined,
     RegisterAuthScreenTwo: undefined,

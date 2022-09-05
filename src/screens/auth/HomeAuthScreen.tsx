@@ -6,7 +6,7 @@ import GoogleLoginButton from '../../components/buttons/GoogleLoginButton'
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
 import AppleLoginButton from '../../components/buttons/AppleLoginButton'
 
-const HomeAuthScreen = ({ navigation }: RootStackScreenProps<'HomeAuthScreen'>): JSX.Element => {
+const HomeAuthScreen = ({ navigation, route }: RootStackScreenProps<'HomeAuthScreen'>): JSX.Element => {
 
   const handleSkipAuthentication = () => navigation.replace('MainTabs')
   const handleRegisterScreen = () => navigation.navigate('RegisterAuthScreenOne')
@@ -14,10 +14,17 @@ const HomeAuthScreen = ({ navigation }: RootStackScreenProps<'HomeAuthScreen'>):
 
   return (
     <View style={styles.container}>
-      <Button icon='arrow-right' onPress={handleSkipAuthentication}
-        contentStyle={{ flexDirection: 'row-reverse'}}
-        style={styles.skipButton}
-      >Skip</Button>
+      {
+        route?.params?.showBack === true ? 
+          <Button icon='arrow-right' onPress={handleSkipAuthentication}
+            contentStyle={{ flexDirection: 'row-reverse'}}
+            style={styles.skipButton}
+          >Skip</Button>
+        :
+          <Button icon='arrow-left' onPress={navigation.goBack}
+            style={styles.backButton}
+          >Back</Button>
+      }
       <View style={styles.buttonContainer}>
         <GoogleLoginButton/>
         <FacebookLoginButton/>
@@ -47,6 +54,10 @@ const styles = StyleSheet.create({
   skipButton: {
     marginTop: 36,
     alignSelf: 'flex-end'
+  },
+  backButton: {
+    marginTop: 36,
+    alignSelf: 'flex-start'
   },
   buttonContainer: {
     alignItems: 'center',
