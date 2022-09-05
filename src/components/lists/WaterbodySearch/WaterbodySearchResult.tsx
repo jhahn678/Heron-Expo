@@ -1,25 +1,25 @@
 import React from "react";
 import { StyleSheet, View, Pressable, Image } from "react-native";
 import { Text, Title } from 'react-native-paper'
-import { WaterbodyListItem } from "../../../types/Waterbody";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { WaterbodyResult } from "../../../hooks/queries/useSearchWaterbodiesQuery";
 import gstyles from '../../../globalStyles'
+import TotalMediaIcon from "../../icons/TotalMediaIcon";
 
 interface Props {
     onPress: () => void,
-    data: WaterbodyListItem
+    data: WaterbodyResult
 }
 
 const WaterbodySearchResult = ({ onPress, data }: Props) => {
     
-
+data
     
     return (
         <Pressable style={styles.container} onPress={onPress}>
             <Image source={{ uri: data.media[0]?.url}} style={styles.image}/>
             <View style={[gstyles.frsb, { paddingRight: 8}]}>
                 <Title style={styles.name}>{data.name}</Title>
-                
+                <TotalMediaIcon totalMedia={data.total_media}/>
             </View>
             { 
                 data.admin_two && data.admin_two.length === 1 ?
