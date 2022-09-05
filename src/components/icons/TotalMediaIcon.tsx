@@ -13,8 +13,8 @@ const TotalMediaIcon = (props: Props): JSX.Element => {
     
     return (
         <View style={globalStyles.frsb}>
-            <Icon name='image-multiple-outline' size={props.iconSize || 16}/>
             <Text style={[styles.text, props.textStyle]}>{props.totalMedia}</Text>
+            <Icon name='image-multiple-outline' size={props.iconSize || 16}/>
         </View>
     );
 };
@@ -23,6 +23,7 @@ export default TotalMediaIcon;
 
 const styles = StyleSheet.create({
     text: {
-
+        fontWeight: '600',
+        marginRight: 6,
     }
 });
