@@ -22,8 +22,6 @@ const classificationCategories= {
     'unknown': 'Unknown'
 }
 
-export const classificationToCategory = (x: WaterbodyClassification): string | undefined => {
-    if(classificationCategories.hasOwnProperty(x)){
-        return classificationCategories[x]
-    }
-}
+export const classificationToCategory = (
+    x: WaterbodyClassification
+): string => classificationCategories[x]
