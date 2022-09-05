@@ -57,6 +57,22 @@ export const apolloClient = new ApolloClient({
     link: from([authLink, onErrorLink, httpLink]),
     cache: new InMemoryCache({
         typePolicies: {
+            Query: {
+                fields: {
+                    waterbodies: {
+                        keyArgs: [
+                            'sort',
+                            'value', 
+                            'adminOne', 
+                            'queryLocation', 
+                            'classifications'
+                        ],
+                        merge: (existing = [], incoming) => {
+                            return [...existing, ...incoming];
+                        }
+                    }
+                }
+            },
             Waterbody: {
                 fields: {
                     classification: {
