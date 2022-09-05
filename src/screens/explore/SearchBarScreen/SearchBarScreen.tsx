@@ -9,24 +9,24 @@ import SearchNearby from '../../../components/lists/AutocompleteSearch/SearchNea
 import AutocompleteResult from '../../../components/lists/AutocompleteSearch/AutocompleteResult'
 import SearchInputValue from '../../../components/lists/AutocompleteSearch/SearchInputValue'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { AutocompleteResultMock } from '../../../../__mocks'
 
 const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScreen'>): JSX.Element => {
 
   const { width } = Dimensions.get('screen')
 
   const { latitude, longitude } = useLocationStore()
-  const [value, setValue] = useState('')
-  const autocomplete = useAutoCompleteSearch({ latitude, longitude, value })  
+  const [input, setInput] = useState('')
+  const autocomplete = useAutoCompleteSearch({ latitude, longitude, input }) 
+  
   
   return (
     <View style={styles.container}>
       <View style={[styles.header, { width: width * .94 }]}>
         <Icon name='arrow-left' size={30} onPress={navigation.goBack}/>
         <SearchBar 
-          value={value} 
+          value={input} 
           autofocus={true}
-          setValue={setValue}
+          setValue={setInput}
           placeholder='Search place or waterbody'
           style={{ marginLeft: 12, width: (width*.9) - 48}}
         />
@@ -45,10 +45,10 @@ const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScree
           />
         )}
         ListFooterComponent={
-          value.length > 0 ? () => (
+          input.length > 0 ? () => (
             <SearchInputValue 
               navigation={navigation} 
-              value={value}
+              value={input}
             /> 
         ): null}
       />
