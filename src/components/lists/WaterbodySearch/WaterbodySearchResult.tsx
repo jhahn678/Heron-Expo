@@ -12,8 +12,6 @@ interface Props {
 
 const WaterbodySearchResult = ({ onPress, data }: Props) => {
     
-data
-    
     return (
         <Pressable style={styles.container} onPress={onPress}>
             <Image source={{ uri: data.media[0]?.url}} style={styles.image}/>
