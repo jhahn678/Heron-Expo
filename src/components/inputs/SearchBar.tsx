@@ -27,7 +27,6 @@ const SearchBar = (props: Props): JSX.Element => {
         <Pressable onPress={props.onPress}>
             <Searchbar
                 enablesReturnKeyAutomatically={true}
-                maxLength={1}
                 multiline={props.multiline}
                 placeholder={props.placeholder}
                 inputStyle={{ fontSize: 14 }}
