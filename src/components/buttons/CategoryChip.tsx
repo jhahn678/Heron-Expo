@@ -4,6 +4,10 @@ import { Text, useTheme } from 'react-native-paper'
 import { useSearchParamStore } from '../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../types/navigation'
 import { WaterbodyClassification } from '../../types/Waterbody'
+import IsometricLake from '../icons/svg/IsometricLake'
+import IsometricPond from '../icons/svg/IsometricPond'
+import IsometricRiver from '../icons/svg/IsometricRiver'
+import IsometricCreek from '../icons/svg/IsometricCreek'
 
 interface Props {
   navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -30,6 +34,17 @@ const CategoryChip = ({ value, label, navigation }: Props) => {
         shadowOffset: { height: 2, width: 0 }, 
         shadowRadius: 2, shadowOpacity: .2 
     }]}>
+      {
+        value === 'river' ?
+          <IsometricRiver />
+        : value === 'lake' ?
+          <IsometricLake/>
+        : value === 'pond' ? 
+          <IsometricPond/>
+        : value === 'creek' ?
+          <IsometricCreek/>
+        : null
+      }
         <Text style={styles.label}>{label}</Text>
     </Pressable>
   )
@@ -39,15 +54,17 @@ export default CategoryChip
 
 const styles = StyleSheet.create({
   container: {
-    justifyContent: 'center',
+    flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-evenly',
+    backgroundColor: 'white',
     height: 72,
     width: '45%',
-    backgroundColor: 'white',
     marginTop: '5%',
     borderRadius: 12,
+    paddingRight: 16
   },
   label: {
-    fontWeight: '700'
+    fontWeight: '700',
   }
 })
