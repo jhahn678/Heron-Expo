@@ -13,10 +13,10 @@ const HeaderSection = ({ navigation }: Props) => {
 
     const { isAuthenticated, firstname, avatar} = useAuth()
 
+    const navigateToSearch = () => navigation.navigate('SearchBarScreen')
     const navigateToProfile = () => navigation.navigate('MyProfileScreen')
     const navigateToAuth = () => navigation.navigate('HomeAuthScreen')
     
-    const [input, setInput] = useState('')
 
     return (
         <View style={styles.header}>
@@ -38,7 +38,7 @@ const HeaderSection = ({ navigation }: Props) => {
 
                 }
             </View>
-            <SearchBar value={input} setValue={setInput}/>
+            <SearchBar onPress={navigateToSearch} enabled={false}/>
         </View>
     )
 }

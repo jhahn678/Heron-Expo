@@ -30,9 +30,9 @@ const NearbySection = ({ navigation }: Props) => {
     }
 
     return (
-        <View style={[styles.container, { height: (!hasCoordinates || error) ? 130 : 370}]}>
+        <View style={[styles.container, { height: (!hasCoordinates || error) ? 150 : 370}]}>
             <Title style={styles.title}>What's nearby</Title>
-            { hasCoordinates ? 
+            { !hasCoordinates ? 
                 data ? 
                     //data available
                     <WaterbodiesListHorizontal data={data.waterbodies}
@@ -75,9 +75,7 @@ const styles = StyleSheet.create({
         paddingHorizontal: '6%'
     },
     nearby: {
-        marginTop: 24, 
-        flexGrow: 1,
-        paddingHorizontal: '6%'
+        width: '90%'
     },
     error: { 
         width: '75%',
