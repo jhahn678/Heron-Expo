@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, TouchableOpacity } from 'react-native'
+import { StyleSheet, Pressable } from 'react-native'
 import { Text, useTheme } from 'react-native-paper'
 import { useSearchParamStore } from '../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../types/navigation'
@@ -20,18 +20,18 @@ const CategoryChip = ({ value, label, navigation }: Props) => {
 
   const handleSelect = () => {
     classificationsAppend(value)
-    navigation.navigate('SearchResultsScreen')
+    navigation.navigate('SearchResultsScreen', { placeholder: `${label} near you`})
   }
 
   return (
-    <TouchableOpacity onPress={handleSelect} 
+    <Pressable onPress={handleSelect} 
       style={[styles.container, {
         elevation: 3, shadowColor: colors.backdrop, 
         shadowOffset: { height: 2, width: 0 }, 
         shadowRadius: 2, shadowOpacity: .2 
     }]}>
         <Text style={styles.label}>{label}</Text>
-    </TouchableOpacity>
+    </Pressable>
   )
 }
 
