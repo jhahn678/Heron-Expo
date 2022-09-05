@@ -17,8 +17,6 @@ const SearchResultsScreen = ({
 
   const { width } = Dimensions.get('screen')
 
-
-
   const {
     hasCoordinates,
     latitude,
@@ -45,7 +43,6 @@ const SearchResultsScreen = ({
         <Icon name='arrow-left' size={30} onPress={navigation.goBack}/>
         <SearchBar 
           value={geoplace ? geoplace.name : (value || '')} 
-          autofocus={true}
           placeholder='Search place or waterbody'
           style={{ marginLeft: 12, width: (width*.9) - 48}}
         />

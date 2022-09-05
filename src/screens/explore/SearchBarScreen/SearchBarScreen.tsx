@@ -17,14 +17,7 @@ const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScree
 
   const { latitude, longitude } = useLocationStore()
   const [value, setValue] = useState('')
-  const autocomplete = useAutoCompleteSearch({ latitude, longitude, value })
-  // const autocomplete = {
-  //   results: AutocompleteResultMock,
-  //   isInitFetch: false,
-  //   isError: false
-  // }
-
-  
+  const autocomplete = useAutoCompleteSearch({ latitude, longitude, value })  
   
   return (
     <View style={styles.container}>
