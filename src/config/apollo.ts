@@ -12,7 +12,7 @@ import { SecureStoreKeys } from "../types/SecureStore";
 import { axios } from "./axios";
 import { TokenResponse } from "../store/auth/useAuth";
 
-const httpLink = createHttpLink({ uri: API_GRAPH_URL! });
+const httpLink = createHttpLink({ uri: API_GRAPH_URL });
 
 const authLink = setContext(async (_, { headers }) => {
     const accessToken = await SecureStore.getItemAsync(SecureStoreKeys.ACCESS_TOKEN)
