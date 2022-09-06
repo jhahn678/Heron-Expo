@@ -7,8 +7,6 @@ interface UseLoginArgs {
     onError: (err: any) => void
 }
 
-
-
 interface LoginParams {
     identifier: string,
     password: string
@@ -21,6 +19,7 @@ export const useLogin = ({ onSuccess, onError}: UseLoginArgs) => {
 
     const loginUser = async (params: LoginParams): Promise<AuthResponse | void> => {
         setIsLoading(true)
+        
         axios.post<AuthResponse>('/auth/login', params)
             .then(({ data }) => {
                 setIsLoading(false)
@@ -28,6 +27,7 @@ export const useLogin = ({ onSuccess, onError}: UseLoginArgs) => {
                 return data;
             })
             .catch(err => {
+                console.log(err)
                 setIsLoading(false)
                 setIsError(true)
                 onError(err)
