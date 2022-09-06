@@ -15,7 +15,7 @@ const SearchNearby = ({ navigation }: Props) => {
     
     const handlePress = () => {
         if(hasPermission){
-            navigation.navigate('SearchResultsScreen')
+            navigation.navigate('SearchResultsScreen', { placeholder: 'Results near me'})
         }else{
             alert('Location sharing must be turned on to use this feature')
         }
