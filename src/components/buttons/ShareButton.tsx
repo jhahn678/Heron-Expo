@@ -1,5 +1,4 @@
 import { ViewStyle, StyleProp } from "react-native";
-import { useNavigation } from "@react-navigation/native";
 import { IconButton, IconButtonProps } from "react-native-paper";
 import { useAuth } from "../../store/auth/useAuth";
 import { useModalStore } from "../../store/modal/useModalStore";
