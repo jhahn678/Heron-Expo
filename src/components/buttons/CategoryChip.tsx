@@ -4,10 +4,10 @@ import { Text, useTheme } from 'react-native-paper'
 import { useSearchParamStore } from '../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../types/navigation'
 import { WaterbodyClassification } from '../../types/Waterbody'
-import IsometricLake from '../icons/svg/IsometricLake'
-import IsometricPond from '../icons/svg/IsometricPond'
-import IsometricRiver from '../icons/svg/IsometricRiver'
-import IsometricCreek from '../icons/svg/IsometricCreek'
+import IsometricLake from '../svg/IsometricLake'
+import IsometricPond from '../svg/IsometricPond'
+import IsometricRiver from '../svg/IsometricRiver'
+import IsometricCreek from '../svg/IsometricCreek'
 
 interface Props {
   navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
