@@ -7,7 +7,6 @@ import { AutocompleteGeoplace } from '../../../types/Geoplace'
 import FAIcon from 'react-native-vector-icons/FontAwesome5'//'water'
 import MCIcon from 'react-native-vector-icons/MaterialIcons' //'park'
 import IonIcon from 'react-native-vector-icons/Ionicons' // 'flag-outline'
-import { Title } from 'react-native-paper'
 
 
 interface Props {
