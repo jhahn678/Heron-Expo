@@ -6,7 +6,6 @@ const IsometricRiver = () => (
     width={52}
     height={52}
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
   >
     <Path
       d="m49.195 25.582-23.183 14.29v1.825l23.183-14.29v-1.825Z"
@@ -1614,6 +1613,7 @@ const IsometricRiver = () => (
       fill="#745433"
     />
     <Defs>
+      {/* @ts-ignore */}
       <LinearGradient
         id="a"
         x1={26.011}
@@ -1625,6 +1625,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#7A4B2B" />
         <Stop offset={1} stopColor="#613523" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="b"
         x1={26.011}
@@ -1636,6 +1637,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#905B32" />
         <Stop offset={1} stopColor="#8E4E33" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="c"
         x1={2.83}
@@ -1647,6 +1649,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#663E24" />
         <Stop offset={1} stopColor="#4D2A1C" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="d"
         x1={2.83}
@@ -1658,6 +1661,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#754A29" />
         <Stop offset={1} stopColor="#733F29" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="e"
         x1={14.622}
@@ -1672,6 +1676,7 @@ const IsometricRiver = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="f"
         x1={17.66}
@@ -1686,6 +1691,7 @@ const IsometricRiver = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="g"
         x1={32.174}
@@ -1700,6 +1706,7 @@ const IsometricRiver = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="h"
         x1={19.335}
@@ -1714,6 +1721,7 @@ const IsometricRiver = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="i"
         x1={20.547}
@@ -1728,6 +1736,7 @@ const IsometricRiver = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="j"
         x1={22.59}
@@ -1742,6 +1751,7 @@ const IsometricRiver = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="k"
         x1={21.31}
@@ -1756,6 +1766,7 @@ const IsometricRiver = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="l"
         x1={14.495}
@@ -1773,6 +1784,7 @@ const IsometricRiver = () => (
         <Stop offset={0.77} stopColor="#976F44" />
         <Stop offset={1} stopColor="#6B441D" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="m"
         x1={28.255}
@@ -1784,6 +1796,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#A4A6A6" />
         <Stop offset={1} stopColor="#A4A6A6" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="n"
         x1={35.942}
@@ -1795,6 +1808,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#C6BFBE" />
         <Stop offset={1} stopColor="#A4A6A6" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="o"
         x1={36.895}
@@ -1806,6 +1820,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#C6BFBE" />
         <Stop offset={1} stopColor="#A4A6A6" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="p"
         x1={36.895}
@@ -1817,6 +1832,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#C6BFBE" />
         <Stop offset={1} stopColor="#A4A6A6" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="q"
         x1={37.297}
@@ -1828,6 +1844,7 @@ const IsometricRiver = () => (
         <Stop stopColor="#C6BFBE" />
         <Stop offset={1} stopColor="#A4A6A6" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="r"
         x1={35.631}

@@ -1,11 +1,10 @@
-import Svg, { Path, G, Mask } from "react-native-svg"
+import Svg, { Path, G, Mask, EMaskUnits } from "react-native-svg"
 
 const FishermanInBoat = () => (
   <Svg
     width={48}
     height={48}
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
   >
     <Path
       d="M34.22 35.205c.026-3.59-4.385-6.532-9.853-6.572-5.467-.04-9.92 2.838-9.947 6.428-.026 3.59 4.385 6.532 9.853 6.572 5.467.04 9.921-2.838 9.947-6.428Z"
@@ -32,6 +31,7 @@ const FishermanInBoat = () => (
       d="m27.5 19.1 14.3-1-1 4.5c-.3 1.5-1.2 2.8-2.3 3.7l-9.3 7.1c-1.9 1.4-4.3 2.4-7.1 2.8l-5.3.8c-3.1.5-6.2-.4-8.6-2.6l-.8-.7 20.1-14.6Z"
       fill="#89523F"
     />
+    {/* @ts-ignore */}
     <G opacity={0.31} fill="#6E7CAF">
       <Path d="m20.9 35.1-9.3 1.5c-.2-.1-.3-.1-.4-.2l9.7-1.5c3.2-.5 6-1.6 8.2-3.3l11.7-8.9c0 .1-.1.2-.1.4l-11.5 8.8c-2.2 1.5-5 2.7-8.3 3.2Z" />
       <Path d="m29.5 29.5 11.7-8.9-.1.4-11.5 8.8c-2.5 1.9-5.7 3.2-9.3 3.8L9.1 35.2c-.1 0-.2-.1-.3-.2l11.5-1.8c3.6-.6 6.8-1.9 9.2-3.7Z" />
@@ -268,12 +268,13 @@ const FishermanInBoat = () => (
       d="M19.8 22.3c-.2 0-.4 0-.6-.1-.4-.2-.7-.5-.8-.9-.2-.6.1-1.3.1-1.3s-.3.6-.1 1.2c.1.4.4.6.8.8 1.3.6 2.2-.9 2.3-.9 0 .1-.7 1.2-1.7 1.2Z"
       fill="#A7CBE8"
     />
+    {/* @ts-ignore */}
     <Mask
       id="a"
       style={{
         maskType: "alpha",
       }}
-      maskUnits="userSpaceOnUse"
+      maskUnits={EMaskUnits.USER_SPACE_ON_USE}
       x={18}
       y={18}
       width={5}
@@ -284,6 +285,7 @@ const FishermanInBoat = () => (
         fill="#fff"
       />
     </Mask>
+    {/* @ts-ignore */}
     <G mask="url(#a)">
       <Path
         d="M19.7 21.6c-.2 0-.3-.2-.2-.3.1-.3.4-.6 1-.7 1-.2 1.3-.1 1.3-.1s-.7 1.1-1.7 1c-.1 0-.3 0-.4.1Z"

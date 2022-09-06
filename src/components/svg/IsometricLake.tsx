@@ -5,7 +5,6 @@ const IsometricLake = () => (
     width={49}
     height={48}
     fill="none"
-    xmlns="http://www.w3.org/2000/svg"
   >
     <Path
       d="M24.908 5.199.816 23.962l24.092 18.763L49 23.962 24.908 5.199Z"
@@ -1983,6 +1982,7 @@ const IsometricLake = () => (
       fill="#745433"
     />
     <Defs>
+      {/* @ts-ignore */}
       <LinearGradient
         id="a"
         x1={19.212}
@@ -1997,6 +1997,7 @@ const IsometricLake = () => (
         <Stop offset={0.81} stopColor="#AAE4F9" />
         <Stop offset={1} stopColor="#B5E8FA" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="b"
         x1={22.799}
@@ -2009,6 +2010,7 @@ const IsometricLake = () => (
         <Stop offset={0.1} stopColor="#94C83C" />
         <Stop offset={0.73} stopColor="#BDD62D" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="c"
         x1={20.611}
@@ -2021,6 +2023,7 @@ const IsometricLake = () => (
         <Stop offset={0.54} stopColor="#DEC771" />
         <Stop offset={1} stopColor="#C7B053" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="d"
         x1={21.226}
@@ -2033,6 +2036,7 @@ const IsometricLake = () => (
         <Stop offset={0.54} stopColor="#DEC771" />
         <Stop offset={1} stopColor="#C7B053" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="e"
         x1={20.999}
@@ -2045,6 +2049,7 @@ const IsometricLake = () => (
         <Stop offset={0.36} stopColor="#EEE8B0" />
         <Stop offset={1} stopColor="#D4C271" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="f"
         x1={27.423}
@@ -2056,6 +2061,7 @@ const IsometricLake = () => (
         <Stop stopColor="#B7B1B0" />
         <Stop offset={1} stopColor="#8D8F8F" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="g"
         x1={36.199}
@@ -2067,6 +2073,7 @@ const IsometricLake = () => (
         <Stop stopColor="#B8AEAD" />
         <Stop offset={1} stopColor="#8D8F8F" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="h"
         x1={37.09}
@@ -2078,6 +2085,7 @@ const IsometricLake = () => (
         <Stop stopColor="#B8AEAD" />
         <Stop offset={1} stopColor="#8D8F8F" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="i"
         x1={37.09}
@@ -2089,6 +2097,7 @@ const IsometricLake = () => (
         <Stop stopColor="#B8AEAD" />
         <Stop offset={1} stopColor="#8D8F8F" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="j"
         x1={37.466}
@@ -2100,6 +2109,7 @@ const IsometricLake = () => (
         <Stop stopColor="#B8AEAD" />
         <Stop offset={1} stopColor="#8D8F8F" />
       </LinearGradient>
+      {/* @ts-ignore */}
       <LinearGradient
         id="k"
         x1={35.908}
