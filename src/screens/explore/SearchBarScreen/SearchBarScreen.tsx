@@ -8,8 +8,6 @@ import { useLocationStore } from '../../../store/location/useLocationStore'
 import SearchNearby from '../../../components/lists/AutocompleteSearch/SearchNearby'
 import AutocompleteResult from '../../../components/lists/AutocompleteSearch/AutocompleteResult'
 import SearchInputValue from '../../../components/lists/AutocompleteSearch/SearchInputValue'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { useFocusEffect } from '@react-navigation/native'
 
 const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScreen'>): JSX.Element => {
 
@@ -22,6 +20,7 @@ const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScree
     <View style={styles.container}>
       <View style={[styles.header, { width: width * .94 }]}>
         <SearchBar 
+          
           value={input} 
           autofocus={true}
           goBack={navigation.goBack}

@@ -38,7 +38,11 @@ const HeaderSection = ({ navigation }: Props) => {
 
                 }
             </View>
-            <SearchBar onPress={navigateToSearch} enabled={false}/>
+            <SearchBar 
+                placeholder='Search name or place'
+                onPress={navigateToSearch} 
+                enabled={false}
+            />
         </View>
     )
 }

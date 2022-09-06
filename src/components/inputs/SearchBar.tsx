@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { 
     StyleSheet, 
     NativeSyntheticEvent,
@@ -22,11 +23,11 @@ interface Props {
     goBack?: () => void
 }
 
+
 const SearchBar = (props: Props): JSX.Element => {
 
-
     return (
-        // <Pressable onPress={props.onPress}>
+        <Pressable onPress={props.onPress}>
             <TextInput
                 mode='outlined'
                 onPressIn={props.onPress}
@@ -53,8 +54,8 @@ const SearchBar = (props: Props): JSX.Element => {
                         color='#000'
                     />
                 }
-                />
-        // </Pressable>
+            />
+        </Pressable>
     )
 }
 
