@@ -17,6 +17,7 @@ import UserProfileScreen from "../screens/profile/UserProfileScreen/UserProfileS
 import SearchUsersScreen from "../screens/contacts/UserSearchScreen/UserSearchScreen";
 import ViewCatchScreen from "../screens/catch/ViewCatchScreen";
 import ViewLocationScreen from "../screens/location/ViewLocationScreen";
+import { navigationRef } from "./navigationRef";
 
 const RootStack = (): JSX.Element => {
     
@@ -24,13 +25,13 @@ const RootStack = (): JSX.Element => {
     const Stack = createNativeStackNavigator<RootStackParams>();
 
     return (
-        <NavigationContainer>
+        <NavigationContainer ref={navigationRef}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 { isUnauthenticated &&
-                    <Stack.Group>
+                    <Stack.Group screenOptions={{ headerBackTitle: 'Back'}}>
                         <Stack.Screen name="HomeAuthScreen" component={HomeAuthScreen}/>
                         <Stack.Screen name="LoginAuthScreen" component={LoginAuthScreen}
-                            options={{ headerShown: true, headerTitle: 'Sign In' }}
+                            options={{ headerShown: true, headerTitle: 'Sign In'}}
                         />
                         <Stack.Screen name="RegisterAuthScreenOne" component={RegisterAuthScreenOne} 
                             options={{ headerShown: true, headerTitle: 'Step 1 of 3' }}

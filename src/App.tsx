@@ -9,6 +9,9 @@ import { apolloClient } from './config/apollo'
 import { QueryClientProvider } from '@tanstack/react-query'
 import { reactQueryClient } from './config/react-query'
 import { SecureStoreKeys } from './types/SecureStore'
+import { StatusBar } from 'expo-status-bar'
+import ModalPortal from './components/modals/ModalPortal'
+import { NavigationContainer } from '@react-navigation/native'
 
 export default function App() { 
   const [appIsReady, setAppIsReady] = useState(false)
@@ -51,7 +54,9 @@ export default function App() {
     <ApolloProvider client={apolloClient}>
       <QueryClientProvider client={reactQueryClient}>
         <PaperProvider>
-          <RootStack/>
+            <StatusBar style='auto'/>
+            <RootStack/>
+            <ModalPortal/>
         </PaperProvider>
       </QueryClientProvider>
     </ApolloProvider>

@@ -4,9 +4,10 @@ import {
     NativeTouchEvent,
     ViewStyle,
     StyleProp,
-    Pressable
+    Pressable,
 } from "react-native";
-import { Searchbar } from "react-native-paper";
+import { TextInput } from "react-native-paper";
+
 
 interface Props {
     value?: string,
@@ -18,26 +19,42 @@ interface Props {
     enabled?: boolean
     style?: StyleProp<ViewStyle>,
     placeholder?: string,
-    multiline?: boolean
+    goBack?: () => void
 }
 
 const SearchBar = (props: Props): JSX.Element => {
-    
+
+
     return (
-        <Pressable onPress={props.onPress}>
-            <Searchbar
-                enablesReturnKeyAutomatically={true}
-                multiline={props.multiline}
-                placeholder={props.placeholder}
-                inputStyle={{ fontSize: 14 }}
+        // <Pressable onPress={props.onPress}>
+            <TextInput
+                mode='outlined'
+                onPressIn={props.onPress}
+                theme={{ roundness: 12 }}
                 editable={props.enabled}
+                placeholder={props.placeholder}
                 autoFocus={props.autofocus}
-                style={[styles.searchbar, props.style]} 
-                theme={{ roundness:  12 }}
+                style={[styles.searchbar, props.style]}
                 value={props.value || ''}
                 onChangeText={props.setValue}
-            />
-        </Pressable>
+                multiline={false}
+                right={<TextInput.Icon name='close' size={24}/>}
+                left={
+                    props.goBack ? 
+                    <TextInput.Icon 
+                        name='arrow-left' 
+                        size={24} 
+                        color='#000'
+                        onPress={props.goBack}
+                    /> :
+                    <TextInput.Icon
+                        name='magnify' 
+                        size={24} 
+                        color='#000'
+                    />
+                }
+                />
+        // </Pressable>
     )
 }
 
