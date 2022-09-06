@@ -46,6 +46,7 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         mode='contained-tonal' 
         style={styles.button} 
         theme={{ roundness: 2 }}
+        loading={isLoading}
       >Sign in</Button>
       <Text style={{ alignSelf: 'center', marginVertical: 12}}>Or</Text>
       <GoogleLoginButton/>
