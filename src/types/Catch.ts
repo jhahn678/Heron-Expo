@@ -1,6 +1,6 @@
 import { IUser } from "./User";
 import { Point } from 'geojson'
-import { CatchMedia } from "./Media";
+import { CatchMedia, IMedia } from "./Media";
 
 export interface ICatch {
     id: number
@@ -18,4 +18,11 @@ export interface ICatch {
     weight_unit?: 'G' | 'OZ' | 'LB' | 'KG'
     created_at: Date
     updated_at?: Date;
+}
+
+export interface GetWaterbodyCatch extends Pick<
+    ICatch, 'id' | 'species' | 'created_at'
+>{
+    user: Pick<IUser, 'fullname' | 'id' | 'avatar'>
+    media: Pick<IMedia, 'url'>[]
 }
