@@ -39,15 +39,17 @@ const SearchResultsScreen = ({
   return (
     <View style={styles.container}>
       <View style={[styles.header, { width: width * .94 }]}>
-        <Icon name='arrow-left' size={30} onPress={handleBack}/>
         <SearchBar 
+          onPress={handleBack}
+          goBack={handleBack}
           value={value || undefined}
+          enabled={false}
           placeholder={
             params ? params.placeholder : 
             geoplace ? geoplace.name : 
             'Search place or waterbody'
           }
-          style={{ marginLeft: 12, width: (width*.9) - 48}}
+          style={{ marginLeft: 8, width: (width*.90)}}
         />
       </View>
       { 

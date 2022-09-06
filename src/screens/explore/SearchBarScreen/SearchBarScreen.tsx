@@ -1,5 +1,5 @@
-import React, { useState } from 'react'
-import { Dimensions, StyleSheet, View } from 'react-native'
+import React, { useRef, useState } from 'react'
+import { Dimensions, StyleSheet, TextInput, View } from 'react-native'
 import SearchBar from '../../../components/inputs/SearchBar'
 import { FlashList } from '@shopify/flash-list'
 import { ExploreStackScreenProps } from '../../../types/navigation'
@@ -9,26 +9,25 @@ import SearchNearby from '../../../components/lists/AutocompleteSearch/SearchNea
 import AutocompleteResult from '../../../components/lists/AutocompleteSearch/AutocompleteResult'
 import SearchInputValue from '../../../components/lists/AutocompleteSearch/SearchInputValue'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useFocusEffect } from '@react-navigation/native'
 
 const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScreen'>): JSX.Element => {
 
   const { width } = Dimensions.get('screen')
-
   const { latitude, longitude } = useLocationStore()
   const [input, setInput] = useState('')
   const autocomplete = useAutoCompleteSearch({ latitude, longitude, input }) 
   
-  
   return (
     <View style={styles.container}>
       <View style={[styles.header, { width: width * .94 }]}>
-        <Icon name='arrow-left' size={30} onPress={navigation.goBack}/>
         <SearchBar 
           value={input} 
           autofocus={true}
+          goBack={navigation.goBack}
           setValue={setInput}
           placeholder='Search place or waterbody'
-          style={{ marginLeft: 12, width: (width*.9) - 48}}
+          style={{ marginLeft: 8, width: (width*.9)}}
         />
       </View>
       <FlashList 
