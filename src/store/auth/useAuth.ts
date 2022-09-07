@@ -23,7 +23,8 @@ export interface AuthStore {
     isAuthenticated: boolean,
     setUser: (data: AuthResponse) => Promise<void>,
     signOut: () => void,
-    autoSignIn: (token: string) => Promise<void>
+    autoSignIn: (token: string) => Promise<void>,
+    getAccessToken: () => Promise<string | null>
 }
 
 
@@ -63,6 +64,23 @@ export const useAuth = create<AuthStore>((set) => ({
             await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
             console.error(err)
         }
-        
+    },
+    getAccessToken: async () => {
+        try{
+            const existing = await SecureStore.getItemAsync(SecureStoreKeys.ACCESS_TOKEN)
+            if(existing) return existing;
+            const token = await SecureStore.getItemAsync(SecureStoreKeys.REFRESH_TOKEN)
+            const { data } = await axios.post<TokenResponse>('/auth/token', { token })
+            const { refreshToken, accessToken } = data;
+            await SecureStore.setItemAsync(SecureStoreKeys.REFRESH_TOKEN, refreshToken)
+            await SecureStore.setItemAsync(SecureStoreKeys.ACCESS_TOKEN, accessToken)
+            return data.accessToken
+        }catch(err){
+            await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
+            await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)
+            console.error(err)
+            set({ isAuthenticated: false })
+            return null;
+        }
     }
 }))
