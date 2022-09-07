@@ -1,6 +1,7 @@
 import { ViewStyle, StyleProp } from "react-native";
 import { IconButton, IconButtonProps } from "react-native-paper";
 import { useAuth } from "../../store/auth/useAuth";
+import { useShareContent } from "../../hooks/utils/useShareContent";
 import { useModalStore } from "../../store/modal/useModalStore";
 
 interface Props {
@@ -12,17 +13,16 @@ interface Props {
 
 const ShareButton = (props: Props): JSX.Element => {
     
-    const isAuthenticated = useAuth(state => state.isAuthenticated)
-    const showAuthModal = useModalStore(state => state.setAuthVisible)
+    const shareContent = useShareContent()
 
-    const handleShare = () => {}
+    const handleShare = () => shareContent({ url: 'heron.com', shareType: 'WATERBODY'})
     
     return (
         <IconButton
             size={props.size || 24}
             mode={props.mode || 'contained'}
             style={props.style}
-            onPress={isAuthenticated ? handleShare : showAuthModal} 
+            onPress={handleShare} 
             icon='share-variant-outline'
         />
     );
