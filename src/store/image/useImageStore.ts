@@ -2,7 +2,7 @@ import create from 'zustand'
 import { ImageInfo } from 'expo-image-picker'
 import uuid from 'react-native-uuid'
 
-interface Images extends Pick<ImageInfo, 'uri' | 'height' | 'width'>{
+export interface Images extends Pick<ImageInfo, 'uri' | 'height' | 'width'>{
     id: string
 }
 
