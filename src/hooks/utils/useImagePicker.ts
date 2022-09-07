@@ -8,13 +8,14 @@ import {
     launchCameraAsync,
     MediaTypeOptions,
     ImagePickerResult, 
-    ImagePickerMultipleResult
+    ImagePickerMultipleResult,
+    ImageInfo
 } from 'expo-image-picker'
 
 interface UseImagePickerRes {
-    openImagePickerAvatar: () => Promise<ImagePickerResult | null>,
-    openImagePicker: () => Promise<ImagePickerMultipleResult | null>,
-    openCamera: () => Promise<ImagePickerResult | null>
+    openImagePickerAvatar: () => Promise<ImageInfo | null>,
+    openImagePicker: () => Promise<ImageInfo[] | null>,
+    openCamera: () => Promise<ImageInfo | null>
 }
 
 export const useImagePicker = (): UseImagePickerRes => {
@@ -31,7 +32,7 @@ export const useImagePicker = (): UseImagePickerRes => {
         })()
     }, [])
 
-    const openImagePickerAvatar = async (): Promise<ImagePickerResult | null> => {
+    const openImagePickerAvatar = async (): Promise<ImageInfo | null> => {
         if(!hasLibraryPermission){
             const res = await requestMediaLibraryPermissionsAsync()
             setHasLibraryPermission(res.granted)
@@ -42,11 +43,11 @@ export const useImagePicker = (): UseImagePickerRes => {
             allowsMultipleSelection: false,
             allowsEditing: true
         })
-        if(result.cancelled) return null;
+        if(result.cancelled === true) return null;
         return result;
     }
 
-    const openImagePicker = async (): Promise<ImagePickerMultipleResult | null> => {
+    const openImagePicker = async (): Promise<ImageInfo[] | null> => {
         if(!hasLibraryPermission){
             const res = await requestMediaLibraryPermissionsAsync()
             setHasLibraryPermission(res.granted)
@@ -57,11 +58,13 @@ export const useImagePicker = (): UseImagePickerRes => {
             allowsMultipleSelection: true,
             selectionLimit: 5
         })
-        if(result.cancelled) return null;
-        return result;
+        if(result.cancelled === true) return null;
+        if(result.hasOwnProperty('selected')) return result.selected;
+        //@ts-ignore if single image is selected
+        return [result]
     }
 
-    const openCamera = async (): Promise<ImagePickerResult | null> => {
+    const openCamera = async (): Promise<ImageInfo | null> => {
         if(!hasCameraPermission){
             const res = await requestCameraPermissionsAsync();
             setHasCameraPermission(res.granted)
@@ -72,7 +75,7 @@ export const useImagePicker = (): UseImagePickerRes => {
             allowsMultipleSelection: true,
             selectionLimit: 5
         })
-        if(result.cancelled) return null;
+        if(result.cancelled === true) return null;
         return result;
     }
 

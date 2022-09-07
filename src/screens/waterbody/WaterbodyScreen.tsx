@@ -14,14 +14,25 @@ import AddLocationIcon from '../../components/icons/AddLocationIcon';
 import BackButton from '../../components/buttons/BackButton';
 import ShareButton from '../../components/buttons/ShareButton';
 import SaveIconButton from '../../components/buttons/SaveIconButton';
+import { useImagePicker } from '../../hooks/utils/useImagePicker';
+import { useImageStore } from '../../store/image/useImageStore';
 
 
 const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'WaterbodyScreen'>): JSX.Element => {
 
     const { data, loading, error } = useGetWaterbodyQuery(route.params.id)
-
     const [fabOpen, setFabOpen] = useState(false)
-    const handleAddImage = () => {}
+
+    const { openImagePicker } = useImagePicker()
+    const setImages = useImageStore(state => state.setImages)
+    const handleAddImage = async () => {
+        const result = await openImagePicker()
+        if(result) setImages(result)
+        if(result) alert(`${result.length} images pending`)
+        //navigate to upload screen
+        //make sure to clear images and navigate back after
+    }
+
     const handleAddCatch = () => {}
     const handleAddLocation = () => {}
   
