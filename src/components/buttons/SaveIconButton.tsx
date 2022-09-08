@@ -18,7 +18,7 @@ interface Props {
 const SaveIconButton = (props: Props) => {
 
     const isAuthenticated = useAuth(state => state.isAuthenticated)
-    const promptAuth = useModalStore(state => state.setAuthVisible)
+    const showAuthModal = useModalStore(state => state.setAuth)
 
     const [saved, setSaved] = useState(Boolean(props.saved))
     
@@ -37,7 +37,7 @@ const SaveIconButton = (props: Props) => {
             size={props.size || 24}
             mode={props.mode || 'contained'}
             style={props.style}
-            onPress={isAuthenticated ? () => saveWaterbody() : promptAuth} 
+            onPress={() => isAuthenticated ? saveWaterbody() : showAuthModal()} 
             icon={ saved ? 
                 ({ size }) => <Icon name='bookmark-check' size={size} color='#316a13'/> : 
                 ({ size, color }) => <Icon name='bookmark-plus-outline' size={size} color={color}/>
