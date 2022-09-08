@@ -1,4 +1,4 @@
-const ACCEPTED_FILE_TYPES = ['png', 'jpg', 'jpeg', 'gif', 'bmp']
+const ACCEPTED_FILE_TYPES = ['image/png', 'jpg', 'jpeg', 'gif', 'bmp']
 
 export const validateUploadFiletype = (value: string | undefined): string | null => {
     if(!value) return null;
@@ -10,4 +10,13 @@ export const validateUploadFiletype = (value: string | undefined): string | null
     }else{
         return null
     }
+}
+
+const ACCEPTED_MIME_TYPE = ['image/jpeg', 'image/png', 'image/gif', 'image/bmp']
+
+export const validateMimeType = (value: string | undefined | null): string | null => {
+    if(!value) return null;
+    const accepted = ACCEPTED_MIME_TYPE.includes(value)
+    if(accepted) return value;
+    return null;
 }
