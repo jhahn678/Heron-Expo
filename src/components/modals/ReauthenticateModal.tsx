@@ -24,7 +24,7 @@ const ReauthenticateModal = (props: Props) => {
             style={styles.container}
         >
             <Dialog.Title style={styles.title}>
-                An error occured 🫤
+                An error occured 😕
             </Dialog.Title>
             <Dialog.Content>
                 <Text style={styles.text}>
@@ -51,7 +51,7 @@ export default ReauthenticateModal;
 
 const styles = StyleSheet.create({
     container: {
-        height: 200,
+        height: 220,
         width: '90%',
         alignSelf: 'center',
         position: 'relative',
