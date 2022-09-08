@@ -17,8 +17,10 @@ const httpLink = createHttpLink({ uri: API_GRAPH_URL });
 const authLink = setContext(async (_, { headers }) => {
     const accessToken = await SecureStore.getItemAsync(SecureStoreKeys.ACCESS_TOKEN)
     return {
-        ...headers,
-        authorization: accessToken ? `Bearer ${accessToken}` : null,
+        headers: {
+            ...headers,
+            authorization: accessToken ? `Bearer ${accessToken}` : null
+        }
     }
 })
 
