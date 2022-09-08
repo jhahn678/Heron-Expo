@@ -6,7 +6,8 @@ export interface ModalStore {
     reauthenticate: boolean
     setReauthenticate: (value?: boolean) => void
     confirmUpload: boolean
-    setConfirmUpload: (value?: boolean) => void
+    confirmUploadWaterbody: number | null
+    setConfirmUpload: (waterbody: number | null, value?: boolean) => void
     uploadPartialSuccess: boolean,
     setUploadPartialSuccess: (value?: boolean) => void
     uploadSuccess: boolean,
@@ -22,7 +23,11 @@ export const useModalStore = create<ModalStore>((set) => ({
     reauthenticate: false,
     setReauthenticate: (value=true) => set({ reauthenticate: value }),
     confirmUpload: false,
-    setConfirmUpload: (value=true) => set({ confirmUpload: value }),
+    confirmUploadWaterbody: null,
+    setConfirmUpload: (waterbody, value=true) => set({ 
+        confirmUpload: value,
+        confirmUploadWaterbody: waterbody
+    }),
     uploadPartialSuccess: false,
     setUploadPartialSuccess: (value=true) => set({ uploadPartialSuccess: value }),
     uploadSuccess: false,
@@ -33,6 +38,7 @@ export const useModalStore = create<ModalStore>((set) => ({
         auth: false,
         reauthenticate: false,
         confirmUpload: false,
+        confirmUploadWaterbody: null,
         uploadPartialSuccess: false,
         uploadSuccess: false,
         error: false

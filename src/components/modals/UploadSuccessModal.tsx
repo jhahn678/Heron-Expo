@@ -17,13 +17,13 @@ const UploadSuccessModal = (props: Props) => {
             style={styles.container}
         >
             <Dialog.Title style={styles.title}>
-                Thanks you for contributing! 😄
+                Thank you for contributing! 😄
             </Dialog.Title>
             <Dialog.Content>
                 <Text style={styles.text}>
                     Your images have been successfully saved.
                     Uploading images is a huge help, not only to us,
-                    but also the rest of the users!
+                    but the rest of the community as well!
                 </Text>
             </Dialog.Content>
             <Dialog.Actions>
@@ -37,7 +37,7 @@ export default UploadSuccessModal;
 
 const styles = StyleSheet.create({
     container: {
-        height: 200,
+        height: 210,
         width: '90%',
         alignSelf: 'center',
         position: 'relative',

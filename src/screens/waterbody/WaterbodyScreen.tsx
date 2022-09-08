@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { 
     StyleSheet, 
     View, 
@@ -16,25 +16,35 @@ import ShareButton from '../../components/buttons/ShareButton';
 import SaveIconButton from '../../components/buttons/SaveIconButton';
 import { useImagePicker } from '../../hooks/utils/useImagePicker';
 import { useImageStore } from '../../store/image/useImageStore';
+import { useModalStore } from '../../store/modal/useModalStore';
+import { useAuth } from '../../store/auth/useAuth';
 
 
 const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'WaterbodyScreen'>): JSX.Element => {
 
-    const { data, loading, error } = useGetWaterbodyQuery(route.params.id)
+    const { params } = route;
     const [fabOpen, setFabOpen] = useState(false)
+    const { data, loading, error } = useGetWaterbodyQuery(params.id)
 
     const { openImagePicker } = useImagePicker()
     const setImages = useImageStore(state => state.setImages)
+    const showConfirmUpload = useModalStore(state => state.setConfirmUpload)
+    const isAuthenticated = useAuth(state => state.isAuthenticated)
+    const showAuthModal = useModalStore(state => state.setAuth)
+    
+
     const handleAddImage = async () => {
         const result = await openImagePicker()
-        if(result) setImages(result)
-        if(result) alert(`${result.length} images pending`)
-        //navigate to upload screen
-        //make sure to clear images and navigate back after
+        if(result) {
+            setImages(result)
+            showConfirmUpload(params.id, true)
+        }
     }
 
-    const handleAddCatch = () => {}
-    const handleAddLocation = () => {}
+    const handleAddCatch = () => {
+        navigation.navigate('NewCatchScreen', { waterbody: params.id })
+    }
+    const handleAddLocation = () => navigation.navigate('NewLocationScreen', { waterbody: params.id })
   
     return (
         <ScrollView style={styles.container}>
@@ -49,15 +59,15 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                     actions={[
                         { 
                             icon: ({ color }) => <AddImageIcon color={color}/>,
-                            onPress: handleAddImage
+                            onPress: isAuthenticated ? handleAddImage : showAuthModal
                         },
                         {
                             icon: ({ color }) => <FishIcon color={color}/>,
-                            onPress: handleAddCatch
+                            onPress: isAuthenticated ? handleAddCatch : showAuthModal
                         },
                         {
                             icon: ({ color }) => <AddLocationIcon color={color}/>,
-                            onPress: handleAddLocation
+                            onPress: isAuthenticated ? handleAddLocation : showAuthModal
                         }
                     ]}
                     onStateChange={({ open }) => setFabOpen(open)}
