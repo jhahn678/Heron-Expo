@@ -11,7 +11,6 @@ import { reactQueryClient } from './config/react-query'
 import { SecureStoreKeys } from './types/SecureStore'
 import { StatusBar } from 'expo-status-bar'
 import ModalPortal from './components/modals/ModalPortal'
-import { NavigationContainer } from '@react-navigation/native'
 
 export default function App() { 
   const [appIsReady, setAppIsReady] = useState(false)
