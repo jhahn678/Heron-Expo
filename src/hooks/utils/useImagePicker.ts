@@ -7,10 +7,13 @@ import {
     launchImageLibraryAsync,
     launchCameraAsync,
     MediaTypeOptions,
-    ImagePickerResult, 
-    ImagePickerMultipleResult,
     ImageInfo
 } from 'expo-image-picker'
+
+
+interface UseImagePickerArgs {
+    onError?: () => void
+}
 
 interface UseImagePickerRes {
     openImagePickerAvatar: () => Promise<ImageInfo | null>,
@@ -18,7 +21,7 @@ interface UseImagePickerRes {
     openCamera: () => Promise<ImageInfo | null>
 }
 
-export const useImagePicker = (): UseImagePickerRes => {
+export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => {
 
     const [hasCameraPermission, setHasCameraPermission] = useState(false)
     const [hasLibraryPermission, setHasLibraryPermission] = useState(false)
@@ -47,6 +50,7 @@ export const useImagePicker = (): UseImagePickerRes => {
             if(result.cancelled === true) return null;
             return result;
         }catch(err){
+            if(args && args.onError) args.onError()
             return null;
         }
     }
@@ -68,6 +72,7 @@ export const useImagePicker = (): UseImagePickerRes => {
             //@ts-ignore if single image is selected
             return [result]
         }catch(err){
+            if(args && args.onError) args.onError()
             return null;
         }
     }
@@ -87,6 +92,7 @@ export const useImagePicker = (): UseImagePickerRes => {
             if(result.cancelled === true) return null;
             return result;
         }catch(err){
+            if(args && args.onError) args.onError()
             return null
         }
     }
