@@ -24,7 +24,8 @@ export interface AuthStore {
     setUser: (data: AuthResponse) => Promise<void>,
     signOut: () => void,
     autoSignIn: (token: string) => Promise<void>,
-    getAccessToken: () => Promise<string | null>
+    getAccessToken: () => Promise<string | null>,
+    refreshAccessToken: () => Promise<string | null>
 }
 
 
@@ -60,9 +61,9 @@ export const useAuth = create<AuthStore>((set) => ({
             await SecureStore.setItemAsync(SecureStoreKeys.ACCESS_TOKEN, accessToken)
             set({ isAuthenticated: true, ...user })
         }catch(err){
+            console.error('auto sign in failed', err);
             await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)
             await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
-            console.error(err)
         }
     },
     getAccessToken: async () => {
@@ -78,9 +79,32 @@ export const useAuth = create<AuthStore>((set) => ({
         }catch(err){
             await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
             await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)
-            console.error(err)
+            console.error('error getting/refreshing access token', err)
             set({ isAuthenticated: false })
             return null;
         }
-    }
+    },
+    /**
+     * ### Function for non graphql related authenticated requests
+     * When invoked will attempt to refresh access token with the stored refresh token
+     * @success will update SecureStore and return access token
+     * @failure will update SecureStore, set authenticated to false, and return null 
+     * @returns Either an access token on success or null if unsuccessful
+     */
+    refreshAccessToken:  async (): Promise<string | null> => {
+        try{
+            const token = await SecureStore.getItemAsync(SecureStoreKeys.REFRESH_TOKEN)
+            if(!token) throw new Error('No refresh token available')
+            const { data } = await axios.post<TokenResponse>('/auth/token', { token })
+            await SecureStore.setItemAsync(SecureStoreKeys.ACCESS_TOKEN, data.accessToken)
+            await SecureStore.setItemAsync(SecureStoreKeys.REFRESH_TOKEN, data.refreshToken)
+            return data.accessToken;
+        }catch(err){
+            console.error('error refreshing access token', err)
+            await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
+            await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)
+            set({ isAuthenticated: false })
+            return null;
+        }
+}
 }))
