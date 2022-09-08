@@ -28,35 +28,36 @@ const onErrorLink = onError(({
     graphQLErrors, operation, forward 
 }) => {
     if(graphQLErrors){
-      for(let err of graphQLErrors){
-          if(err.extensions.code === "ACCESS_TOKEN_EXPIRED"){
-            const headers = operation.getContext().headers;
-            const context =  { headers: { ...headers } }
-            operation.setContext(async () => {
-              try{
-                const token = await SecureStore.getItemAsync('REFRESH_TOKEN')
-                if(!token) return context;
-                const { data } = await axios.post<TokenResponse>('/auth/token', { token })
-                const { refreshToken, accessToken } = data;
-                await SecureStore.setItemAsync(SecureStoreKeys.REFRESH_TOKEN, refreshToken)
-                await SecureStore.setItemAsync(SecureStoreKeys.ACCESS_TOKEN, accessToken)
-                context.headers.authorization = accessToken;
-                return context;
-              }catch(err){
-                await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
-                await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)
-                return context;
-              }
-            })
-            break;
-          }
-      }
-      return forward(operation)
+        graphQLErrors.forEach(x => console.log('gql error', x.extensions.code))
+        for(let err of graphQLErrors){
+            if(err.extensions.code === "ACCESS_TOKEN_EXPIRED"){
+                operation.setContext(async () => {
+                    const headers = operation.getContext().headers;
+                    try{
+                        const token = await SecureStore.getItemAsync(SecureStoreKeys.REFRESH_TOKEN)
+                        if(!token) throw new Error('Refresh token not stored')
+                        const { data } = await axios.post<TokenResponse>('/auth/token', { token })
+                        const { refreshToken, accessToken } = data;
+                        await SecureStore.setItemAsync(SecureStoreKeys.REFRESH_TOKEN, refreshToken)
+                        await SecureStore.setItemAsync(SecureStoreKeys.ACCESS_TOKEN, accessToken)
+                        return { headers: { ...headers, authorization: `Bearer ${accessToken}` } }
+                    }catch(err){
+                        console.error(err)
+                        //Should be an extremely rare occurence -- refresh token expired after app launch
+                        console.warn('Access token refresh failed via Apollo Client')
+                        await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
+                        await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)
+                        return { headers: { ...headers, authorization: null } }
+                    }
+                })
+                return forward(operation)
+            }
+        }
     }
 })
 
 export const apolloClient = new ApolloClient({
-    link: from([authLink, onErrorLink, httpLink]),
+    link: from([onErrorLink, authLink, httpLink]),
     cache: new InMemoryCache({
         typePolicies: {
             Query: {
