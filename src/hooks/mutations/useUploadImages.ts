@@ -49,7 +49,6 @@ export const useUploadImages = () => {
             }
         }catch(error){
             const err = error as AxiosError;
-            console.log(err.response?.status)
             if(err.response && err.response.status && err.response.status === 401){
                 const newToken = await refreshAccessToken()
                 if(!newToken) return { attempts: 1, cause: 'AUTHENTICATION', signedUrl: null }
@@ -90,7 +89,6 @@ export const useUploadImages = () => {
                 const type = validateMimeType(body.type)
                 if(!type) throw new Error('File type not accepted')
                 const { signedUrl, cause } = await getSignedUrl(type, token)
-                console.log(signedUrl, cause)
                 if(!signedUrl && cause === 'AUTHENTICATION'){
                     showReauthenticate(); return;
                 }
