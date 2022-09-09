@@ -1,4 +1,12 @@
 import create from 'zustand'
+import { mapErrorTypeToDetails, ErrorType } from '../../utils/mapErrorTypeToDetails'
+import { mapSuccessTypeToDetails, SuccessType } from '../../utils/mapSuccessTypeToDetails'
+
+export interface Details {
+    message: string | null
+    title: string | null
+}
+
 
 export interface ModalStore {
     auth: boolean
@@ -8,12 +16,20 @@ export interface ModalStore {
     confirmUpload: boolean
     confirmUploadWaterbody: number | null
     setConfirmUpload: (waterbody: number | null, value?: boolean) => void
-    uploadPartialSuccess: boolean,
-    setUploadPartialSuccess: (value?: boolean) => void
-    uploadSuccess: boolean,
-    setUploadSuccess: (value?: boolean) => void
+    success: boolean,
+    successTitle: string | null
+    successMessage: string | null
+    setSuccess: (value?: boolean, type?: SuccessType) => void
     error: boolean,
-    setError: (value?: boolean) => void
+    errorMessage: string | null
+    errorTitle: string | null
+    setError: (value?: boolean, type?: ErrorType) => void
+    review: boolean,
+    reviewWaterbody: number | null
+    setReview: (waterbody: number | null, value?: boolean) => void
+    snack: boolean,
+    snackText: string | null,
+    setSnack: (value: string | false) => void
     dismiss: () => void
 }
 
@@ -28,19 +44,44 @@ export const useModalStore = create<ModalStore>((set) => ({
         confirmUpload: value,
         confirmUploadWaterbody: waterbody
     }),
-    uploadPartialSuccess: false,
-    setUploadPartialSuccess: (value=true) => set({ uploadPartialSuccess: value }),
-    uploadSuccess: false,
-    setUploadSuccess: (value=true) => set({ uploadSuccess: value }),
+    success: false,
+    successMessage: null,
+    successTitle: null,
+    setSuccess: (value=true, type) => {
+        const { message, title } = mapSuccessTypeToDetails(type)
+        set({ success: value, successMessage: message, successTitle: title})
+    },
     error: false,
-    setError:  (value=true) => set({ error: value }),
+    errorMessage: null,
+    errorTitle: null,
+    setError:  (value=true, type) => {
+        const { message, title } = mapErrorTypeToDetails(type);
+        set({ error: value, errorMessage: message, errorTitle: title })
+    },
+    review: false,
+    reviewWaterbody: null,
+    setReview: (waterbody, value=true) => set({ 
+        review: value, 
+        reviewWaterbody: waterbody 
+    }),
+    snack: false,
+    snackText: null,
+    setSnack: value => set({
+        snack: value ? true: false, 
+        snackText: value ? value : null  
+    }),
     dismiss: () => set({
         auth: false,
         reauthenticate: false,
         confirmUpload: false,
         confirmUploadWaterbody: null,
-        uploadPartialSuccess: false,
-        uploadSuccess: false,
-        error: false
+        success: false,
+        successMessage: null,
+        successTitle: null,
+        error: false,
+        errorMessage: null,
+        errorTitle: null,
+        review: false,
+        reviewWaterbody: null,
     })
 }))

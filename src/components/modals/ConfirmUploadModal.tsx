@@ -15,14 +15,12 @@ const ConfirmUploadModal = (props: Props) => {
 
     const {
         setConfirmUploadModalVisible,
-        setPartialSuccesModalVisible,
         setSuccessModalVisible,
         setErrorModalVisible,
         waterbody
     } = useModalStore(state => ({
-        setPartialSuccesModalVisible: state.setUploadPartialSuccess,
         setConfirmUploadModalVisible: state.setConfirmUpload,
-        setSuccessModalVisible: state.setUploadSuccess,
+        setSuccessModalVisible: state.setSuccess,
         waterbody: state.confirmUploadWaterbody,
         setErrorModalVisible: state.setError,
     }))
@@ -44,11 +42,11 @@ const ConfirmUploadModal = (props: Props) => {
         })
         setConfirmUploadModalVisible(null, false)
         if(!data || data.addWaterbodyMedia.length === 0){
-            setErrorModalVisible()
+            setErrorModalVisible(true, 'UPLOAD')
         }else if(data.addWaterbodyMedia.length !== uploads.length){
-            setPartialSuccesModalVisible()
+            setErrorModalVisible(true, 'UPLOAD_PARTIAL')
         }else{
-            setSuccessModalVisible(true)
+            setSuccessModalVisible(true, 'UPLOAD')
         }
         return clearImages()
     }
@@ -89,7 +87,10 @@ const ConfirmUploadModal = (props: Props) => {
             </Dialog.Content>
             <Dialog.Actions>
                 <Button onPress={handleCancel}>Cancel</Button>
-                <Button onPress={handleConfirm}>Confirm</Button>
+                <Button 
+                    onPress={handleConfirm} 
+                    loading={loading}
+                >Confirm</Button>
             </Dialog.Actions>
         </Dialog>
     );

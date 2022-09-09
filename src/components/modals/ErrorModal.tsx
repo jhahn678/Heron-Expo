@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
+import { useModalStore } from "../../store/modal/useModalStore";
 
 interface Props {
     visible: boolean
@@ -8,6 +9,11 @@ interface Props {
 }
 
 const ErrorModal = (props: Props) => {
+
+    const { message, title } = useModalStore(state => ({
+        message: state.errorMessage,
+        title: state.errorTitle
+    }))
 
     return (
         <Dialog 
@@ -17,11 +23,11 @@ const ErrorModal = (props: Props) => {
             style={styles.container}
         >
             <Dialog.Title style={styles.title}>
-                Something went wrong 😵‍💫
+                {title ? title : 'Something went wrong 😵‍💫'}
             </Dialog.Title>
             <Dialog.Content>
                 <Text style={styles.text}>
-                    You may need to refresh the app and try again
+                    {message ? message : 'You may need to refresh the app and try again'}
                 </Text>
             </Dialog.Content>
             <Dialog.Actions>

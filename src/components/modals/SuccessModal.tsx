@@ -1,13 +1,19 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
+import { useModalStore } from "../../store/modal/useModalStore";
 
 interface Props {
     visible: boolean
     dismiss: () => void
 }
 
-const UploadPartialSuccessModal = (props: Props) => {
+const SuccessModal = (props: Props) => {
+
+    const { message, title } = useModalStore(state => ({
+        message: state.successMessage,
+        title: state.successTitle
+    }))
 
     return (
         <Dialog 
@@ -17,26 +23,27 @@ const UploadPartialSuccessModal = (props: Props) => {
             style={styles.container}
         >
             <Dialog.Title style={styles.title}>
-                There was an issue 🤔
+                {title}
             </Dialog.Title>
             <Dialog.Content>
                 <Text style={styles.text}>
-                    Some of the images you attempted to upload could not be processed.
-                    The problem may have been their file format.
+                    {message}
                 </Text>
             </Dialog.Content>
             <Dialog.Actions>
-                <Button onPress={props.dismiss}>Dismiss</Button>
+                <Button onPress={props.dismiss}>
+                    Dismiss
+                </Button>
             </Dialog.Actions>
         </Dialog>
     );
 };
 
-export default UploadPartialSuccessModal;
+export default SuccessModal;
 
 const styles = StyleSheet.create({
     container: {
-        height: 200,
+        height: 210,
         width: '90%',
         alignSelf: 'center',
         position: 'relative',

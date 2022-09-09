@@ -1,30 +1,39 @@
 import AuthModal from "./AuthModal";
 import ErrorModal from "./ErrorModal";
-import { Portal } from "react-native-paper";
+import ReviewModal from "./ReviewModal";
+import SuccessModal from "./SuccessModal";
+import { Portal, Snackbar } from "react-native-paper";
 import ConfirmUploadModal from "./ConfirmUploadModal";
-import UploadSuccessModal from "./UploadSuccessModal";
 import ReauthenticateModal from "./ReauthenticateModal";
 import { useModalStore } from '../../store/modal/useModalStore'
-import UploadPartialSuccessModal from "./UploadPartialSuccessModal";
 
 const ModalPortal = () => {
     
     const dismiss = useModalStore(state => state.dismiss)
     const authVisible = useModalStore(state => state.auth)
     const errorVisible = useModalStore(state => state.error)
+    const reviewVisible = useModalStore(state => state.review)
+    const successVisible = useModalStore(state => state.success)
     const reauthVisible = useModalStore(state => state.reauthenticate)
-    const uploadSuccessful = useModalStore(state => state.uploadSuccess)
     const confirmUploadVisible = useModalStore(state => state.confirmUpload)
-    const uploadPartialSuccess = useModalStore(state => state.uploadPartialSuccess)
+    const snack = useModalStore(state => ({
+        visible: state.snack,
+        text: state.snackText,
+        dismiss: () => state.setSnack(false)
+    }))
     
     return (
         <Portal>
             <AuthModal visible={authVisible} dismiss={dismiss}/>
             <ErrorModal visible={errorVisible} dismiss={dismiss}/>
+            <ReviewModal visible={reviewVisible} dismiss={dismiss}/>
+            <SuccessModal visible={successVisible} dismiss={dismiss}/>
             <ReauthenticateModal visible={reauthVisible} dismiss={dismiss}/>
-            <UploadSuccessModal visible={uploadSuccessful} dismiss={dismiss}/>
             <ConfirmUploadModal visible={confirmUploadVisible} dismiss={dismiss}/>
-            <UploadPartialSuccessModal visible={uploadPartialSuccess} dismiss={dismiss}/>
+            <Snackbar 
+                visible={snack.visible} onDismiss={snack.dismiss}
+                action={{ label: 'close', onPress: snack.dismiss }}
+            >{snack.text}</Snackbar>
         </Portal>
     );
 };
