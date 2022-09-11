@@ -1,23 +1,22 @@
 import React, { useEffect, useState } from 'react'
-import { 
-    StyleSheet, 
-    View, 
-    ScrollView, 
-    Image 
-} from 'react-native'
 import { Text, Title, FAB } from 'react-native-paper'
-import { useGetWaterbodyQuery } from '../../hooks/queries/useGetWaterbodyQuery';
-import { ExploreStackScreenProps } from '../../types/navigation'
+import { useAuth } from '../../store/auth/useAuth'
 import FishIcon from '../../components/icons/FishIcon';
-import AddImageIcon from '../../components/icons/AddImageIcon';
-import AddLocationIcon from '../../components/icons/AddLocationIcon';
 import BackButton from '../../components/buttons/BackButton';
+import AddImageIcon from '../../components/icons/AddImageIcon';
 import ShareButton from '../../components/buttons/ShareButton';
-import SaveIconButton from '../../components/buttons/SaveIconButton';
-import { useImagePicker } from '../../hooks/utils/useImagePicker';
 import { useImageStore } from '../../store/image/useImageStore';
 import { useModalStore } from '../../store/modal/useModalStore';
-import { useAuth } from '../../store/auth/useAuth';
+import { ExploreStackScreenProps } from '../../types/navigation';
+import RatingDisplay from '../../components/ratings/RatingDisplay';
+import { useImagePicker } from '../../hooks/utils/useImagePicker';
+import { StyleSheet, View, ScrollView, Image, Pressable } from 'react-native';
+import AddLocationIcon from '../../components/icons/AddLocationIcon';
+import SaveIconButton from '../../components/buttons/SaveIconButton';
+import { useGetWaterbodyQuery } from '../../hooks/queries/useGetWaterbodyQuery';
+import ReviewsSection from './sections/ReviewsSection';
+import MapSection from './sections/MapSection';
+import MediaSection from './sections/MediaSection';
 
 
 const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'WaterbodyScreen'>): JSX.Element => {
@@ -25,31 +24,36 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     const { params } = route;
     const [fabOpen, setFabOpen] = useState(false)
     const { data, loading, error } = useGetWaterbodyQuery(params.id)
-
     const { openImagePicker } = useImagePicker()
     const setImages = useImageStore(state => state.setImages)
     const showConfirmUpload = useModalStore(state => state.setConfirmUpload)
     const isAuthenticated = useAuth(state => state.isAuthenticated)
     const showAuthModal = useModalStore(state => state.setAuth)
-    
+    const showReviewModal = useModalStore(state => state.setReview)
+
 
     const handleAddImage = async () => {
         const result = await openImagePicker()
-        if(result) {
-            setImages(result)
-            showConfirmUpload(params.id, true)
-        }
+        if(!result) return;
+        setImages(result)
+        showConfirmUpload(params.id, true)
     }
 
-    const handleAddCatch = () => {
-        navigation.navigate('NewCatchScreen', { waterbody: params.id })
-    }
+    const handleAddCatch = () => navigation.navigate('NewCatchScreen', { waterbody: params.id })
     const handleAddLocation = () => navigation.navigate('NewLocationScreen', { waterbody: params.id })
+    const handleMediaScreen = () => navigation.navigate('MediaGridScreen', { 
+        waterbody: params.id, 
+        total: data?.waterbody.total_media, 
+        title: data?.waterbody.name 
+    })
+    const handleStartReview = () => showReviewModal(params.id)
   
     return (
         <ScrollView style={styles.container}>
             <View>
-                <Image source={{ uri: data?.waterbody.media[0]?.url}} style={styles.image}/>
+                <Pressable onPress={handleMediaScreen}>
+                    <Image source={{ uri: data?.waterbody.media[0]?.url}} style={styles.image}/>
+                </Pressable>
                 <BackButton style={styles.back}/>
                 <ShareButton style={styles.share} waterbody={data?.waterbody.id}/>
                 <SaveIconButton style={styles.save} waterbody={data?.waterbody.id}/>
@@ -88,8 +92,29 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                         `${data?.waterbody.subregion} ${data?.waterbody.country}` :
                         `${data?.waterbody.country}`
                     }</Text>
+                    <RatingDisplay 
+                        onPress={handleStartReview} style={{ marginTop: 16 }} 
+                        numberOfRatings={data?.waterbody.total_reviews} 
+                        rating={data?.waterbody.average_rating}
+                    />
                 </View>
             </View>
+            <MapSection 
+                navigation={navigation} 
+                waterbody={params.id} 
+                uri={data?.waterbody.media[0]?.url}
+            />
+            <MediaSection
+                navigation={navigation} 
+                waterbody={params.id} name={data?.waterbody.name}
+                totalMedia={data?.waterbody.total_media}
+            />
+            <ReviewsSection 
+                navigation={navigation} 
+                waterbody={params.id} name={data?.waterbody.name}
+                totalReviews={data?.waterbody.total_reviews}
+                rating={data?.waterbody.average_rating}
+            />
         </ScrollView>
     )
 }
@@ -102,7 +127,8 @@ const styles = StyleSheet.create({
         minHeight: '100%',
     },
     header: {
-        padding: 24,
+        paddingHorizontal: 16,
+        paddingVertical: 24,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
