@@ -56,6 +56,14 @@ export interface NearbyWaterbody extends WaterbodyListItem {
     distance: number
 }
 
+export interface IWaterbodyReview {
+    id: number
+    waterbody: number
+    user: number
+    rating: number
+    text: string
+    created_at: Date
+}
 
 
 

@@ -24,3 +24,9 @@ export interface WaterbodyMedia extends IMedia {
 }
 
 export interface UserAvatar extends IMedia{}
+
+export enum MediaType {
+    Catch = 'CATCH',
+    Location = 'LOCATION',
+    Waterbody = 'WATERBODY'
+  }

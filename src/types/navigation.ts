@@ -1,6 +1,7 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, NavigationProp } from "@react-navigation/native"
+import { MediaType } from "./Media"
 
 export type RootStackParams = {
     HomeAuthScreen: { showBack: boolean } | undefined,
@@ -15,9 +16,17 @@ export type RootStackParams = {
     ViewLocationScreen: { id: number }
     UserProfileScreen: { id: number },
     UserSearchScreen: undefined
-    ViewMapScreen: undefined
+    ViewMapScreen: { 
+        waterbody?: number | number[], 
+        catch?: number | number [], 
+        location?: number | number[]
+    }
     SaveMapScreen: undefined
     CameraScreen: undefined
+    MediaGridScreen: { waterbody: number, title: string | undefined, total?: number }
+    ReviewsScreen: { waterbody: number, title: string | undefined, total?: number }
+    /**  @URI will display only the image -- no details **/
+    ViewImageScreen: { id?: number, type?: MediaType, uri?: string, title?: string | undefined }
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 
