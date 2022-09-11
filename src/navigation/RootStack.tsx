@@ -18,6 +18,9 @@ import SearchUsersScreen from "../screens/contacts/UserSearchScreen/UserSearchSc
 import ViewCatchScreen from "../screens/catch/ViewCatchScreen";
 import ViewLocationScreen from "../screens/location/ViewLocationScreen";
 import { navigationRef } from "./navigationRef";
+import MediaGridScreen from "../screens/media/MediaGridScreen";
+import ReviewsScreen from "../screens/waterbody/ReviewsScreen";
+import ViewImageScreen from "../screens/media/ViewImageScreen";
 
 const RootStack = (): JSX.Element => {
     
@@ -54,6 +57,9 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='UserSearchScreen' component={SearchUsersScreen}/>
                 <Stack.Screen name='ViewCatchScreen' component={ViewCatchScreen}/>
                 <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
+                <Stack.Screen name='MediaGridScreen' component={MediaGridScreen}/>
+                <Stack.Screen name='ReviewsScreen' component={ReviewsScreen}/>
+                <Stack.Screen name='ViewImageScreen' component={ViewImageScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
