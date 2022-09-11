@@ -11,7 +11,7 @@ interface Props {
 
 const HeaderSection = ({ navigation }: Props) => {
 
-    const { isAuthenticated, firstname, avatar} = useAuth()
+    const { isAuthenticated, firstname, avatar, signOut } = useAuth()
 
     const navigateToSearch = () => navigation.navigate('SearchBarScreen')
     const navigateToProfile = () => navigation.navigate('MyProfileScreen')
@@ -28,7 +28,7 @@ const HeaderSection = ({ navigation }: Props) => {
                             <Avatar.Image source={{ uri: avatar }}/>
                         </Pressable>
                     : firstname &&
-                        <Pressable onPress={navigateToProfile}>
+                        <Pressable onPress={signOut}>
                             <Avatar.Text label={firstname[0]}/>
                         </Pressable>
                     : 

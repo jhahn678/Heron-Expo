@@ -6,7 +6,6 @@ import { ExploreStackScreenProps } from '../../../../types/navigation'
 import EnableLocationButton from '../../../../components/buttons/EnableLocationButton'
 import WaterbodiesListHorizontal from '../../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListHorizontal'
 import { useGetNearbyWaterbodiesQuery } from '../../../../hooks/queries/useGetNearbyWaterbodiesQuery'
-import { useGetNearbyWaterbodiesQueryMock } from '../../../../../__mocks'
 import { useSearchParamStore } from '../../../../store/search/useSearchParamStore'
 
 interface Props {
@@ -16,7 +15,7 @@ interface Props {
 const NearbySection = ({ navigation }: Props) => {
 
     const { setSort } = useSearchParamStore()
-    const { hasCoordinates, latitude, longitude } = useLocationStore()
+    const { latitude, longitude, hasPermission } = useLocationStore()
     
     const { data, loading, error } = useGetNearbyWaterbodiesQuery({ latitude, longitude })
 
@@ -30,34 +29,18 @@ const NearbySection = ({ navigation }: Props) => {
     }
 
     return (
-        <View style={[styles.container, { height: (!hasCoordinates || error) ? 150 : 370}]}>
+        <View style={[styles.container, { height: (hasPermission === false || error) ? 150 : 370}]}>
             <Title style={styles.title}>What's nearby</Title>
-            { hasCoordinates ? 
-                data ? 
-                    //data available
-                    <WaterbodiesListHorizontal data={data.waterbodies}
-                        navigateViewMore={navigateViewMore}
-                        navigateToWaterbody={navigateToWaterbody}
-                    /> 
-                    
-                    //loading state
-                    : loading ? 
-                        <ActivityIndicator 
-                            style={{ marginTop: 128 }}
-                            animating 
-                            size='large'
-                        />
-                    
-                    //Error state    
-                    : error &&
-                        <Text style={styles.error}>Could not load nearby waterbodies</Text> 
-                
-                    //Location not available
-                    : 
-                        <EnableLocationButton 
-                            for='waterbodies' 
-                            style={styles.nearby}
-                        />
+            { hasPermission === false ? 
+                <EnableLocationButton 
+                    for='waterbodies' 
+                    style={styles.nearby}
+                /> :
+                <WaterbodiesListHorizontal 
+                    data={data?.waterbodies}
+                    navigateViewMore={navigateViewMore}
+                    navigateToWaterbody={navigateToWaterbody}
+                />
             }
         </View>
     )
