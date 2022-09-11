@@ -15,22 +15,29 @@ interface QueuedOperation {
 }
 
 interface Args {
-    getAndValidateAccessToken: () => Promise<string | null>
-    getAndValidateRefreshToken: () => Promise<string | null>
+    getAccessToken: () => Promise<string | null>
+    validateAccessToken: (token: string | null) => boolean
+    getRefreshToken: () => Promise<string | null>
+    validateRefreshToken: (token: string | null) => boolean
     fetchNewAccessToken: (refreshToken: string) => Promise<string | null>
 }
 
 export class RefreshTokenLink extends ApolloLink {
-    private getAndValidateAccessToken: () => Promise<string | null>
-    private getAndValidateRefreshToken: () => Promise<string | null>
+    private getAccessToken: () => Promise<string | null>
+    private getRefreshToken: () => Promise<string | null>
+    private validateAccessToken: (token: string | null) => boolean
+    private validateRefreshToken: (token: string | null) => boolean
     private fetchNewAccessToken: (refreshToken: string) => Promise<string | null>
     private isFetching: boolean = false;
     private operationQueue: QueuedOperation[] = [];
+    private accessToken: string | null = null;
 
     constructor(args: Args){
         super()
-        this.getAndValidateAccessToken = args.getAndValidateAccessToken;
-        this.getAndValidateRefreshToken = args.getAndValidateRefreshToken;
+        this.getAccessToken = args.getAccessToken;
+        this.getRefreshToken = args.getRefreshToken;
+        this.validateAccessToken = args.validateAccessToken;
+        this.validateRefreshToken = args.validateRefreshToken;
         this.fetchNewAccessToken = args.fetchNewAccessToken;
     }
 
@@ -42,16 +49,21 @@ export class RefreshTokenLink extends ApolloLink {
         this.operationQueue = this.operationQueue.filter(op => op !== entry)
     }
 
-    private executeQueue(authorization: string | null){
+    private setAuthorization(operation: Operation, token: string | null): void{
+        const authorization = typeof token === 'string' ? `Bearer ${token}` : undefined
+        operation.setContext(({ headers={}, ...context }) => ({
+            ...context,
+            headers: {
+                ...headers,
+                authorization
+            }
+        }))
+    }
+
+    private executeQueue(token: string | null){
         this.isFetching = false;
         this.operationQueue.forEach(({ operation, forward, observer }) => {
-            operation.setContext(({ headers={}, ...context }) => ({
-                ...context,
-                headers: {
-                    ...headers,
-                    authorization
-                }
-            }))
+            this.setAuthorization(operation, token)
             forward(operation).subscribe(observer)
             // console.log('AUTH LINK: EXECUTING QUEUE ITEM')
         })
@@ -69,28 +81,37 @@ export class RefreshTokenLink extends ApolloLink {
                 return () => this.cancelOperation(entry)
             })
         }else{
+            if(this.accessToken){
+                const isValid = this.validateAccessToken(this.accessToken);
+                if(isValid) {
+                    console.log('stored access token is valid')
+                    this.setAuthorization(operation, this.accessToken)
+                    return forward(operation)
+                }
+                // console.log('stored access token is invalid')
+                this.accessToken = null
+            }
             this.isFetching = true;
             return new Observable<FetchResult>((observer: Observer<FetchResult>) => {
-                this.getAndValidateAccessToken()
-                    .then(token => { 
-                        if(token) throw token
+                this.getAccessToken()
+                    .then(token => {
+                        const valid = this.validateAccessToken(token)
+                        if(valid) throw token;
                         // console.log('getting refresh token')
-                        return null 
                     })
-                    .then(() => this.getAndValidateRefreshToken())
-                    .then(token =>  { 
-                        if(!token) throw new Error
+                    .then(() => this.getRefreshToken())
+                    .then(token => {
+                        const valid = this.validateRefreshToken(token)
+                        //typeof satisfies ts -- should be checked in function
+                        if(!valid || typeof token !== 'string') throw new Error;
                         return this.fetchNewAccessToken(token)
                     })
                     .then(res => { throw res })
                     .catch(caught => {
-                        const authorization = typeof caught === 'string' ? `Bearer ${caught}` : null
-                        operation.setContext(({ headers={}, ...context }) => ({
-                            ...context,
-                            headers: { ...headers, authorization }
-                        }))
+                        if(typeof caught === 'string') this.accessToken = caught;
+                        this.setAuthorization(operation, caught)
                         forward(operation).subscribe(observer)
-                        this.executeQueue(authorization)
+                        this.executeQueue(caught)
                     })
             })
         }
