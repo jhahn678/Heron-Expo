@@ -3,7 +3,7 @@ import { StyleSheet } from "react-native";
 import { Button, Dialog, TextInput, Title } from "react-native-paper";
 import { useCreateWaterbodyReview } from "../../hooks/mutations/useCreateWaterbodyReview";
 import { useModalStore } from "../../store/modal/useModalStore";
-import RatingInput from "../inputs/RatingInput";
+import RatingInput from "../ratings/RatingInput";
 
 interface Props {
     visible: boolean
@@ -70,7 +70,6 @@ const ReviewModal = (props: Props) => {
             </Dialog.Title>
             <Dialog.Content style={styles.main}>
                 <RatingInput value={rating} setValue={setRating}/>
-
                 <TextInput 
                     mode="outlined" multiline
                     theme={{ roundness: 12 }}
@@ -80,10 +79,12 @@ const ReviewModal = (props: Props) => {
                 />
             </Dialog.Content>
             <Dialog.Actions>
-                <Button onPress={props.dismiss}>Cancel</Button>
+                <Button
+                    onPress={props.dismiss}
+                >Cancel</Button>
                 <Button 
+                    labelStyle={{ fontWeight: '600' }}
                     loading={loading}
-                    mode='elevated' 
                     onPress={handleSubmit} 
                 >Submit</Button>
             </Dialog.Actions>
