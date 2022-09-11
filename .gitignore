@@ -10,7 +10,6 @@ npm-debug.*
 *.orig.*
 *.env
 web-build/
-__mocks.ts
 
 # macOS
 .DS_Store
