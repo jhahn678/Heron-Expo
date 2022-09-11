@@ -9,7 +9,7 @@ import { useLocationStore } from '../../store/location/useLocationStore'
 
 interface GetCurrentLocationResult {
     getCurrentLocation: () => Promise<LocationObject>
-    hasPermission: boolean
+    hasPermission: boolean | undefined
 }
 
 export const useCurrentLocation = (): GetCurrentLocationResult => {

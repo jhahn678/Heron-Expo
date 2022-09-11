@@ -2,7 +2,7 @@ import { LocationObjectCoords } from 'expo-location'
 import create from 'zustand'
 
 interface LocationStore {
-    hasPermission: boolean
+    hasPermission: boolean | undefined
     hasCoordinates: boolean,
     isFetchingLocation: boolean,
     longitude: number | null,
@@ -13,7 +13,7 @@ interface LocationStore {
 }
 
 export const useLocationStore = create<LocationStore>((set) => ({
-    hasPermission: false,
+    hasPermission: undefined,
     hasCoordinates: false,
     isFetchingLocation: false,
     longitude: null,
