@@ -27,20 +27,26 @@ const validateTokenExp = (token: string | null, msBuffer: number): boolean => {
     return true;
 }
 
-const getAndValidateAccessToken = async (): Promise<string | null> => {
-    const token = await SecureStore.getItemAsync(SecureStoreKeys.ACCESS_TOKEN)
-    if(!token) return null
-    const valid = validateTokenExp(token, ACCESS_TOKEN_BUFFER)
-    if(!valid) return null;
-    return token
+const getAccessToken = (): Promise<string | null> => {
+    return SecureStore.getItemAsync(SecureStoreKeys.ACCESS_TOKEN)
+        .then(res => res ? res : null)
+        .catch(() => null)
 }
 
-const getAndValidateRefreshToken = async (): Promise<string | null> => {
-    const token = await SecureStore.getItemAsync(SecureStoreKeys.REFRESH_TOKEN)
-    if(!token) return null
+const validateAccessToken = (token: string | null): boolean => {
+    const valid = validateTokenExp(token, ACCESS_TOKEN_BUFFER)
+    if(!valid) return false; return true;
+}
+
+const getRefreshToken = (): Promise<string | null> => {
+    return SecureStore.getItemAsync(SecureStoreKeys.REFRESH_TOKEN)
+        .then(res => res ? res : null)
+        .catch(() => null)
+}
+
+const validateRefreshToken = (token: string | null): boolean => {
     const valid = validateTokenExp(token, REFRESH_TOKEN_BUFFER)
-    if(!valid) return null;
-    return token
+    if(!valid) return false; return true
 }
 
 const fetchNewAccessToken = async (token: string): Promise<string | null> => {
@@ -60,8 +66,10 @@ const fetchNewAccessToken = async (token: string): Promise<string | null> => {
 
 const tokenLink = new RefreshTokenLink({
     fetchNewAccessToken,
-    getAndValidateAccessToken,
-    getAndValidateRefreshToken
+    getAccessToken,
+    getRefreshToken,
+    validateAccessToken,
+    validateRefreshToken
 })
 
 const httpLink = createHttpLink({ uri: API_GRAPH_URL });
