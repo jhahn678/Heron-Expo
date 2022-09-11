@@ -17,6 +17,8 @@ query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int) {
         total_catches
         total_locations
         total_media
+        total_reviews
+        average_rating
         media(limit: $mediaLimit) {
             url
         }
@@ -39,7 +41,9 @@ query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int) {
 export interface GetWaterbody extends Omit<IWaterbody, 'oid' | 'weight'>{
     total_catches: number
     total_locations: number
-    total_media: number
+    total_media: number,
+    total_reviews: number,
+    average_rating: number | null,
     media: Pick<IMedia, 'url'>[]
     catches: GetWaterbodyCatch[]
 }
