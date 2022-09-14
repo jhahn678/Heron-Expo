@@ -1,15 +1,16 @@
 import React from 'react'
-import { StyleSheet, View } from 'react-native'
+import { StyleProp, StyleSheet, View, ViewStyle } from 'react-native'
 import { Button } from 'react-native-paper'
 
 interface Props {
     /** Callback to navigate to list screen */
     onPress: () => void
+    style?: StyleProp<ViewStyle>
 }
 
-const ListFooterSeeMore = ({ onPress }: Props) => {
+const ListFooterSeeMore = ({ onPress, style }: Props) => {
     return (
-        <View style={styles.container}>
+        <View style={[styles.container, style]}>
             <Button 
                 icon='arrow-right'
                 onPress={onPress}
