@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
   image: {
     height: '60%',
     width: '100%',
-    backgroundColor: 'gray',
+    backgroundColor: "#e3e3e3",
     borderRadius: 12
   },
   totals: {
