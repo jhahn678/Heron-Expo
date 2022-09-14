@@ -17,7 +17,10 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
 
     // const { data, loading, error, fetchMore } = useGetCatchesQuery({ type, id, sort, coordinates }) 
     const { data, loading, error } = useGetCatchesQueryMock({ loading: false, error: false, limit: 20 })
+
     const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
+
+    const navigateCatch = (id: number) => () => navigation.navigate('ViewCatchScreen', { id }) 
 
     const navigateWaterbody = (id: number) => () => navigation.navigate('MainTabs', { 
         screen: 'ExploreStack',
@@ -36,14 +39,15 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
             { data ? 
                 <FlashList 
                     data={data?.catches}
-                    contentContainerStyle={{ paddingTop: 80 }}
+                    contentContainerStyle={{ paddingTop: 100 }}
                     showsVerticalScrollIndicator={false}
                     estimatedItemSize={300}
                     renderItem={({ item }) => (
                         <CatchesListItem 
                             key={item.id} data={item} 
-                            navigateToUser={navigateUser(item.id)} 
-                            navigateToWaterbody={navigateWaterbody(item.id)}
+                            navigateToCatch={navigateCatch(item.id)}
+                            navigateToUser={navigateUser(item.user.id)} 
+                            navigateToWaterbody={navigateWaterbody(item.waterbody.id)}
                         />
                     )}
                 /> :
