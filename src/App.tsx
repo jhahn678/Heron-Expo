@@ -11,6 +11,7 @@ import { reactQueryClient } from './config/react-query'
 import { SecureStoreKeys } from './types/SecureStore'
 import { StatusBar } from 'expo-status-bar'
 import ModalPortal from './components/modals/ModalPortal'
+import { theme } from './config/theme'
 
 export default function App() { 
   const [appIsReady, setAppIsReady] = useState(false)
@@ -52,7 +53,7 @@ export default function App() {
   return (
     <ApolloProvider client={apolloClient}>
       <QueryClientProvider client={reactQueryClient}>
-        <PaperProvider>
+        <PaperProvider theme={theme}>
             <StatusBar style='auto'/>
             <RootStack/>
             <ModalPortal/>
