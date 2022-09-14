@@ -36,10 +36,11 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         alignItems: 'center',
-        paddingVertical: 32
+        paddingVertical: 16,
+        paddingBottom: 32
     },
     surface: {
-        height: 200,
+        height: 230,
         width: '80%'
     },
     image: {
@@ -51,7 +52,7 @@ const styles = StyleSheet.create({
     button: {
         position: 'absolute',
         alignSelf: 'center',
-        bottom: 12,
+        bottom: 16,
         width: '86%',
         borderRadius: 10
     }

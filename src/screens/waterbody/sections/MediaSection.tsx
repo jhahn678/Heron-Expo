@@ -19,7 +19,7 @@ interface Props {
 const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
 
     // const { data, loading, error } = useGetWaterbodyMedia({ id: waterbody, limit: 8 })
-    const { data, loading, error } = useGetWaterbodyMediaMock({ loading: true, error: false, limit: 8 })
+    const { data, loading, error } = useGetWaterbodyMediaMock({ loading: false, error: false, limit: 8 })
     const navigateToImage = (id: number) => () => navigation.navigate('ViewImageScreen', { id, type: MediaType.Waterbody, title: name })
     const navigateToMedia = () => navigation.navigate('MediaGridScreen', { title: name, waterbody, total: totalMedia})
 
@@ -37,22 +37,17 @@ const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
                 ListFooterComponent={<ListFooterSeeMore onPress={navigateToMedia}/>}
                 renderItem={({ item }) => (
                     data ? 
-                    <Pressable onPress={navigateToImage(item.id)}>
-                        <Surface key={item.id} style={styles.imageSurface}>
-                            <Image
-                            source={{ uri: item.url }} 
-                            style={styles.image}
-                            resizeMode='cover'
-                            />
-                        </Surface>
+                    <Pressable onPress={navigateToImage(item.id)} style={styles.imageSurface}>
+                        <Image
+                        source={{ uri: item.url }} 
+                        style={styles.image}
+                        resizeMode='cover'
+                        />
                     </Pressable> : 
                     <BoxLoader 
                         height={200} 
                         width={200} 
-                        style={{
-                            marginVertical: 24,
-                            marginRight: 8
-                        }}
+                        style={{ marginRight: 8 }}
                     />
                 )}
             />
@@ -66,9 +61,15 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         height: 300,
+        borderColor: 'rgba(0,0,0,.1)',
+        borderTopWidth: 1,
+        borderBottomWidth: 1,
+        paddingBottom: 24,
+        paddingTop: 16
     },
     header: {
-        paddingHorizontal: 16,
+        paddingLeft: 16,
+        paddingBottom: 16,
         paddingRight: 28,
         flexDirection: 'row',
         alignItems: 'center',
@@ -82,7 +83,6 @@ const styles = StyleSheet.create({
         width: 200,
         borderRadius: 12,
         marginRight: 8,
-        marginVertical: 24
     },
     image: {
         height: '100%',
