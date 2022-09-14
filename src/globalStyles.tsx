@@ -8,5 +8,9 @@ export default StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
+    },
+    baseline: {
+        flexDirection: 'row', 
+        alignItems: 'baseline' 
     }
 })
