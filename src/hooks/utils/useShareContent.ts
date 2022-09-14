@@ -1,6 +1,5 @@
 import { Share, ShareAction } from "react-native";
 
-
 type ShareType = 'WATERBODY'| 'CATCH' | 'LOCATION'
 
 type ShareTypeMessage = {
