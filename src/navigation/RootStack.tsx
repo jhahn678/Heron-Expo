@@ -21,6 +21,8 @@ import { navigationRef } from "./navigationRef";
 import MediaGridScreen from "../screens/media/MediaGridScreen";
 import ReviewsScreen from "../screens/waterbody/ReviewsScreen";
 import ViewImageScreen from "../screens/media/ViewImageScreen";
+import CatchListScreen from "../screens/catch/CatchListScreen";
+import LocationListScreen from "../screens/location/LocationListScreen";
 
 const RootStack = (): JSX.Element => {
     
@@ -60,6 +62,8 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='MediaGridScreen' component={MediaGridScreen}/>
                 <Stack.Screen name='ReviewsScreen' component={ReviewsScreen}/>
                 <Stack.Screen name='ViewImageScreen' component={ViewImageScreen}/>
+                <Stack.Screen name='CatchListScreen' component={CatchListScreen}/>
+                <Stack.Screen name='LocationListScreen' component={LocationListScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
