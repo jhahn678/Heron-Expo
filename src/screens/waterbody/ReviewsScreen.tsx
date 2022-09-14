@@ -77,7 +77,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
                 >Sort by</Button>
               </View>
             }
-            renderItem={({ item, index }) => (
+            renderItem={({ item }) => (
               <WaterbodyReview 
                 key={item.id} data={item} 
                 navigateToUser={navigateUser(item.user.id)}
