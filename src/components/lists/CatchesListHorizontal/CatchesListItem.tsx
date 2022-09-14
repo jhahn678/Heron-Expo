@@ -17,7 +17,7 @@ const CatchesListItem = ({ data, navigation }: Props) => {
     const navigateCatch = () => navigation.navigate('ViewCatchScreen', { id: data.id })
 
     return (
-        <Card style={styles.container}>
+        <View style={styles.container}>
             <TouchableRipple onPress={navigateUser}>
                 <View style={styles.header}>
                     <Avatar fullname={data.user.fullname} uri={data.user.avatar} size={40}/>
@@ -30,7 +30,7 @@ const CatchesListItem = ({ data, navigation }: Props) => {
             <Pressable onPress={navigateCatch} style={styles.image}>
                 <Image style={styles.image} source={{ uri: data.media[0].url }}/>
             </Pressable>
-        </Card>
+        </View>
     );
 };
 
@@ -42,7 +42,8 @@ const styles = StyleSheet.create({
         width: 300,
         marginRight: 8,
         overflow: 'hidden',
-        borderRadius: 12
+        borderRadius: 12,
+        backgroundColor: 'white'
     },
     header: {
         flexDirection: 'row',
