@@ -151,7 +151,7 @@ export const useGetCatchesQueryMock = ({ error=false, limit=20, loading=false }:
         fullname: faker.name.fullName(),
         id: 75634
       },
-      media: [{ url: faker.image.animals() }]
+      media: new Array(1).fill(null).map(() => ({ url: faker.image.nature()}))
     }))
   }
 
