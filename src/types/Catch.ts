@@ -1,21 +1,21 @@
 import { IUser } from "./User";
 import { Point } from 'geojson'
-import { CatchMedia, IMedia } from "./Media";
+import { IMedia } from "./Media";
+
 
 export interface ICatch {
     id: number
-    user: IUser
+    user: number
     description?: string
     geom?: Point
+    /** INCHES */
     length?: number
-    length_unit?: 'CM' | 'IN'
-    media?: CatchMedia[]
     rig?: string
     species?: string
     title?: string
     waterbody?: number
+    /** OUNCES */
     weight?: number
-    weight_unit?: 'G' | 'OZ' | 'LB' | 'KG'
     created_at: Date
     updated_at?: Date;
 }
@@ -26,3 +26,16 @@ export interface GetWaterbodyCatch extends Pick<
     user: Pick<IUser, 'fullname' | 'id' | 'avatar'>
     media: Pick<IMedia, 'url'>[]
 }
+
+export enum CatchSort {
+    CreatedAtNewest = 'CREATED_AT_NEWEST',
+    CreatedAtOldest = 'CREATED_AT_OLDEST',
+    LengthLargest = 'LENGTH_LARGEST',
+    WeightLargest = 'WEIGHT_LARGEST'
+}
+
+export enum CatchQueryType {
+    Coordinates = 'COORDINATES',
+    User = 'USER',
+    Waterbody = 'WATERBODY'
+  }

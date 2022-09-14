@@ -1,7 +1,9 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
-import { CompositeScreenProps, NavigationProp } from "@react-navigation/native"
+import { CompositeScreenProps, NavigationProp as NavProp, NavigatorScreenParams } from "@react-navigation/native"
 import { MediaType } from "./Media"
+import { CatchQueryType } from "./Catch"
+
 
 export type RootStackParams = {
     HomeAuthScreen: { showBack: boolean } | undefined,
@@ -9,7 +11,7 @@ export type RootStackParams = {
     RegisterAuthScreenOne: undefined,
     RegisterAuthScreenTwo: undefined,
     RegisterAuthScreenThree: undefined,
-    MainTabs: undefined,
+    MainTabs: NavigatorScreenParams<BottomTabsParams>,
     NewCatchScreen: { waterbody: number } | undefined
     ViewCatchScreen: { id: number }
     NewLocationScreen: { waterbody: number } | undefined
@@ -27,6 +29,13 @@ export type RootStackParams = {
     ReviewsScreen: { waterbody: number, title: string | undefined, total?: number }
     /**  @URI will display only the image -- no details **/
     ViewImageScreen: { id?: number, type?: MediaType, uri?: string, title?: string | undefined }
+    CatchListScreen: { type: CatchQueryType, id?: number, coordinates?: Coordinates, title: string | undefined }
+    LocationListScreen: { waterbody: number, title: string | undefined  }
+}
+
+type Coordinates = {
+    latitude: number
+    longitude: number
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 
@@ -39,6 +48,7 @@ export type ExploreStackParams = {
     WaterbodyScreen: { id: number }
 }
 
+
 export type ExploreStackScreenProps<T extends keyof ExploreStackParams> = 
     CompositeScreenProps<
         NativeStackScreenProps<ExploreStackParams, T>,
@@ -49,7 +59,7 @@ export type ExploreStackScreenProps<T extends keyof ExploreStackParams> =
     >
 
 export type BottomTabsParams = {
-    ExploreStack: undefined,
+    ExploreStack: NavigatorScreenParams<ExploreStackParams>,
     MyLocationsScreen: undefined,
     MyCatchesScreen: undefined,
     MyProfileScreen: undefined
@@ -61,5 +71,7 @@ export type BottomTabsScreenProps<T extends keyof BottomTabsParams> =
         NativeStackScreenProps<RootStackParams>
     >
     
-export type UseNavigateParams = NavigationProp<RootStackParams & BottomTabsParams & ExploreStackParams>
+export type UseNavigateParams = NavProp<RootStackParams & BottomTabsParams & ExploreStackParams>
+
+export type NavigationProp = NavProp<RootStackParams & BottomTabsParams & ExploreStackParams>
 

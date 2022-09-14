@@ -4,16 +4,14 @@ import { IMedia } from "./Media"
 
 
 export type WaterbodyClassification = 
-    'bay' | 'beach' | 'bayou' | 'bend' | 'channel' | 
-    'creek' | 'dock' | 'harbor' | 'lagoon' | 'lake' | 
-    'marsh' | 'oxbow' | 'pond' | 'reservoir' | 'river' | 
-    'slough' | 'stream' | 'strait' | 'unknown'
+    'bay' | 'beach' | 'bayou' | 'creek' |  'harbor' | 
+    'lagoon' | 'lake' | 'marsh' | 'oxbow' | 'pond' | 'reservoir' | 
+    'river' | 'slough' | 'stream' | 'strait' | 'unknown'
 
 export const waterbodyClassifications: WaterbodyClassification[] = [
-    'bay', 'beach', 'bayou', 'bend', 'channel', 'creek',
-    'dock', 'harbor', 'lagoon', 'lake', 'marsh', 'oxbow',
-    'pond', 'reservoir', 'river', 'slough', 'stream', 
-    'strait', 'unknown'
+    'bay', 'beach', 'bayou', 'creek', 'harbor', 'lagoon', 
+    'lake', 'marsh', 'oxbow', 'pond', 'reservoir', 'river', 
+    'slough', 'stream', 'strait', 'unknown'
 ]
 
 
