@@ -1,10 +1,10 @@
 import { gql, useQuery, useLazyQuery } from '@apollo/client'
-import { GetWaterbodyCatch } from '../../types/Catch'
+import { CatchSort, GetWaterbodyCatch } from '../../types/Catch'
 import { IMedia } from '../../types/Media'
 import { IWaterbody } from '../../types/Waterbody'
 
 const GET_WATERBODY = gql`
-query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int) {
+query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int, $sort: CatchSort) {
     waterbody(id: $id) {
         id
         name
@@ -15,6 +15,7 @@ query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int) {
         ccode
         subregion
         total_catches
+        total_species
         total_locations
         total_media
         total_reviews
@@ -22,7 +23,7 @@ query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int) {
         media(limit: $mediaLimit) {
             url
         }
-        catches(limit: $catchesLimit) {
+        catches(limit: $catchesLimit, sort: $sort) {
             id
             user {
                 fullname
@@ -30,6 +31,8 @@ query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int) {
                 avatar
             }
             species
+            length
+            weight
             created_at
             media {
                 url
@@ -40,6 +43,7 @@ query Waterbody($id: Int!, $mediaLimit: Int, $catchesLimit: Int) {
 
 export interface GetWaterbody extends Omit<IWaterbody, 'oid' | 'weight'>{
     total_catches: number
+    total_species: number
     total_locations: number
     total_media: number,
     total_reviews: number,
@@ -56,11 +60,12 @@ export interface GetWaterbodyVars {
     id: number,
     mediaLimit?: number
     catchesLimit?: number
+    sort?: CatchSort
 }
 
 export const useGetWaterbodyQuery = (id: number) => {
     const result = useQuery<GetWaterbodyRes>(GET_WATERBODY, {
-        variables: { id, mediaLimit: 1, catchesLimit: 1 },
+        variables: { id, mediaLimit: 1, catchesLimit: 3, sort: CatchSort.CreatedAtNewest },
         skip: !Boolean(id)
     })
     return result;
