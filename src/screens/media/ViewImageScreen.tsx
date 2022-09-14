@@ -18,7 +18,7 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
 
     return (
         <View style={styles.container}>
-            <Surface style={styles.header}>
+            <Surface style={[styles.header, { width }]}>
                 <View style={globalStyles.frsb}>
                     <IconButton icon='arrow-left' onPress={navigation.goBack}/>
                     { title && <Title style={styles.title}>{title}</Title>}
@@ -34,8 +34,8 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
                     <Text style={styles.date}>{dayjs(data.created_at).fromNow()}</Text>
                 </View>
                 <Button 
-                    onPress={navigateProfile} 
-                    icon='arrow-right' style={{ alignItems: 'flex-end', flexGrow: 1 }}
+                    onPress={navigateProfile} icon='arrow-right' 
+                    style={{ alignItems: 'flex-end', flexGrow: 1 }}
                     contentStyle={{ flexDirection: 'row-reverse'}}
                 >View profile</Button>
             </View>
@@ -53,10 +53,9 @@ const styles = StyleSheet.create({
     header: {
         position: 'absolute',
         zIndex: 100,
-        width: '100%',
         height: 80,
         flexDirection: 'row',
-        alignItems: 'flex-end'
+        alignItems: 'flex-end',
     },
     title: {
         fontWeight: '500',
