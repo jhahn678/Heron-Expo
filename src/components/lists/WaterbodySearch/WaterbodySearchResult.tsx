@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Pressable, Image } from "react-native";
 import { Text, Title } from 'react-native-paper'
-import { WaterbodyResult } from "../../../hooks/queries/useSearchWaterbodiesQuery";
+import { WaterbodyResult } from "../../../hooks/queries/useSearchWaterbodies";
 import gstyles from '../../../globalStyles'
 import TotalMediaIcon from "../../icons/TotalMediaIcon";
 
