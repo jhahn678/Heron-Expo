@@ -13,7 +13,7 @@ import { useImagePicker } from '../../hooks/utils/useImagePicker';
 import { StyleSheet, View, ScrollView, Image, Pressable } from 'react-native';
 import AddLocationIcon from '../../components/icons/AddLocationIcon';
 import SaveIconButton from '../../components/buttons/SaveIconButton';
-import { useGetWaterbodyQuery } from '../../hooks/queries/useGetWaterbodyQuery';
+import { useGetWaterbodyQuery } from '../../hooks/queries/useGetWaterbody';
 import ReviewsSection from './sections/ReviewsSection';
 import MapSection from './sections/MapSection';
 import MediaSection from './sections/MediaSection';
@@ -21,7 +21,6 @@ import HeaderSection from './sections/HeaderSection';
 import LocationsSection from './sections/LocationsSection';
 import CatchesSection from './sections/CatchesSection';
 import { useGetWaterbodyMock } from '../../../__mocks';
-import BottomSheet from '@gorhom/bottom-sheet';
 
 
 const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'WaterbodyScreen'>): JSX.Element => {
@@ -44,7 +43,9 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     }
 
     const handleAddCatch = () => navigation.navigate('NewCatchScreen', { waterbody: params.id })
+
     const handleAddLocation = () => navigation.navigate('NewLocationScreen', { waterbody: params.id })
+
     const handleMediaScreen = () => navigation.navigate('MediaGridScreen', { 
         waterbody: params.id, 
         total: data?.waterbody.total_media, 
@@ -91,7 +92,6 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                 name={data?.waterbody.name}
                 totalCatches={data?.waterbody.total_catches}
                 totalSpecies={data?.waterbody.total_species}
-                catches={data?.waterbody.catches}
             />
             <LocationsSection 
                 name={data?.waterbody.name} 
