@@ -1,10 +1,12 @@
 import { faker } from "@faker-js/faker";
 import { GetWaterbodyReviews } from "./src/hooks/queries/useGetWaterbodyReviews";
-import { GetImage } from "./src/hooks/queries/useGetImageQuery";
-import { GetWaterbodyMedia } from "./src/hooks/queries/useGetWaterbodiesMedia";
-import { GetWaterbodyRes } from './src/hooks/queries/useGetWaterbodyQuery';
+import { GetImage } from "./src/hooks/queries/useGetImage";
+import { GetWaterbodyMedia } from "./src/hooks/queries/useGetWaterbodyMedia";
+import { GetWaterbodyRes } from './src/hooks/queries/useGetWaterbody';
 import { GetWaterbodySpeciesRes } from './src/hooks/queries/useGetWaterbodySpecies'
 import { GetCatchesRes } from "./src/hooks/queries/useGetCatches";
+import { GetLocationsRes } from "./src/hooks/queries/useGetLocationsQuery";
+import { Privacy } from "./src/types/Location";
 
 interface Args {
   loading?: boolean, 
@@ -63,6 +65,7 @@ export const useGetWaterbodyMediaMock = (
 
   const data: GetWaterbodyMedia = {
     waterbody: {
+      id: faker.datatype.number({ min: 100000 }),
       media: new Array(limit).fill(null).map(() => ({
         id: faker.datatype.number({ min: 100000 }),
         created_at: faker.date.past(),
@@ -80,7 +83,7 @@ export const useGetWaterbodyMock = ({ loading=false, error=false }: Args): Res<G
   const data: GetWaterbodyRes = {
     waterbody: {
       id: faker.datatype.number({ min: 100000 }),
-      name: `${faker.word.adjective()} ${faker.word.noun()} Lake`,
+      name: `Shooting Star Lake`,
       ccode: 'US',
       country: 'United States',
       admin_one: ['Connecticut'],
@@ -93,18 +96,7 @@ export const useGetWaterbodyMock = ({ loading=false, error=false }: Args): Res<G
       total_species: 6,
       total_media: 122,
       total_reviews: 32,
-      media: new Array(12).fill(null).map(x => ({ url: faker.image.nature(640, 480, true) })),
-      catches: new Array(3).fill(null).map(x => ({ 
-        id: faker.datatype.number({ min: 100000 }),
-        user: {
-          id: faker.datatype.number({ min: 100000 }),
-          fullname: faker.name.fullName(),
-          avatar: faker.internet.avatar()
-        },
-        media: [{ url: faker.image.nature() }],
-        species: faker.animal.fish(),
-        created_at: faker.date.past()
-      })),
+      media: new Array(12).fill(null).map(x => ({ url: faker.image.nature(640, 480, true) }))
     }
   }
 
@@ -155,5 +147,36 @@ export const useGetCatchesQueryMock = ({ error=false, limit=20, loading=false }:
     }))
   }
 
+  return { data: (loading || error) ? undefined : data, loading, error }
+}
+
+export const useGetLocationsQueryMock = ({ error=false, limit=20, loading=false }: Args & { limit?: number }): Res<GetLocationsRes> => {
+  
+  const data: GetLocationsRes = {
+    locations: new Array(limit).fill(null).map(() => ({
+      id: faker.datatype.number({ min: 100000 }),
+      privacy: Privacy.Public,
+      title: faker.lorem.words(),
+      description: faker.lorem.sentence(10),
+      hexcolor: faker.color.rgb().slice(2),
+      geom: {
+        type: 'Point',
+        coordinates: [parseFloat(faker.address.longitude()), parseFloat(faker.address.latitude())]
+      },
+      created_at: faker.date.past(),
+      waterbody: {
+        id: 12385,
+        name: "Magnificence Lake"
+      },
+      user: {
+        avatar: faker.internet.avatar(),
+        fullname: faker.name.fullName(),
+        id: 75634
+      },
+      media: new Array(1).fill(null).map(() => ({ url: faker.image.nature() })),
+      nearest_geoplace: `${faker.address.cityName()}, ${faker.address.state()}`
+    }))
+  }
+  
   return { data: (loading || error) ? undefined : data, loading, error }
 }
