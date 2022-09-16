@@ -2,7 +2,9 @@ import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
 import { CompositeScreenProps, NavigationProp as NavProp, NavigatorScreenParams } from "@react-navigation/native"
 import { MediaType } from "./Media"
-import { CatchQueryType } from "./Catch"
+import { CatchQuery } from "./Catch"
+import { Coordinates, LocationQuery } from "./Location"
+import { Coordinate } from "react-native-maps"
 
 
 export type RootStackParams = {
@@ -19,9 +21,10 @@ export type RootStackParams = {
     UserProfileScreen: { id: number },
     UserSearchScreen: undefined
     ViewMapScreen: { 
-        waterbody?: number | number[], 
-        catch?: number | number [], 
-        location?: number | number[]
+        resource: MapResource
+        id?: number
+        coordinates?: Coordinates
+        total?: number
     }
     SaveMapScreen: undefined
     CameraScreen: undefined
@@ -29,13 +32,19 @@ export type RootStackParams = {
     ReviewsScreen: { waterbody: number, title: string | undefined, total?: number }
     /**  @URI will display only the image -- no details **/
     ViewImageScreen: { id?: number, type?: MediaType, uri?: string, title?: string | undefined }
-    CatchListScreen: { type: CatchQueryType, id?: number, coordinates?: Coordinates, title: string | undefined }
-    LocationListScreen: { waterbody: number, title: string | undefined  }
+    CatchListScreen: { type: CatchQuery, id?: number, title: string | undefined }
+    LocationListScreen: { type: LocationQuery, id: number, title: string | undefined }
 }
 
-type Coordinates = {
-    latitude: number
-    longitude: number
+export enum MapResource {
+    Waterbody = 'WATERBODY',
+    WaterbodyLocations = 'WATERBODY_LOCATIONS',
+    WaterbodyCatches = 'WATERBODY_CATCHES',
+    UserCatches = 'USER_CATCHES',
+    UserLocations = 'USER_LOCATIONS',
+    Location = 'LOCATION',
+    Catch = 'CATCH',
+    CatchesNearby = 'CATCHES_NEARBY'
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 
@@ -74,4 +83,3 @@ export type BottomTabsScreenProps<T extends keyof BottomTabsParams> =
 export type UseNavigateParams = NavProp<RootStackParams & BottomTabsParams & ExploreStackParams>
 
 export type NavigationProp = NavProp<RootStackParams & BottomTabsParams & ExploreStackParams>
-

@@ -34,7 +34,7 @@ export enum CatchSort {
     WeightLargest = 'WEIGHT_LARGEST'
 }
 
-export enum CatchQueryType {
+export enum CatchQuery {
     Coordinates = 'COORDINATES',
     User = 'USER',
     Waterbody = 'WATERBODY'
