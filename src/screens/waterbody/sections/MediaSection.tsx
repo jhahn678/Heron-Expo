@@ -5,7 +5,7 @@ import { Button, Surface, Title } from "react-native-paper";
 import { useGetWaterbodyMediaMock } from "../../../../__mocks";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import BoxLoader from "../../../components/loaders/BoxLoader";
-import { useGetWaterbodyMedia } from "../../../hooks/queries/useGetWaterbodiesMedia";
+import { useGetWaterbodyMedia } from "../../../hooks/queries/useGetWaterbodyMedia";
 import { MediaType } from "../../../types/Media";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 

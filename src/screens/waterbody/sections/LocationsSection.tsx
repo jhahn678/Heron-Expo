@@ -4,6 +4,7 @@ import { Text, Title } from 'react-native-paper'
 import FishermanDock from "../../../components/svg/FishermanDock";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { LocationQuery } from "../../../types/Location";
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
@@ -14,7 +15,9 @@ interface Props {
 
 const LocationsSection = ({ navigation, name, waterbody, totalLocations }: Props) => {
 
-    const navigateLocations = () => navigation.navigate('LocationListScreen', { waterbody, title: name })
+    const navigateLocations = () => navigation.navigate('LocationListScreen', { 
+        type: LocationQuery.Waterbody, id: waterbody, title: name
+    })
 
     return (
         <View style={styles.container}>
@@ -27,11 +30,6 @@ const LocationsSection = ({ navigation, name, waterbody, totalLocations }: Props
                         <Text style={styles.number}>{totalLocations}</Text>
                         <Text style={{ fontWeight: '400', fontSize: 12 }}>Saved Spots</Text>
                     </View>
-                    {/* <View style={styles.divider}/> */}
-                    {/* <View style={styles.text}>
-                        <Text style={styles.number}>{totalLocations}</Text>
-                        <Text style={{ fontWeight: '400', fontSize: 12 }}>Species</Text>
-                    </View> */}
                 </View>
             </Pressable>
         </View>

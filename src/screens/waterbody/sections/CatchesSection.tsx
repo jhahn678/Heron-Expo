@@ -4,10 +4,12 @@ import { Text, Title } from 'react-native-paper'
 import FishermanCatchingFish from "../../../components/svg/FishermanCatchingFish";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
-import { CatchQueryType, GetWaterbodyCatch } from "../../../types/Catch";
+import { CatchQuery, CatchSort, GetWaterbodyCatch } from "../../../types/Catch";
 import CatchesListItem from "../../../components/lists/CatchesListHorizontal/CatchesListItem";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import { useBottomSheetStore } from '../../../store/modal/useBottomSheetStore'
+import { useGetCatchesQuery } from "../../../hooks/queries/useGetCatches";
+import { useGetCatchesQueryMock } from "../../../../__mocks";
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
@@ -15,15 +17,22 @@ interface Props {
     name: string | undefined
     totalCatches: number | undefined
     totalSpecies: number | undefined
-    catches: GetWaterbodyCatch[] | undefined
 }
 
-const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecies, catches }: Props) => {
+const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecies }: Props) => {
 
     const openSpecies = useBottomSheetStore(store => () => store.openSpecies(waterbody))
 
+    // const { data, loading, error } = useGetCatchesQuery({ 
+    //     limit: 3, id: waterbody, 
+    //     type: CatchQuery.Waterbody, 
+    //     sort: CatchSort.CreatedAtNewest
+    // })
+
+    const { data, loading, error } = useGetCatchesQueryMock({ limit: 3 })
+
     const navigateCatches = () => navigation.navigate('CatchListScreen', { 
-        type: CatchQueryType.Waterbody, id: waterbody, title: name 
+        type: CatchQuery.Waterbody, id: waterbody, title: name 
     })
 
     return (
@@ -45,7 +54,7 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
             <Title style={styles.title}>Latest Catches</Title>
             <View style={styles.list}>
                 <FlashList
-                    data={catches} horizontal
+                    data={data?.catches} horizontal
                     estimatedItemSize={300}
                     renderItem={({ item }) => (
                         <CatchesListItem

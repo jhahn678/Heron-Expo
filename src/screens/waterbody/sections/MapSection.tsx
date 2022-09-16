@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import { Text, Surface, Button } from 'react-native-paper'
-import { ExploreStackScreenProps } from "../../../types/navigation";
+import { ExploreStackScreenProps, MapResource } from "../../../types/navigation";
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
@@ -11,7 +11,7 @@ interface Props {
 
 const MapSection = ({ navigation, waterbody, uri }: Props) => {
 
-    const navigateToMap = () => navigation.navigate('ViewMapScreen', { waterbody })
+    const navigateToMap = () => navigation.navigate('ViewMapScreen', { resource: MapResource.Waterbody, id: waterbody })
 
     return (
         <View style={styles.container}>
@@ -53,7 +53,7 @@ const styles = StyleSheet.create({
         position: 'absolute',
         alignSelf: 'center',
         bottom: 16,
-        width: '86%',
-        borderRadius: 10
+        borderRadius: 10,
+        flexGrow: 1
     }
 });
