@@ -1,11 +1,12 @@
 import { gql, useQuery } from '@apollo/client'
-import { CatchQueryType, CatchSort, ICatch } from '../../types/Catch'
+import { useLocationStore } from '../../store/location/useLocationStore'
+import { CatchQuery, CatchSort, ICatch } from '../../types/Catch'
 import { IMedia } from '../../types/Media'
 import { IUser } from '../../types/User'
 import { IWaterbody } from '../../types/Waterbody'
 
 const GET_CATCHES = gql`
-    query Catches($id: Int!, $type: CatchQueryType!, $offset: Int, $limit: Int, $sort: CatchSort, $queryLocation: QueryLocation, $mediaLimit: Int) {
+    query Catches($id: Int!, $type: CatchQuery!, $offset: Int, $limit: Int, $sort: CatchSort, $queryLocation: QueryLocation, $mediaLimit: Int) {
         catches(id: $id, type: $type, offset: $offset, limit: $limit, sort: $sort, queryLocation: $queryLocation) {
             id
             created_at
@@ -41,7 +42,7 @@ export interface GetCatchesRes{
 }
 
 export interface Vars {
-    type: CatchQueryType,
+    type: CatchQuery,
     id?: number
     offset?: number
     limit?: number
@@ -55,24 +56,21 @@ export interface Vars {
 }
 
 interface Args extends Omit<Vars, 'queryLocation'>{
-    coordinates?: {
-        latitude: number,
-        longitude: number
-    },
     withinMeters?: number
 }
 
-export const useGetCatchesQuery = ({ withinMeters=100000, coordinates, ...args }: Args) => {
+export const useGetCatchesQuery = ({ withinMeters=100000, ...args }: Args) => {
+
+    const { latitude, longitude }= useLocationStore(store => ({ 
+        latitude: store.latitude, longitude: store.longitude 
+    }))
+
     return useQuery<GetCatchesRes, Vars>(GET_CATCHES, { 
         variables: {
-            type: args.type,
-            id: args.id,
-            offset: args.offset,
-            limit: args.limit,
-            mediaLimit: args.mediaLimit,
-            sort: args.sort,
-            queryLocation: coordinates ? { 
-                ...coordinates,
+            ...args,
+            queryLocation: (latitude && longitude) ? { 
+                latitude,
+                longitude,
                 withinMeters
             } : undefined
         } 
