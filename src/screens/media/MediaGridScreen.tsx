@@ -1,7 +1,7 @@
 import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import React, { useEffect, useState } from "react";
 import { RootStackScreenProps } from "../../types/navigation";
-import { useGetWaterbodyMedia } from "../../hooks/queries/useGetWaterbodiesMedia";
+import { useGetWaterbodyMedia } from "../../hooks/queries/useGetWaterbodyMedia";
 import { FlashList } from "@shopify/flash-list";
 import { FAB, IconButton, Surface, Title } from "react-native-paper";
 import BoxLoader from "../../components/loaders/BoxLoader";

@@ -4,7 +4,7 @@ import { Avatar, Button, IconButton, Surface, Title } from "react-native-paper";
 import { useGetImageMock } from "../../../__mocks";
 import dayjs from "../../config/dayjs";
 import globalStyles from "../../globalStyles";
-import { useGetImageQuery } from "../../hooks/queries/useGetImageQuery";
+import { useGetImageQuery } from "../../hooks/queries/useGetImage";
 import { RootStackScreenProps } from "../../types/navigation";
 
 
@@ -14,7 +14,7 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
     const { params: { id, type, uri, title } } = route;
     // const { data, loading, error } = useGetImageQuery({ id, type })
     const { data, loading, error } = useGetImageMock({ loading: false, error: false})
-    const navigateProfile = () => navigation.navigate('UserProfileScreen', { id: data.user.id})
+    const navigateProfile = () => navigation.navigate('UserProfileScreen', { id: data?.user.id! })
 
     return (
         <View style={styles.container}>
@@ -28,10 +28,10 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
                 style={[styles.image, { width }]} resizeMode='contain'
             />
             <View style={styles.footer}>
-                { data.user.avatar && <Avatar.Image source={{ uri: data.user.avatar }}/>}
+                { data?.user.avatar && <Avatar.Image source={{ uri: data.user.avatar }}/>}
                 <View style={styles.details}>
-                    <Text style={styles.name}>{data.user.fullname}</Text>
-                    <Text style={styles.date}>{dayjs(data.created_at).fromNow()}</Text>
+                    <Text style={styles.name}>{data?.user.fullname}</Text>
+                    <Text style={styles.date}>{dayjs(data?.created_at).fromNow()}</Text>
                 </View>
                 <Button 
                     onPress={navigateProfile} icon='arrow-right' 
