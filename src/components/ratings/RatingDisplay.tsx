@@ -10,9 +10,13 @@ interface Props {
     onPress?: () => void
     style?: StyleProp<ViewStyle>
     hideLabel?: boolean
+    backgroundColor?: string
+    ratingBackgroundColor?: string
 }
 
 const RatingDisplay = ({
+    ratingBackgroundColor,
+    backgroundColor,
     numberOfRatings,
     hideLabel=false,
     iconSize=28,
@@ -24,10 +28,12 @@ const RatingDisplay = ({
     return (
         <Pressable onPress={onPress} style={style}>
             <Rating
-                tintColor={DEFAULT_BACKGROUND}
+                tintColor={backgroundColor || DEFAULT_BACKGROUND}
+                ratingBackgroundColor={ratingBackgroundColor|| 'white'}
                 readonly fractions={2}
+                type='custom'
                 startingValue={rating || 0} 
-                style={{ width: iconSize * 4.5 }}
+                style={{ marginLeft: 4, width: iconSize * 4.5 }}
                 imageSize={iconSize}
             />
             {hideLabel === false && (numberOfRatings === 0 ?
@@ -35,7 +41,7 @@ const RatingDisplay = ({
                     Be the first to leave a rating!
                 </Text> :
                 <Text style={styles.label}>
-                    {rating || 0} stars  &bull;   {numberOfRatings || 0} { numberOfRatings === 1 ? 'rating' : 'ratings'}
+                    {rating || 0} stars   &bull;   {numberOfRatings || 0} { numberOfRatings === 1 ? 'rating' : 'ratings'}
                 </Text>
             )}
         </Pressable>
@@ -48,7 +54,6 @@ const styles = StyleSheet.create({
     label: {
         fontWeight: '500',
         marginTop: 12,
-        marginLeft: 4
     },
     labelNoRating: {
         fontWeight: '500',
