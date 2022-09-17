@@ -23,7 +23,6 @@ export type RootStackParams = {
     ViewMapScreen: { 
         resource: MapResource
         id?: number
-        coordinates?: Coordinates
         total?: number
     }
     SaveMapScreen: undefined
