@@ -33,42 +33,12 @@ const GET_CATCH = gql`
 `;
 
 
-export const useGetCatchFragment = () => (id: number | undefined) => {
-  if (!id) return null;
-  return useApolloClient().readFragment<GetCatchRes>({
-    id: `Catch:${id}`,
-    fragment: gql`
-      fragment CachedCatch on Catch {
-        id
-        geom
-        title
-        description
-        species
-        length
-        weight
-        rig
-        created_at
-        user {
-          id
-          fullname
-          avatar
-        }
-        waterbody {
-          id
-          name
-        }
-        media {
-          url
-        }
-      }
-    `,
-  });
-} 
-
-interface GetCatchRes extends Omit<ICatch, 'user' | 'waterbody'> {
-    user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
-    waterbody: Pick<IWaterbody, 'id' | 'name'>
-    media: Pick<IMedia, 'url'>[]
+export interface GetCatchRes {
+  catch: Omit<ICatch, "user" | "waterbody"> & {
+    user: Pick<IUser, "id" | "fullname" | "avatar">;
+    waterbody: Pick<IWaterbody, "id" | "name">;
+    media: Pick<IMedia, "url">[];
+  };
 }
 
 interface Vars {
@@ -82,3 +52,38 @@ export const useGetCatchQuery = (variables: Vars) => {
 export const useLazyGetCatch = (variables: Vars) => {
   return useLazyQuery<GetCatchRes, Vars>(GET_CATCH, { variables });
 };
+
+export const useGetCatchFragment = () => {
+  const client = useApolloClient();
+  return (id: number | undefined | null) => {
+    if (!id) return null;
+    return client.readFragment<GetCatchRes['catch']>({
+      id: `Catch:${id}`,
+      fragment: gql`
+        fragment CachedCatch on Catch {
+          id
+          geom
+          title
+          description
+          species
+          length
+          weight
+          rig
+          created_at
+          user {
+            id
+            fullname
+            avatar
+          }
+          waterbody {
+            id
+            name
+          }
+          media {
+            url
+          }
+        }
+      `,
+    });
+  }
+}; 

@@ -1,7 +1,8 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useLazyQuery, useQuery } from '@apollo/client'
 import { useLocationStore } from '../../store/location/useLocationStore'
 import { CatchQuery, CatchSort, ICatch } from '../../types/Catch'
 import { IMedia } from '../../types/Media'
+import { MapResource } from '../../types/navigation'
 import { IUser } from '../../types/User'
 import { IWaterbody } from '../../types/Waterbody'
 
@@ -59,7 +60,7 @@ interface Args extends Omit<Vars, 'queryLocation'>{
     withinMeters?: number
 }
 
-export const useGetCatchesQuery = ({ withinMeters=100000, ...args }: Args) => {
+export const useGetCatches = ({ withinMeters=100000, ...args }: Args) => {
 
     const { latitude, longitude }= useLocationStore(store => ({ 
         latitude: store.latitude, longitude: store.longitude 
@@ -76,3 +77,38 @@ export const useGetCatchesQuery = ({ withinMeters=100000, ...args }: Args) => {
         } 
     })
 }
+
+export const catchMapResource = (resource: MapResource): CatchQuery => {
+    switch(resource){
+        case MapResource.UserCatches:
+            return CatchQuery.User;
+        case MapResource.WaterbodyCatches:
+            return CatchQuery.Waterbody;
+        case MapResource.CatchesNearby:
+            return CatchQuery.Coordinates;
+        default:
+            return CatchQuery.Coordinates
+    }
+} 
+
+export const useLazyGetCatches = ({ withinMeters = 100000, ...args }: Args) => {
+
+  const { latitude, longitude } = useLocationStore((store) => ({
+    latitude: store.latitude,
+    longitude: store.longitude,
+  }));
+
+  return useLazyQuery<GetCatchesRes, Vars>(GET_CATCHES, {
+    variables: {
+      ...args,
+      queryLocation:
+        latitude && longitude
+          ? {
+              latitude,
+              longitude,
+              withinMeters,
+            }
+          : undefined,
+    },
+  });
+};

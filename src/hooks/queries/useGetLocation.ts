@@ -31,10 +31,12 @@ const GET_LOCATION = gql`
   }
 `;
 
-interface GetLocationRes extends Omit<ILocation, 'user' | 'waterbody'>{
-    waterbody: Pick<IWaterbody, 'id' | 'name'>
-    user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
-    media: Pick<IMedia, 'url'>[]
+export interface GetLocationRes {
+  location: Omit<ILocation, "user" | "waterbody"> & {
+    waterbody: Pick<IWaterbody, "id" | "name">
+    user: Pick<IUser, "id" | "fullname" | "avatar">
+    media: Pick<IMedia, "url">[]
+  };
 }
 
 interface Vars {
@@ -53,7 +55,8 @@ export const useGetLocationFragment = () => {
     const client = useApolloClient()
 
     return  (id: number | undefined) => {
-        return client.readFragment<GetLocationRes>({
+        if(!id) return null;
+        return client.readFragment<GetLocationRes['location']>({
             id: `Location:${id}`,
             fragment: gql`
             fragment CachedLocation on Location {
@@ -62,16 +65,16 @@ export const useGetLocationFragment = () => {
                 title
                 description
                 user {
-                id
-                fullname
-                avatar
+                  id
+                  fullname
+                  avatar
                 }
                 waterbody {
-                id
-                name
+                  id
+                  name
                 }
                 media {
-                url
+                  url
                 }
                 geom
                 hexcolor
