@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet, Text, View, Image, Pressable } from "react-native";
 import { IconButton, TouchableRipple } from "react-native-paper";
 import dayjs from "../../../config/dayjs";
-import { GetLocationsRes } from "../../../hooks/queries/useGetLocationsQuery";
+import { GetLocationsRes } from "../../../hooks/queries/useGetLocations";
 import { useShareContent } from "../../../hooks/utils/useShareContent";
 import Avatar from "../../users/Avatar";
 
