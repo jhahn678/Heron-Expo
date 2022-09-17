@@ -1,12 +1,10 @@
 import React from "react";
 import { StyleSheet,  View } from "react-native";
 import { Title, Text } from "react-native-paper";
-import BoxLoader from "../../../components/loaders/BoxLoader";
 import WaterbodyHeaderLoader from "../../../components/loaders/WaterbodyHeaderLoader";
 import RatingDisplay from "../../../components/ratings/RatingDisplay";
 import { GetWaterbody } from "../../../hooks/queries/useGetWaterbody";
 import { useModalStore } from "../../../store/modal/useModalStore";
-import { AdminOneName } from "../../../types/AdminOne";
 
 interface Props {
     id: number
@@ -36,7 +34,8 @@ const HeaderSection = ({ data, id }: Props) => {
                             `${data.country}`
                         }</Text>
                         <RatingDisplay 
-                            onPress={handleStartReview} style={{ marginTop: 16 }} 
+                            onPress={handleStartReview} 
+                            style={{ marginTop: 16 }} 
                             numberOfRatings={data.total_reviews} 
                             rating={data.average_rating}
                         />

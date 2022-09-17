@@ -7,7 +7,7 @@ import EnableLocationButton from '../../../../components/buttons/EnableLocationB
 import WaterbodiesListHorizontal from '../../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListHorizontal'
 import { useSearchParamStore } from '../../../../store/search/useSearchParamStore'
 import { WaterbodyClassification } from '../../../../types/Waterbody'
-import { useGetNearbyWaterbodiesQuery } from '../../../../hooks/queries/useGetNearbyWaterbodiesQuery'
+import { useGetNearbyWaterbodies } from '../../../../hooks/queries/useGetNearbyWaterbodies'
 import { classificationToCategory } from '../../../../utils/conversions/classificationToCategory'
 import { useGetNearbyWaterbodiesQueryMock } from '../../../../../__mocks'
 
@@ -21,7 +21,7 @@ const NearbyCategorySection = ({ navigation, classification }: Props) => {
     const { classificationsAppend } = useSearchParamStore()
     const { hasCoordinates, latitude, longitude } = useLocationStore()
 
-    const { data, loading, error } = useGetNearbyWaterbodiesQuery({
+    const { data, loading, error } = useGetNearbyWaterbodies({
         latitude,
         longitude,
         classification,

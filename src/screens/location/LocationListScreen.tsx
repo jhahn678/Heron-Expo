@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { MapResource, RootStackScreenProps } from "../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
 import { IconButton, Surface, Title } from "react-native-paper";
-import { useGetLocationsQuery } from "../../hooks/queries/useGetLocationsQuery";
+import { useGetLocations } from "../../hooks/queries/useGetLocations";
 import LocationListItem from "../../components/lists/LocationList/LocationListItem";
 import { useGetLocationsQueryMock } from "../../../__mocks";
 import globalStyles from "../../globalStyles";
@@ -14,7 +14,7 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
 
     const { params: { id, title, type } } = route;
 
-    const { data, loading, error, fetchMore } = useGetLocationsQuery({ type, id, limit }) 
+    const { data, loading, error, fetchMore } = useGetLocations({ type, id, limit }) 
     // const { data, loading, error } = useGetLocationsQueryMock({ limit })
 
     const [hasMore, setHasMore] = useState(false)

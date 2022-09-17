@@ -5,7 +5,7 @@ import { useLocationStore } from '../../../../store/location/useLocationStore'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import EnableLocationButton from '../../../../components/buttons/EnableLocationButton'
 import WaterbodiesListHorizontal from '../../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListHorizontal'
-import { useGetNearbyWaterbodiesQuery } from '../../../../hooks/queries/useGetNearbyWaterbodiesQuery'
+import { useGetNearbyWaterbodies } from '../../../../hooks/queries/useGetNearbyWaterbodies'
 import { useSearchParamStore } from '../../../../store/search/useSearchParamStore'
 
 interface Props {
@@ -17,7 +17,7 @@ const NearbySection = ({ navigation }: Props) => {
     const { setSort } = useSearchParamStore()
     const { latitude, longitude, hasPermission } = useLocationStore()
     
-    const { data, loading, error } = useGetNearbyWaterbodiesQuery({ latitude, longitude })
+    const { data, loading, error } = useGetNearbyWaterbodies({ latitude, longitude })
 
     const navigateViewMore = (): void => {
         setSort('distance')

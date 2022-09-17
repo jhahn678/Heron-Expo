@@ -3,7 +3,7 @@ import React, { useEffect, useState } from "react";
 import { MapResource, RootStackScreenProps } from "../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
 import { IconButton, Surface, Title, Text } from "react-native-paper";
-import { useGetCatchesQuery } from "../../hooks/queries/useGetCatches";
+import { useGetCatches } from "../../hooks/queries/useGetCatches";
 import { CatchQuery, CatchSort } from "../../types/Catch";
 import CatchesListItem from "../../components/lists/CatchList/CatchesListItem";
 import BoxLoader from "../../components/loaders/BoxLoader";
@@ -18,7 +18,7 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
 
     const [sort, setSort] = useState(CatchSort.CreatedAtNewest)
 
-    // const { data, loading, error, fetchMore } = useGetCatchesQuery({ type, id, sort, limit }) 
+    // const { data, loading, error, fetchMore } = useGetCatches({ type, id, sort, limit }) 
     const { data, loading, error } = useGetCatchesQueryMock({ loading: false, error: false, limit })
 
     const [hasMore, setHasMore] = useState(false)

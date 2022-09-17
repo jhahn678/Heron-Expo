@@ -1,7 +1,7 @@
 import { FlashList } from "@shopify/flash-list";
 import React from "react";
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
-import { Button, Surface, Title } from "react-native-paper";
+import { StyleSheet, View, Image, Pressable } from "react-native";
+import { Button, Title } from "react-native-paper";
 import { useGetWaterbodyMediaMock } from "../../../../__mocks";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import BoxLoader from "../../../components/loaders/BoxLoader";

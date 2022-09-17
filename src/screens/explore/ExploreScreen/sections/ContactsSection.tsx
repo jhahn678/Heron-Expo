@@ -3,7 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { ActivityIndicator, Title, Text, Button } from 'react-native-paper'
 import NavigateToUserSearch from '../../../../components/buttons/NavigateToUserSearch'
 import ContactsListHorizontal from '../../../../components/lists/ContactsListHorizontal/ContactsListHorizontal'
-import { useGetMyContactsQuery } from '../../../../hooks/queries/useGetMyContactsQuery'
+import { useGetMyContacts } from '../../../../hooks/queries/useGetMyContacts'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import { useAuth } from '../../../../store/auth/useAuth'
 
@@ -17,7 +17,7 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
     const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen', { showBack: true })
 
     const isAuthenticated = useAuth(state => state.isAuthenticated)
-    const { data, loading, error } = useGetMyContactsQuery(isAuthenticated)
+    const { data, loading, error } = useGetMyContacts(isAuthenticated)
 
     return (
         <View style={styles.container}>

@@ -13,7 +13,7 @@ import { useImagePicker } from '../../hooks/utils/useImagePicker';
 import { StyleSheet, View, ScrollView, Image, Pressable } from 'react-native';
 import AddLocationIcon from '../../components/icons/AddLocationIcon';
 import SaveIconButton from '../../components/buttons/SaveIconButton';
-import { useGetWaterbodyQuery } from '../../hooks/queries/useGetWaterbody';
+import { useGetWaterbody } from '../../hooks/queries/useGetWaterbody';
 import ReviewsSection from './sections/ReviewsSection';
 import MapSection from './sections/MapSection';
 import MediaSection from './sections/MediaSection';
@@ -27,7 +27,9 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
 
     const { params } = route;
     const [fabOpen, setFabOpen] = useState(false)
-    // const { data, loading, error } = useGetWaterbodyQuery(params.id)
+    const { 
+        // data, 
+        loading, error } = useGetWaterbody(params.id)
     const { data } = useGetWaterbodyMock({ loading: false, error: false })
     const { openImagePicker } = useImagePicker()
     const setImages = useImageStore(state => state.setImages)
