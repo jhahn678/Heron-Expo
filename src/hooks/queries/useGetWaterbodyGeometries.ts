@@ -1,5 +1,5 @@
 import { useLazyQuery, gql } from "@apollo/client";
-import { GeoJsonObject, Geometry, GeometryCollection } from "geojson";
+import { Geometry, GeometryCollection } from "geojson";
 
 const GET_WATERBODY_GEOMETRIES = gql`
   query Waterbody($id: Int!) {
