@@ -5,7 +5,7 @@ import { GetWaterbodyMedia } from "./src/hooks/queries/useGetWaterbodyMedia";
 import { GetWaterbodyRes } from './src/hooks/queries/useGetWaterbody';
 import { GetWaterbodySpeciesRes } from './src/hooks/queries/useGetWaterbodySpecies'
 import { GetCatchesRes } from "./src/hooks/queries/useGetCatches";
-import { GetLocationsRes } from "./src/hooks/queries/useGetLocationsQuery";
+import { GetLocationsRes } from "./src/hooks/queries/useGetLocations";
 import { Privacy } from "./src/types/Location";
 
 interface Args {
@@ -179,4 +179,29 @@ export const useGetLocationsQueryMock = ({ error=false, limit=20, loading=false 
   }
   
   return { data: (loading || error) ? undefined : data, loading, error }
+}
+
+
+export const useGetWaterbodyFragmentMock = (): GetWaterbodyRes['waterbody'] => {
+  const data: GetWaterbodyRes["waterbody"] = {
+    id: faker.datatype.number({ min: 100000 }),
+    name: "Swatara Creekistan",
+    ccode: "US",
+    country: "United States",
+    admin_one: ["Connecticut"],
+    admin_two: [faker.address.county()],
+    subregion: "Northeastern",
+    classification: "creek",
+    average_rating: 4.1,
+    total_catches: 85,
+    total_locations: 18,
+    total_species: 5,
+    total_media: 122,
+    total_reviews: 32,
+    media: new Array(12)
+      .fill(null)
+      .map((x) => ({ url: faker.image.nature(640, 480, true) })),
+  };
+
+  return data;
 }
