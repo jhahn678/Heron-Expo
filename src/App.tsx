@@ -12,6 +12,7 @@ import { SecureStoreKeys } from './types/SecureStore'
 import { StatusBar } from 'expo-status-bar'
 import ModalPortal from './components/modals/ModalPortal'
 import { theme } from './config/theme'
+import { GestureHandlerRootView } from 'react-native-gesture-handler'
 
 export default function App() { 
   const [appIsReady, setAppIsReady] = useState(false)
@@ -54,9 +55,11 @@ export default function App() {
     <ApolloProvider client={apolloClient}>
       <QueryClientProvider client={reactQueryClient}>
         <PaperProvider theme={theme}>
-            <StatusBar style='auto'/>
-            <RootStack/>
-            <ModalPortal/>
+          <GestureHandlerRootView style={{ flex: 1 }}>
+            <StatusBar style="auto" />
+            <RootStack />
+            <ModalPortal />
+          </GestureHandlerRootView>
         </PaperProvider>
       </QueryClientProvider>
     </ApolloProvider>
