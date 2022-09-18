@@ -1,21 +1,33 @@
 import { ViewStyle, StyleProp } from "react-native";
-import { IconButton, IconButtonProps } from "react-native-paper";
-import { useAuth } from "../../store/auth/useAuth";
-import { useShareContent } from "../../hooks/utils/useShareContent";
-import { useModalStore } from "../../store/modal/useModalStore";
+import { IconButton, IconButtonProps, MD3Theme, useTheme } from "react-native-paper";
+import { ShareType, useShareContent } from "../../hooks/utils/useShareContent";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 interface Props {
-    waterbody: number | undefined,
+    shareType: ShareType
+    id: number | undefined | null,
     size?: number
-    mode?: IconButtonProps['mode']
+    mode?: IconButtonProps['mode'] | 'none'
     style?: StyleProp<ViewStyle>
 }
 
-const ShareButton = (props: Props): JSX.Element => {
+const ShareButton = ({ shareType, ...props }: Props): JSX.Element => {
     
     const shareContent = useShareContent()
+    const theme = useTheme() as MD3Theme
+    const handleShare = () => shareContent({ url: 'heron.com', shareType })
 
-    const handleShare = () => shareContent({ url: 'heron.com', shareType: 'WATERBODY'})
+    if(props.mode === 'none'){
+        return (
+          <Icon
+            color={theme.colors.primary}
+            size={props.size || 24}
+            style={props.style}
+            onPress={handleShare}
+            name="share-variant-outline"
+          />
+        );
+    }
     
     return (
         <IconButton
