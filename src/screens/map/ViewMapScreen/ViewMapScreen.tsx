@@ -149,23 +149,24 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
         style={styles.goback}
         mode="contained-tonal"
       />
-      <MapView ref={map} 
-        style={styles.map} 
+      <MapView
+        ref={map}
+        style={styles.map}
         onMapReady={() => setMapReady(true)}
       >
         {geojson && (
           <Geojson
             geojson={geojson}
-            strokeColor={"#ff9b32"}
+            strokeColor={"rgba(255,155,50,1)"}
             strokeWidth={5}
-            fillColor={"#ff9b32"}
-            lineJoin='bevel'
+            fillColor={"rgba(255,155,50,.5)"}
+            lineJoin="bevel"
           />
         )}
       </MapView>
       {/* <MapCatchesBottomSheet/> */}
-      <LocationsBottomSheet/>
-      <WaterbodyBottomSheet/>
+      <LocationsBottomSheet />
+      <WaterbodyBottomSheet />
     </View>
   );
 }
