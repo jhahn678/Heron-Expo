@@ -8,7 +8,7 @@ import { CatchQuery, CatchSort, GetWaterbodyCatch } from "../../../types/Catch";
 import CatchesListItem from "../../../components/lists/CatchesListHorizontal/CatchesListItem";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import { useBottomSheetStore } from '../../../store/modal/useBottomSheetStore'
-import { useGetCatchesQuery } from "../../../hooks/queries/useGetCatches";
+import { useGetCatches } from "../../../hooks/queries/useGetCatches";
 import { useGetCatchesQueryMock } from "../../../../__mocks";
 
 interface Props {
@@ -23,16 +23,17 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
 
     const openSpecies = useBottomSheetStore(store => () => store.openSpecies(waterbody))
 
-    // const { data, loading, error } = useGetCatchesQuery({ 
+    // const { data, loading, error } = useGetCatches({ 
     //     limit: 3, id: waterbody, 
     //     type: CatchQuery.Waterbody, 
-    //     sort: CatchSort.CreatedAtNewest
+    //     sort: CatchSort.CreatedAtNewest,
+    //     total: totalCatches 
     // })
 
     const { data, loading, error } = useGetCatchesQueryMock({ limit: 3 })
 
     const navigateCatches = () => navigation.navigate('CatchListScreen', { 
-        type: CatchQuery.Waterbody, id: waterbody, title: name 
+        type: CatchQuery.Waterbody, id: waterbody, title: name, total: totalCatches 
     })
 
     return (

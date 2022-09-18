@@ -31,8 +31,8 @@ export type RootStackParams = {
     ReviewsScreen: { waterbody: number, title: string | undefined, total?: number }
     /**  @URI will display only the image -- no details **/
     ViewImageScreen: { id?: number, type?: MediaType, uri?: string, title?: string | undefined }
-    CatchListScreen: { type: CatchQuery, id?: number, title: string | undefined }
-    LocationListScreen: { type: LocationQuery, id: number, title: string | undefined }
+    CatchListScreen: { type: CatchQuery, id?: number, title: string | undefined, total?: number }
+    LocationListScreen: { type: LocationQuery, id: number, title: string | undefined, total?: number }
 }
 
 export enum MapResource {

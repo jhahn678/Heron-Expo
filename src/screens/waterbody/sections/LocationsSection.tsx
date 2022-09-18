@@ -16,7 +16,7 @@ interface Props {
 const LocationsSection = ({ navigation, name, waterbody, totalLocations }: Props) => {
 
     const navigateLocations = () => navigation.navigate('LocationListScreen', { 
-        type: LocationQuery.Waterbody, id: waterbody, title: name
+        type: LocationQuery.Waterbody, id: waterbody, title: name, total: totalLocations
     })
 
     return (

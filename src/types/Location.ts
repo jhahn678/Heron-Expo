@@ -35,9 +35,10 @@ export enum LocationQuery {
 }
   
 export enum LocationSort {
-    CreatedAtNewest = 'CREATED_AT_NEWEST',
-    CreatedAtOldest = 'CREATED_AT_OLDEST',
-    Nearest = 'NEAREST'
+  CreatedAtNewest = "CREATED_AT_NEWEST",
+  CreatedAtOldest = "CREATED_AT_OLDEST",
+  MostRecommended = "MOST_RECOMMENDED",
+  Nearest = "NEAREST",
 }
 
 export type Coordinates = {

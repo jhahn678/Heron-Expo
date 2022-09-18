@@ -1,10 +1,14 @@
 import React from "react";
-import { StyleSheet, Text, View, Image, Pressable } from "react-native";
-import { IconButton, TouchableRipple } from "react-native-paper";
+import { StyleSheet, View, Image, Pressable } from "react-native";
+import { TouchableRipple, Text } from "react-native-paper";
 import dayjs from "../../../config/dayjs";
 import { GetLocationsRes } from "../../../hooks/queries/useGetLocations";
-import { useShareContent } from "../../../hooks/utils/useShareContent";
+import { ShareType, useShareContent } from "../../../hooks/utils/useShareContent";
 import Avatar from "../../users/Avatar";
+import Icon from 'react-native-vector-icons/FontAwesome'
+import ShareButton from "../../buttons/ShareButton";
+import SaveLocationButton from "../../buttons/SaveLocationButton";
+import RecommendLocationButton from "../../buttons/RecommendLocationButton";
 
 interface Props {
     data: GetLocationsRes['locations'][number],
@@ -13,9 +17,7 @@ interface Props {
     navigateToMap: () => void
 }
 
-const LocationListItem = ({ data, navigateToUser, navigateToWaterbody, navigateToMap }: Props) => {
-
-    const handleShare = () => useShareContent()({ url: '', shareType: 'LOCATION' })
+const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
 
     return (
       <View style={styles.container}>
@@ -36,22 +38,44 @@ const LocationListItem = ({ data, navigateToUser, navigateToWaterbody, navigateT
               </View>
             </View>
           </TouchableRipple>
-          <IconButton
-            icon={"share-variant"}
-            onPress={handleShare}
-            style={{ paddingRight: 8 }}
-          />
         </View>
-        {data.title && <Text style={styles.title}>{data.title}</Text>}
+
+        {<Text style={styles.title}>One of the best spots on the Swatara</Text>}
         <Pressable onPress={navigateToMap}>
           <Image style={styles.image} source={{ uri: data.media[0]?.url }} />
         </Pressable>
+
+        {data.total_favorites > 0 ? data.total_favorites === 1 ? (
+          <Text style={styles.favorites}>
+            {data.total_favorites} Person Recommends This Spot
+          </Text>
+        ) : (
+          <Text style={styles.favorites}>
+            {data.total_favorites} People Recommend This Spot
+          </Text>
+        ): null}
+
         <View style={styles.footer}>
-            <Text style={styles.label}>Saved at</Text>
-            <Text style={styles.value}>{data.waterbody.name}</Text>
-            <Text style={styles.label}>Near</Text>
-            <Text style={styles.value}>{data.nearest_geoplace}</Text>
-          <IconButton onPress={navigateToMap} icon="map" style={styles.map} />
+          <View style={styles.footerButton}>
+            <ShareButton
+              shareType={ShareType.Location}
+              id={data.id}
+              mode="none"
+            />
+          </View>
+          <View style={styles.footerButtonCenter}>
+            <SaveLocationButton
+              id={data?.id}
+              active={data?.is_favorited}
+              style={styles.footerButton}
+            />
+          </View>
+          <View style={styles.footerButton}>
+            <RecommendLocationButton
+              active={data?.is_favorited}
+              id={data?.id}
+            />
+          </View>
         </View>
       </View>
     );
@@ -85,7 +109,7 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingLeft: 12,
-    fontSize: 18,
+    fontSize: 16,
     fontWeight: "500",
     paddingBottom: 12,
   },
@@ -95,23 +119,29 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
   },
   footer: {
-    paddingHorizontal: 12,
-    paddingBottom: 24
+    flexDirection: "row",
+    paddingVertical: 8,
+    paddingBottom: 8,
   },
-  value: {
+  footerButton: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+  },
+  footerButtonCenter: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "rgba(0,0,0,.1)",
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
+  },
+  favorites: {
     fontWeight: "500",
-  },
-  label: {
-    fontWeight: "300",
     fontSize: 12,
-    marginTop: 12,
-    flexShrink: 2,
-  },
-  map: {
-    position: "absolute",
-    right: 4,
-    top: 4,
-    zIndex: 100,
+    alignSelf: "flex-end",
+    marginRight: 12,
+    marginVertical: 8,
   },
 });
 
