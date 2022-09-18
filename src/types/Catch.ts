@@ -4,20 +4,20 @@ import { IMedia } from "./Media";
 
 
 export interface ICatch {
-    id: number
-    user: number
-    description?: string
-    geom?: Point
-    /** INCHES */
-    length?: number
-    rig?: string
-    species?: string
-    title?: string
-    waterbody?: number
-    /** OUNCES */
-    weight?: number
-    created_at: Date
-    updated_at?: Date;
+  id: number;
+  user: number;
+  description?: string;
+  geom?: Point;
+  /** INCHES */
+  length?: number;
+  rig?: string;
+  species?: string;
+  title?: string;
+  waterbody?: number;
+  /** OUNCES */
+  weight?: number;
+  created_at: Date;
+  updated_at?: Date;
 }
 
 export interface GetWaterbodyCatch extends Pick<
