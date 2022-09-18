@@ -84,7 +84,7 @@ export class RefreshTokenLink extends ApolloLink {
             if(this.accessToken){
                 const isValid = this.validateAccessToken(this.accessToken);
                 if(isValid) {
-                    console.log('stored access token is valid')
+                    // console.log('stored access token is valid')
                     this.setAuthorization(operation, this.accessToken)
                     return forward(operation)
                 }
