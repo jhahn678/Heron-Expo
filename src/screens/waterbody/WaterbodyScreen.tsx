@@ -1,5 +1,5 @@
-import React, { useEffect, useRef, useState } from 'react'
-import { Text, Title, FAB } from 'react-native-paper'
+import React, { useState } from 'react'
+import { FAB } from 'react-native-paper'
 import { useAuth } from '../../store/auth/useAuth'
 import FishIcon from '../../components/icons/FishIcon';
 import BackButton from '../../components/buttons/BackButton';
@@ -8,7 +8,6 @@ import ShareButton from '../../components/buttons/ShareButton';
 import { useImageStore } from '../../store/image/useImageStore';
 import { useModalStore } from '../../store/modal/useModalStore';
 import { ExploreStackScreenProps } from '../../types/navigation';
-import RatingDisplay from '../../components/ratings/RatingDisplay';
 import { useImagePicker } from '../../hooks/utils/useImagePicker';
 import { StyleSheet, View, ScrollView, Image, Pressable } from 'react-native';
 import AddLocationIcon from '../../components/icons/AddLocationIcon';
@@ -21,6 +20,7 @@ import HeaderSection from './sections/HeaderSection';
 import LocationsSection from './sections/LocationsSection';
 import CatchesSection from './sections/CatchesSection';
 import { useGetWaterbodyMock } from '../../../__mocks';
+import { ShareType } from '../../hooks/utils/useShareContent';
 
 
 const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'WaterbodyScreen'>): JSX.Element => {
@@ -36,7 +36,6 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     const showConfirmUpload = useModalStore(state => state.setConfirmUpload)
     const isAuthenticated = useAuth(state => state.isAuthenticated)
     const showAuthModal = useModalStore(state => state.setAuth)
-
     const handleAddImage = async () => {
         const result = await openImagePicker()
         if(!result) return;
@@ -61,8 +60,8 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                     <Image source={{ uri: data?.waterbody.media[0]?.url}} style={styles.image}/>
                 </Pressable>
                 <BackButton style={styles.back}/>
-                <ShareButton style={styles.share} waterbody={data?.waterbody.id}/>
-                <SaveIconButton style={styles.save} waterbody={data?.waterbody.id}/>
+                <ShareButton style={styles.share} shareType={ShareType.Waterbody} id={data?.waterbody.id}/>
+                <SaveIconButton style={styles.save} waterbody={data?.waterbody.id} saved={data?.waterbody.is_saved}/>
                 <FAB.Group
                     visible={true} open={fabOpen}
                     icon={fabOpen ? 'close' : 'plus'}
