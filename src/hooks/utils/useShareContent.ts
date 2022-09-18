@@ -1,15 +1,10 @@
 import { Share, ShareAction } from "react-native";
 
-type ShareType = 'WATERBODY'| 'CATCH' | 'LOCATION'
 
-type ShareTypeMessage = {
-    [key in ShareType]: string;
-};
-
-const shareTypeMessage: ShareTypeMessage = {
-    "WATERBODY": "Check this place to fish on the Heron App!",
-    "CATCH": "Check out this catch on the Heron App!",
-    "LOCATION": "Check out this fishing spot on the Heron App!"
+export enum ShareType {
+  Waterbody,
+  Catch,
+  Location
 }
 
 interface ShareContentArgs {
@@ -23,8 +18,17 @@ export const useShareContent = () => {
         url , shareType
     }: ShareContentArgs): Promise<ShareAction | void> => {
 
-        let message = 'Download the Heron App and check this out!' + ` ${url}`
-        if(shareType) message = shareTypeMessage[shareType] + ` ${url}`
+        let message: string;
+        switch(shareType){
+            case ShareType.Waterbody:
+                message = `Check this place to fish on the Heron App! ${url}`;
+            case ShareType.Catch:
+                message = `Check out this catch on the Heron App! ${url}`;
+            case ShareType.Location:
+                message = `Check out this fishing spot on the Heron App! ${url}`;
+            default:
+                message = `Download the Heron App and check this out! ${url}`;
+        }
         try{
             const res = await Share.share({ message })
             return res;
