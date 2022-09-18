@@ -16,7 +16,6 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
 
     const { data, loading, error, fetchMore } = useGetLocations({ type, id, limit }) 
     // const { data, loading, error } = useGetLocationsQueryMock({ limit })
-
     const [hasMore, setHasMore] = useState(false)
 
     useEffect(() => {
