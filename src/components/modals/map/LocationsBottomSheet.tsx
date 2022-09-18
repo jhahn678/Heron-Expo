@@ -65,17 +65,23 @@ const LocationsBottomSheet = () => {
       </View>
 
       <View style={styles.main}>
-        <View style={styles.mainLeft}>
-          <Text style={styles.name}>Description</Text>
-          { data?.description ? 
-            <Text style={styles.desc}>{data?.description}</Text> :
-            <Text style={styles.nodesc}>None</Text>
-          }
-        </View>
         {data && data.media.length > 0 ? (
-          <Pressable onPress={navigateToImage(data.media[0].url)}>
-            <Image source={{ uri: data.media[0].url }} style={styles.image} />
-          </Pressable>
+          <BottomSheetFlatList
+            horizontal
+            data={data.media}
+            snapToInterval={width * 0.5}
+            overScrollMode="never"
+            contentContainerStyle={{ marginTop: 8 }}
+            showsHorizontalScrollIndicator={false}
+            renderItem={({ item, index }) => (
+              <Pressable onPress={navigateToImage(item.url)}>
+                <Image
+                  source={{ uri: item.url }}
+                  style={(index + 1) % 2 === 0 ? styles.right : styles.left}
+                />
+              </Pressable>
+            )}
+          />
         ) : (
           <View style={styles.noImages}>
             <IceFishing />
@@ -83,7 +89,6 @@ const LocationsBottomSheet = () => {
           </View>
         )}
       </View>
-
 
       <View style={styles.subfooter}>
         <View style={globalStyles.frsb}>
@@ -164,14 +169,21 @@ const styles = StyleSheet.create({
     flex: 1,
     paddingVertical: 16,
   },
-  mainLeft: {
-    width: width * .5
+  text: {
+    fontWeight: "600",
+    paddingRight: 2,
   },
-  desc: {
-    marginTop: 4
+  left: {
+    flex: 1,
+    width: width * 0.5 - 4,
+    borderRadius: 12,
+    marginRight: 4,
   },
-  nodesc: {
-    fontStyle: 'italic'
+  right: {
+    flex: 1,
+    width: width * 0.5 - 4,
+    borderRadius: 12,
+    marginLeft: 4,
   },
   noImages: {
     flex: 1,
@@ -187,17 +199,11 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 12,
-  },
-  image: {
-    flex: 1,
-    width: width * 0.4,
-    borderRadius: 12
+    marginVertical: 16,
   },
   favorites: {
     fontWeight: "500",
     fontSize: 12,
-    alignSelf: "flex-end",
   },
   footer: {
     flexDirection: "row",
