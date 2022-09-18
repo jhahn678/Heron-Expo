@@ -7,32 +7,49 @@ import { IUser } from '../../types/User'
 import { IWaterbody } from '../../types/Waterbody'
 
 const GET_CATCHES = gql`
-    query Catches($id: Int!, $type: CatchQuery!, $offset: Int, $limit: Int, $sort: CatchSort, $queryLocation: QueryLocation, $mediaLimit: Int) {
-        catches(id: $id, type: $type, offset: $offset, limit: $limit, sort: $sort, queryLocation: $queryLocation) {
-            id
-            created_at
-            species
-            title
-            waterbody {
-                id
-                name
-            }
-            user {
-                id
-                fullname
-                avatar
-            }
-            media(limit: $mediaLimit) {
-                url
-            }
-            geom
-            description
-            length
-            weight
-            rig
-        }
+  query Catches(
+    $id: Int!
+    $type: CatchQuery!
+    $offset: Int
+    $limit: Int
+    $sort: CatchSort
+    $queryLocation: QueryLocation
+    $mediaLimit: Int
+  ) {
+    catches(
+      id: $id
+      type: $type
+      offset: $offset
+      limit: $limit
+      sort: $sort
+      queryLocation: $queryLocation
+    ) {
+      id
+      created_at
+      species
+      title
+      waterbody {
+        id
+        name
+      }
+      user {
+        id
+        fullname
+        avatar
+      }
+      media(limit: $mediaLimit) {
+        url
+      }
+      geom
+      description
+      length
+      weight
+      rig
+      total_favorites
+      is_favorited
     }
-`
+  }
+`;
 
 export interface GetCatchesRes{
     catches: (Omit<ICatch, 'updated_at' | 'user' | 'waterbody'> & {

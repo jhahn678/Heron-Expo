@@ -29,19 +29,21 @@ const GET_LOCATIONS = gql`
             hexcolor
             created_at
             nearest_geoplace
+            total_favorites
+            is_favorited
         }
     }
-`
+`;
 
 export interface GetLocationsRes {
-    locations: (
-        Omit<ILocation, 'user' | 'waterbody'> & {
-            user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
-            waterbody: Pick<IWaterbody, 'id' | 'name'>
-            media: Pick<IMedia, 'url'>[]
-            nearest_geoplace: string
-        }
-    )[]
+  locations: (Omit<ILocation, "user" | "waterbody"> & {
+    user: Pick<IUser, "id" | "fullname" | "avatar">;
+    waterbody: Pick<IWaterbody, "id" | "name">;
+    media: Pick<IMedia, "url">[];
+    nearest_geoplace: string;
+    total_favorites: number;
+    is_favorited: boolean;
+  })[];
 }
 
 interface Vars {

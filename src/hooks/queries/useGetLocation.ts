@@ -27,15 +27,19 @@ const GET_LOCATION = gql`
       hexcolor
       created_at
       nearest_geoplace
+      total_favorites
+      is_favorited
     }
   }
 `;
 
 export interface GetLocationRes {
   location: Omit<ILocation, "user" | "waterbody"> & {
-    waterbody: Pick<IWaterbody, "id" | "name">
-    user: Pick<IUser, "id" | "fullname" | "avatar">
-    media: Pick<IMedia, "url">[]
+    waterbody: Pick<IWaterbody, "id" | "name">;
+    user: Pick<IUser, "id" | "fullname" | "avatar">;
+    media: Pick<IMedia, "url">[];
+    total_favorites: number;
+    is_favorited: boolean;
   };
 }
 
@@ -56,32 +60,34 @@ export const useGetLocationFragment = () => {
 
     return  (id: number | undefined) => {
         if(!id) return null;
-        return client.readFragment<GetLocationRes['location']>({
-            id: `Location:${id}`,
-            fragment: gql`
+        return client.readFragment<GetLocationRes["location"]>({
+          id: `Location:${id}`,
+          fragment: gql`
             fragment CachedLocation on Location {
+              id
+              privacy
+              title
+              description
+              user {
                 id
-                privacy
-                title
-                description
-                user {
-                  id
-                  fullname
-                  avatar
-                }
-                waterbody {
-                  id
-                  name
-                }
-                media {
-                  url
-                }
-                geom
-                hexcolor
-                created_at
-                nearest_geoplace
+                fullname
+                avatar
+              }
+              waterbody {
+                id
+                name
+              }
+              media {
+                url
+              }
+              geom
+              hexcolor
+              created_at
+              nearest_geoplace
+              total_favorites
+              is_favorited
             }
-            `,
-        })
+          `,
+        });
     }
 }

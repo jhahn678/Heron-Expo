@@ -20,6 +20,7 @@ query Waterbody($id: Int!, $mediaLimit: Int) {
         total_media
         total_reviews
         average_rating
+        is_saved
         media(limit: $mediaLimit) {
             url
         }
@@ -33,6 +34,7 @@ export interface GetWaterbody extends Omit<IWaterbody, 'oid' | 'weight'>{
     total_media: number,
     total_reviews: number,
     average_rating: number | null,
+    is_saved: boolean
     media: Pick<IMedia, 'url'>[]
 }
 
@@ -81,6 +83,7 @@ export const useGetWaterbodyFragment = () => {
               total_media
               total_reviews
               average_rating
+              is_saved
               media {
                 url
               }
