@@ -1,4 +1,4 @@
-import { MD3Theme, Text, Title, useTheme } from "react-native-paper";
+import { Text } from "react-native-paper";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { Dimensions, Image, Pressable, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -8,8 +8,6 @@ import { NavigationProp } from "../../../types/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../store/auth/useAuth";
 import Avatar from "../../users/Avatar";
-import { useGetLocationFragementMock, useGetLocationsQueryMock } from "../../../../__mocks";
-import { Privacy } from "../../../types/Location";
 import dayjs from "../../../config/dayjs";
 import globalStyles from "../../../globalStyles";
 import SaveLocationButton from "../../buttons/SaveLocationButton";
@@ -17,14 +15,15 @@ import RecommendLocationButton from "../../buttons/RecommendLocationButton";
 import ShareButton from "../../buttons/ShareButton";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import IceFishing from "../../svg/IceFishing";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
+import { privacyToLabel } from "../../../utils/conversions/privacyToLabel";
+import PrivacyLabel from "../../locations/PrivacyLabel";
 
 const { width } = Dimensions.get('window')
 
 const LocationsBottomSheet = () => {
 
   const { id } = useAuth()
-  const theme = useTheme() as MD3Theme
   const navigation = useNavigation<NavigationProp>();
   const [data, setData] = useState<GetLocationRes['location'] | null>(null);
   const getFromCache = useGetLocationFragment();
@@ -40,9 +39,8 @@ const LocationsBottomSheet = () => {
   }
 
   useEffect(() => {
-    // if (!location) setData(null);
-    // if (location) setData(getFromCache(location));
-    setData(useGetLocationFragementMock(Privacy.Public)())
+    if (!location) setData(null);
+    if (location) setData(getFromCache(location));
   }, [location]);
 
   if (!visible) return null;
@@ -55,7 +53,7 @@ const LocationsBottomSheet = () => {
     >
       <View style={globalStyles.frac}>
         <Text style={styles.title} numberOfLines={1}>
-          {data?.title}
+          {data?.title || "Untitled Location"}
         </Text>
       </View>
 
@@ -64,56 +62,49 @@ const LocationsBottomSheet = () => {
         <Text style={styles.waterbody}>{data?.waterbody.name}</Text>
       </View>
 
-      <View style={styles.main}>
-        {data && data.media.length > 0 ? (
-          <BottomSheetFlatList
-            horizontal
-            data={data.media}
-            snapToInterval={width * 0.5}
-            overScrollMode="never"
-            contentContainerStyle={{ marginTop: 8 }}
-            showsHorizontalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <Pressable onPress={navigateToImage(item.url)}>
-                <Image
-                  source={{ uri: item.url }}
-                  style={(index + 1) % 2 === 0 ? styles.right : styles.left}
-                />
-              </Pressable>
-            )}
-          />
+      <View style={[globalStyles.frac, { marginTop: 12 }]}>
+        <Avatar
+          fullname={data?.user.fullname}
+          uri={data?.user.avatar}
+          size={24}
+          onPress={navigateToUser}
+        />
+        <Text style={styles.name} onPress={navigateToUser}>
+          {data?.user.fullname}
+        </Text>
+        <View style={styles.divider} />
+        <Text style={styles.detail}>{dayjs(data?.created_at).fromNow()}</Text>
+        <View style={styles.divider} />
+        <PrivacyLabel privacy={data?.privacy}/>
+      </View>
+
+      <View style={styles.images}>
+        {data?.media && data.media.length > 0 ? (
+          data.media.slice(0, 2).map(({ id, url }) => (
+            <Pressable
+              key={id}
+              style={styles.image}
+              onPress={navigateToImage(url)}
+            >
+              <Image source={{ uri: url }} />
+            </Pressable>
+          ))
         ) : (
-          <View style={styles.noImages}>
-            <IceFishing />
-            <Text style={styles.noImagesText}>No uploaded images</Text>
-          </View>
+          <NoImagesUploaded/>
         )}
       </View>
 
-      <View style={styles.subfooter}>
-        <View style={globalStyles.frsb}>
-          <Avatar
-            size={36}
-            fullname={data?.user.fullname}
-            uri={data?.user.avatar}
-            onPress={navigateToUser}
-          />
-          <View style={styles.user}>
-            <Text style={styles.name}>{data?.user.fullname}</Text>
-            <Text style={styles.created}>
-              {dayjs(data?.created_at).fromNow()}
-            </Text>
-          </View>
-        </View>
-        {data?.total_favorites && (
+      { data && data.total_favorites > 0 ? (
+        data.total_favorites === 1 ? (
           <Text style={styles.favorites}>
-            {data.total_favorites}
-            {data.total_favorites > 1
-              ? " People Recommend This Spot"
-              : " Person Recommends This Spot"}
+            {data.total_favorites} Person Recommends This Spot
           </Text>
-        )}
-      </View>
+        ) : (
+          <Text style={styles.favorites}>
+            {data.total_favorites} People Recommend This Spot
+          </Text>
+        )
+      ) : null}
 
       <View style={styles.footer}>
         <View style={styles.footerButton}>
@@ -126,7 +117,7 @@ const LocationsBottomSheet = () => {
         <View style={styles.footerButtonCenter}>
           <SaveLocationButton
             id={data?.id}
-            active={data?.is_favorited}
+            active={data?.is_saved}
             style={styles.footerButton}
           />
         </View>
@@ -148,8 +139,12 @@ const styles = StyleSheet.create({
   },
   waterbody: {
     fontSize: 18,
-    fontWeight: "500",
-    marginTop: 4,
+    fontWeight: "600",
+    marginTop: 6,
+  },
+  detail: { 
+    fontWeight: '500', 
+    fontSize: 12 
   },
   label: {
     fontWeight: "400",
@@ -160,50 +155,35 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: "500",
+    marginLeft: 6,
   },
-  created: {
-    fontSize: 12,
-  },
-  main: {
-    flexDirection: "row",
-    flex: 1,
-    paddingVertical: 16,
+  divider: {
+    width: 1,
+    height: 18,
+    backgroundColor: "#e0e0e0",
+    marginHorizontal: 12,
   },
   text: {
     fontWeight: "600",
     paddingRight: 2,
   },
-  left: {
+  images: {
     flex: 1,
-    width: width * 0.5 - 4,
-    borderRadius: 12,
-    marginRight: 4,
-  },
-  right: {
-    flex: 1,
-    width: width * 0.5 - 4,
-    borderRadius: 12,
-    marginLeft: 4,
-  },
-  noImages: {
-    flex: 1,
-    alignItems: "center",
-    justifyContent: "center",
-  },
-  noImagesText: {
-    fontWeight: "500",
-    fontSize: 10,
-    marginTop: 12,
-  },
-  subfooter: {
     flexDirection: "row",
-    alignItems: "center",
     justifyContent: "space-between",
-    marginVertical: 16,
+    paddingTop: 24,
+    paddingBottom: 16,
+  },
+  image: {
+    backgroundColor: "#e0e0e0",
+    width: width * 0.5 - 20,
+    borderRadius: 12,
   },
   favorites: {
     fontWeight: "500",
     fontSize: 12,
+    alignSelf: 'flex-end',
+    paddingVertical: 4
   },
   footer: {
     flexDirection: "row",
