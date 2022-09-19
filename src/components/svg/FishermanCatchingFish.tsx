@@ -1,4 +1,6 @@
+import { StyleProp, ViewStyle } from "react-native"
 import Svg, { Path } from "react-native-svg"
+
 
 const FishermanCatchingFish = () => (
   <Svg
