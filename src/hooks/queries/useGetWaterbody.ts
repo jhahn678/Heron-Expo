@@ -22,20 +22,21 @@ query Waterbody($id: Int!, $mediaLimit: Int) {
         average_rating
         is_saved
         media(limit: $mediaLimit) {
+            id
             url
         }
     }
 }`
 
-export interface GetWaterbody extends Omit<IWaterbody, 'oid' | 'weight'>{
-    total_catches: number
-    total_species: number
-    total_locations: number
-    total_media: number,
-    total_reviews: number,
-    average_rating: number | null,
-    is_saved: boolean
-    media: Pick<IMedia, 'url'>[]
+export interface GetWaterbody extends Omit<IWaterbody, "oid" | "weight"> {
+  total_catches: number;
+  total_species: number;
+  total_locations: number;
+  total_media: number;
+  total_reviews: number;
+  average_rating: number | null;
+  is_saved: boolean;
+  media: Pick<IMedia, "url" | "id">[];
 }
 
 export interface GetWaterbodyRes {

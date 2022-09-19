@@ -14,6 +14,7 @@ query Waterbodies($classifications: [ClassificationEnum!], $queryLocation: Query
       ccode
       subregion
       media {
+        id
         url
       }
       distance

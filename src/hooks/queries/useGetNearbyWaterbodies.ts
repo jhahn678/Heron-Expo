@@ -13,6 +13,7 @@ query Waterbodies($classifications: [ClassificationEnum!], $queryLocation: Query
         admin_one
         admin_two
         media {
+            id
             url
         }
         distance

@@ -28,6 +28,7 @@ const GET_CATCH = gql`
         name
       }
       media {
+        id
         url
       }
     }
@@ -39,8 +40,9 @@ export interface GetCatchRes {
   catch: Omit<ICatch, "user" | "waterbody"> & {
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     waterbody: Pick<IWaterbody, "id" | "name">;
-    media: Pick<IMedia, "url">[];
-    
+    media: Pick<IMedia, "url" | 'id'>[];
+    total_favorites: number
+    is_favorited: boolean
   };
 }
 
@@ -84,11 +86,8 @@ export const useGetCatchFragment = () => {
             id
             name
           }
-          media {
-            url
-          }
         }
-      `,
+      `
     });
   }
 }; 

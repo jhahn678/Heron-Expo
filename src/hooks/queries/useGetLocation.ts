@@ -21,6 +21,7 @@ const GET_LOCATION = gql`
         name
       }
       media {
+        id
         url
       }
       geom
@@ -29,6 +30,7 @@ const GET_LOCATION = gql`
       nearest_geoplace
       total_favorites
       is_favorited
+      is_saved
     }
   }
 `;
@@ -37,9 +39,10 @@ export interface GetLocationRes {
   location: Omit<ILocation, "user" | "waterbody"> & {
     waterbody: Pick<IWaterbody, "id" | "name">;
     user: Pick<IUser, "id" | "fullname" | "avatar">;
-    media: Pick<IMedia, "url">[];
+    media: Pick<IMedia, "url" | "id">[]
     total_favorites: number;
     is_favorited: boolean;
+    is_saved: boolean
   };
 }
 
@@ -86,6 +89,7 @@ export const useGetLocationFragment = () => {
               nearest_geoplace
               total_favorites
               is_favorited
+              is_saved
             }
           `,
         });

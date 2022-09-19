@@ -38,6 +38,7 @@ const GET_CATCHES = gql`
         avatar
       }
       media(limit: $mediaLimit) {
+        id
         url
       }
       geom
@@ -51,12 +52,14 @@ const GET_CATCHES = gql`
   }
 `;
 
-export interface GetCatchesRes{
-    catches: (Omit<ICatch, 'updated_at' | 'user' | 'waterbody'> & {
-        waterbody: Pick<IWaterbody, 'id' | 'name'>
-        user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
-        media: Pick<IMedia, 'url'>[]
-    })[]
+export interface GetCatchesRes {
+  catches: (Omit<ICatch, "updated_at" | "user" | "waterbody"> & {
+    waterbody: Pick<IWaterbody, "id" | "name">;
+    user: Pick<IUser, "id" | "fullname" | "avatar">;
+    media: Pick<IMedia, "url" | "id">[];
+    total_favorites: number;
+    is_favorited: boolean;
+  })[];
 }
 
 export interface Vars {
@@ -77,7 +80,7 @@ interface Args extends Omit<Vars, 'queryLocation'>{
     withinMeters?: number
 }
 
-export const useGetCatches = ({ withinMeters=100000, ...args }: Args) => {
+export const useGetCatches = ({ withinMeters=100000, mediaLimit, ...args }: Args) => {
 
     const { latitude, longitude }= useLocationStore(store => ({ 
         latitude: store.latitude, longitude: store.longitude 
@@ -86,6 +89,7 @@ export const useGetCatches = ({ withinMeters=100000, ...args }: Args) => {
     return useQuery<GetCatchesRes, Vars>(GET_CATCHES, { 
         variables: {
             ...args,
+            mediaLimit: mediaLimit ? mediaLimit : 1,
             queryLocation: (latitude && longitude) ? { 
                 latitude,
                 longitude,

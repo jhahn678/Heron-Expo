@@ -23,6 +23,7 @@ const GET_LOCATIONS = gql`
                 name
             }
             media {
+                id
                 url
             }
             geom
@@ -31,6 +32,7 @@ const GET_LOCATIONS = gql`
             nearest_geoplace
             total_favorites
             is_favorited
+            is_saved
         }
     }
 `;
@@ -39,10 +41,11 @@ export interface GetLocationsRes {
   locations: (Omit<ILocation, "user" | "waterbody"> & {
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     waterbody: Pick<IWaterbody, "id" | "name">;
-    media: Pick<IMedia, "url">[];
+    media: Pick<IMedia, "url" | "id">[];
     nearest_geoplace: string;
     total_favorites: number;
     is_favorited: boolean;
+    is_saved: boolean
   })[];
 }
 
