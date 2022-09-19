@@ -1,15 +1,20 @@
 import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
-import { IconButton, Text, TouchableRipple } from 'react-native-paper'
+import { Text, TouchableRipple } from 'react-native-paper'
 import { GetCatchesRes } from "../../../hooks/queries/useGetCatches";
 import Avatar from "../../users/Avatar";
 import dayjs from '../../../config/dayjs'
-import { useShareContent } from "../../../hooks/utils/useShareContent";
+import { ShareType } from "../../../hooks/utils/useShareContent";
+import ShareButton from "../../buttons/ShareButton";
+import SaveLocationButton from "../../buttons/SaveLocationButton";
+import LikeButton, { LikeType } from "../../buttons/LikeButton";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { theme } from "../../../config/theme";
 
 interface Props {
     data: GetCatchesRes['catches'][number]
     navigateToUser: () => void
-    navigateToWaterbody: () => void,
+    navigateToMap: () => void,
     navigateToCatch: () => void
 }
 
@@ -17,85 +22,73 @@ const CatchesListItem = ({
     data, 
     navigateToUser, 
     navigateToCatch,
-    navigateToWaterbody
+    navigateToMap
 }: Props) => {
-
-    const handleShare = () => useShareContent()({ url: '', shareType: 'CATCH' })
     
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableRipple onPress={navigateToUser}>
-            <View style={styles.user}>
-              <Avatar
-                size={40}
-                fullname={data.user.fullname}
-                uri={data.user.avatar}
-                onPress={navigateToUser}
-              />
-              <View style={{ paddingLeft: 12 }}>
-                <Text style={styles.name}>{data.user.fullname}</Text>
-                <Text style={styles.date}>
-                  {dayjs(data.created_at).fromNow()}
-                </Text>
+        <Pressable onPress={navigateToCatch}>
+          <View style={styles.header}>
+            <TouchableRipple onPress={navigateToUser}>
+              <View style={styles.user}>
+                <Avatar
+                  size={40}
+                  fullname={data.user.fullname}
+                  uri={data.user.avatar}
+                  onPress={navigateToUser}
+                />
+                <View style={{ paddingLeft: 12 }}>
+                  <Text style={styles.name}>{data.user.fullname}</Text>
+                  <Text style={styles.date}>
+                    {dayjs(data.created_at).fromNow()}
+                  </Text>
+                </View>
               </View>
-            </View>
-          </TouchableRipple>
-          <IconButton icon={"share-variant"} onPress={handleShare} />
-        </View>
-        <Pressable style={styles.image} onPress={navigateToCatch}>
-          <Image
-            source={{ uri: data.media[0].url }}
-            style={styles.image}
-            resizeMode="cover"
-          />
+            </TouchableRipple>
+          </View>
+
+          {data.title && (
+            <Text style={styles.title} numberOfLines={1}>
+              {data.title}
+            </Text>
+          )}
+
+          <Text style={styles.details} numberOfLines={1}>
+            {data.waterbody.name}
+            {data.species && `  \u2022  ${data.species}`}
+            {data.length && `  \u2022  ${data.length} in`}
+            {data.weight && `  \u2022  ${data.weight} oz`}
+          </Text>
+
+          {data.media.length === 0 && (
+            <Image
+              source={{ uri: data.media[0]?.url }}
+              style={styles.image}
+              resizeMode="cover"
+            />
+          )}
         </Pressable>
         <View style={styles.footer}>
-          <View style={styles.row}>
-            <View style={styles.leftItem}>
-              <Text style={styles.label}>Time</Text>
-              <Text style={styles.text}>
-                {dayjs(data.created_at).format("h:mm a")}
-              </Text>
-            </View>
-            <View style={styles.rightItem}>
-              <Text style={styles.label}>Caught at</Text>
-              <Pressable onPress={navigateToWaterbody}>
-                <Text style={styles.text} numberOfLines={1}>
-                  {data.waterbody.name}
-                </Text>
-              </Pressable>
-            </View>
+          <View style={styles.footerButton}>
+            <ShareButton shareType={ShareType.Catch} id={data.id} mode="none" />
           </View>
-          <View style={styles.row}>
-            <View style={styles.leftItem}>
-              <Text style={styles.label}>Measurements</Text>
-              {data.length && data.weight ? (
-                <View style={styles.measurements}>
-                  <Text style={styles.text}>{data.length} in</Text>
-                  <View style={styles.divider} />
-                  <Text style={styles.text}>{data.weight} oz</Text>
-                </View>
-              ) : data.length ? (
-                <View style={styles.measurements}>
-                  <Text style={styles.text}>{data.length} in</Text>
-                </View>
-              ) : data.weight ? (
-                <View style={styles.measurements}>
-                  <Text style={styles.text}>{data.weight} oz</Text>
-                </View>
-              ) : (
-                <Text style={styles.na}>Not specified</Text>
-              )}
-            </View>
-            <View style={styles.rightItem}>
-              <Text style={styles.label}>Species</Text>
-              {data.species ? (
-                <Text style={styles.text}>{data.species}</Text>
-              ) : (
-                <Text style={styles.na}>Not specified</Text>
-              )}
-            </View>
+          {data.geom ?
+            <Pressable style={styles.footerButtonCenter} onPress={navigateToMap}>
+              <Icon
+                name="map"
+                size={24}
+                color={theme.colors.primary}
+                style={styles.footerButton}
+              />
+            </Pressable>
+            : <View style={{ width: 1, backgroundColor: '#e0e0e0' }}/>
+          }
+          <View style={styles.footerButton}>
+            <LikeButton
+              type={LikeType.Catch}
+              active={data.is_favorited}
+              id={data.id}
+            />
           </View>
         </View>
       </View>
@@ -128,43 +121,38 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 12,
   },
+  title: {
+    paddingHorizontal: 12,
+    paddingTop: 6,
+    fontSize: 16,
+    fontWeight: "600",
+  },
+  details: {
+    fontWeight: "500",
+    fontSize: 12,
+    paddingHorizontal: 12,
+    marginVertical: 8,
+  },
   image: {
     width: "100%",
     height: 250,
+    backgroundColor: '#e0e0e0'
   },
   footer: {
-    paddingHorizontal: 12,
-    paddingBottom: 24,
-  },
-  row: {
-    marginTop: 12,
     flexDirection: "row",
-    alignItems: "center",
+    paddingVertical: 12
   },
-  leftItem: {
+  footerButton: {
     flex: 1,
-  },
-  rightItem: {
-    flex: 2,
-  },
-  label: {
-    fontWeight: "300",
-    fontSize: 12,
-  },
-  text: {
-    fontWeight: "500",
-  },
-  measurements: {
-    flexDirection: "row",
+    justifyContent: "center",
     alignItems: "center",
   },
-  divider: {
-    height: 16,
-    width: 1,
-    backgroundColor: "rgba(0,0,0,.2)",
-    marginHorizontal: 8,
+  footerButtonCenter: {
+    flex: 1,
+    justifyContent: "center",
+    alignItems: "center",
+    borderColor: "rgba(0,0,0,.1)",
+    borderLeftWidth: 1,
+    borderRightWidth: 1,
   },
-  na: {
-    fontStyle: "italic",
-  }
 });
