@@ -44,10 +44,10 @@ export interface SearchWaterbody extends IWaterbody {
     rank: number
 }
 
-export interface WaterbodyListItem extends Omit<SearchWaterbody, 'weight' | 'oid'>{
-    media: Pick<IMedia, 'url'>[]
-    total_catches: number
-    total_locations: number
+export interface WaterbodyListItem extends Omit<SearchWaterbody, "weight" | "oid"> {
+  media: Pick<IMedia, "url" | "id">[];
+  total_catches: number;
+  total_locations: number;
 }
 
 export interface NearbyWaterbody extends WaterbodyListItem {
