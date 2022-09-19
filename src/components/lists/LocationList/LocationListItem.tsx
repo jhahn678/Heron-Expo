@@ -3,12 +3,12 @@ import { StyleSheet, View, Image, Pressable } from "react-native";
 import { TouchableRipple, Text } from "react-native-paper";
 import dayjs from "../../../config/dayjs";
 import { GetLocationsRes } from "../../../hooks/queries/useGetLocations";
-import { ShareType, useShareContent } from "../../../hooks/utils/useShareContent";
+import { ShareType } from "../../../hooks/utils/useShareContent";
 import Avatar from "../../users/Avatar";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import ShareButton from "../../buttons/ShareButton";
 import SaveLocationButton from "../../buttons/SaveLocationButton";
-import RecommendLocationButton from "../../buttons/RecommendLocationButton";
+import LikeButton, { LikeType } from "../../buttons/LikeButton";
 
 interface Props {
     data: GetLocationsRes['locations'][number],
@@ -21,40 +21,53 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
 
     return (
       <View style={styles.container}>
-        <View style={styles.header}>
-          <TouchableRipple onPress={navigateToUser}>
-            <View style={styles.user}>
-              <Avatar
-                size={40}
-                fullname={data.user.fullname}
-                uri={data.user.avatar}
-                onPress={navigateToUser}
-              />
-              <View style={{ paddingLeft: 12 }}>
-                <Text style={styles.name}>{data.user.fullname}</Text>
-                <Text style={styles.date}>
-                  {dayjs(data.created_at).fromNow()}
-                </Text>
-              </View>
-            </View>
-          </TouchableRipple>
-        </View>
-
-        {<Text style={styles.title}>One of the best spots on the Swatara</Text>}
         <Pressable onPress={navigateToMap}>
-          <Image style={styles.image} source={{ uri: data.media[0]?.url }} />
+          <View style={styles.header}>
+            <TouchableRipple onPress={navigateToUser}>
+              <View style={styles.user}>
+                <Avatar
+                  size={40}
+                  fullname={data.user.fullname}
+                  uri={data.user.avatar}
+                  onPress={navigateToUser}
+                />
+                <View style={{ paddingLeft: 12 }}>
+                  <Text style={styles.name}>{data.user.fullname}</Text>
+                  <Text style={styles.date}>
+                    {dayjs(data.created_at).fromNow()}
+                  </Text>
+                </View>
+              </View>
+            </TouchableRipple>
+          </View>
+
+          {!data.title && (
+            <Text style={styles.title} numberOfLines={1}>
+              {data.title ||
+                "One of the best spots on the Swatara that ive ever fished at"}
+            </Text>
+          )}
+
+          <Text style={styles.near} numberOfLines={1}>
+            {data.waterbody.name}
+            {"  "}&bull;{"  "}
+            {data.nearest_geoplace}
+          </Text>
+
+          <Image style={styles.image} source={{ uri: data.media[0]?.url }}/>
+
+          {data.total_favorites > 0 ? (
+            data.total_favorites === 1 ? (
+              <Text style={styles.favorites}>
+                {data.total_favorites} Person Recommends This Spot
+              </Text>
+            ) : (
+              <Text style={styles.favorites}>
+                {data.total_favorites} People Recommend This Spot
+              </Text>
+            )
+          ) : null}
         </Pressable>
-
-        {data.total_favorites > 0 ? data.total_favorites === 1 ? (
-          <Text style={styles.favorites}>
-            {data.total_favorites} Person Recommends This Spot
-          </Text>
-        ) : (
-          <Text style={styles.favorites}>
-            {data.total_favorites} People Recommend This Spot
-          </Text>
-        ): null}
-
         <View style={styles.footer}>
           <View style={styles.footerButton}>
             <ShareButton
@@ -71,7 +84,8 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
             />
           </View>
           <View style={styles.footerButton}>
-            <RecommendLocationButton
+            <LikeButton
+              type={LikeType.Location}
               active={data?.is_favorited}
               id={data?.id}
             />
@@ -107,11 +121,18 @@ const styles = StyleSheet.create({
   date: {
     fontSize: 12,
   },
+  near: {
+    marginLeft: 12,
+    marginBottom: 8,
+    fontSize: 12,
+    fontWeight: '500'
+  },
   title: {
-    paddingLeft: 12,
-    fontSize: 16,
-    fontWeight: "500",
+    paddingHorizontal: 12,
     paddingBottom: 12,
+    paddingTop: 6,
+    fontSize: 16,
+    fontWeight: "600",
   },
   image: {
     width: "100%",
@@ -120,8 +141,7 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    paddingVertical: 8,
-    paddingBottom: 8,
+    paddingVertical: 12
   },
   footerButton: {
     flex: 1,
