@@ -7,13 +7,10 @@ import { useSearchWaterbodiesQuery } from '../../../hooks/queries/useSearchWater
 import { useLocationStore } from '../../../store/location/useLocationStore'
 import { useSearchParamStore } from '../../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../../types/navigation'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import WaterbodySearchResult from '../../../components/lists/WaterbodySearch/WaterbodySearchResult'
 
 
-const SearchResultsScreen = ({
-  navigation, route
-}: ExploreStackScreenProps<'SearchResultsScreen'>) => {
+const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'SearchResultsScreen'>) => {
 
   const { width } = Dimensions.get('screen')
   const { params } = route; 
@@ -25,6 +22,11 @@ const SearchResultsScreen = ({
     longitude: geoplace ? geoplace.geom.coordinates[0] : longitude, 
     latitude: geoplace ? geoplace.geom.coordinates[1] : latitude
   })
+
+  const handleSearchBarPress = () => {
+    resetSearchParams()
+    navigation.navigate('SearchBarScreen')
+  }
 
   const handleBack = () => {
     resetSearchParams()
@@ -40,7 +42,7 @@ const SearchResultsScreen = ({
     <View style={styles.container}>
       <View style={[styles.header, { width: width * .94 }]}>
         <SearchBar 
-          onPress={handleBack}
+          onPress={handleSearchBarPress}
           goBack={handleBack}
           value={value || undefined}
           enabled={false}

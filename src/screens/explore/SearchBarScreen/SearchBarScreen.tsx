@@ -20,7 +20,6 @@ const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScree
     <View style={styles.container}>
       <View style={[styles.header, { width: width * .94 }]}>
         <SearchBar 
-          
           value={input} 
           autofocus={true}
           goBack={navigation.goBack}
