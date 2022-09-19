@@ -23,7 +23,7 @@ const BoxLoader = ({ height=200, width=200, speed=1, ...props}: Props) => {
             foregroundColor="#f0f0f0"
             {...props}
         >
-            <Rect x="0" y="0" rx="2" ry="2" width={width} height={height} /> 
+            <Rect x="0" y="0" rx="2" ry="2" width={width} height={height}/> 
         </ContentLoader>
         )
 };
