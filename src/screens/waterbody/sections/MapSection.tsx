@@ -11,7 +11,9 @@ interface Props {
 
 const MapSection = ({ navigation, waterbody, uri }: Props) => {
 
-    const navigateToMap = () => navigation.navigate('ViewMapScreen', { resource: MapResource.Waterbody, id: waterbody })
+    const navigateToMap = () => navigation.navigate('ViewMapScreen', { 
+        resource: MapResource.Waterbody, id: waterbody 
+    })
 
     return (
         <View style={styles.container}>
