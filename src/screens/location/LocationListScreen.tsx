@@ -2,15 +2,19 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MapResource, RootStackScreenProps } from "../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
-import { IconButton, Surface, Title, Text, Button, Menu, Divider } from "react-native-paper";
+import { IconButton, Surface, Title, Menu, Divider } from "react-native-paper";
 import { useGetLocations } from "../../hooks/queries/useGetLocations";
 import LocationListItem from "../../components/lists/LocationList/LocationListItem";
 import { useGetLocationsQueryMock } from "../../../__mocks";
 import globalStyles from "../../globalStyles";
 import { LocationSort } from "../../types/Location";
+import { locationSortToLabel } from "../../utils/conversions/locationSortToLabel";
+import BoxLoader from "../../components/loaders/BoxLoader";
+import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterBar";
+import LocationsListEmpty from "../../components/lists/shared/LocationsListEmpty";
 
 const limit = 16;
-const { width } = Dimensions.get('screen')
+const { width, height } = Dimensions.get('screen')
 
 const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'LocationListScreen'>) => {
 
@@ -27,9 +31,7 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
         if(data) setHasMore(data.locations.length % limit === 0)
     },[data])
 
-    const handleSort = (type: LocationSort) => () => { setSort(type); setMenuOpen(false) }
-
-    const toggleMenu = () => setMenuOpen(o => !o)
+    const handleSort = (type: LocationSort) => () => { setSort(type); setMenuOpen(false); }
 
     const navigateUser = (id: number) => () => 
       navigation.navigate('UserProfileScreen', { id })
@@ -51,7 +53,7 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
         <Surface style={styles.header}>
           <View style={globalStyles.frsb}>
             <IconButton icon="arrow-left" onPress={navigation.goBack} />
-            <Title>{title}</Title>
+            <Title style={styles.title}>{title}</Title>
           </View>
           <IconButton
             icon="map"
@@ -75,42 +77,59 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
           <Menu.Item
             title="Least Recent"
             style={{ height: 40 }}
-            onPress={handleSort(LocationSort.CreatedAtNewest)}
+            onPress={handleSort(LocationSort.CreatedAtOldest)}
           />
           <Divider />
           <Menu.Item
             title="Most Recommendations"
             style={{ height: 40 }}
-            onPress={handleSort(LocationSort.CreatedAtNewest)}
+            onPress={handleSort(LocationSort.MostRecommended)}
           />
         </Menu>
 
         <FlashList
-          data={data?.locations}
+          data={data ? data.locations : new Array(6).fill(null)}
           showsVerticalScrollIndicator={false}
           estimatedItemSize={300}
           onEndReachedThreshold={0.3}
           ListHeaderComponent={
-            <View style={styles.sort}>
-              <Text style={styles.total}>{total} results</Text>
-              <Button icon="chevron-down" onPress={toggleMenu}>
-                Sort by
-              </Button>
-            </View>
-          }
-          // onEndReached={hasMore ? () => (
-          //     fetchMore({ variables: { offset: data?.locations.length }})
-          // ): null}
-          renderItem={({ item }) => (
-            <LocationListItem
-              key={item.id}
-              data={item}
-              navigateToMap={navigateMap(item.id)}
-              navigateToUser={navigateUser(item.user.id)}
-              navigateToWaterbody={navigateWaterbody(item.waterbody.id)}
+            <ListHeaderFilterBar 
+            total={total}
+            sortLabel={locationSortToLabel(sort)} 
+            setMenuOpen={setMenuOpen}
             />
-          )}
+          }
+          onEndReached={
+            hasMore
+              ? () =>
+                  fetchMore({ variables: { offset: data?.locations.length } })
+              : null
+          }
+          renderItem={({ item, index }) =>
+            data ? (
+              <LocationListItem
+                key={item.id}
+                data={item}
+                navigateToMap={navigateMap(item.id)}
+                navigateToUser={navigateUser(item.user.id)}
+                navigateToWaterbody={navigateWaterbody(item.waterbody.id)}
+              />
+            ) : (
+              <BoxLoader
+                key={index}
+                height={width * 0.9}
+                width={width * 0.9}
+                style={{
+                  marginLeft: width * 0.05,
+                  marginBottom: 16,
+                }}
+              />
+            )
+          }
         />
+
+        { data && data.locations.length === 0 && <LocationsListEmpty style={styles.empty}/>}
+
       </View>
     );
 };
@@ -132,16 +151,13 @@ const styles = StyleSheet.create({
     justifyContent: "space-between",
     height: 80,
   },
-  total: {
-    fontWeight: "600",
-    fontSize: 16,
+  title: {
+    fontWeight: "500",
   },
-  sort: {
-    flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    marginVertical: 12,
-    marginHorizontal: 12,
+  empty: {
+    alignSelf: "center",
+    position: "absolute",
+    bottom: height * 0.4,
   },
 });
 

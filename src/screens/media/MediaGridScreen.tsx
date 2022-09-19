@@ -38,7 +38,7 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
             <Surface style={styles.heading}>
                 <View style={globalStyles.frsb}>
                     <IconButton icon='arrow-left' onPress={navigation.goBack}/>
-                    <Title style={{ fontWeight: '500'}}>
+                    <Title style={{ fontWeight: '500' }}>
                         {params.title} {params.total !== undefined && `(${params.total})`}
                     </Title>
                 </View>
