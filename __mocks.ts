@@ -85,12 +85,12 @@ export const useGetWaterbodyMock = ({ loading=false, error=false }: Args): Res<G
     waterbody: {
       id: faker.datatype.number({ min: 100000 }),
       name: `Shooting Star Lake`,
-      ccode: 'US',
-      country: 'United States',
-      admin_one: ['Connecticut'],
+      ccode: "US",
+      country: "United States",
+      admin_one: ["Connecticut"],
       admin_two: [faker.address.county()],
-      subregion: 'Northeastern',
-      classification: 'lake',
+      subregion: "Northeastern",
+      classification: "lake",
       average_rating: 4.5,
       total_catches: 384,
       total_locations: 18,
@@ -98,9 +98,14 @@ export const useGetWaterbodyMock = ({ loading=false, error=false }: Args): Res<G
       total_media: 122,
       total_reviews: 32,
       is_saved: false,
-      media: new Array(12).fill(null).map(x => ({ url: faker.image.nature(640, 480, true) }))
-    }
-  }
+      media: new Array(12)
+        .fill(null)
+        .map((x) => ({
+          id: Math.random(),
+          url: faker.image.nature(640, 480, true),
+        })),
+    },
+  };
 
   return { data: (loading || error) ? undefined : data, loading, error }
 }
@@ -126,7 +131,7 @@ export const useGetCatchesQueryMock = ({ error=false, limit=20, loading=false }:
   const data: GetCatchesRes = {
     catches: new Array(limit).fill(null).map(() => ({
       id: faker.datatype.number({ min: 100000 }),
-      title: faker.lorem.words(),
+      title: 'New PB at the lake',
       description: faker.lorem.sentence(10),
       weight: faker.datatype.number({ min: 4, max: 16 }),
       length: faker.datatype.number({ min: 6, max: 28 }),
@@ -145,7 +150,9 @@ export const useGetCatchesQueryMock = ({ error=false, limit=20, loading=false }:
         fullname: faker.name.fullName(),
         id: 75634
       },
-      media: new Array(1).fill(null).map(() => ({ url: faker.image.nature()}))
+      media: new Array(1).fill(null).map(() => ({ id: Math.random(), url: faker.image.nature()})),
+      is_favorited: false,
+      total_favorites: Math.floor(Math.random()* 10) + 1,
     }))
   }
 
@@ -162,25 +169,30 @@ export const useGetLocationsQueryMock = ({ error=false, limit=20, loading=false 
       description: faker.lorem.sentence(10),
       hexcolor: faker.color.rgb().slice(2),
       geom: {
-        type: 'Point',
-        coordinates: [parseFloat(faker.address.longitude()), parseFloat(faker.address.latitude())]
+        type: "Point",
+        coordinates: [
+          parseFloat(faker.address.longitude()),
+          parseFloat(faker.address.latitude()),
+        ],
       },
       created_at: faker.date.past(),
       waterbody: {
         id: 12385,
-        name: "Magnificence Lake"
+        name: "Magnificence Lake",
       },
       user: {
         avatar: faker.internet.avatar(),
         fullname: faker.name.fullName(),
-        id: 75634
+        id: 75634,
       },
-      media: new Array(1).fill(null).map(() => ({ url: faker.image.nature() })),
+      media: new Array(1)
+        .fill(null)
+        .map(() => ({ id: Math.random(), url: faker.image.nature() })),
       nearest_geoplace: `${faker.address.cityName()}, ${faker.address.state()}`,
       is_favorited: false,
-      total_favorites: Math.floor(Math.random() * 10) + 1
-    }))
-  }
+      total_favorites: Math.floor(Math.random() * 10) + 1,
+    })),
+  };
   
   return { data: (loading || error) ? undefined : data, loading, error }
 }
@@ -205,7 +217,10 @@ export const useGetWaterbodyFragmentMock = (): GetWaterbodyRes['waterbody'] => {
     is_saved: false,
     media: new Array(12)
       .fill(null)
-      .map((x) => ({ url: faker.image.nature(640, 480, true) })),
+      .map((x) => ({
+        id: Math.random(),
+        url: faker.image.nature(640, 480, true),
+      })),
   };
 
   return data;
@@ -215,9 +230,10 @@ export const useGetLocationFragementMock = (privacy: Privacy) => () => {
   const data: GetLocationsRes["locations"][number] = {
     id: faker.datatype.number({ min: 100000 }),
     privacy,
-    title: 'Harrisburg Pike Bridge',
-    description: 'Theres a pull off on Swatara Creek Rd. Walk down to the bridge',
-    hexcolor: 'rgb(123, 126, 198)',
+    title: "Harrisburg Pike Bridge",
+    description:
+      "Theres a pull off on Swatara Creek Rd. Walk down to the bridge",
+    hexcolor: "rgb(123, 126, 198)",
     geom: {
       type: "Point",
       coordinates: [
@@ -235,10 +251,13 @@ export const useGetLocationFragementMock = (privacy: Privacy) => () => {
       fullname: faker.name.fullName(),
       id: 75634,
     },
-    media: new Array(1).fill(null).map(() => ({ url: faker.image.nature() })),
+    media: new Array(1)
+      .fill(null)
+      .map(() => ({ id: Math.random(), url: faker.image.nature() })),
     nearest_geoplace: `${faker.address.cityName()}, ${faker.address.state()}`,
     is_favorited: false,
-    total_favorites: privacy === Privacy.Public ? Math.floor(Math.random() * 10) + 1 : 0,
+    total_favorites:
+      privacy === Privacy.Public ? Math.floor(Math.random() * 10) + 1 : 0,
   };
 
   return data;
