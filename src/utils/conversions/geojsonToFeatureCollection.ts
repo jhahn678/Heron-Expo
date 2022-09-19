@@ -1,26 +1,43 @@
 import { FeatureCollection, Geometry } from "geojson";
 
-export const geojsonToFeatureCollection = (geojson: Geometry | Geometry[]): FeatureCollection => {
+export interface Properties extends Object {
+    id: number,
+    resource: GeoJsonResource
+}
+
+export enum GeoJsonResource {
+    Waterbody,
+    Catch,
+    Location
+}
+
+export interface Feature {
+  geometry: Geometry;
+  properties?: Properties
+}
+
+export const geojsonToFeatureCollection = (features: Feature | Feature[]): FeatureCollection => {
 
     const coll: FeatureCollection = { type: 'FeatureCollection', features: [] }
 
-    let input: Geometry[];
+    let input: Feature[];
 
-    if(Array.isArray(geojson)) input = geojson;
-    else input = [geojson];
+    if(Array.isArray(features)) input = features;
+    else input = [features];
 
-    for(let geometry of input){
-        if (geometry.type === "GeometryCollection") {
-            coll.features = geometry.geometries.map((x) => ({
-                type: "Feature",
-                properties: {},
-                geometry: x,
-            }));
+    for(let feat of input){
+        if (feat.geometry.type === "GeometryCollection") {
+            coll.features = feat.geometry.geometries
+                .map(geometry => ({
+                    type: "Feature",
+                    properties: { ...feat.properties },
+                    geometry
+                }))
         } else {
             coll.features.push({
                 type: "Feature",
-                properties: {},
-                geometry,
+                properties: { ...feat.properties },
+                geometry: feat.geometry,
             });
         }
     }
