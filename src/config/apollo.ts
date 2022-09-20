@@ -77,7 +77,7 @@ const httpLink = createHttpLink({ uri: API_GRAPH_URL });
 const errorLink = onError(({ graphQLErrors }) => {
     if(graphQLErrors){    
         graphQLErrors.forEach(x => {
-            console.log({ graphQLError: x.extensions.code })
+            console.log({ graphQLError: x.extensions.code, error: x })
         })
     }
 })
