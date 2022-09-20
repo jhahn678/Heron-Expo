@@ -24,7 +24,6 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
     const [hasMore, setHasMore] = useState(false);
 
     const { data, loading, error, fetchMore } = useGetCatches({ type, id, sort, limit }) 
-    // const { data, loading, error } = useGetCatchesQueryMock({ loading: false, error: false, limit })
     
     useEffect(() => {
         if(data) setHasMore(data.catches.length % limit === 0)
