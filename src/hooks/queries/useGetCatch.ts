@@ -8,16 +8,6 @@ const GET_CATCH = gql`
   query Catch($id: Int!) {
     catch(id: $id) {
       id
-      geom
-      title
-      description
-      species
-      length
-      weight
-      rig
-      created_at
-      total_favorites
-      is_favorited
       user {
         id
         fullname
@@ -27,10 +17,20 @@ const GET_CATCH = gql`
         id
         name
       }
+      geom
+      title
+      description
+      species
+      length
       media {
         id
         url
       }
+      created_at
+      total_favorites
+      is_favorited
+      weight
+      rig
     }
   }
 `;

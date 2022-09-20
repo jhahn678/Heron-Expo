@@ -1,6 +1,8 @@
 import { gql, useQuery } from '@apollo/client'
 import { NearbyWaterbody, WaterbodyClassification } from '../../types/Waterbody'
 
+//@TODO --- Change sort to enum on backend then here
+
 const GET_WATERBODIES = gql`
 query Waterbodies($classifications: [ClassificationEnum!], $queryLocation: QueryLocation, $offset: Int, $limit: Int, $sort: Sort) {
     waterbodies(classifications: $classifications, queryLocation: $queryLocation, offset: $offset, limit: $limit, sort: $sort) {
@@ -20,6 +22,7 @@ query Waterbodies($classifications: [ClassificationEnum!], $queryLocation: Query
         rank
         total_catches
         total_locations
+        average_rating
     }
 }`
 
