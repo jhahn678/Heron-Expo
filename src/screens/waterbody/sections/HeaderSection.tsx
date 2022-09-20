@@ -52,18 +52,18 @@ export default HeaderSection;
 const styles = StyleSheet.create({
     header: {
         paddingHorizontal: 16,
-        paddingVertical: 24,
+        paddingVertical: 16,
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center'
     },
     title: {
         fontWeight: '600',
-        fontSize: 24,
+        fontSize: 28,
         paddingBottom: 2
     },
     location: {
-        fontWeight: '400',
-        fontSize: 16
+        fontWeight: '500',
+        fontSize: 20
     }
 });
