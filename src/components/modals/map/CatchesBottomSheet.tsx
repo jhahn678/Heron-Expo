@@ -23,7 +23,8 @@ const CatchesBottomSheet = () => {
   const getFromCache = useGetCatchFragment();
   const visible = useMapModalStore((store) => store.catchVisible);
   const catchId = useMapModalStore((store) => store.catchId);
-
+  const dismissable = useMapModalStore(store => store.catchDismissable)
+  const onClose = useMapModalStore(store => () => store.setCatch())
   const handleTouch = (e: GestureResponderEvent) => e.stopPropagation()
 
   const navigateToImage = (uri: string) => () =>
@@ -53,7 +54,8 @@ const CatchesBottomSheet = () => {
 
   return (
     <BottomSheet
-      enablePanDownToClose={false}
+      enablePanDownToClose={dismissable}
+      onClose={onClose}
       style={{ paddingHorizontal: 16 }}
       snapPoints={["12%", "45%"]}
       index={0}

@@ -28,10 +28,11 @@ export interface GetWaterbodyCatch extends Pick<
 }
 
 export enum CatchSort {
-    CreatedAtNewest = 'CREATED_AT_NEWEST',
-    CreatedAtOldest = 'CREATED_AT_OLDEST',
-    LengthLargest = 'LENGTH_LARGEST',
-    WeightLargest = 'WEIGHT_LARGEST'
+  CreatedAtNewest = "CREATED_AT_NEWEST",
+  CreatedAtOldest = "CREATED_AT_OLDEST",
+  LengthLargest = "LENGTH_LARGEST",
+  Nearest = "NEAREST",
+  WeightLargest = "WEIGHT_LARGEST",
 }
 
 export enum CatchQuery {

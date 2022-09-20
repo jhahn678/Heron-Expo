@@ -13,7 +13,7 @@ const GET_CATCHES = gql`
     $offset: Int
     $limit: Int
     $sort: CatchSort
-    $queryLocation: QueryLocation
+    $coordinates: Coordinates
     $mediaLimit: Int
   ) {
     catches(
@@ -22,7 +22,7 @@ const GET_CATCHES = gql`
       offset: $offset
       limit: $limit
       sort: $sort
-      queryLocation: $queryLocation
+      coordinates: $coordinates
     ) {
       id
       created_at
@@ -68,10 +68,9 @@ export interface Vars {
     offset?: number
     limit?: number
     sort?: CatchSort
-    queryLocation?: {
+    coordinates?: {
         latitude: number
         longitude: number
-        withinMeters?: number
     }
     mediaLimit?: number
 }
@@ -80,23 +79,24 @@ interface Args extends Omit<Vars, 'queryLocation'>{
     withinMeters?: number
 }
 
-export const useGetCatches = ({ withinMeters=100000, mediaLimit, ...args }: Args) => {
+export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
 
-    const { latitude, longitude }= useLocationStore(store => ({ 
-        latitude: store.latitude, longitude: store.longitude 
-    }))
+    const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
+      if (!latitude || !longitude) return null;
+      return { latitude, longitude };
+    });
 
-    return useQuery<GetCatchesRes, Vars>(GET_CATCHES, { 
-        variables: {
-            ...args,
-            mediaLimit: mediaLimit ? mediaLimit : 1,
-            queryLocation: (latitude && longitude) ? { 
-                latitude,
-                longitude,
-                withinMeters
-            } : undefined
-        } 
-    })
+    return useQuery<GetCatchesRes, Vars>(GET_CATCHES, {
+      variables: {
+        ...args,
+        mediaLimit: mediaLimit ? mediaLimit : 1,
+        coordinates: coordinates
+          ? coordinates
+          : storedCoordinates
+          ? storedCoordinates
+          : undefined,
+      },
+    });
 }
 
 export const catchMapResource = (resource: MapResource): CatchQuery => {
@@ -112,24 +112,22 @@ export const catchMapResource = (resource: MapResource): CatchQuery => {
     }
 } 
 
-export const useLazyGetCatches = ({ withinMeters = 100000, ...args }: Args) => {
+export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
 
-  const { latitude, longitude } = useLocationStore((store) => ({
-    latitude: store.latitude,
-    longitude: store.longitude,
-  }));
+  const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
+    if(!latitude || !longitude) return null;
+    return { latitude, longitude };
+  });
 
   return useLazyQuery<GetCatchesRes, Vars>(GET_CATCHES, {
     variables: {
       ...args,
-      queryLocation:
-        latitude && longitude
-          ? {
-              latitude,
-              longitude,
-              withinMeters,
-            }
-          : undefined,
-    },
+      mediaLimit: mediaLimit ? mediaLimit : 1,
+      coordinates: coordinates 
+        ? coordinates 
+        : storedCoordinates 
+        ? storedCoordinates 
+        : undefined
+    }
   });
 };

@@ -14,9 +14,7 @@ import SaveLocationButton from "../../buttons/SaveLocationButton";
 import RecommendLocationButton from "../../buttons/RecommendLocationButton";
 import ShareButton from "../../buttons/ShareButton";
 import { ShareType } from "../../../hooks/utils/useShareContent";
-import IceFishing from "../../svg/IceFishing";
 import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
-import { privacyToLabel } from "../../../utils/conversions/privacyToLabel";
 import PrivacyLabel from "../../locations/PrivacyLabel";
 
 const { width } = Dimensions.get('window')
@@ -29,6 +27,8 @@ const LocationsBottomSheet = () => {
   const getFromCache = useGetLocationFragment();
   const visible = useMapModalStore((store) => store.locationVisible);
   const location = useMapModalStore((store) => store.locationId);
+  const dismissable = useMapModalStore(store => store.locationDismissable)
+  const onClose = useMapModalStore(store => () => store.setLocation())
 
   const navigateToImage = (uri: string) => () =>
     navigation.navigate("ViewImageScreen", { uri });
@@ -47,9 +47,11 @@ const LocationsBottomSheet = () => {
 
   return (
     <BottomSheet
+      enablePanDownToClose={dismissable}
       style={{ paddingHorizontal: 16 }}
       snapPoints={["12%", "45%"]}
       index={0}
+      onClose={onClose}
     >
       <View style={globalStyles.frac}>
         <Text style={styles.title} numberOfLines={1}>

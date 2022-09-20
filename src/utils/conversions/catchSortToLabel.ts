@@ -10,5 +10,7 @@ export const catchSortToLabel = (sort: CatchSort): string => {
             return 'Length Largest';
         case CatchSort.WeightLargest:
             return 'Weight Largest';
+        case CatchSort.Nearest:
+            return 'Nearby'
     }
 }

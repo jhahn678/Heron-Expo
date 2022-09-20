@@ -1,29 +1,40 @@
-import { StyleSheet, View } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
-import { MapResource, RootStackScreenProps } from '../../../types/navigation'
-import MapView, { Camera, Geojson, MapEvent } from 'react-native-maps';
-import { IconButton } from 'react-native-paper';
-import { useFocusEffect } from '@react-navigation/native';
-import { useGetCatchFragment } from '../../../hooks/queries/useGetCatch';
-import { useGetLocationFragment } from '../../../hooks/queries/useGetLocation';
 import { FeatureCollection } from 'geojson';
-import { useLazyGetWaterbodyGeometries } from '../../../hooks/queries/useGetWaterbodyGeometries';
-import { MapPressResponse, useGeoJson } from '../../../hooks/utils/useGeoJson';
-import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries/useGetLocations';
-import { catchMapResource, useLazyGetCatches } from '../../../hooks/queries/useGetCatches';
-import WaterbodyBottomSheet from '../../../components/modals/map/WaterbodyBottomSheet';
+import { theme } from '../../../config/theme';
+import { CatchSort } from '../../../types/Catch';
+import { Button, IconButton, Text, TouchableRipple } from 'react-native-paper';
+import { LocationSort } from '../../../types/Location';
+import { useFocusEffect } from '@react-navigation/native';
+import { Dimensions, StyleSheet, View } from 'react-native';
+import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useMapModalStore } from '../../../store/modal/useMapModalStore';
-import LocationsBottomSheet from '../../../components/modals/map/LocationsBottomSheet';
-import { Feature, GeoJsonResource } from '../../../utils/conversions/geojsonToFeatureCollection';
+import { useGetCatchFragment } from '../../../hooks/queries/useGetCatch';
+import { MapResource, RootStackScreenProps } from '../../../types/navigation'
+import MapView, { Camera, Geojson, LatLng, MapEvent } from 'react-native-maps';
+import { useGetLocationFragment } from '../../../hooks/queries/useGetLocation';
+import { MapPressResponse, useGeoJson } from '../../../hooks/utils/useGeoJson';
 import CatchesBottomSheet from '../../../components/modals/map/CatchesBottomSheet';
+import LocationsBottomSheet from '../../../components/modals/map/LocationsBottomSheet';
+import WaterbodyBottomSheet from '../../../components/modals/map/WaterbodyBottomSheet';
+import { catchMapResource, useLazyGetCatches } from '../../../hooks/queries/useGetCatches';
+import { useLazyGetWaterbodyGeometries } from '../../../hooks/queries/useGetWaterbodyGeometries';
+import { Feature, GeoJsonResource } from '../../../utils/conversions/geojsonToFeatureCollection';
+import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries/useGetLocations';
+
+
+const { width } = Dimensions.get('screen')
+const LIMIT = 50;
+
 
 const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScreen'>) => {
   
   const { params: { resource, id } } = route;
   const map = useRef<MapView | null>(null)
+  const [coordinates, setCoordinates] = useState<LatLng | null>(null)
   const [geojson, setGeojson] = useState<FeatureCollection | null>(null)
+  const [geojsonResource, setGeojsonResource] = useState<GeoJsonResource | null>(null)
   const [mapCamera, setMapCamera] = useState<Partial<Camera> | null>(null)
   const [mapReady, setMapReady] = useState(false)
+  const [hasMore, setHasMore] = useState(false)
   const { handleGeoJson } = useGeoJson()
   const modal = useMapModalStore(store => ({
     setWaterbody: store.setWaterbody,
@@ -46,16 +57,99 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
   const getCachedCatch = useGetCatchFragment()
   const getCachedLocation = useGetLocationFragment()
   const [getWaterbody] = useLazyGetWaterbodyGeometries({ id })
-  const [getLocations] = useLazyGetLocations({ type: locationMapResource(resource), id })
-  const [getCatches] = useLazyGetCatches({ type: catchMapResource(resource), id })
+  const [getLocations] = useLazyGetLocations({
+    id, limit: LIMIT,
+    sort: LocationSort.CreatedAtNewest,
+    type: locationMapResource(resource)
+  });
+  const [getCatches] = useLazyGetCatches({
+    id, limit: LIMIT,
+    sort: CatchSort.CreatedAtNewest,
+    type: catchMapResource(resource)
+  });
+
+
+  const handleShowMore = async () => {
+    if(!map.current) return;
+    map.current.getCamera()
+      .then(({ center }) => {
+        setCoordinates(center)
+        if(geojsonResource === GeoJsonResource.Catch){
+          getCatches({
+            variables: {
+              id,
+              limit: LIMIT,
+              coordinates: center,
+              sort: CatchSort.Nearest,
+              type: catchMapResource(resource),
+            },
+          })
+          .then(({ data }) => {
+            if (!data) return;
+            modal.setCatch({ dismissable: true });
+            const features = data.catches
+              .map((x) => x.geom ? ({
+                geometry: x.geom,
+                properties: {
+                  id: x.id,
+                  resource: GeoJsonResource.Catch,
+                },
+              }) : null)
+              .filter((x) => x !== null) as Feature[];
+            const result = handleGeoJson(features);
+            setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Catch);
+            setMapCamera(result.camera);
+            setHasMore(data.catches.length === LIMIT);
+          })
+          .catch((err) => console.error(err));
+        }
+        if(geojsonResource === GeoJsonResource.Location){
+          getLocations({
+            variables: {
+              id,
+              limit: LIMIT,
+              coordinates: center,
+              sort: LocationSort.Nearest,
+              type: locationMapResource(resource),
+            },
+          })
+            .then(({ data }) => {
+              if (!data) return;
+              modal.setLocation({ dismissable: true });
+              const geometries = data.locations.map((x) => ({
+                geometry: x.geom,
+                properties: {
+                  id: x.id,
+                  resource: GeoJsonResource.Location,
+                },
+              }));
+              const result = handleGeoJson(geometries);
+              setGeojson(result.featureCollection);
+              setGeojsonResource(GeoJsonResource.Location);
+              setMapCamera(result.camera);
+              setHasMore(data.locations.length === LIMIT);
+            })
+            .catch((err) => console.error(err));
+        }
+
+      })
+      .catch(err => console.error(err))
+  }
 
   const handlePressGeoJson = (e: MapEvent) => {
     const { feature: { properties } } = e as unknown as MapPressResponse;
     switch(properties.resource){
       case GeoJsonResource.Catch:
-        return modal.setCatch(properties.id)
+        return modal.setCatch({
+          id: properties.id,
+          dismissable: resource !== MapResource.Catch
+        })
       case GeoJsonResource.Location:
-        return modal.setLocation(properties.id)
+        return modal.setLocation({ 
+          id: properties.id, 
+          dismissable: resource !== MapResource.Location 
+        })
       case GeoJsonResource.Waterbody:
         return modal.setWaterbody(properties.id)
     }
@@ -68,7 +162,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
           //Will be navigating here from list
           const cachedCatch = getCachedCatch(id)
           if(cachedCatch && cachedCatch.geom){
-            modal.setCatch(cachedCatch.id)
+            modal.setCatch({ id: cachedCatch.id })
             const feature: Feature = { 
               geometry: cachedCatch.geom,
               properties: { 
@@ -78,14 +172,16 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             }
             const result = handleGeoJson(feature)
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Catch)
             setMapCamera(result.camera)
+            setHasMore(false)
           }
           break;
         case MapResource.Location:
           //Will be navigating here from list
           const cachedLocation = getCachedLocation(id)
           if(cachedLocation && cachedLocation.geom){
-            modal.setLocation(cachedLocation.id)
+            modal.setLocation({ id: cachedLocation.id })
             const feature: Feature = {
               geometry: cachedLocation.geom,
               properties: { 
@@ -95,7 +191,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             };
             const result = handleGeoJson(feature);
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Location);
             setMapCamera(result.camera)
+            setHasMore(false);
           }
           break;
         case MapResource.Waterbody:
@@ -111,13 +209,16 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             };
             const result = handleGeoJson(feature);
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Waterbody);
             setMapCamera(result.camera)
+            setHasMore(false);
             
           })
           break;
         case MapResource.UserCatches:
           getCatches().then(({ data }) => {
             if (!data) return;
+            modal.setCatch({ dismissable: true })
             const features = data.catches
               .map(x => x.geom ? ({ 
                 geometry: x.geom, 
@@ -129,12 +230,15 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
               .filter(x => x !== null) as Feature[]
             const result = handleGeoJson(features)
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Catch);
             setMapCamera(result.camera);
+            setHasMore(data.catches.length === LIMIT)
           })
           break;
         case MapResource.UserLocations:
           getLocations().then(({ data }) => {
             if(!data) return;
+            modal.setLocation({ dismissable: true })
             const geometries = data.locations.map(x => ({ 
               geometry: x.geom, 
               properties: { 
@@ -144,12 +248,15 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             }));
             const result = handleGeoJson(geometries);
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Location);
             setMapCamera(result.camera);
+            setHasMore(data.locations.length === LIMIT);
           })
           break;
         case MapResource.WaterbodyCatches:
           getCatches().then(({ data }) => {
             if (!data) return;
+            modal.setCatch({ dismissable: true })
             const features = data.catches
               .map((x) => (x.geom ? ({
                 geometry: x.geom,
@@ -161,12 +268,15 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
               .filter((x) => x !== null) as Feature[];
             const result = handleGeoJson(features);
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Catch);
             setMapCamera(result.camera);
+            setHasMore(data.catches.length === LIMIT);
           });
           break;
         case MapResource.WaterbodyLocations:
           getLocations().then(({ data }) => {
             if (!data) return;
+            modal.setLocation({ dismissable: true })
             const features = data.locations
               .map(x => ({ 
                 geometry: x.geom, 
@@ -177,12 +287,15 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
               }))
             const result = handleGeoJson(features);
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Location);
             setMapCamera(result.camera);
+            setHasMore(data.locations.length === LIMIT);
           });
           break;
         case MapResource.CatchesNearby:
           getCatches().then(({ data }) => {
             if(!data) return;
+            modal.setCatch({ dismissable: true })
             const features = data.catches
               .map((x) => (x.geom ? ({
                 geometry: x.geom,
@@ -194,21 +307,42 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
               .filter((x) => x !== null) as Feature[];
             const result = handleGeoJson(features);
             setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Catch);
             setMapCamera(result.camera);
+            setHasMore(data.catches.length === LIMIT);
           })
           break;
       }
     },[route.params])
   );
+
+
   
   return (
     <View style={styles.container}>
-      <IconButton
-        icon="arrow-left"
-        onPress={navigation.goBack}
-        style={styles.goback}
-        mode="contained-tonal"
-      />
+      <View style={styles.header}>
+        <IconButton
+          icon="arrow-left"
+          onPress={navigation.goBack}
+          style={styles.back}
+          mode="contained-tonal"
+        />
+        {geojson && geojsonResource !== GeoJsonResource.Waterbody && (
+          <Text style={[styles.results]}>
+            Showing{" "}
+            {geojson.features.length === LIMIT ? `first ${LIMIT}` : "all"}{" "}
+            results
+          </Text>
+        )}
+        {hasMore && (
+          <Button 
+          mode='contained-tonal' 
+          style={styles.showMore}
+          onPress={handleShowMore}
+          >Show More Here</Button>
+        )}
+      </View>
+
       <MapView
         ref={map}
         style={styles.map}
@@ -225,9 +359,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
           />
         )}
       </MapView>
-      <CatchesBottomSheet/>
-      <LocationsBottomSheet/>
-      <WaterbodyBottomSheet/>
+      <CatchesBottomSheet />
+      <LocationsBottomSheet />
+      <WaterbodyBottomSheet />
     </View>
   );
 }
@@ -236,17 +370,38 @@ export default ViewMapScreen
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
-    width: '100%'
+    height: "100%",
+    width: "100%",
   },
-  goback: {
-    position: 'absolute',
+  header: {
+    width: width,
+    top: 36,
+    alignItems: "center",
+    position: "absolute",
+    zIndex: 100,
+  },
+  back: {
+    position: "absolute",
+    top: -8,
     left: 12,
-    top: 32,
-    zIndex: 100
+    zIndex: 100,
   },
   map: {
-    width: '100%',
-    height: '100%'
+    width: "100%",
+    height: "100%",
+  },
+  results: {
+    paddingVertical: 8,
+    paddingHorizontal: 16,
+    fontWeight: "500",
+    borderRadius: 12,
+    alignSelf: "center",
+    backgroundColor: theme.colors.surfaceVariant,
+  },
+  showMore: {
+    marginTop: 8,
+    fontWeight: "600",
+    borderRadius: 12,
+    alignSelf: "center",
   },
 });

@@ -57,18 +57,19 @@ interface Vars {
     offset?: number
     sort?: LocationSort
 }
+export const useGetLocations = ({ coordinates, ...args }: Vars) => {
 
-export const useGetLocations = (args: Omit<Vars, 'coordinates'>) => {
-
-    const { latitude, longitude } = useLocationStore(store => ({
-        latitude: store.latitude,
-        longitude: store.longitude
-    }))
+    const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
+      if (!latitude || !longitude) return null;
+      return { latitude, longitude };
+    });
 
     return useQuery<GetLocationsRes, Vars>(GET_LOCATIONS, { 
         variables: {
             ...args,
-            coordinates: (latitude && longitude) ? { latitude, longitude } : undefined
+            coordinates: coordinates ?
+            coordinates : storedCoordinates ?
+            storedCoordinates : undefined
         }
     })
 }
@@ -84,17 +85,21 @@ export const locationMapResource = (type: MapResource) => {
     }
 }
 
-export const useLazyGetLocations = (args: Omit<Vars, 'coordinates'>) => {
-    const { latitude, longitude } = useLocationStore((store) => ({
-      latitude: store.latitude,
-      longitude: store.longitude,
-    }));
+export const useLazyGetLocations = ({ coordinates, ...args}: Vars) => {
+
+    const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
+      if (!latitude || !longitude) return null;
+      return { latitude, longitude };
+    });
 
     return useLazyQuery<GetLocationsRes, Vars>(GET_LOCATIONS, {
       variables: {
         ...args,
-        coordinates:
-          latitude && longitude ? { latitude, longitude } : undefined,
+        coordinates: coordinates
+          ? coordinates
+          : storedCoordinates
+          ? storedCoordinates
+          : undefined,
       },
     });
 }
