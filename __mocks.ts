@@ -150,7 +150,7 @@ export const useGetCatchesQueryMock = ({ error=false, limit=20, loading=false }:
         fullname: faker.name.fullName(),
         id: 75634
       },
-      media: new Array(1).fill(null).map(() => ({ id: Math.random(), url: faker.image.nature()})),
+      media: new Array(3).fill(null).map(() => ({ id: Math.random(), url: faker.image.nature()})),
       is_favorited: false,
       total_favorites: Math.floor(Math.random()* 10) + 1,
     }))
@@ -191,6 +191,7 @@ export const useGetLocationsQueryMock = ({ error=false, limit=20, loading=false 
       nearest_geoplace: `${faker.address.cityName()}, ${faker.address.state()}`,
       is_favorited: false,
       total_favorites: Math.floor(Math.random() * 10) + 1,
+      is_saved: false
     })),
   };
   
@@ -258,6 +259,7 @@ export const useGetLocationFragementMock = (privacy: Privacy) => () => {
     is_favorited: false,
     total_favorites:
       privacy === Privacy.Public ? Math.floor(Math.random() * 10) + 1 : 0,
+    is_saved: false
   };
 
   return data;
