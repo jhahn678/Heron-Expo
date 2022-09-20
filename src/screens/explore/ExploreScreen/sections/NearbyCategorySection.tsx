@@ -9,7 +9,6 @@ import { useSearchParamStore } from '../../../../store/search/useSearchParamStor
 import { WaterbodyClassification } from '../../../../types/Waterbody'
 import { useGetNearbyWaterbodies } from '../../../../hooks/queries/useGetNearbyWaterbodies'
 import { classificationToCategory } from '../../../../utils/conversions/classificationToCategory'
-import { useGetNearbyWaterbodiesQueryMock } from '../../../../../__mocks'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -40,7 +39,7 @@ const NearbyCategorySection = ({ navigation, classification }: Props) => {
     }
 
     return (
-        <View style={[styles.container, { height: (!hasCoordinates || error) ? 130 : 370}]}>
+        <View style={[styles.container, { height: (!hasCoordinates || error) ? 130 : 400}]}>
             <Title style={styles.title}>Nearby {classificationToCategory(classification)}</Title>
             { hasCoordinates ? 
                 data ? 

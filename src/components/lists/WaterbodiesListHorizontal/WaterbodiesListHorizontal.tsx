@@ -28,7 +28,7 @@ const WaterbodiesListHorizontal = <T extends WaterbodyListItem>({
                 /> : 
                 <WaterbodiesListLoader 
                     key={Math.random()}
-                    style={{ marginTop: 24, marginLeft: '1%' }}
+                    style={{ marginLeft: '1%', marginTop: 24 }}
                 />
             )} 
             ListFooterComponent={() => <ListFooterSeeMore onPress={navigateViewMore}/>}

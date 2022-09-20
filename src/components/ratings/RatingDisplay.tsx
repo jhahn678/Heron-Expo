@@ -30,15 +30,15 @@ const RatingDisplay = ({
             <Rating
                 tintColor={backgroundColor || DEFAULT_BACKGROUND}
                 ratingBackgroundColor={ratingBackgroundColor|| 'white'}
-                readonly fractions={2}
+                readonly fractions={1}
                 type='custom'
                 startingValue={rating || 0} 
-                style={{ marginLeft: 4, width: iconSize * 4.5 }}
+                style={{ marginLeft: 4, width: iconSize * 4.6 }}
                 imageSize={iconSize}
             />
             {hideLabel === false && (numberOfRatings === 0 ?
                 <Text style={styles.labelNoRating}>
-                    Be the first to leave a rating!
+                    Be the first to leave a review!
                 </Text> :
                 <Text style={styles.label}>
                     {rating || 0} stars   &bull;   {numberOfRatings || 0} { numberOfRatings === 1 ? 'rating' : 'ratings'}

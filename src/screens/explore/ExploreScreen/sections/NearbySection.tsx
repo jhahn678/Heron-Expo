@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Title, Text, ActivityIndicator } from 'react-native-paper'
+import { Title } from 'react-native-paper'
 import { useLocationStore } from '../../../../store/location/useLocationStore'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import EnableLocationButton from '../../../../components/buttons/EnableLocationButton'
@@ -29,7 +29,7 @@ const NearbySection = ({ navigation }: Props) => {
     }
 
     return (
-        <View style={[styles.container, { height: (hasPermission === false || error) ? 150 : 370}]}>
+        <View style={[styles.container, { height: (hasPermission === false || error) ? 150 : 400}]}>
             <Title style={styles.title}>What's nearby</Title>
             { hasPermission === false ? 
                 <EnableLocationButton 
