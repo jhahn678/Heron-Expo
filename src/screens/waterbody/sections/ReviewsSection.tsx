@@ -1,64 +1,51 @@
-import React from "react";
-import { Dimensions, ScrollView, StyleSheet, View } from "react-native";
+import React, { useEffect, useState } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 import { Button, Text, Title } from 'react-native-paper'
-import Avatar from '../../../components/users/Avatar'
 import RatingDisplay from '../../../components/ratings/RatingDisplay'
-import { GetWaterbodyReviews, useGetWaterbodyReviews } from "../../../hooks/queries/useGetWaterbodyReviews";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useGetWaterbodyReviews } from "../../../hooks/queries/useGetWaterbodyReviews";
+
 import RatingGraph from "../../../components/ratings/RatingGraph";
 import RatingGraphBar from "../../../components/ratings/RatingGraphBar";
-import ContentLoader from "react-content-loader";
 import WaterbodyReview from "../../../components/lists/Reviews/WaterbodyReview";
 import { useModalStore } from "../../../store/modal/useModalStore";
+
+const { width } = Dimensions.get('screen')
 
 interface Props {
   navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
   totalReviews: number | undefined
   waterbody: number
-  rating: number | undefined | null
+  averageRating: number | null | undefined
   name: string | undefined
 }
 
-/** @TODO need to add review metrics into query and remove from other */
+const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, name }: Props) => {
 
-const ReviewsSection = ({ 
-  navigation, waterbody, totalReviews, rating, name
-}: Props) => {
+  const { data, refetch } = useGetWaterbodyReviews({ id: waterbody });
 
-  const { width } = Dimensions.get('screen')
-  // const { data, error, loading } = useGetWaterbodyReviews({ id: waterbody });
+  const [ratingCounts, setRatingCounts] = useState({ five: 0, four: 0, three: 0, two: 0, one: 0 })
+
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
+
   const showReviewModal = useModalStore(store => () => store.setReview(waterbody))
+
   const navigateReviews = () => navigation.navigate('ReviewsScreen', { 
     waterbody, title: name, total: totalReviews
   })
 
-  const data: GetWaterbodyReviews = {
-    waterbody: {
-      reviews: [{
-        id: 10,
-        created_at: new Date(),
-        rating: 4,
-        text: 'It was a really great place to be',
-        user: {
-            id: 12,
-            avatar: null,
-            fullname: 'Julian Hahn'
-        }
-      },{
-        id: 11,
-        created_at: new Date(),
-        rating: 5,
-        text: 'It was a really great place to be',
-        user: {
-            id: 15,
-            avatar: null,
-            fullname: 'Julian Han'
-        }
-      }]
-  }
-}
+  useEffect(() => {
+    if(data && totalReviews) {
+      const { rating_counts } = data.waterbody;
+      setRatingCounts({
+        one: rating_counts.one / totalReviews * 100,
+        two: rating_counts.two / totalReviews * 100,
+        three: rating_counts.three / totalReviews * 100,
+        four: rating_counts.four / totalReviews * 100,
+        five: rating_counts.five / totalReviews * 100,
+      })
+    }
+  },[data, totalReviews])
 
   return (
     <View style={styles.container}>
@@ -67,10 +54,7 @@ const ReviewsSection = ({
         <Title style={styles.title}>
           Reviews {totalReviews !== undefined ? `(${totalReviews})` : null}
         </Title>
-        <Button 
-          style={{ marginLeft: 16 }}
-          onPress={navigateReviews}
-        >
+        <Button style={{ marginLeft: 16 }} onPress={navigateReviews}>
           See all reviews
         </Button>
       </View>
@@ -78,19 +62,19 @@ const ReviewsSection = ({
       <View style={styles.main}>
 
         <RatingGraph width={width*.55}>
-          <RatingGraphBar label="5" percent={80}/>
-          <RatingGraphBar label="4" percent={12}/>
-          <RatingGraphBar label="3" percent={6}/>
-          <RatingGraphBar label="2" percent={2}/>
-          <RatingGraphBar label="1" percent={0}/>
+          <RatingGraphBar label="5" percent={ratingCounts.five}/>
+          <RatingGraphBar label="4" percent={ratingCounts.four}/>
+          <RatingGraphBar label="3" percent={ratingCounts.three}/>
+          <RatingGraphBar label="2" percent={ratingCounts.two}/>
+          <RatingGraphBar label="1" percent={ratingCounts.one}/>
         </RatingGraph>
 
         <View style={styles.summary}>
-          <Text style={styles.average}>{4.8}</Text>
+          <Text style={styles.average}>{averageRating ? averageRating.toFixed(1) : "N/A"}</Text>
           <RatingDisplay 
             hideLabel
             iconSize={20}
-            rating={rating} 
+            rating={averageRating} 
             numberOfRatings={totalReviews}
             />
           <Text style={styles.total}>{totalReviews} reviews</Text>
@@ -105,7 +89,7 @@ const ReviewsSection = ({
       >Leave a review</Button>
 
       <View style={styles.listSection}>
-          { data && data.waterbody.reviews.map((x) => (
+          { data && data.waterbody.reviews.slice(0,3).map((x) => (
             <WaterbodyReview 
               key={x.id} data={x} 
               navigateToUser={navigateUser(x.user.id)}
@@ -113,10 +97,12 @@ const ReviewsSection = ({
           ))}
       </View>
 
-      <Button 
-        style={styles.leaveReview}
-        onPress={navigateReviews}
-      >Show more reviews</Button>
+      { totalReviews && totalReviews > 3 ?
+        <Button 
+          style={styles.leaveReview}
+          onPress={navigateReviews}
+        >Show more reviews</Button>
+      :null}
       
     </View>
   );
