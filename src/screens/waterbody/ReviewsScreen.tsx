@@ -1,20 +1,22 @@
-import React, { useEffect, useState } from "react";
-import { FlashList } from "@shopify/flash-list";
-import { Dimensions, StyleSheet, View } from "react-native";
-import ContentLoader from "react-content-loader";
-import { RootStackScreenProps } from '../../types/navigation'
-import WaterbodyReview from "../../components/lists/Reviews/WaterbodyReview";
-import { ReviewSort, useGetWaterbodyReviews } from "../../hooks/queries/useGetWaterbodyReviews";
-import { Button, Text, Divider, IconButton, Menu, Surface, Title } from "react-native-paper";
 import globalStyles from "../../globalStyles";
+import { FlashList } from "@shopify/flash-list";
+import React, { useEffect, useState } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
+import { RootStackScreenProps } from '../../types/navigation'
 import { useModalStore } from "../../store/modal/useModalStore";
-import { useGetWaterbodyReviewsMock } from "../../../__mocks";
+import WaterbodyReview from "../../components/lists/Reviews/WaterbodyReview";
+import { Divider, IconButton, Menu, Surface, Title } from "react-native-paper";
+import { ReviewSort, useGetWaterbodyReviews } from "../../hooks/queries/useGetWaterbodyReviews";
+import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterBar";
+import { reviewSortToLabel } from "../../utils/conversions/reviewSortToLabel";
+import ReviewsListEmpty from "../../components/lists/shared/ReviewsListEmpty";
+
+const LIMIT = 12;
+const { width } = Dimensions.get('screen')
 
 const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScreen'>) => {
 
-  const LIMIT = 12;
   const { params } = route;
-  const { width } = Dimensions.get('screen')
   const [hasMore, setHasMore] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
   const [sort, setSort] = useState<ReviewSort | null>(null)
@@ -22,17 +24,14 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
   const setShowReview = useModalStore(store => store.setReview)
   const handleAddReview = () => setShowReview(params.waterbody)
 
-  const { 
-    // data, error, loading, 
-    fetchMore 
-  } = useGetWaterbodyReviews({
+  const { data, error, loading, fetchMore } = useGetWaterbodyReviews({
     id: params.waterbody,
     limit: LIMIT,
     offset: 0,
     sort: sort ? sort : ReviewSort.CreatedAtNewest
   })
 
-  const { data, loading, error } = useGetWaterbodyReviewsMock({ error: false, loading: false, limit: 15 })
+
 
   useEffect(() => {
     if(data) setHasMore(data.waterbody.reviews.length === LIMIT)
@@ -43,6 +42,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
 
   return (
     <View style={styles.container}>
+
       <Surface style={styles.heading}>
           <View style={globalStyles.frsb}>
               <IconButton icon='arrow-left' onPress={navigation.goBack}/>
@@ -54,28 +54,44 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
             onPress={handleAddReview} 
           />
       </Surface>
+
       <View style={styles.main}>
         <Menu 
           anchor={{ x: width, y: 100 }} 
           onDismiss={() => setMenuOpen(false)} 
           visible={menuOpen} 
         >
-          <Menu.Item title='Most Recent' style={{ height: 40 }} onPress={handleSort(ReviewSort.CreatedAtNewest)}/><Divider/>
-          <Menu.Item title='Least Recent' style={{ height: 40 }} onPress={handleSort(ReviewSort.CreatedAtOldest)}/><Divider/>
-          <Menu.Item title='Highest Ratings' style={{ height: 40 }} onPress={handleSort(ReviewSort.RatingHighest)}/><Divider/>
-          <Menu.Item title='Lowest Ratings' style={{ height: 40 }} onPress={handleSort(ReviewSort.RatingLowest)}/>
+          <Menu.Item 
+            title='Most Recent' 
+            style={{ height: 40 }} 
+            onPress={handleSort(ReviewSort.CreatedAtNewest)}
+          /><Divider/>
+          <Menu.Item 
+            title='Least Recent' 
+            style={{ height: 40 }} 
+            onPress={handleSort(ReviewSort.CreatedAtOldest)}
+          /><Divider/>
+          <Menu.Item 
+            title='Highest Ratings' 
+            style={{ height: 40 }} 
+            onPress={handleSort(ReviewSort.RatingHighest)}
+          /><Divider/>
+          <Menu.Item 
+            title='Lowest Ratings' 
+            style={{ height: 40 }} 
+            onPress={handleSort(ReviewSort.RatingLowest)}
+          />
         </Menu>
-        { data ?
+
+        { data && data.waterbody.reviews.length > 0 ?
           <FlashList
             data={data?.waterbody.reviews}
-            ListHeaderComponent={
-              <View style={styles.sort}>
-                <Text style={styles.total}>{params.total} results</Text>
-                <Button 
-                  icon='chevron-down' 
-                  onPress={toggleMenu} 
-                >Sort by</Button>
-              </View>
+            ListHeaderComponent={ 
+              <ListHeaderFilterBar 
+                setMenuOpen={setMenuOpen} 
+                sortLabel={reviewSortToLabel(sort)} 
+                total={params.total}
+              />
             }
             renderItem={({ item }) => (
               <WaterbodyReview 
@@ -90,9 +106,10 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
                 { offset: data.waterbody.reviews.length }
             }): null}
           />:
-          <></>
+          <ReviewsListEmpty/>
         }
       </View>
+
     </View>
   );
 };
