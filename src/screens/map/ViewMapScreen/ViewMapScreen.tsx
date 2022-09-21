@@ -327,7 +327,11 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
           style={styles.back}
           mode="contained-tonal"
         />
-        {geojson && geojsonResource !== GeoJsonResource.Waterbody && (
+        {
+          geojson && 
+          resource !== MapResource.Catch && 
+          resource !== MapResource.Location &&
+          resource !== MapResource.Waterbody && (
           <Text style={[styles.results]}>
             Showing{" "}
             {geojson.features.length === LIMIT ? `first ${LIMIT}` : "all"}{" "}
