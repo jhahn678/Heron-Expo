@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import { Text, Surface, Button } from 'react-native-paper'
+import MapCard from "../../../components/cards/MapCard";
 import { ExploreStackScreenProps, MapResource } from "../../../types/navigation";
 
 interface Props {
@@ -17,17 +18,7 @@ const MapSection = ({ navigation, waterbody, uri }: Props) => {
 
     return (
         <View style={styles.container}>
-            <Pressable onPress={navigateToMap} style={styles.surface}>
-            <Surface style={{ borderRadius: 12 }}>
-                <Image source={{ uri }} style={styles.image} />
-                <Button 
-                    icon={'map'} 
-                    style={styles.button} 
-                    mode='contained-tonal'
-                    contentStyle={{ flexDirection: 'row-reverse' }}
-                >View in Map</Button>
-            </Surface>
-            </Pressable>
+            <MapCard navigateToMap={navigateToMap} uri={uri}/>
         </View>
     );
 };
