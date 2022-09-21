@@ -15,7 +15,7 @@ const ListHeaderFilterBar = ({ total, sortLabel, setMenuOpen, style }: Props) =>
   return (
     <View style={[styles.sort, style]}>
       <View style={globalStyles.frac}>
-        {total && <Text style={styles.total}>{total} results</Text>}
+        {total ? <Text style={styles.total}>{total} results</Text> : null}
         <Chip compact textStyle={{ fontSize: 12 }} style={{ height: 32 }}>
           {sortLabel}
         </Chip>
