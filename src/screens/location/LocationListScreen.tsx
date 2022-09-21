@@ -5,7 +5,6 @@ import { FlashList } from "@shopify/flash-list";
 import { IconButton, Surface, Title, Menu, Divider } from "react-native-paper";
 import { useGetLocations } from "../../hooks/queries/useGetLocations";
 import LocationListItem from "../../components/lists/LocationList/LocationListItem";
-import { useGetLocationsQueryMock } from "../../../__mocks";
 import globalStyles from "../../globalStyles";
 import { LocationSort } from "../../types/Location";
 import { locationSortToLabel } from "../../utils/conversions/locationSortToLabel";
@@ -25,7 +24,6 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
     const [sort, setSort] = useState(LocationSort.CreatedAtNewest);
 
     const { data, loading, error, fetchMore } = useGetLocations({ type, id, limit, sort }) 
-    // const { data, loading, error } = useGetLocationsQueryMock({ limit })
 
     useEffect(() => {
         if(data) setHasMore(data.locations.length % limit === 0)
@@ -128,7 +126,7 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
           }
         />
 
-        { data && data.locations.length === 0 && <LocationsListEmpty style={styles.empty}/>}
+        { (data && data.locations.length === 0) && <LocationsListEmpty style={styles.empty}/>}
 
       </View>
     );
