@@ -2,10 +2,17 @@ import { gql, useQuery, useLazyQuery } from '@apollo/client'
 import { IUser } from '../../types/User'
 import { IWaterbodyReview } from '../../types/Waterbody'
 
-const GET_REVIEWS = gql`
+export const GET_REVIEWS = gql`
     query Waterbody($id: Int!, $limit: Int, $offset: Int) {
         waterbody(id: $id) {
             id
+            rating_counts{
+                five
+                four
+                three
+                two
+                one
+            }
             reviews(limit: $limit, offset: $offset) {
                 id
                 rating
@@ -22,11 +29,19 @@ const GET_REVIEWS = gql`
 `
 
 export interface GetWaterbodyReview extends Omit<IWaterbodyReview, 'user' | 'waterbody'>{
-    user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
+    user: Pick<IUser, 'id' | 'fullname' | 'avatar'>,
 }
 
 export interface GetWaterbodyReviews {
     waterbody: {
+        id: number,
+        rating_counts: {
+            five: number
+            four: number
+            three: number
+            two: number
+            one: number
+        }
         reviews: GetWaterbodyReview[]
     }
 }

@@ -1,10 +1,10 @@
 import { gql, useQuery, useLazyQuery, useApolloClient } from '@apollo/client'
-import { CatchSort, GetWaterbodyCatch } from '../../types/Catch'
+import { CatchSort } from '../../types/Catch'
 import { IMedia } from '../../types/Media'
 import { IWaterbody } from '../../types/Waterbody'
 
-const GET_WATERBODY = gql`
-query Waterbody($id: Int!, $mediaLimit: Int) {
+export const GET_WATERBODY = gql`
+  query Waterbody($id: Int!, $mediaLimit: Int) {
     waterbody(id: $id) {
         id
         name
@@ -26,7 +26,8 @@ query Waterbody($id: Int!, $mediaLimit: Int) {
             url
         }
     }
-}`
+  }
+`
 
 export interface GetWaterbody extends Omit<IWaterbody, "oid" | "weight"> {
   total_catches: number;
