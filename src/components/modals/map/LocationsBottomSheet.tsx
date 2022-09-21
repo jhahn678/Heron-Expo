@@ -16,6 +16,7 @@ import ShareButton from "../../buttons/ShareButton";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
 import PrivacyLabel from "../../locations/PrivacyLabel";
+import { theme } from "../../../config/theme";
 
 const { width } = Dimensions.get('window')
 
@@ -48,23 +49,22 @@ const LocationsBottomSheet = () => {
   return (
     <BottomSheet
       enablePanDownToClose={dismissable}
-      style={{ paddingHorizontal: 16 }}
       snapPoints={["12%", "45%"]}
       index={0}
       onClose={onClose}
     >
-      <View style={globalStyles.frac}>
+      <View style={[globalStyles.frac, styles.hpadding]}>
         <Text style={styles.title} numberOfLines={1}>
           {data?.title || "Untitled Location"}
         </Text>
       </View>
 
-      <View style={globalStyles.baseline}>
+      <View style={[globalStyles.baseline, styles.hpadding]}>
         <Text style={styles.label}>on</Text>
         <Text style={styles.waterbody}>{data?.waterbody.name}</Text>
       </View>
 
-      <View style={[globalStyles.frac, { marginTop: 12 }]}>
+      <View style={[globalStyles.frac, { marginTop: 12 }, styles.hpadding]}>
         <Avatar
           fullname={data?.user.fullname}
           uri={data?.user.avatar}
@@ -80,7 +80,7 @@ const LocationsBottomSheet = () => {
         <PrivacyLabel privacy={data?.privacy}/>
       </View>
 
-      <View style={styles.images}>
+      <View style={[styles.images, styles.hpadding]}>
         {data?.media && data.media.length > 0 ? (
           data.media.slice(0, 2).map(({ id, url }) => (
             <Pressable
@@ -116,13 +116,14 @@ const LocationsBottomSheet = () => {
             mode="none"
           />
         </View>
-        <View style={styles.footerButtonCenter}>
+        <View style={styles.fdivider}/>
+        <View style={styles.footerButton}>
           <SaveLocationButton
             id={data?.id}
             active={data?.is_saved}
-            style={styles.footerButton}
           />
         </View>
+        <View style={styles.fdivider}/>
         <View style={styles.footerButton}>
           <RecommendLocationButton active={data?.is_favorited} id={data?.id} />
         </View>
@@ -134,6 +135,9 @@ const LocationsBottomSheet = () => {
 export default LocationsBottomSheet;
 
 const styles = StyleSheet.create({
+  hpadding: {
+    paddingHorizontal: 16
+  },
   title: {
     fontSize: 24,
     fontWeight: "600",
@@ -189,20 +193,19 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    paddingVertical: 8,
-    marginBottom: 8,
+    width: '100%',
+    height: 50,
+    backgroundColor: theme.colors.surfaceVariant
   },
   footerButton: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  footerButtonCenter: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "rgba(0,0,0,.1)",
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-  },
+  fdivider: {
+    height: 24,
+    width: 1,
+    backgroundColor: 'rgba(0,0,0,.1)',
+    alignSelf: 'center'
+  }
 });

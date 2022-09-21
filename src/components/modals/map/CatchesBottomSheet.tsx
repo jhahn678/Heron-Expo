@@ -13,6 +13,7 @@ import ShareButton from "../../buttons/ShareButton";
 import RecommendLocationButton from "../../buttons/RecommendLocationButton";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
+import { theme } from "../../../config/theme";
 
 const { width } = Dimensions.get('screen')
 
@@ -25,7 +26,6 @@ const CatchesBottomSheet = () => {
   const catchId = useMapModalStore((store) => store.catchId);
   const dismissable = useMapModalStore(store => store.catchDismissable)
   const onClose = useMapModalStore(store => () => store.setCatch())
-  const handleTouch = (e: GestureResponderEvent) => e.stopPropagation()
 
   const navigateToImage = (uri: string) => () =>
     navigation.navigate("ViewImageScreen", { uri });
@@ -56,24 +56,23 @@ const CatchesBottomSheet = () => {
     <BottomSheet
       enablePanDownToClose={dismissable}
       onClose={onClose}
-      style={{ paddingHorizontal: 16 }}
       snapPoints={["12%", "45%"]}
       index={0}
     >
-      <Pressable style={globalStyles.frac} onPress={navigateToCatch}>
+      <Pressable style={[globalStyles.frac, styles.hpadding]} onPress={navigateToCatch}>
         <Text style={styles.title} numberOfLines={1}>
           {data?.title || "Untitled Catch"}
         </Text>
       </Pressable>
 
-      <View style={globalStyles.baseline}>
+      <View style={[globalStyles.baseline, styles.hpadding]}>
         <Text style={styles.label}>at</Text>
         <Text style={styles.waterbody} onPress={navigateToWaterbody}>
           {data?.waterbody.name}
         </Text>
       </View>
 
-      <View style={[globalStyles.frac, { marginTop: 12 }]}>
+      <View style={[globalStyles.frac, { marginTop: 12 }, styles.hpadding]}>
         <Avatar
           fullname={data?.user.fullname}
           uri={data?.user.avatar}
@@ -89,7 +88,7 @@ const CatchesBottomSheet = () => {
         <Text style={styles.detail}>{data?.species}</Text>
       </View>
 
-      <View style={styles.images}>
+      <View style={[styles.images, styles.hpadding]}>
         {data?.media && data.media.length > 0 ? (
           data.media.slice(0, 2).map(({ id, url }) => (
             <Pressable
@@ -105,7 +104,7 @@ const CatchesBottomSheet = () => {
         )}
       </View>
 
-      <Pressable style={styles.footer} onPress={handleTouch}>
+      <View style={styles.footer}>
         <View style={styles.footerButton}>
           <ShareButton
             shareType={ShareType.Location}
@@ -113,10 +112,11 @@ const CatchesBottomSheet = () => {
             mode="none"
           />
         </View>
+        <View style={styles.fdivider}/>
         <View style={styles.footerButton}>
           <RecommendLocationButton active={data?.is_favorited} id={data?.id} />
         </View>
-      </Pressable>
+      </View>
     </BottomSheet>
   );
 };
@@ -124,6 +124,9 @@ const CatchesBottomSheet = () => {
 export default CatchesBottomSheet;
 
 const styles = StyleSheet.create({
+  hpadding: {
+    paddingHorizontal: 16
+  },
   title: {
     fontSize: 24,
     fontWeight: "600",
@@ -166,19 +169,19 @@ const styles = StyleSheet.create({
   },
   footer: {
     flexDirection: "row",
-    marginBottom: 16,
+    width: '100%',
+    height: 50,
+    backgroundColor: theme.colors.surfaceVariant
   },
   footerButton: {
     flex: 1,
     justifyContent: "center",
     alignItems: "center",
   },
-  footerButtonCenter: {
-    flex: 1,
-    justifyContent: "center",
-    alignItems: "center",
-    borderColor: "rgba(0,0,0,.1)",
-    borderLeftWidth: 1,
-    borderRightWidth: 1,
-  },
+  fdivider: {
+    height: 24,
+    width: 1,
+    backgroundColor: 'rgba(0,0,0,.1)',
+    alignSelf: 'center'
+  }
 });

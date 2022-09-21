@@ -4,7 +4,6 @@ import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { StyleSheet, View, Image, Pressable, Dimensions } from "react-native";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { GetWaterbodyRes, useGetWaterbodyFragment } from "../../../hooks/queries/useGetWaterbody";
-import { useGetWaterbodyFragmentMock } from '../../../../__mocks';
 import RatingDisplay from '../../ratings/RatingDisplay';
 import { useNavigation } from "@react-navigation/native";
 import { NavigationProp } from "../../../types/navigation";

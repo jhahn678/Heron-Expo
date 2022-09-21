@@ -33,7 +33,7 @@ const RatingDisplay = ({
                 readonly fractions={1}
                 type='custom'
                 startingValue={rating || 0} 
-                style={{ marginLeft: 4, width: iconSize * 4.6 }}
+                style={{ width: iconSize * 4.9 }}
                 imageSize={iconSize}
             />
             {hideLabel === false && (numberOfRatings === 0 ?

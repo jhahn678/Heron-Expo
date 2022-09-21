@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import { StyleSheet } from "react-native";
 import { Button, Dialog, TextInput,  } from "react-native-paper";
+import { theme } from "../../config/theme";
 import { useCreateWaterbodyReview } from "../../hooks/mutations/useCreateWaterbodyReview";
 import { useModalStore } from "../../store/modal/useModalStore";
 import RatingInput from "../ratings/RatingInput";
@@ -71,8 +72,9 @@ const ReviewModal = (props: Props) => {
             <Dialog.Content style={styles.main}>
                 <RatingInput value={rating} setValue={setRating}/>
                 <TextInput 
-                    mode="outlined" multiline
-                    theme={{ roundness: 12 }}
+                    mode="outlined" 
+                    multiline={true}
+                    outlineColor={'rgba(0,0,0,.2)'}
                     style={styles.input}
                     placeholder="Share your thoughts"
                     value={text} onChangeText={setText}
@@ -99,7 +101,8 @@ const styles = StyleSheet.create({
         height: 460,
         width: '90%',
         position: 'relative',
-        bottom: '8%'
+        bottom: '8%',
+        backgroundColor: theme.colors.surfaceVariant
     },
     main: {
         marginTop: 12,
@@ -112,6 +115,7 @@ const styles = StyleSheet.create({
     input: {
         marginTop: 32,
         height: 200,
-        width: '100%'
+        width: '100%',
+        backgroundColor: 'rgba(255,255,255,.5)'
     }
 });
