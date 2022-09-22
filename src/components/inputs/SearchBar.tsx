@@ -1,3 +1,4 @@
+import { forwardRef } from "react";
 import { 
     StyleSheet, 
     NativeSyntheticEvent,
@@ -7,7 +8,6 @@ import {
     Pressable,
 } from "react-native";
 import { TextInput } from "react-native-paper";
-import { theme } from "../../config/theme";
 
 
 interface Props {
@@ -35,8 +35,6 @@ const SearchBar = (props: Props): JSX.Element => {
                 editable={props.enabled}
                 placeholder={props.placeholder}
                 autoFocus={props.autofocus}
-                outlineColor={'rgba(0,0,0,.1)'}
-                activeOutlineColor={theme.colors.primary}
                 style={[styles.searchbar, props.style]}
                 value={props.value || ''}
                 onChangeText={props.setValue}

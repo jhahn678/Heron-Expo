@@ -1,11 +1,12 @@
 import { Text } from "react-native-paper";
-import BottomSheet from "@gorhom/bottom-sheet";
+import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { Dimensions, Image, Pressable, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { GetLocationRes, useGetLocationFragment } from "../../../hooks/queries/useGetLocation";
 import { NavigationProp } from "../../../types/navigation";
 import { useNavigation } from "@react-navigation/native";
+import { useAuth } from "../../../store/auth/useAuth";
 import Avatar from "../../users/Avatar";
 import dayjs from "../../../config/dayjs";
 import globalStyles from "../../../globalStyles";
@@ -16,12 +17,12 @@ import { ShareType } from "../../../hooks/utils/useShareContent";
 import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
 import PrivacyLabel from "../../locations/PrivacyLabel";
 import { theme } from "../../../config/theme";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const { width } = Dimensions.get('window')
 
 const LocationsBottomSheet = () => {
 
+  const { id } = useAuth()
   const navigation = useNavigation<NavigationProp>();
   const [data, setData] = useState<GetLocationRes['location'] | null>(null);
   const getFromCache = useGetLocationFragment();
@@ -30,27 +31,14 @@ const LocationsBottomSheet = () => {
   const dismissable = useMapModalStore(store => store.locationDismissable)
   const onClose = useMapModalStore(store => () => store.setLocation())
 
-  const navigateToLocation = () => {
-    if(!location) return;
-    navigation.navigate('ViewLocationScreen', { id: location })
-  }
-
   const navigateToImage = (uri: string) => () =>
     navigation.navigate("ViewImageScreen", { uri });
 
   const navigateToUser = () => {
-    if(!data?.user.id) return;
+    if(!data?.user.id || data.user.id === id ) return;
     navigation.navigate('UserProfileScreen', { id: data?.user.id })
   }
 
-  const navigateToWaterbody = () => {
-    if(!data) return;
-    navigation.navigate('ExploreStack', { 
-      screen: 'WaterbodyScreen', 
-      params: { id: data?.waterbody.id }
-    })
-  }
-  
   useEffect(() => {
     if (!location) setData(null);
     if (location) setData(getFromCache(location));
@@ -65,17 +53,16 @@ const LocationsBottomSheet = () => {
       index={0}
       onClose={onClose}
     >
-      <Pressable style={[globalStyles.frsb, styles.hpadding]} onPress={navigateToLocation}>
+      <View style={[globalStyles.frac, styles.hpadding]}>
         <Text style={styles.title} numberOfLines={1}>
           {data?.title || "Untitled Location"}
         </Text>
-        <Icon name='arrow-right' size={24} color={theme.colors.primary} onPress={navigateToLocation}/>
-      </Pressable>
+      </View>
 
-      <Pressable style={[globalStyles.baseline, styles.hpadding]} onPress={navigateToWaterbody}>
+      <View style={[globalStyles.baseline, styles.hpadding]}>
         <Text style={styles.label}>on</Text>
         <Text style={styles.waterbody}>{data?.waterbody.name}</Text>
-      </Pressable>
+      </View>
 
       <View style={[globalStyles.frac, { marginTop: 12 }, styles.hpadding]}>
         <Avatar
@@ -152,7 +139,7 @@ const styles = StyleSheet.create({
     paddingHorizontal: 16
   },
   title: {
-    fontSize: 28,
+    fontSize: 24,
     fontWeight: "600",
     marginTop: 4,
   },

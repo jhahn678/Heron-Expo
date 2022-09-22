@@ -75,7 +75,11 @@ export interface Vars {
     mediaLimit?: number
 }
 
-export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
+interface Args extends Omit<Vars, 'queryLocation'>{
+    withinMeters?: number
+}
+
+export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
 
     const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
       if (!latitude || !longitude) return null;
@@ -108,7 +112,7 @@ export const catchMapResource = (resource: MapResource): CatchQuery => {
     }
 } 
 
-export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
+export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
 
   const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
     if(!latitude || !longitude) return null;

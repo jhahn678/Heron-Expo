@@ -6,8 +6,6 @@ import BackButton from "../../../../components/buttons/BackButton";
 import { GetCatchRes } from "../../../../hooks/queries/useGetCatch";
 import ShareButton from "../../../../components/buttons/ShareButton";
 import { ShareType } from "../../../../hooks/utils/useShareContent";
-import ImagePagination from "../../../../components/lists/shared/ImagePagination";
-import { useImagePaginationIndicator } from "../../../../hooks/utils/useImagePaginationIndicator";
 
 interface Info {
   viewableItems: ViewToken[],
@@ -24,7 +22,12 @@ const { width, height } = Dimensions.get('window')
 
 const BannerSection = ({ navigation, id, media }: Props) => {
     
-    const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
+    const [currentIndex, setCurrentIndex] = useState<number | null>(0)
+
+    const handleImageInView = useCallback(({ viewableItems }: Info) => {
+      setCurrentIndex(viewableItems[0].index)
+    },[]);
+
     const navigateToImage = (id: number) => () => navigation.navigate("ViewImageScreen", { id });
 
     return (
@@ -32,13 +35,21 @@ const BannerSection = ({ navigation, id, media }: Props) => {
         <BackButton style={styles.back}/>
         <ShareButton id={id} shareType={ShareType.Catch} style={styles.share}/>
         { media && media.length > 0 && 
-          <ImagePagination currentIndex={currentIndex} media={media}/>
+          <View style={styles.indexbar}>
+            {media.map((x, index) => (
+              <View key={x.id} style={[styles.dot, {
+                backgroundColor: index === currentIndex ? 'white' : 'rgba(255,255,255,.6)',
+                height: index === currentIndex ? 7 : 6,
+                width: index === currentIndex ? 7 : 6,
+              }]}/>
+            ))}
+          </View>
         }
         <FlatList
           data={media}
           horizontal={true}
           pagingEnabled={true}
-          onViewableItemsChanged={handleViewableItemsChanged}
+          onViewableItemsChanged={handleImageInView}
           showsHorizontalScrollIndicator={false}
           renderItem={({ item }) => (
             <Pressable onPress={navigateToImage(item.id)}>
@@ -72,5 +83,22 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: width,
+  },
+  indexbar: {
+    position: 'absolute',
+    alignSelf: 'center',
+    zIndex: 100,
+    bottom: 24,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0,0,0,.4)',
+    padding: 8,
+    paddingLeft: 16,
+    borderRadius: 12
+  },
+  dot: {
+    borderRadius: 100,
+    marginRight: 8
   }
 });

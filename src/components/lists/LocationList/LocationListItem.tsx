@@ -41,9 +41,10 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
             </TouchableRipple>
           </View>
 
-          {data.title && (
+          {!data.title && (
             <Text style={styles.title} numberOfLines={1}>
-              {data.title}
+              {data.title ||
+                "One of the best spots on the Swatara that ive ever fished at"}
             </Text>
           )}
 
@@ -108,7 +109,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     paddingLeft: 12,
-    paddingVertical: 12,
+    paddingVertical: 8,
   },
   user: {
     flexDirection: "row",
