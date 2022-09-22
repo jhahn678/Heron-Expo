@@ -9,15 +9,18 @@ import { theme } from "../../../../config/theme";
 import globalStyles from "../../../../globalStyles";
 import { GetCatchRes } from "../../../../hooks/queries/useGetCatch";
 import { ShareType } from "../../../../hooks/utils/useShareContent";
-import { RootStackScreenProps } from "../../../../types/navigation";
+import { MapResource, RootStackScreenProps } from "../../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 interface Props {
   navigation: RootStackScreenProps<"ViewCatchScreen">["navigation"];
   data: GetCatchRes["catch"] | undefined
+  id: number
 }
 
-const HeadingSection = ({ navigation, data }: Props) => {
+const HeadingSection = ({ navigation, data, id }: Props) => {
+
+    const navigateToMap = () => navigation.navigate('ViewMapScreen', { resource: MapResource.Catch, id })
     
     const navigateToWaterbody = () => {
         if(!data) return;
@@ -67,11 +70,11 @@ const HeadingSection = ({ navigation, data }: Props) => {
           </Text>
         }
         <View style={styles.actionbar}>
-          <LikeButton active={false} id={data?.id} type={LikeType.Catch} />
+          <LikeButton active={false} id={id} type={LikeType.Catch} />
           <View style={styles.bardivider}/>
-          <Icon name="map" size={24} color={theme.colors.primary} />
+          <Icon name="map" size={24} color={theme.colors.primary} onPress={navigateToMap}/>
           <View style={styles.bardivider} />
-          <ShareButton shareType={ShareType.Catch} id={data?.id} mode="none" />
+          <ShareButton shareType={ShareType.Catch} id={id} mode="none" />
         </View>
       </View>
     );
