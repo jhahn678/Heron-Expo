@@ -5,7 +5,6 @@ import dayjs from "../../../config/dayjs";
 import { GetLocationsRes } from "../../../hooks/queries/useGetLocations";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import Avatar from "../../users/Avatar";
-import Icon from 'react-native-vector-icons/FontAwesome'
 import ShareButton from "../../buttons/ShareButton";
 import SaveLocationButton from "../../buttons/SaveLocationButton";
 import LikeButton, { LikeType } from "../../buttons/LikeButton";
@@ -41,10 +40,9 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
             </TouchableRipple>
           </View>
 
-          {!data.title && (
+          {data.title && (
             <Text style={styles.title} numberOfLines={1}>
-              {data.title ||
-                "One of the best spots on the Swatara that ive ever fished at"}
+              {data.title}
             </Text>
           )}
 
