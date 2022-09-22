@@ -36,6 +36,7 @@ const SearchBar = (props: Props): JSX.Element => {
                 placeholder={props.placeholder}
                 autoFocus={props.autofocus}
                 style={[styles.searchbar, props.style]}
+                outlineColor={'rgba(0,0,0,.2)'}
                 value={props.value || ''}
                 onChangeText={props.setValue}
                 multiline={false}
