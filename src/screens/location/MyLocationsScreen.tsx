@@ -1,17 +1,25 @@
-import { StyleSheet, Text, View } from 'react-native'
 import React from 'react'
+import { StyleSheet, View } from 'react-native'
+import { useAuth } from '../../store/auth/useAuth'
 import { BottomTabsScreenProps } from '../../types/navigation'
 
 
-const MyLocationsScreen = (props: BottomTabsScreenProps<'MyLocationsScreen'>) => {
+const MyLocationsScreen = ({ navigation }: BottomTabsScreenProps<'MyLocationsScreen'>) => {
+
+  const userId = useAuth(store => store.id)
 
   return (
-    <View>
-      <Text>MyLocationsScreen</Text>
+    <View style={styles.container}>
+
     </View>
   )
 }
 
 export default MyLocationsScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    height: '100%',
+    width: '100%'
+  },
+})

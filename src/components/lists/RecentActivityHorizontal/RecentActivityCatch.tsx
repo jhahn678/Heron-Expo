@@ -7,7 +7,7 @@ import {
     ViewStyle, 
     Image 
 } from 'react-native'
-import { Title, Text, useTheme } from 'react-native-paper'
+import { Text, useTheme } from 'react-native-paper'
 import { RecentActivity } from '../../../hooks/queries/useGetRecentActivity'
 import Avatar from '../../users/Avatar'
 import { dateToCalendar } from '../../../utils/conversions/dateToCalendar'
@@ -23,10 +23,8 @@ const RecentActivityCatch = <T extends RecentActivity>({
     data, style, onNavigateToCatch, onNavigateToProfile
 }: Props<T>): JSX.Element => {
 
-    const { colors } = useTheme()
-
     return (
-        <Pressable onPress={onNavigateToCatch}  style={[styles.container, style, { shadowColor: colors.backdrop}]}>
+        <Pressable onPress={onNavigateToCatch}  style={[styles.container, style]}>
             <View style={styles.header}>
                 <Avatar 
                     size={40}
@@ -36,20 +34,20 @@ const RecentActivityCatch = <T extends RecentActivity>({
                 />  
                 <View style={styles.headerText}>
                     <Text style={styles.name}>{data.user.fullname}</Text>    
-                    <Text>{dateToCalendar(data.created_at)}</Text>
+                    <Text style={styles.created}>{dateToCalendar(data.created_at)}</Text>
                 </View>
             </View>
+            <Image source={{ uri: data.media[0]?.url }} style={styles.image}/>
             {
                 data.species ? 
-                    <Text style={styles.caption}>
+                    <Text style={styles.caption} numberOfLines={2}>
                         Caught a {data.species} at {data.waterbody.name}
                     </Text>
                 :
-                    <Text style={styles.caption}>
+                    <Text style={styles.caption} numberOfLines={2}>
                         Logged a catch at {data.waterbody.name}
                     </Text>
             }
-            <Image source={{ uri: data.media[0]?.url }} style={styles.image}/>
         </Pressable>
     )
 }
@@ -58,36 +56,36 @@ export default RecentActivityCatch
 
 const styles = StyleSheet.create({
     container: {
-        height: '100%',
+        height: 340,
         width: 300,
         marginRight: 32,
-        elevation: 3, 
-        shadowOffset: { 
-            height: 2, 
-            width: 0 
-        }, 
-        shadowRadius: 2, 
-        shadowOpacity: .2,
-        justifyContent: 'space-evenly'
+        borderRadius: 12,
+        justifyContent: 'space-evenly',
+        backgroundColor: 'white',
+        overflow: 'hidden'
     },
     image: {
-        height: '70%',
+        flex: 1,
         width: '100%',
-        borderRadius: 12,
-        
+        backgroundColor: '#e0e0e0'
     },
     header: {
         flexDirection: 'row',
         alignItems: 'center',
+        padding: 12
     },
     headerText: {
-        paddingLeft: 12
+        paddingLeft: 8
     },
     name: {
-        fontWeight: '600',
-        fontSize: 16
+        fontWeight: '500',
+    },
+    created: {
+        fontSize: 12
     },
     caption: {
-        fontWeight: '500'
+        fontWeight: '500',
+        fontSize: 12,
+        padding: 16
     }
 })

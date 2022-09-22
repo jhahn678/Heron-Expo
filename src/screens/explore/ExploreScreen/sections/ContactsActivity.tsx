@@ -3,7 +3,6 @@ import { StyleSheet, View } from 'react-native'
 import { Title, Text, ActivityIndicator } from 'react-native-paper'
 import RecentActivityHorizontalList from '../../../../components/lists/RecentActivityHorizontal/RecentActivityHorizontalList'
 import { useGetRecentActivityQuery } from '../../../../hooks/queries/useGetRecentActivity'
-import { useGetRecentActivityQueryMock } from '../../../../../__mocks'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 
 interface Props {
@@ -20,7 +19,7 @@ const ContactsActivity = ({
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
     
     return (
-        <View style={[styles.container, { height: data && data.activityFeed.length > 0 ? 370 : 130 }]}>
+        <View style={[styles.container, { height: data && data.activityFeed.length > 0 ? 420 : 130 }]}>
             <Title style={styles.title}>Recent activity</Title>
             { 
                 data ? data.activityFeed.length > 0 ?
@@ -51,7 +50,7 @@ const styles = StyleSheet.create({
         fontSize: 24,
         fontWeight: '600',
         paddingHorizontal: '6%',
-        marginBottom: 24
+        marginBottom: 32
     },
     message: {
         paddingLeft: 24,

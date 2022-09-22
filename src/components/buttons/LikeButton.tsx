@@ -39,7 +39,6 @@ const LikeButton = ({ id, type, ...props }: Props) => {
     if (!id) return;
     if(type === LikeType.Catch) await likeCatch({ variables: { id }})
     if(type === LikeType.Location) await recommendLocation({ variables: { id } });
-    setActive((act) => !act);
   };
 
   return (

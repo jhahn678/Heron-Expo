@@ -8,7 +8,7 @@ import { IWaterbody } from '../../types/Waterbody'
 
 const GET_CATCHES = gql`
   query Catches(
-    $id: Int!
+    $id: Int
     $type: CatchQuery!
     $offset: Int
     $limit: Int
@@ -75,11 +75,7 @@ export interface Vars {
     mediaLimit?: number
 }
 
-interface Args extends Omit<Vars, 'queryLocation'>{
-    withinMeters?: number
-}
-
-export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
+export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
 
     const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
       if (!latitude || !longitude) return null;
@@ -112,7 +108,7 @@ export const catchMapResource = (resource: MapResource): CatchQuery => {
     }
 } 
 
-export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
+export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
 
   const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
     if(!latitude || !longitude) return null;

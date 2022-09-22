@@ -25,7 +25,7 @@ const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate }: Pr
         {data.average_rating && (
           <View style={globalStyles.frac}>
             <Text style={styles.rating}>{data.average_rating}</Text>
-            <Icon name="star" size={14} />
+            <Icon name="star" size={14} color={'#f1c40f'}/>
           </View>
         )}
       </View>

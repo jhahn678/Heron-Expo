@@ -16,7 +16,7 @@ import RegisterAuthScreenThree from "../screens/auth/RegisterAuthScreenThree";
 import UserProfileScreen from "../screens/profile/UserProfileScreen/UserProfileScreen";
 import SearchUsersScreen from "../screens/contacts/UserSearchScreen/UserSearchScreen";
 import ViewCatchScreen from "../screens/catch/CatchScreen/ViewCatchScreen";
-import ViewLocationScreen from "../screens/location/ViewLocationScreen";
+import ViewLocationScreen from "../screens/location/LocationScreen/ViewLocationScreen";
 import { navigationRef } from "./navigationRef";
 import MediaGridScreen from "../screens/media/MediaGridScreen";
 import ReviewsScreen from "../screens/waterbody/ReviewsScreen";
