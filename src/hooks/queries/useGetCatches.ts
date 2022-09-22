@@ -1,4 +1,5 @@
 import { gql, useLazyQuery, useQuery } from '@apollo/client'
+import { useEffect, useState } from 'react'
 import { useLocationStore } from '../../store/location/useLocationStore'
 import { CatchQuery, CatchSort, ICatch } from '../../types/Catch'
 import { IMedia } from '../../types/Media'
@@ -14,6 +15,7 @@ const GET_CATCHES = gql`
     $limit: Int
     $sort: CatchSort
     $coordinates: Coordinates
+    $within: Int
     $mediaLimit: Int
   ) {
     catches(
@@ -22,6 +24,7 @@ const GET_CATCHES = gql`
       offset: $offset
       limit: $limit
       sort: $sort
+      within: $within
       coordinates: $coordinates
     ) {
       id
@@ -71,22 +74,28 @@ export interface Vars {
     coordinates?: {
         latitude: number
         longitude: number
-    }
+    },
+    within?: number
     mediaLimit?: number
 }
 
-interface Args extends Omit<Vars, 'queryLocation'>{
-    withinMeters?: number
-}
+export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
 
-export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
+    const [skip, setSkip] = useState(true)
 
+    useEffect(() => {
+      if(args.type === CatchQuery.User || args.type === CatchQuery.Waterbody){
+        args.id ? setSkip(false) : setSkip(true)
+      }
+    }, [args.type, args.id]);
+    
     const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
       if (!latitude || !longitude) return null;
       return { latitude, longitude };
     });
 
     return useQuery<GetCatchesRes, Vars>(GET_CATCHES, {
+      skip,
       variables: {
         ...args,
         mediaLimit: mediaLimit ? mediaLimit : 1,
@@ -112,7 +121,7 @@ export const catchMapResource = (resource: MapResource): CatchQuery => {
     }
 } 
 
-export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Args) => {
+export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
 
   const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
     if(!latitude || !longitude) return null;
