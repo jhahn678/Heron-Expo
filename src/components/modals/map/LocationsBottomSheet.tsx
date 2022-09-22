@@ -1,5 +1,5 @@
 import { Text } from "react-native-paper";
-import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
+import BottomSheet from "@gorhom/bottom-sheet";
 import { Dimensions, Image, Pressable, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
@@ -17,6 +17,7 @@ import { ShareType } from "../../../hooks/utils/useShareContent";
 import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
 import PrivacyLabel from "../../locations/PrivacyLabel";
 import { theme } from "../../../config/theme";
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const { width } = Dimensions.get('window')
 
@@ -33,6 +34,11 @@ const LocationsBottomSheet = () => {
 
   const navigateToImage = (uri: string) => () =>
     navigation.navigate("ViewImageScreen", { uri });
+
+  const navigateToLocation = () => {
+    if(!location) return;
+    navigation.navigate('ViewLocationScreen', { id: location })
+  }
 
   const navigateToUser = () => {
     if(!data?.user.id || data.user.id === id ) return;
@@ -53,11 +59,12 @@ const LocationsBottomSheet = () => {
       index={0}
       onClose={onClose}
     >
-      <View style={[globalStyles.frac, styles.hpadding]}>
+      <Pressable style={[globalStyles.frsb, styles.hpadding]} onPress={navigateToLocation}>
         <Text style={styles.title} numberOfLines={1}>
           {data?.title || "Untitled Location"}
         </Text>
-      </View>
+        <Icon name='arrow-right' size={20} color={theme.colors.primary} style={{ marginRight: 8 }}/>
+      </Pressable>
 
       <View style={[globalStyles.baseline, styles.hpadding]}>
         <Text style={styles.label}>on</Text>
@@ -125,7 +132,7 @@ const LocationsBottomSheet = () => {
         </View>
         <View style={styles.fdivider}/>
         <View style={styles.footerButton}>
-          <RecommendLocationButton active={data?.is_favorited} id={data?.id} />
+          <RecommendLocationButton active={data?.is_favorited} id={data?.id}/>
         </View>
       </View>
     </BottomSheet>
