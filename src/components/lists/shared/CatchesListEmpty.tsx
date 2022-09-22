@@ -4,13 +4,16 @@ import FishermanInBoat from "../../svg/FishermanInBoat";
 
 interface Props {
     style?: StyleProp<ViewStyle>
+    fontSize?: number
+    scale?: number
+    caption?: string
 }
 
-const CatchesListEmpty = ({ style }: Props) => {
+const CatchesListEmpty = ({ style, fontSize=14, scale=1, caption }: Props) => {
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style, { transform: [{ scale }]}]}>
       <FishermanInBoat />
-      <Text style={styles.label}>No catches logged yet</Text>
+      <Text style={[styles.label, { fontSize }]}>{caption || "No catches logged yet"}</Text>
     </View>
   );
 };
