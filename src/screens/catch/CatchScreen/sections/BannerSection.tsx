@@ -35,7 +35,7 @@ const BannerSection = ({ navigation, id, media }: Props) => {
           <ImagePagination currentIndex={currentIndex} media={media}/>
         }
         <FlatList
-          data={media}
+          data={media || []}
           horizontal={true}
           pagingEnabled={true}
           onViewableItemsChanged={handleViewableItemsChanged}

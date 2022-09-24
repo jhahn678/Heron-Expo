@@ -21,6 +21,7 @@ const ViewCatchScreen = ({ navigation, route }: RootStackScreenProps<'ViewCatchS
         media={data?.catch.media}
       />
       <HeadingSection 
+        id={id}
         navigation={navigation} 
         data={data?.catch}
       />

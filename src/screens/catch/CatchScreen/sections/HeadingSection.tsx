@@ -70,7 +70,7 @@ const HeadingSection = ({ navigation, data, id }: Props) => {
           </Text>
         }
         <View style={styles.actionbar}>
-          <LikeButton active={false} id={id} type={LikeType.Catch} />
+          <LikeButton active={data?.is_favorited} id={id} type={LikeType.Catch} />
           <View style={styles.bardivider}/>
           <Icon name="map" size={24} color={theme.colors.primary} onPress={navigateToMap}/>
           <View style={styles.bardivider} />
