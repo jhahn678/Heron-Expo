@@ -10,6 +10,8 @@ import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMor
 import { useBottomSheetStore } from '../../../store/modal/useBottomSheetStore'
 import { useGetCatches } from "../../../hooks/queries/useGetCatches";
 
+const LIMIT = 3;
+
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
     waterbody: number
@@ -23,7 +25,7 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
     const openSpecies = useBottomSheetStore(store => () => store.openSpecies(waterbody))
 
     const { data, loading, error } = useGetCatches({ 
-        limit: 3, 
+        limit: LIMIT, 
         id: waterbody, 
         type: CatchQuery.Waterbody, 
         sort: CatchSort.CreatedAtNewest,
@@ -50,8 +52,9 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                 </Pressable>
             </View>
             <Title style={styles.title}>Latest Catches</Title>
-            <View style={styles.list}>
-                <FlashList
+            { data && data.catches.length === 0 ? <></> :
+                <View style={styles.list}>
+                    <FlashList
                     data={data?.catches} horizontal
                     estimatedItemSize={300}
                     renderItem={({ item }) => (
@@ -63,15 +66,16 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                         />
                     )} 
                     showsHorizontalScrollIndicator={false}
-                    ListFooterComponent={() => (
+                    ListFooterComponent={data && data.catches.length === LIMIT ? () => (
                         <ListFooterSeeMore
                             onPress={navigateCatches} 
                             style={styles.seemore}
                         />
-                    )}
+                    ): null}
                     contentContainerStyle={{ paddingLeft: 16, paddingRight: 32 }}
-                />
-            </View>
+                    />
+                </View>
+            }
         </View>
     );
 };
