@@ -1,5 +1,5 @@
 import { StyleSheet, View, Image, Pressable } from "react-native";
-import { Text, Card, TouchableRipple } from 'react-native-paper'
+import { Text, TouchableRipple } from 'react-native-paper'
 import dayjs from "../../../config/dayjs";
 import { GetWaterbodyCatch } from "../../../types/Catch";
 import { NavigationProp } from "../../../types/navigation";
@@ -28,7 +28,7 @@ const CatchesListItem = ({ data, navigation }: Props) => {
                 </View>
             </TouchableRipple>
             <Pressable onPress={navigateCatch} style={styles.image}>
-                <Image style={styles.image} source={{ uri: data.media[0].url }}/>
+                <Image style={styles.image} source={{ uri: data.media[0]?.url }}/>
             </Pressable>
         </View>
     );
@@ -38,9 +38,9 @@ export default CatchesListItem;
 
 const styles = StyleSheet.create({
     container: {
-        height: 298,
+        flex: 1,
         width: 300,
-        marginRight: 8,
+        marginRight: 16,
         overflow: 'hidden',
         borderRadius: 12,
         backgroundColor: 'white'
