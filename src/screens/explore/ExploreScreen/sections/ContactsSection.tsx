@@ -17,7 +17,7 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
     const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen', { showBack: true })
 
     const isAuthenticated = useAuth(state => state.isAuthenticated)
-    const { data, loading, error } = useGetMyContacts(isAuthenticated)
+    const { data, loading, error } = useGetMyContacts()
 
     return (
         <View style={styles.container}>
