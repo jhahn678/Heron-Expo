@@ -39,13 +39,13 @@ const DetailsSection = ({ data }: Props) => {
             <Icon name='ruler' size={24} color={theme.colors.primary} style={styles.icon}/>
             <View>
               <Text style={styles.label}>Length</Text>
-              <Text style={styles.value}>{data?.length ? `${data.length} in` : "N/A"}</Text>
+              <Text style={styles.value}>{data?.length ? `${data.length} in` : "—"}</Text>
             </View>
             <View style={styles.divider}/>
             <Icon name='scale' size={24} color={theme.colors.primary} style={styles.icon}/>
             <View>
               <Text style={styles.label}>Weight</Text>
-              <Text style={styles.value}>{data?.weight ? `${data.weight} in` : "N/A"}</Text>
+              <Text style={styles.value}>{data?.weight ? `${data.weight} in` : "—"}</Text>
             </View>
         </View>
         <View style={styles.bar}>
