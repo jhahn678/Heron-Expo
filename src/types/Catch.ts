@@ -5,7 +5,6 @@ import { IMedia } from "./Media";
 
 export interface ICatch {
   id: number;
-  user: number;
   description?: string;
   geom?: Point;
   /** INCHES */
@@ -13,7 +12,6 @@ export interface ICatch {
   rig?: string;
   species?: string;
   title?: string;
-  waterbody?: number;
   /** OUNCES */
   weight?: number;
   created_at: Date;

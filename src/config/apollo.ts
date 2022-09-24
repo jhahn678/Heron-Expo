@@ -112,6 +112,15 @@ export const apolloClient = new ApolloClient({
                         }
                     }
                 }
+            },
+            User: {
+                fields: {
+                    catch_statistics: {
+                        merge: (existing={}, incoming) => ({
+                            ...existing, ...incoming
+                        })
+                    }
+                }
             }
         }
     })

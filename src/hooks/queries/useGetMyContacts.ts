@@ -1,9 +1,11 @@
 import { gql, useQuery, useLazyQuery } from '@apollo/client'
+import { useAuth } from '../../store/auth/useAuth'
 import { IContact } from '../../types/User'
 
 const GET_MY_CONTACTS = gql`
     query Me {
         me {
+            id
             contacts {
                 fullname
                 id
@@ -20,7 +22,10 @@ export interface GetMyContacts {
     me: Contacts
 }
 
-export const useGetMyContacts = (isAuthenticated: boolean) => {
+export const useGetMyContacts = () => {
+
+    const isAuthenticated = useAuth(store => store.isAuthenticated) 
+
     const result = useQuery<GetMyContacts>(GET_MY_CONTACTS, {
         skip: !isAuthenticated
     })

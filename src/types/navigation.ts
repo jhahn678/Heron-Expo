@@ -1,10 +1,10 @@
 import { NativeStackScreenProps } from "@react-navigation/native-stack"
 import { BottomTabScreenProps } from "@react-navigation/bottom-tabs"
+import { MaterialTopTabScreenProps} from '@react-navigation/material-top-tabs'
 import { CompositeScreenProps, NavigationProp as NavProp, NavigatorScreenParams } from "@react-navigation/native"
 import { MediaType } from "./Media"
 import { CatchQuery } from "./Catch"
-import { Coordinates, LocationQuery } from "./Location"
-import { Coordinate } from "react-native-maps"
+import { LocationQuery } from "./Location"
 
 
 export type RootStackParams = {
@@ -78,6 +78,27 @@ export type BottomTabsScreenProps<T extends keyof BottomTabsParams> =
         BottomTabScreenProps<BottomTabsParams, T>,
         NativeStackScreenProps<RootStackParams>
     >
+
+export type MyCatchesTabsParams = {
+    MyCatchesList: undefined
+    MyCatchesStatistics: undefined
+}
+
+export type MyCatchesTabsScreenProps<T extends keyof MyCatchesTabsParams> = 
+    CompositeScreenProps<
+        MaterialTopTabScreenProps<MyCatchesTabsParams, T>,
+        BottomTabsScreenProps<'MyCatchesScreen'>
+    >
+
+// export type MyLocationsTabsParams = {
+
+// }
+
+// export type MyLocationsTabsScreenProps<T extends keyof MyLocationsTabsParams> = 
+//     CompositeScreenProps<
+//         MaterialTopTabScreenProps<MyLocationsTabsParams, T>,
+//         BottomTabsScreenProps<'MyLocationsScreen'>
+//     >
     
 export type UseNavigateParams = NavProp<RootStackParams & BottomTabsParams & ExploreStackParams>
 
