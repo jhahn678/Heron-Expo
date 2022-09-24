@@ -30,11 +30,11 @@ const ActionBar = ({ navigation, totalFavorites, isFavorited, isSaved, id }: Pro
                 </Text>
             : null}
             <View style={styles.actionbar}>
-                <LikeButton active={isFavorited} id={id} type={LikeType.Catch} />
+                <LikeButton active={isFavorited} id={id} type={LikeType.Location} />
                 <View style={styles.bardivider}/>
                 <SaveLocationButton id={id} active={isSaved}/>
                 <View style={styles.bardivider} />
-                <ShareButton shareType={ShareType.Catch} id={id} mode="none" />
+                <ShareButton shareType={ShareType.Location} id={id} mode="none" />
             </View>
         </View>
     );
