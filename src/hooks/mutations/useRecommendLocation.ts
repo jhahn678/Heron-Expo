@@ -25,17 +25,17 @@ export const useRecommendLocation = (args?: Args) => {
       },
       update: (cache, { data }, { variables }) => {
         if(data && variables?.id){
-            cache.writeFragment({
+          cache.writeFragment({
             id: `Location:${variables.id}`,
             fragment: gql`
-                fragment updatedLocation on Location {
+                fragment UpdatedLocation${variables.id} on Location {
                     is_favorited
                 }
             `,
             data: {
                 is_favorited: data.toggleFavoriteLocation
             }
-        })
+          })
         }
       }
     });

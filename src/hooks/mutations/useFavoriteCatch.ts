@@ -29,17 +29,17 @@ export const useFavoriteCatch = (args?: Args) => {
       },
       update: (cache, { data }, { variables }) => {
         if(data && variables?.id){
-            cache.writeFragment({
-                id: `Catch:${variables.id}`,
-                fragment: gql`
-                    fragment UpdateCatch on Catch{
-                        is_favorited
-                    }
-                `,
-                data: {
-                    is_favorited: data.toggleFavoriteCatch
+          cache.writeFragment({
+            id: `Catch:${variables.id}`,
+            fragment: gql`
+                fragment UpdatedCatch${variables.id} on Catch{
+                    is_favorited
                 }
-            })
+            `,
+            data: {
+                is_favorited: data.toggleFavoriteCatch
+            }
+          })
         }
       }
     });
