@@ -1,12 +1,12 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ExploreStack from "./ExploreStack";
-import MyCatchesScreen from "../screens/catch/MyCatchesScreen";
 import MyLocationsScreen from "../screens/location/MyLocationsScreen";
 import MyProfileScreen from '../screens/profile/MyProfileScreen/MyProfileScreen'
 import { BottomTabsParams } from "../types/navigation";
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import FAIcon from 'react-native-vector-icons/FontAwesome5'
+import MyCatchesTabs from "./MyCatchesTabs";
 
 
 const BottomTabs = (): JSX.Element => {
@@ -19,7 +19,7 @@ const BottomTabs = (): JSX.Element => {
                 tabBarLabel: 'Explore',
                 tabBarIcon: ({ color, size }) => <MCIcon name='map-search-outline' color={color} size={size}/>
             }}/>
-            <Tabs.Screen name='MyCatchesScreen' component={MyCatchesScreen} options={{ 
+            <Tabs.Screen name='MyCatchesScreen' component={MyCatchesTabs} options={{ 
                 tabBarLabel: 'Catches',
                 tabBarIcon: ({ color, size }) => <MCIcon name='fish' color={color} size={size}/>
             }}/>
