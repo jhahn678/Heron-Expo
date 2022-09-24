@@ -45,7 +45,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontWeight: '600',
-        marginBottom: 24,
+        marginBottom: 32,
         marginLeft: 16
     },
     summary: {

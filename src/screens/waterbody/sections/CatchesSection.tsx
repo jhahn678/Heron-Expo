@@ -4,12 +4,11 @@ import { Text, Title } from 'react-native-paper'
 import FishermanCatchingFish from "../../../components/svg/FishermanCatchingFish";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
-import { CatchQuery, CatchSort, GetWaterbodyCatch } from "../../../types/Catch";
+import { CatchQuery, CatchSort } from "../../../types/Catch";
 import CatchesListItem from "../../../components/lists/CatchesListHorizontal/CatchesListItem";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import { useBottomSheetStore } from '../../../store/modal/useBottomSheetStore'
 import { useGetCatches } from "../../../hooks/queries/useGetCatches";
-import { useGetCatchesQueryMock } from "../../../../__mocks";
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
@@ -23,14 +22,12 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
 
     const openSpecies = useBottomSheetStore(store => () => store.openSpecies(waterbody))
 
-    // const { data, loading, error } = useGetCatches({ 
-    //     limit: 3, id: waterbody, 
-    //     type: CatchQuery.Waterbody, 
-    //     sort: CatchSort.CreatedAtNewest,
-    //     total: totalCatches 
-    // })
-
-    const { data, loading, error } = useGetCatchesQueryMock({ limit: 3 })
+    const { data, loading, error } = useGetCatches({ 
+        limit: 3, 
+        id: waterbody, 
+        type: CatchQuery.Waterbody, 
+        sort: CatchSort.CreatedAtNewest,
+    })
 
     const navigateCatches = () => navigation.navigate('CatchListScreen', { 
         type: CatchQuery.Waterbody, id: waterbody, title: name, total: totalCatches 
@@ -88,7 +85,7 @@ const styles = StyleSheet.create({
         borderBottomWidth: 1,
         width: '100%',
         paddingTop: 16,
-        paddingBottom: 32
+        paddingBottom: 24
     },
     title: {
         fontWeight: '600',
@@ -122,7 +119,7 @@ const styles = StyleSheet.create({
         right: 16
     },
     list: {
-        height: 300
+        height: 332
     },
     seemore: {
         flexGrow: 1,
