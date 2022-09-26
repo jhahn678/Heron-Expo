@@ -5,16 +5,21 @@ import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalSt
 import { Title } from "react-native-paper";
 import SelectableItem from "../../lists/shared/SelectableItem";
 import { useGetMyCatchWaterbodies } from "../../../hooks/queries/useGetUserCatchStatistics";
+import Backdrop from "../Backdrop";
 
 const FilterWaterbodyBottomSheet = () => {
 
-    const { data, loading, error } = useGetMyCatchWaterbodies()
+    const { data } = useGetMyCatchWaterbodies()
     const ref = useRef<BottomSheet | null>(null)
+
     const setModalVisible = useMyCatchesModalStore(store => store.setWaterbodyVisible)
-    const handleClose = () => setModalVisible(false)
     const setWaterbody = useMyCatchesModalStore(store => store.setWaterbody)
-    const handleSelect = (value: number) => () => setWaterbody(value)
+    const waterbodies = useMyCatchesModalStore(store => store.waterbody)
     const modalVisible = useMyCatchesModalStore(store => store.waterbodyVisible)
+
+    const handleBackdrop = () => { if(ref.current) ref.current.close() }
+    const handleClose = () => setModalVisible(false)
+    const handleSelect = (value: number) => () => setWaterbody(value)
 
     useEffect(() => {
         if(ref.current && modalVisible) ref.current.expand()
@@ -27,18 +32,22 @@ const FilterWaterbodyBottomSheet = () => {
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}
+            backdropComponent={modalVisible ? (
+                () => <Backdrop onPress={handleBackdrop}/>
+            ) : null}
         >
             <Title style={styles.title}>Waterbodies</Title>
-            { data && data.me.catch_statistics.all_waterbodies ?
+            { data && data.me.catch_statistics.waterbody_counts ?
                 <BottomSheetFlatList
                     contentContainerStyle={styles.content}
-                    data={data.me.catch_statistics.all_waterbodies}
+                    data={data.me.catch_statistics.waterbody_counts}
                     renderItem={({ item }) => (
                         <SelectableItem 
-                            key={item.id} 
-                            label={item.name}
-                            value={item.id} 
-                            onPress={handleSelect(item.id)}
+                            key={item.waterbody.id} 
+                            label={item.waterbody.name}
+                            value={item.waterbody.id} 
+                            activeValues={waterbodies}
+                            onPress={handleSelect(item.waterbody.id)}
                         />
                     )}
                 />

@@ -13,6 +13,7 @@ const FilterSpeciesBottomSheet = () => {
     const setModalVisible = useMyCatchesModalStore(store => store.setSpeciesVisible)
     const handleClose = () => setModalVisible(false)
     const setSpecies = useMyCatchesModalStore(store => store.setSpecies)
+    const species = useMyCatchesModalStore(store => store.species)
     const handleSelect = (value: string) => () => setSpecies(value)
     const modalVisible = useMyCatchesModalStore(store => store.speciesVisible)
 
@@ -29,14 +30,15 @@ const FilterSpeciesBottomSheet = () => {
             onClose={handleClose}
         >
             <Title style={styles.title}>Species</Title>
-            { data && data.me.catch_statistics.all_species ?
+            { data && data.me.catch_statistics.species_counts ?
                 <BottomSheetFlatList
                     contentContainerStyle={styles.content}
-                    data={data.me.catch_statistics.all_species}
+                    data={data.me.catch_statistics.species_counts.map(x => x.species)}
                     renderItem={({ item }) => (
                         <SelectableItem 
                             key={item} 
                             value={item} 
+                            activeValues={species}
                             onPress={handleSelect(item)}
                         />
                     )}

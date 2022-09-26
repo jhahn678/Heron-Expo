@@ -40,6 +40,12 @@ export interface MyCatchesModalStore {
     maxWeight: number | undefined
     setMaxWeight: (weight?: number) => void
 
+    speciesTotalsVisible: boolean
+    setSpeciesTotalsVisible: (visible?: boolean) => void
+
+    waterbodyTotalsVisible: boolean
+    setWaterbodyTotalsVisible: (visible?: boolean) => void
+
     closeAll: () => void
     reset: () => void
 }
@@ -87,12 +93,18 @@ export const useMyCatchesModalStore = create<MyCatchesModalStore>((set, get) => 
     setMaxWeight: maxWeight => set({ maxWeight }),
     weightVisible: false,
     setWeightVisible: (weightVisible=true) => set({ weightVisible }),
+    speciesTotalsVisible: false,
+    setSpeciesTotalsVisible: (speciesTotalsVisible=true) => set({ speciesTotalsVisible }),
+    waterbodyTotalsVisible: false,
+    setWaterbodyTotalsVisible: (waterbodyTotalsVisible=true) => set({ waterbodyTotalsVisible }),
     closeAll: () => set({
         waterbodyVisible: false,
         speciesVisible: false,
         dateVisible: false,
         weightVisible: false,
-        lengthVisible: false
+        lengthVisible: false,
+        speciesTotalsVisible: false,
+        waterbodyTotalsVisible: false
     }),
     reset: () => set({
         waterbody: undefined,
@@ -107,6 +119,8 @@ export const useMyCatchesModalStore = create<MyCatchesModalStore>((set, get) => 
         lengthVisible: false,
         minWeight: undefined,
         maxWeight: undefined,
-        weightVisible: false
+        weightVisible: false,
+        speciesTotalsVisible: false,
+        waterbodyTotalsVisible: false
     })
 }))

@@ -8,14 +8,6 @@ const GET_CATCH_STATISTICS = gql`
             id
             catch_statistics {
                 total_catches
-                total_species
-                all_species
-                top_species
-                total_waterbodies
-                top_waterbody {
-                    id
-                    name
-                }
                 largest_catch {
                     id
                     waterbody {
@@ -27,6 +19,24 @@ const GET_CATCH_STATISTICS = gql`
                     length
                     created_at
                 }
+                species_counts {
+                    species
+                    count
+                }
+                total_species
+                top_species
+                total_waterbodies
+                waterbody_counts {
+                    waterbody {
+                        id
+                        name
+                    }
+                    count
+                }
+                top_waterbody {
+                    id
+                    name
+                }
             }
         }
     }
@@ -35,13 +45,14 @@ const GET_CATCH_STATISTICS = gql`
 export interface CatchStatistics {
     total_catches: number
     total_species: number
-    all_species: string[]
-    top_species: string
+    top_species: string | null
     total_waterbodies: number
-    top_waterbody: Pick<IWaterbody, 'id' | 'name'>
-    largest_catch: Pick<ICatch, 'id' | 'species' | 'weight' | 'length' | 'created_at'> & {
+    top_waterbody: Pick<IWaterbody, 'id' | 'name'> | null
+    largest_catch: (Pick<ICatch, 'id' | 'species' | 'weight' | 'length' | 'created_at'> & {
         waterbody: { id: number, name: string }
-    }
+    }) | null,
+    species_counts: { species: string, count: number }[] | null
+    waterbody_counts: { waterbody: Pick<IWaterbody, 'id' | 'name'>, count: number }[] | null
 }
 
 export interface GetUserCatchStatisticsRes {
@@ -63,19 +74,11 @@ export const useGetUserCatchStatistics = (id: number | null | undefined) => {
 }
 
 const GET_MY_CATCH_STATISTICS = gql`
-    query Catch_Statistics {
+    query Me {
         me {
             id
             catch_statistics {
                 total_catches
-                total_species
-                all_species
-                top_species
-                total_waterbodies
-                top_waterbody {
-                    id
-                    name
-                }
                 largest_catch {
                     id
                     waterbody {
@@ -86,6 +89,24 @@ const GET_MY_CATCH_STATISTICS = gql`
                     weight
                     length
                     created_at
+                }
+                total_species
+                top_species
+                species_counts {
+                    species
+                    count
+                }
+                total_waterbodies
+                top_waterbody {
+                    id
+                    name
+                }
+                waterbody_counts {
+                    waterbody {
+                        id
+                        name
+                    }
+                    count
                 }
             }
         }
@@ -109,9 +130,12 @@ const GET_MY_CATCH_WATERBODIES = gql`
         me {
             id
             catch_statistics {
-                all_waterbodies {
-                    id
-                    name
+                waterbody_counts {
+                    waterbody {
+                        id
+                        name
+                    }
+                    count
                 }
             }
         }
@@ -122,10 +146,15 @@ export interface GetMyCatchWaterbodiesRes {
     me: {
         id: number
         catch_statistics: {
-            all_waterbodies: Pick<IWaterbody, 'id' | 'name'>[]
+            waterbody_counts: {
+                waterbody: Pick<IWaterbody, 'id' | 'name'>
+                count: number
+            }[]
         }
     }
 }
 
 
-export const useGetMyCatchWaterbodies = () => useQuery<GetMyCatchWaterbodiesRes>(GET_MY_CATCH_WATERBODIES)
+export const useGetMyCatchWaterbodies = () => useQuery<GetMyCatchWaterbodiesRes>(GET_MY_CATCH_WATERBODIES, {
+    fetchPolicy: 'cache-first'
+})
