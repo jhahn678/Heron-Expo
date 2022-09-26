@@ -9,7 +9,7 @@ interface Props {
 }
 
 const ErrorModal = (props: Props) => {
-
+    
     const { message, title } = useModalStore(state => ({
         message: state.errorMessage,
         title: state.errorTitle
@@ -42,7 +42,6 @@ export default ErrorModal;
 const styles = StyleSheet.create({
     container: {
         zIndex: 1000,
-        height: 200,
         width: '90%',
         alignSelf: 'center',
         position: 'relative',
