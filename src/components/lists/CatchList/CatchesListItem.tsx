@@ -6,7 +6,6 @@ import Avatar from "../../users/Avatar";
 import dayjs from '../../../config/dayjs'
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import ShareButton from "../../buttons/ShareButton";
-import SaveLocationButton from "../../buttons/SaveLocationButton";
 import LikeButton, { LikeType } from "../../buttons/LikeButton";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../../config/theme";
@@ -60,7 +59,7 @@ const CatchesListItem = ({
             {data.weight && `  \u2022  ${data.weight} oz`}
           </Text>
 
-          {data.media.length === 0 && (
+          {data.media.length > 0 && (
             <Image
               source={{ uri: data.media[0]?.url }}
               style={styles.image}
@@ -70,7 +69,7 @@ const CatchesListItem = ({
         </Pressable>
         <View style={styles.footer}>
           <View style={styles.footerButton}>
-            <ShareButton shareType={ShareType.Catch} id={data.id} mode="none" />
+            <ShareButton shareType={ShareType.Catch} id={data.id} mode="none"/>
           </View>
           {data.geom ?
             <Pressable style={styles.footerButtonCenter} onPress={navigateToMap}>
@@ -108,8 +107,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingLeft: 12,
-    paddingVertical: 8,
+    padding: 12
   },
   user: {
     flexDirection: "row",
