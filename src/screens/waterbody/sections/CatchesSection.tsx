@@ -52,11 +52,14 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                 </Pressable>
             </View>
             <Title style={styles.title}>Latest Catches</Title>
-            { data && data.catches.length === 0 ? <></> :
+            { data && data.catches.length > 0 ?
                 <View style={styles.list}>
                     <FlashList
-                    data={data?.catches} horizontal
+                    horizontal
+                    data={data.catches} 
                     estimatedItemSize={300}
+                    showsHorizontalScrollIndicator={false}
+                    contentContainerStyle={{ paddingLeft: 16, paddingRight: 32 }}
                     renderItem={({ item }) => (
                         <CatchesListItem
                             key={item.id}
@@ -65,17 +68,15 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                             waterbody={waterbody}
                         />
                     )} 
-                    showsHorizontalScrollIndicator={false}
                     ListFooterComponent={data && data.catches.length === LIMIT ? () => (
                         <ListFooterSeeMore
                             onPress={navigateCatches} 
                             style={styles.seemore}
                         />
                     ): null}
-                    contentContainerStyle={{ paddingLeft: 16, paddingRight: 32 }}
                     />
                 </View>
-            }
+            : null}
         </View>
     );
 };
@@ -123,7 +124,7 @@ const styles = StyleSheet.create({
         right: 16
     },
     list: {
-        height: 332
+        height: 332,
     },
     seemore: {
         flexGrow: 1,
