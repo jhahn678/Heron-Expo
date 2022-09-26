@@ -97,8 +97,8 @@ const styles = StyleSheet.create({
     container: {
         marginTop: 16,
         marginBottom: 24,
-        paddingLeft: 24,
-        paddingRight: 16,
+        paddingLeft: 16,
+        paddingRight: 4
     },
     chip: {
         height: 40,

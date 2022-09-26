@@ -1,15 +1,20 @@
-import { StyleSheet, Text, View } from 'react-native'
+import { ScrollView, StyleSheet, View } from 'react-native'
 import React from 'react'
 import { RootStackScreenProps } from '../../../types/navigation'
+import HeaderSection from './sections/HeaderSection'
 
-const NewCatchScreen = (props: RootStackScreenProps<'NewCatchScreen'>) => {
+const NewCatchScreen = ({ navigation }: RootStackScreenProps<'NewCatchScreen'>) => {
   return (
-    <View>
-      <Text>NewCatchScreen</Text>
-    </View>
+    <ScrollView style={styles.container}>
+      <HeaderSection navigation={navigation}/>
+    </ScrollView>
   )
 }
 
 export default NewCatchScreen
 
-const styles = StyleSheet.create({})
+const styles = StyleSheet.create({
+  container: {
+    width: '100%'
+  }
+})

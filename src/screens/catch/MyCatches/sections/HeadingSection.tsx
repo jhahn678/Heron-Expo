@@ -1,11 +1,12 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Title } from 'react-native-paper';
+import { FAB, IconButton, Title } from 'react-native-paper';
 import { theme } from '../../../../config/theme'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from "@react-navigation/native";
 import { MapResource, UseNavigateParams } from "../../../../types/navigation";
 import { useAuth } from "../../../../store/auth/useAuth";
+import globalStyles from "../../../../globalStyles";
 
 
 const HeadingSection = () => {
@@ -22,12 +23,13 @@ const HeadingSection = () => {
     return (
         <View style={styles.container}>
             <Title style={styles.title}>My Catches</Title>
-            <Icon 
-                name='map' 
-                size={24} 
+            <IconButton 
+                icon='map' 
                 onPress={navigateToMap}
-                color={theme.colors.onPrimaryContainer} 
+                mode='contained'
+                size={24}
             />
+            {/* <FAB icon='plus' customSize={48} mode='flat' style={{ borderRadius: 32 }}/> */}
         </View>
     );
 };
@@ -42,7 +44,8 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         width: '100%',
         backgroundColor: theme.colors.onPrimary,
-        paddingHorizontal: 24,
+        paddingLeft: 24,
+        paddingRight: 16,
         paddingTop: 36
     },
     title: {

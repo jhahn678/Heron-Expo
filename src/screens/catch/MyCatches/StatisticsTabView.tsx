@@ -1,30 +1,52 @@
-import { Pressable, StyleSheet, Text, View } from "react-native";
 import React from "react";
-import { MyCatchesTabsScreenProps } from "../../../types/navigation";
-import { useGetUserCatchStatistics } from "../../../hooks/queries/useGetUserCatchStatistics";
-import { useAuth } from "../../../store/auth/useAuth";
 import dayjs from "../../../config/dayjs";
-import { IconButton, TouchableRipple } from "react-native-paper";
+import { useAuth } from "../../../store/auth/useAuth";
+import { Pressable, StyleSheet, Text, View } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { MyCatchesTabsScreenProps } from "../../../types/navigation";
+import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
+import { useGetUserCatchStatistics } from "../../../hooks/queries/useGetUserCatchStatistics";
 
 const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesStatistics'>) => {
 
   const id = useAuth(state => state.id)
 
+  const setSpecies = useMyCatchesModalStore(store => store.setSpecies)
+  const setWaterbody = useMyCatchesModalStore(store => store.setWaterbody)
+  const setWaterbodyTotalsVisible = useMyCatchesModalStore(store => store.setWaterbodyTotalsVisible);
+  const setSpeciesTotalsVisible = useMyCatchesModalStore(store => store.setSpeciesTotalsVisible);
   const { data, error, loading } = useGetUserCatchStatistics(id)
+
+  const showWaterbodyTotals = () => {
+    if(data && data.user.catch_statistics.total_waterbodies > 0){
+      setWaterbodyTotalsVisible(true)
+    }
+  }
+
+  const showSpeciesTotals = () => {
+    if(data && data.user.catch_statistics.total_species > 0){
+      setSpeciesTotalsVisible(true)
+    }
+  }
 
   const navigateTotalCatches = () => navigation.jumpTo('MyCatchesList')
 
+  const navigateTopSpecies = () => {
+    if(!data || !data.user.catch_statistics.top_species) return;
+    setSpecies(data.user.catch_statistics.top_species)
+    navigation.jumpTo('MyCatchesList')
+  }
+
   const navigateBiggestCatch = () => {
-    if(!data || !data.user.catch_statistics.largest_catch) return;
-    navigation.navigate('ViewCatchScreen', { id: data.user.catch_statistics.largest_catch.id })
+    if(data && data.user.catch_statistics.largest_catch){
+      navigation.navigate('ViewCatchScreen', { id: data.user.catch_statistics.largest_catch.id })
+    }
   }
 
   const navigateTopWaterbody = () => {
     if(!data || !data.user.catch_statistics.top_waterbody) return;
-    navigation.navigate('ExploreStack', { screen: 'WaterbodyScreen', params: { 
-      id: data.user.catch_statistics.top_waterbody.id 
-    }})
+    setWaterbody(data.user.catch_statistics.top_waterbody.id)
+    navigation.jumpTo('MyCatchesList')
   }
 
   return (
@@ -48,28 +70,31 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
         </View>
         <Icon name='chevron-right' size={28}/>
       </Pressable>
-      <View style={styles.row}>
+      <Pressable style={styles.row} onPress={showSpeciesTotals}>
         <View>
           <Text style={styles.label}>Total Species</Text>
           <Text style={styles.value}>{data?.user.catch_statistics.total_species}</Text>
         </View>
-      </View>
-      <View style={styles.row}>
+        <Icon name='chevron-right' size={28}/>
+      </Pressable>
+      <Pressable style={styles.row} onPress={navigateTopSpecies}>
         <View>
           <Text style={styles.label}>Top Species</Text>
           <Text style={styles.value}>{data?.user.catch_statistics.top_species || '—'}</Text>
         </View>
-      </View>
-      <View style={styles.row}>
+        <Icon name='chevron-right' size={28}/>
+      </Pressable>
+      <Pressable style={styles.row} onPress={showWaterbodyTotals}>
         <View>
-          <Text style={styles.label}>Total Places</Text>
+          <Text style={styles.label}>Total Fisheries</Text>
           <Text style={styles.value}>{data?.user.catch_statistics.total_waterbodies}</Text>
         </View>
-      </View>
+        <Icon name='chevron-right' size={28}/>
+      </Pressable>
       <Pressable style={styles.row} onPress={navigateTopWaterbody}>
         <View>
           <Text style={styles.label}>Top Fishery</Text>
-          <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody.name}</Text>
+          <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody?.name}</Text>
         </View>
         <Icon name='chevron-right' size={28}/>
       </Pressable>

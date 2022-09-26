@@ -6,7 +6,7 @@ import { useGetMyCatches } from '../../../hooks/queries/useGetMyCatches'
 import { useMyCatchesModalStore } from '../../../store/modal/useMyCatchesModalStore'
 import { MapResource, MyCatchesTabsScreenProps } from '../../../types/navigation'
 import FiltersSection from './sections/FiltersSection'
-import { Text } from 'react-native-paper'
+import { FAB, Text } from 'react-native-paper'
 
 const { width } = Dimensions.get('screen')
 
@@ -31,7 +31,6 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
 
   return (
     <View style={styles.container}>
-      {/* <SearchBar style={styles.search} placeholder='Enter a keyword'/> */}
       <FiltersSection/>
       <FlashList 
         data={data?.me.catches} 
@@ -54,11 +53,9 @@ export default CatchesTabView;
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    width: '100%'
   },
   search: {
     width: width - 48,
-    marginHorizontal: 24,
     marginTop: 16,
   }
 })
