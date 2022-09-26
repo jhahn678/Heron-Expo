@@ -1,7 +1,7 @@
 import { FeatureCollection } from 'geojson';
 import { theme } from '../../../config/theme';
 import { CatchSort } from '../../../types/Catch';
-import { Button, IconButton, Text, TouchableRipple } from 'react-native-paper';
+import { Button, IconButton, Text } from 'react-native-paper';
 import { LocationSort } from '../../../types/Location';
 import { useFocusEffect } from '@react-navigation/native';
 import { Dimensions, StyleSheet, View } from 'react-native';
@@ -19,6 +19,8 @@ import { catchMapResource, useLazyGetCatches } from '../../../hooks/queries/useG
 import { useLazyGetWaterbodyGeometries } from '../../../hooks/queries/useGetWaterbodyGeometries';
 import { Feature, GeoJsonResource } from '../../../utils/conversions/geojsonToFeatureCollection';
 import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries/useGetLocations';
+import { useModalStore } from '../../../store/modal/useModalStore';
+import { ErrorType } from '../../../utils/mapErrorTypeToDetails';
 
 
 const { width } = Dimensions.get('screen')
@@ -36,6 +38,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
   const [mapReady, setMapReady] = useState(false)
   const [hasMore, setHasMore] = useState(false)
   const { handleGeoJson } = useGeoJson()
+  const showError = useModalStore(store => store.setError)
   const modal = useMapModalStore(store => ({
     setWaterbody: store.setWaterbody,
     setLocation: store.setLocation,
@@ -175,6 +178,8 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             setGeojsonResource(GeoJsonResource.Catch)
             setMapCamera(result.camera)
             setHasMore(false)
+          }else{
+            showError(true, ErrorType.MapCatch)
           }
           break;
         case MapResource.Location:
@@ -194,6 +199,8 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             setGeojsonResource(GeoJsonResource.Location);
             setMapCamera(result.camera)
             setHasMore(false);
+          }else{
+            showError(true, ErrorType.MapLocation)
           }
           break;
         case MapResource.Waterbody:
@@ -212,7 +219,6 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             setGeojsonResource(GeoJsonResource.Waterbody);
             setMapCamera(result.camera)
             setHasMore(false);
-            
           })
           break;
         case MapResource.UserCatches:
@@ -228,6 +234,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
                 } 
               }) : null)
               .filter(x => x !== null) as Feature[]
+            if(features.length === 0) {
+              return showError(true, ErrorType.MapNoCatches)
+            }
             const result = handleGeoJson(features)
             setGeojson(result.featureCollection);
             setGeojsonResource(GeoJsonResource.Catch);
@@ -246,6 +255,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
                 resource: GeoJsonResource.Location
               } 
             }));
+            if(geometries.length === 0){
+              return showError(true, ErrorType.MapNoLocations)
+            }
             const result = handleGeoJson(geometries);
             setGeojson(result.featureCollection);
             setGeojsonResource(GeoJsonResource.Location);
@@ -266,6 +278,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
                 }
               }) : null))
               .filter((x) => x !== null) as Feature[];
+            if(features.length === 0) {
+              return showError(true, ErrorType.MapNoCatchesLogged)
+            }
             const result = handleGeoJson(features);
             setGeojson(result.featureCollection);
             setGeojsonResource(GeoJsonResource.Catch);
@@ -285,6 +300,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
                   resource: GeoJsonResource.Location 
                 }
               }))
+            if(features.length === 0){
+              return showError(true, ErrorType.MapNoLocations)
+            }
             const result = handleGeoJson(features);
             setGeojson(result.featureCollection);
             setGeojsonResource(GeoJsonResource.Location);
@@ -305,6 +323,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
                 }
               }) : null))
               .filter((x) => x !== null) as Feature[];
+            if(features.length === 0) {
+              return showError(true, ErrorType.MapNoCatches)
+            }
             const result = handleGeoJson(features);
             setGeojson(result.featureCollection);
             setGeojsonResource(GeoJsonResource.Catch);

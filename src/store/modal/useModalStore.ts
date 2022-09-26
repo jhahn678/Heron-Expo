@@ -70,18 +70,22 @@ export const useModalStore = create<ModalStore>((set) => ({
         snack: value ? true: false, 
         snackText: value ? value : null  
     }),
-    dismiss: () => set({
-        auth: false,
-        reauthenticate: false,
-        confirmUpload: false,
-        confirmUploadWaterbody: null,
-        success: false,
-        successMessage: null,
-        successTitle: null,
-        error: false,
-        errorMessage: null,
-        errorTitle: null,
-        review: false,
-        reviewWaterbody: null,
-    })
+    dismiss: () => {
+        set({
+            auth: false,
+            reauthenticate: false,
+            confirmUpload: false,
+            success: false,
+            error: false,
+            review: false,
+        })
+        set({
+            confirmUploadWaterbody: null,
+            successMessage: null,
+            successTitle: null,
+            errorMessage: null,
+            errorTitle: null,
+            reviewWaterbody: null,
+        })
+    }
 }))
