@@ -1,20 +1,20 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { Checkbox } from "react-native-paper";
 
 interface Props {
     label?: string
-    value: string | number
+    value: string | number,
+    activeValues: any[] | undefined,
     onPress: (value: string | number) => void 
 }
 
-const SelectableItem = ({ label, value, onPress }: Props) => {
+const SelectableItem = ({ label, value, onPress, activeValues=[] }: Props) => {
 
     const [active, setActive] = useState(false)
 
-    const handlePress = () => {
-        onPress(value)
-        setActive(x => !x)
-    }
+    useEffect(() => setActive(activeValues.includes(value)),[activeValues])
+
+    const handlePress = () => onPress(value);
 
     return (
         <Checkbox.Item 
