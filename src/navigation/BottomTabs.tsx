@@ -5,8 +5,8 @@ import MyProfileScreen from '../screens/profile/MyProfileScreen/MyProfileScreen'
 import { BottomTabsParams } from "../types/navigation";
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
-import FAIcon from 'react-native-vector-icons/FontAwesome5'
 import MyCatchesTabs from "./MyCatchesTabs";
+import FishIcon from "../components/icons/FishIcon";
 
 
 const BottomTabs = (): JSX.Element => {
@@ -21,15 +21,15 @@ const BottomTabs = (): JSX.Element => {
             }}/>
             <Tabs.Screen name='MyCatchesScreen' component={MyCatchesTabs} options={{ 
                 tabBarLabel: 'Catches',
-                tabBarIcon: ({ color, size }) => <MCIcon name='fish' color={color} size={size}/>
+                tabBarIcon: ({ color, size }) => <FishIcon color={color} size={size}/>
             }}/>
             <Tabs.Screen name='MyLocationsScreen' component={MyLocationsScreen} options={{ 
                 tabBarLabel: 'Locations',
-                tabBarIcon: ({ color, size }) => <IonIcon name='location' color={color} size={size}/>
+                tabBarIcon: ({ color, size }) => <IonIcon name='location-outline' color={color} size={size}/>
             }}/>
             <Tabs.Screen name="MyProfileScreen" component={MyProfileScreen} options={{ 
                 tabBarLabel: 'Profile',
-                tabBarIcon: ({ color, size }) => <FAIcon name='user-circle' color={color} size={size}/>
+                tabBarIcon: ({ color, size }) => <IonIcon name='person-circle-outline' color={color} size={size}/>
             }}/>
         </Tabs.Navigator>
     )
