@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { RootStackScreenProps } from '../../../types/navigation'
 import Header from './sections/Header'
@@ -12,13 +12,60 @@ import LocationInput from './sections/LocationInput'
 import SpeciesInput from './sections/SpeciesInput'
 import MeasurementsInput from './sections/MeasurementsInput'
 import RigInput from './sections/RigInput'
+import { Button } from 'react-native-paper'
+import { useCreateCatch } from '../../../hooks/mutations/useCreateCatch'
+import { UploadResult, useUploadImages } from '../../../hooks/mutations/useUploadImages'
+import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop'
+import { useModalStore } from '../../../store/modal/useModalStore'
+import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
 
 const NewCatchScreen = ({ navigation }: RootStackScreenProps<'NewCatchScreen'>) => {
 
+  const [loading, setLoading] = useState(false)
+  const uploadImages = useUploadImages()
+  const [createCatch] = useCreateCatch()
+
+  const newCatch = useNewCatchStore(store => ({
+    title: store.title,
+    description: store.description,
+    species: store.species,
+    waterbody: store.waterbody,
+    coordinates: store.coordinates,
+    length: store.length,
+    weight: store.weight,
+    rig: store.rig
+  }))
+
+  const showErrorModal = useModalStore(store => store.setError)
   const resetStore = useNewCatchStore(store => store.reset)
   const clearImages = useImageStore(store => store.clearImages)
-
+  const mapSnapshot = useNewCatchStore(store => store.mapSnapshot)
+  const images = useImageStore(store => store.images)
   const clearState = () => { resetStore(); clearImages() }
+
+  const handleSave = async () => {
+    setLoading(true)
+    let newImages = images.map(({ uri, id }) => ({ uri, id }));
+    if(mapSnapshot) newImages.push(mapSnapshot);
+    try{
+      let media: UploadResult['uploads'] | undefined;
+      if(newImages.length > 0){
+        const uploaded = await uploadImages(newImages)
+        if(!uploaded) return setLoading(false)
+        const { uploads, errors } = uploaded;
+        // if(errors) //do something
+        media = uploads;
+      }
+      const variables = { newCatch: { ...newCatch, media } }
+      const results = await createCatch({ variables })
+      console.log(results)
+      setLoading(false)
+      navigation.goBack()
+    }catch(err){
+      setLoading(false)
+      showErrorModal(true, ErrorType.CreateCatch)
+    }
+  }
 
   useEffect(() => {
     const listener = navigation.addListener('beforeRemove', clearState)
@@ -37,7 +84,14 @@ const NewCatchScreen = ({ navigation }: RootStackScreenProps<'NewCatchScreen'>) 
         <LocationInput navigation={navigation}/>
         <MeasurementsInput/>
         <RigInput/>
+        <Button 
+          mode='contained' 
+          style={styles.button}
+          labelStyle={styles.label}
+          onPress={handleSave}
+        >Save</Button>
       </ScrollView>
+      { loading && <LoadingBackdrop/> }
     </View>
   )
 }
@@ -51,5 +105,14 @@ const styles = StyleSheet.create({
   main: {
     paddingVertical: 16,
     minHeight: 1500
+  },
+  button: {
+    marginTop: 36,
+    marginHorizontal: 16,
+    borderRadius: 6
+  },
+  label: {
+    fontSize: 16,
+    paddingVertical: 4
   }
 })

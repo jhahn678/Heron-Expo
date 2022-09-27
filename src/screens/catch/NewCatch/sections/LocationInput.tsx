@@ -18,7 +18,7 @@ const LocationInput = ({ navigation }: Props) => {
 
     const navigateMapCurrentLocation = () => navigation.navigate('SaveMapScreen', { saveType: SaveType.CatchAuto })
     const navigateMapManualLocation = () => navigation.navigate('SaveMapScreen', { saveType: SaveType.CatchManual})
-    const uri = useNewCatchStore(store => store.mapSnapshot)
+    const snapshot = useNewCatchStore(store => store.mapSnapshot)
     const coordinates = useNewCatchStore(store => store.coordinates)
     const handleClearLocation = useNewCatchStore(store => () => {
         store.setCoordinates(); 
@@ -37,7 +37,7 @@ const LocationInput = ({ navigation }: Props) => {
                     style={styles.remove} 
                     onPress={handleClearLocation}
                 />
-                <Image source={{ uri }} style={styles.snapshot} resizeMode={'cover'}/>
+                <Image source={{ uri: snapshot?.uri }} style={styles.snapshot} resizeMode={'cover'}/>
             </Card> :
             <View style={globalStyles.frsb}>
                 <Pressable style={styles.pressable} onPress={navigateMapManualLocation}>
