@@ -2,7 +2,7 @@ import { gql, useMutation } from '@apollo/client'
 import { MediaInput, WaterbodyMedia } from '../../types/Media'
 
 const ADD_WATERBODY_MEDIA = gql`
-    mutation Mutation($id: Int!, $media: [MediaInput!]!) {
+    mutation WaterbodyMedia($id: Int!, $media: [MediaInput!]!) {
         addWaterbodyMedia(id: $id, media: $media) {
             id
             url
