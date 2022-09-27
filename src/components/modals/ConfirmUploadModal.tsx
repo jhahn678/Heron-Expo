@@ -5,6 +5,7 @@ import { useAddWaterbodyMediaMutation } from "../../hooks/mutations/useAddWaterb
 import { useUploadImages } from "../../hooks/mutations/useUploadImages";
 import { useImageStore } from '../../store/image/useImageStore'
 import { useModalStore } from "../../store/modal/useModalStore";
+import { ErrorType } from "../../utils/mapErrorTypeToDetails";
 
 interface Props {
     visible: boolean
@@ -42,9 +43,9 @@ const ConfirmUploadModal = (props: Props) => {
         })
         setConfirmUploadModalVisible(null, false)
         if(!data || data.addWaterbodyMedia.length === 0){
-            setErrorModalVisible(true, 'UPLOAD')
+            setErrorModalVisible(true, ErrorType.Upload)
         }else if(data.addWaterbodyMedia.length !== uploads.length){
-            setErrorModalVisible(true, 'UPLOAD_PARTIAL')
+            setErrorModalVisible(true, ErrorType.UploadPartial)
         }else{
             setSuccessModalVisible(true, 'UPLOAD')
         }
