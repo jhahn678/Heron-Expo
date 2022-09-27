@@ -59,24 +59,8 @@ export interface NewCatchRes extends Omit<ICatch, 'user' | 'waterbody'>{
     is_favorited: boolean
 }
 
-interface Args {
-    waterbody: number | undefined
-    coordinates: [number, number] | undefined
-    title: string | undefined
-    description: string | undefined
-    species: string | undefined
-    weight?: number | undefined
-    length?: number | undefined
-    rig?: string | undefined
-    media?: {
-        url: string
-        key: string
-    }[] | undefined 
-}
-
-export const useCreateCatch = (newCatch: Args) => {
+export const useCreateCatch = () => {
     return useMutation<NewCatchRes, NewCatchArgs>(CREATE_CATCH, {
-        variables: { newCatch },
         update: () => {
 
         }
