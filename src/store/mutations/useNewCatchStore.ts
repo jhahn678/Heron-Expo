@@ -1,11 +1,12 @@
 import create from 'zustand'
+import uuid from 'react-native-uuid'
 
 export interface NewCatchStore {
     title: string | undefined
     description: string | undefined
     waterbody: number | undefined
     coordinates: [number, number] | undefined
-    mapSnapshot: string | undefined
+    mapSnapshot: { uri: string, id: string } | undefined
     weight: number | undefined
     length: number | undefined
     species: string | undefined
@@ -39,7 +40,11 @@ export const useNewCatchStore = create<NewCatchStore>((set) => ({
     setDescription: description => set({ description }),
     setWaterbody: waterbody => set({ waterbody }),
     setCoordinates: coordinates => set({ coordinates }),
-    setMapSnapshot: mapSnapshot => set({ mapSnapshot }),
+    setMapSnapshot: mapSnapshot => {
+        mapSnapshot ? 
+        set({ mapSnapshot: { uri: mapSnapshot, id: uuid.v4().toString() }})
+        : set({ mapSnapshot: undefined })
+    },
     setWeight: weight => set({ weight }),
     setLength: length => set({ length }),
     setSpecies: species => set({ species }),
