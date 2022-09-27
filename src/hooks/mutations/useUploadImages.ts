@@ -4,12 +4,11 @@ import { validateMimeType } from '../../utils/validateUploadFiletype';
 import { useAuth } from '../../store/auth/useAuth';
 import { useModalStore } from '../../store/modal/useModalStore';
 import { MediaInput } from "../../types/Media";
-import { hasOwnProperty } from "../../utils/hasOwnProperty";
 import { AxiosError } from "axios";
 
-interface UploadResult {
-    uploads: any[]
-    errors: PendingImage[] | null
+export interface UploadResult {
+    uploads: { key: string, url: string }[]
+    errors: Pick<PendingImage, 'id' | 'uri'>[] | null
 }
 
 interface GetSignedUrlRes {
@@ -23,10 +22,7 @@ export const useUploadImages = () => {
 
     const showReauthenticate = useModalStore(state => state.setReauthenticate)
 
-    const {
-        getAccessToken, 
-        refreshAccessToken 
-    } = useAuth(state => ({
+    const { getAccessToken, refreshAccessToken } = useAuth(state => ({
         getAccessToken: state.getAccessToken,
         refreshAccessToken: state.refreshAccessToken
     }))
@@ -65,6 +61,7 @@ export const useUploadImages = () => {
         }
     }
 
+
     /** 
      * ### S3 Upload Function 
      * #### Handles the S3 portion of image upload only
@@ -74,9 +71,9 @@ export const useUploadImages = () => {
      * @params Array of images from image picker
      * @returns Object containing successful uploads and failed uploads
      * */
-    const uploadImages = async (images: PendingImage[]): Promise<UploadResult | void> => {
+    const uploadImages = async (images: Pick<PendingImage, 'id' | 'uri'>[]): Promise<UploadResult | void> => {
 
-        const errors: PendingImage[] = [];
+        const errors: Pick<PendingImage, 'id' | 'uri'>[] = [];
         const uploads: MediaInput[] = [];
 
         const token = await getAccessToken()
