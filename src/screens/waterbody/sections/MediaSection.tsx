@@ -2,7 +2,6 @@ import { FlashList } from "@shopify/flash-list";
 import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import { Button, Title } from "react-native-paper";
-import { useGetWaterbodyMediaMock } from "../../../../__mocks";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import BoxLoader from "../../../components/loaders/BoxLoader";
 import { useGetWaterbodyMedia } from "../../../hooks/queries/useGetWaterbodyMedia";
@@ -18,8 +17,7 @@ interface Props {
 
 const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
 
-    // const { data, loading, error } = useGetWaterbodyMedia({ id: waterbody, limit: 8 })
-    const { data, loading, error } = useGetWaterbodyMediaMock({ loading: false, error: false, limit: 8 })
+    const { data, loading, error } = useGetWaterbodyMedia({ id: waterbody, limit: 8 })
     const navigateToImage = (id: number) => () => navigation.navigate('ViewImageScreen', { id, type: MediaType.Waterbody, title: name })
     const navigateToMedia = () => navigation.navigate('MediaGridScreen', { title: name, waterbody, total: totalMedia})
 
