@@ -13,6 +13,7 @@ export enum ErrorType {
     MapNoCatches = 'MAP_NO_CATCHES',
     MapNoCatchesLogged = 'MAP_NO_CATCHES_LOGGED',
     MapNoLocations = 'MAP_NO_LOCATIONS',
+    MapCurrentLocation = 'MAP_CURRENT_LOCATION'
 }
 
 const ErrorDetails: { [key in ErrorType]: Details } = {
@@ -49,6 +50,11 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
     REVIEW_DUPLICATE: {
         title: '',
         message: '',
+    },
+    MAP_CURRENT_LOCATION: {
+        title: 'There was an issue 🤔',
+        message: 'Your location is not available. \
+        Please make sure location permissions are enabled'
     },
     MAP_NO_CATCHES: {
         title: 'Nothing to display 🗺',
