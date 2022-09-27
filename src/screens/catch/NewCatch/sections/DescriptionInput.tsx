@@ -13,7 +13,7 @@ const DescriptionInput = () => {
         <View style={styles.container}>
             <TextInput
                 mode='outlined'  
-                placeholder="Share some details about the catch"
+                placeholder="Share some details about your catch"
                 label={'Description'}
                 numberOfLines={5}
                 theme={{ roundness: 6 }}

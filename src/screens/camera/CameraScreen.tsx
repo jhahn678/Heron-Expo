@@ -1,25 +1,22 @@
 import { useState, useEffect } from 'react'
-import { StyleSheet, Text, TouchableOpacity, View } from 'react-native'
+import { Dimensions, StyleSheet, Text, TouchableOpacity, View } from 'react-native'
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MaterialIcon from 'react-native-vector-icons/MaterialIcons'
 import { Camera, CameraType, FlashMode } from 'expo-camera'
-import { useNavigation } from '@react-navigation/core'
-import { useWindowDimensions } from 'react-native';
 import { StatusBar } from 'expo-status-bar'
 import uuid from 'react-native-uuid'
 import { RootStackScreenProps } from '../../types/navigation'
+import { useImageStore } from '../../store/image/useImageStore'
 
+const { width } = Dimensions.get('window')
 
-const CameraScreen = (props: RootStackScreenProps<'CameraScreen'>): JSX.Element => {
-
-    const { width: screenWidth } = useWindowDimensions()
-
-    const navigation = useNavigation()
-
+const CameraScreen = ({ navigation }: RootStackScreenProps<'CameraScreen'>): JSX.Element => {
+    
     const [cameraRef, setCameraRef] = useState<Camera | null>(null)
     const [cameraType, setCameraType] = useState(CameraType.back)
     const [hasPermission, setHasPermission] = useState<Boolean | null>(null)
     const [flash, setFlash] = useState('off')
+    const imageStore = useImageStore()
 
 
     useEffect(() => {
@@ -44,18 +41,8 @@ const CameraScreen = (props: RootStackScreenProps<'CameraScreen'>): JSX.Element 
 
     const handleTakePicture = async () => {
         if(!cameraRef) return;
-        const image = await cameraRef.takePictureAsync()
-        // const history = navigation.getState().routes
-        // const navigatedFrom = history[history.length - 2].name
-        // if(navigatedFrom === 'NewCatch'){
-        //     setCatchImages(images => [...images, { ...image, id: uuid.v4(), origin: 'CAMERA' } ])
-        // }
-        // if(navigatedFrom === 'NewPlace'){
-        //     setPlaceImages(images => [...images, { ...image, id: uuid.v4(), origin: 'CAMERA' } ])
-        // }
-        // if(navigatedFrom === 'GroupScreen'){
-        //     setChatImages(images => [...images, { ...image, id: uuid.v4(), origin: 'CAMERA' } ])
-        // }
+        const { height, width, uri } = await cameraRef.takePictureAsync()
+        imageStore.appendImages({ uri, height, width })
         navigation.goBack()
     }
     
@@ -65,11 +52,11 @@ const CameraScreen = (props: RootStackScreenProps<'CameraScreen'>): JSX.Element 
             { hasPermission && 
                 <>
                     <View style={styles.header}>
-                        <IonIcon size={36} name='close' style={styles.goBackButton} onPress={() => navigation.goBack()}/>
+                        <IonIcon size={36} name='close' style={styles.goBackButton} onPress={navigation.goBack}/>
                     </View>
                     <Camera type={cameraType} flashMode={flash as FlashMode}
                         ref={ref => setCameraRef(ref)} ratio='4:3'
-                        style={{ height: (screenWidth * (4/3)), width: screenWidth }}
+                        style={{ height: (width * (4/3)), width: width }}
                     />
                     <View style={styles.footer}>
                         <TouchableOpacity onPress={handleFlash} style={styles.flashIcon}>

@@ -2,20 +2,26 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { RootStackScreenProps } from "../../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { Surface, Title } from "react-native-paper";
+import { IconButton, Surface, Title } from "react-native-paper";
 import { theme } from "../../../../config/theme";
+import globalStyles from "../../../../globalStyles";
 
 interface Props {
     navigation: RootStackScreenProps<'NewCatchScreen'>['navigation']
 }
 
 const Header = ({ navigation }: Props) => {
+
+    const navigateCamera = () => navigation.navigate('CameraScreen')
     
     return (
         <Surface style={styles.header}>
             <View style={styles.container}>
-                <Icon name='arrow-left' size={24} onPress={navigation.goBack}/>
-                <Title style={styles.title}>New Catch</Title>
+                <View style={globalStyles.frac}>
+                    <Icon name='arrow-left' size={24} onPress={navigation.goBack}/>
+                    <Title style={styles.title}>New Catch</Title>
+                </View>
+                <IconButton icon='camera' mode="contained" onPress={navigateCamera}/>
             </View>
         </Surface>
     );  
@@ -25,7 +31,7 @@ export default Header;
 
 const styles = StyleSheet.create({
     header: {
-        height: 80,
+        height: 90,
         width: '100%',
         justifyContent: 'flex-end',
         paddingBottom: 8,
@@ -34,6 +40,7 @@ const styles = StyleSheet.create({
     },
     container: {
         flexDirection: 'row',
+        justifyContent: 'space-between',
         alignItems: 'center'
     },
     title: {

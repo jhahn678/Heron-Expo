@@ -5,6 +5,7 @@ export interface NewCatchStore {
     description: string | undefined
     waterbody: number | undefined
     coordinates: [number, number] | undefined
+    mapSnapshot: string | undefined
     weight: number | undefined
     length: number | undefined
     species: string | undefined
@@ -14,6 +15,7 @@ export interface NewCatchStore {
     setDescription: (value?: string) => void
     setWaterbody: (value?: number) => void
     setCoordinates: (value?: [number, number]) => void
+    setMapSnapshot: (value?: string) => void
     setWeight: (value?: number) => void
     setLength: (value?: number) => void
     setSpecies: (value?: string) => void
@@ -27,6 +29,7 @@ export const useNewCatchStore = create<NewCatchStore>((set) => ({
     description: undefined,
     waterbody: undefined,
     coordinates: undefined,
+    mapSnapshot: undefined,
     weight: undefined,
     length: undefined,
     rig: undefined,
@@ -36,6 +39,7 @@ export const useNewCatchStore = create<NewCatchStore>((set) => ({
     setDescription: description => set({ description }),
     setWaterbody: waterbody => set({ waterbody }),
     setCoordinates: coordinates => set({ coordinates }),
+    setMapSnapshot: mapSnapshot => set({ mapSnapshot }),
     setWeight: weight => set({ weight }),
     setLength: length => set({ length }),
     setSpecies: species => set({ species }),
@@ -46,6 +50,7 @@ export const useNewCatchStore = create<NewCatchStore>((set) => ({
         description: undefined,
         waterbody: undefined,
         coordinates: undefined,
+        mapSnapshot: undefined,
         weight: undefined,
         length: undefined,
         rig: undefined,

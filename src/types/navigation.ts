@@ -25,7 +25,7 @@ export type RootStackParams = {
         id?: number
         total?: number
     }
-    SaveMapScreen: undefined
+    SaveMapScreen: { saveType: SaveType }
     CameraScreen: undefined
     MediaGridScreen: { waterbody: number, title: string | undefined, total?: number }
     ReviewsScreen: { waterbody: number, title: string | undefined, total?: number }
@@ -44,6 +44,11 @@ export enum MapResource {
     Location = 'LOCATION',
     Catch = 'CATCH',
     CatchesNearby = 'CATCHES_NEARBY'
+}
+
+export enum SaveType {
+    CatchManual = 'CATCH_MANUAL_LOCATION',
+    CatchAuto = 'CATCH_CURRENT_LOCATION'
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 

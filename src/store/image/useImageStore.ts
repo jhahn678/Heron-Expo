@@ -1,6 +1,7 @@
 import create from 'zustand'
 import { ImageInfo } from 'expo-image-picker'
 import uuid from 'react-native-uuid'
+import { CameraCapturedPicture } from 'expo-camera'
 
 export interface Images extends Pick<ImageInfo, 'uri' | 'height' | 'width'>{
     id: string
@@ -9,7 +10,7 @@ export interface Images extends Pick<ImageInfo, 'uri' | 'height' | 'width'>{
 export interface ImageStore {
     images: Images[]
     setImages: (data: ImageInfo | ImageInfo[]) => void
-    appendImages: (data: ImageInfo | ImageInfo[]) => void 
+    appendImages: (data: ImageInfo | ImageInfo[] | CameraCapturedPicture) => void 
     removeImages: (id: string | string[]) => void
     clearImages: () => void
 }
