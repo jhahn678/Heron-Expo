@@ -99,6 +99,28 @@ export const apolloClient = new ApolloClient({
                         merge: (existing = [], incoming) => {
                             return [...existing, ...incoming];
                         }
+                    },
+                    catches: {
+                        keyArgs: [
+                            'type',
+                            'id',
+                            'sort',
+                            'coordinates'
+                        ],
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
+                    },
+                    locations: {
+                        keyArgs: [
+                            'type',
+                            'id',
+                            'sort',
+                            'coordinates'
+                        ],
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
                     }
                 }
             },
@@ -110,6 +132,12 @@ export const apolloClient = new ApolloClient({
                                 return value.charAt(0).toUpperCase() + value.slice(1)
                             }
                         }
+                    },
+                    media: {
+                        keyArgs: false,
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
                     }
                 }
             },
@@ -119,6 +147,12 @@ export const apolloClient = new ApolloClient({
                         merge: (existing={}, incoming) => ({
                             ...existing, ...incoming
                         })
+                    },
+                    media: {
+                        keyArgs: false,
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
                     }
                 }
             }
