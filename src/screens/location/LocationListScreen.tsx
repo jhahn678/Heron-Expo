@@ -11,6 +11,7 @@ import { locationSortToLabel } from "../../utils/conversions/locationSortToLabel
 import BoxLoader from "../../components/loaders/BoxLoader";
 import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterBar";
 import LocationsListEmpty from "../../components/lists/shared/LocationsListEmpty";
+import { theme } from "../../config/theme";
 
 const limit = 16;
 const { width, height } = Dimensions.get('screen')
@@ -164,7 +165,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 80,
+    height: 90,
+    backgroundColor: theme.colors.background,
   },
   title: {
     fontWeight: "500",
