@@ -1,11 +1,12 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { View, StyleSheet, Pressable, ViewStyle, StyleProp } from 'react-native'
-import { Text, Title } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import Avatar from '../../users/Avatar'
 import { GetWaterbodyReview } from '../../../hooks/queries/useGetWaterbodyReviews'
 import RatingDisplay from '../../ratings/RatingDisplay'
 import dayjs from '../../../config/dayjs'
 import globalStyles from '../../../globalStyles'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 interface Props {
     data: GetWaterbodyReview,
@@ -26,7 +27,7 @@ const WaterbodyReview = ({ data, navigateToUser, style }: Props) => {
                     />
                     <View style={{ marginLeft: 12 }}>
                         <Text style={styles.name}>{data.user.fullname}</Text>
-                        <Text style={styles.headerDate}>{dayjs(data.created_at).calendar()}</Text>
+                        <Text style={styles.date}>{dayjs(data.created_at).fromNow()}</Text>
                     </View>
                 </Pressable>
                 <RatingDisplay
@@ -36,11 +37,11 @@ const WaterbodyReview = ({ data, navigateToUser, style }: Props) => {
                     iconSize={20}
                 />
             </View>
-            { data.text &&  
-                <Text style={styles.text}>
-                    {data.text}
-                </Text>
-            }
+            { data.text && <Text style={styles.text}>{data.text}</Text> }
+            <View style={styles.waterbody}>
+                <Icon name="map-legend" size={24}/>
+                <Text style={styles.waterbodyName}>{"Susquehanna River"}</Text>
+            </View>
         </View>
     );
 };
@@ -49,24 +50,26 @@ export default WaterbodyReview;
 
 const styles = StyleSheet.create({
     container: {
-        borderColor: 'rgba(0,0,0,.1)',
-        borderTopWidth: 1,
-        paddingTop: 16
+        borderColor: '#d9d9d9',
+        borderBottomWidth: 1,
+        paddingTop: 16,
+        paddingBottom: 24,
+        marginHorizontal: 8
     },
     header: {
         width: '100%',
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
-        paddingHorizontal: 16
+        paddingHorizontal: 8
     },
     name: {
-        fontWeight: '600',
+        fontWeight: '500',
         fontSize: 16,
         paddingBottom: 2
     },
-    headerDate: {
-        fontWeight: '400',
+    date: {
+        fontWeight: '500',
         fontSize: 12
     },
     rating: {
@@ -74,10 +77,19 @@ const styles = StyleSheet.create({
     },
     text: {
         marginTop: 16,
-        marginBottom: 24,
-        marginHorizontal: 24,
-        fontSize: 14.5,
+        paddingHorizontal: 8,
         lineHeight: 18
+    },
+    waterbody: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        paddingHorizontal: 8,
+        marginTop: 16,
+    },
+    waterbodyName: {
+        fontWeight: '500',
+        fontSize: 14,
+        marginLeft: 6
     }
 });
 

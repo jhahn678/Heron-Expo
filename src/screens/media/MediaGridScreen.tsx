@@ -12,6 +12,7 @@ import globalStyles from "../../globalStyles";
 import { GetUserMediaRes, useGetUserMedia, useLazyGetUserMedia } from "../../hooks/queries/useGetUserMedia";
 import CatchesListEmpty from "../../components/lists/shared/CatchesListEmpty";
 import LocationsListEmpty from "../../components/lists/shared/LocationsListEmpty";
+import { theme } from "../../config/theme";
 
 const limit = 24;
 const { width } = Dimensions.get('screen')  
@@ -163,6 +164,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         justifyContent: 'space-between',
         alignItems: 'center',
+        backgroundColor: theme.colors.background,
     },
     image: {
         backgroundColor: '#e0e0e0',

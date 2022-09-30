@@ -19,7 +19,7 @@ const ContactsActivity = ({
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
     
     return (
-        <View style={[styles.container, { height: data && data.activityFeed.length > 0 ? 400 : 130 }]}>
+        <View style={styles.container}>
             <Title style={styles.title}>Recent activity</Title>
             { 
                 data ? data.activityFeed.length > 0 ?
@@ -31,7 +31,7 @@ const ContactsActivity = ({
                 : 
                     <Text style={styles.message}>Your friends have not logged any catches yet 🐟</Text>
                 : loading ?
-                    <ActivityIndicator size='large'/>
+                    <ActivityIndicator size='large' style={styles.message}/>
                 : error &&
                     <Text style={styles.message}>Error loading recent activity</Text>
             }
@@ -45,20 +45,16 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         marginTop: 32,
-        marginBottom: 24
+        marginBottom: 24,
     },
     title: {
         fontSize: 24,
         fontWeight: '600',
         paddingHorizontal: '6%',
-        marginBottom: 24
     },
     message: {
-        paddingLeft: 24,
-        paddingTop: 24,
+        paddingTop: 36,
         fontWeight: '600',
-        textAlign: 'center',
-        width: '70%',
         alignSelf: 'center'
     }
 })

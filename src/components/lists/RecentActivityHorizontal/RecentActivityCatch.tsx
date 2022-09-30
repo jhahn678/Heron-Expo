@@ -7,7 +7,7 @@ import {
     Image, 
     Pressable
 } from 'react-native'
-import { Text } from 'react-native-paper'
+import { Card, Text } from 'react-native-paper'
 import { RecentActivity } from '../../../hooks/queries/useGetRecentActivity'
 import Avatar from '../../users/Avatar'
 import { dateToCalendar } from '../../../utils/conversions/dateToCalendar'
@@ -24,7 +24,7 @@ const RecentActivityCatch = <T extends RecentActivity>({
 }: Props<T>): JSX.Element => {
 
     return (
-        <Pressable onPress={onNavigateToCatch} style={[styles.container, style]}>
+        <Card onPress={onNavigateToCatch} style={[styles.container, style]} elevation={0}>
             <View style={styles.header}>
                 <Avatar 
                     size={36}
@@ -48,7 +48,7 @@ const RecentActivityCatch = <T extends RecentActivity>({
                         Logged a catch at {data.waterbody.name}
                     </Text>
             }
-        </Pressable>
+        </Card>
     )
 }
 
@@ -56,15 +56,15 @@ export default RecentActivityCatch
 
 const styles = StyleSheet.create({
     container: {
-        height: 350,
         width: 300,
         backgroundColor: 'white',
         marginRight: 16,
+        marginVertical: 24,
         borderRadius: 12,
         justifyContent: 'space-evenly'
     },
     image: {
-        flex: 1,
+        height: 220,
         width: '100%',
         backgroundColor: '#e0e0e0'
     },
