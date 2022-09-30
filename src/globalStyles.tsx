@@ -18,4 +18,8 @@ export default StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
   },
+  frr: {
+    display: 'flex',
+    flexDirection: 'row-reverse'
+  }
 });
