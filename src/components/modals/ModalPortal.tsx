@@ -8,12 +8,14 @@ import ConfirmUploadModal from "./ConfirmUploadModal";
 import ReauthenticateModal from "./ReauthenticateModal";
 import { useModalStore } from '../../store/modal/useModalStore'
 import SpeciesBottomSheet from "./SpeciesBottomSheet";
+import LogoutModal from "./LogoutModal";
 
 const ModalPortal = () => {
     
     const dismiss = useModalStore(state => state.dismiss)
     const authVisible = useModalStore(state => state.auth)
     const errorVisible = useModalStore(state => state.error)
+    const logoutVisible = useModalStore(state => state.logout)
     const reviewVisible = useModalStore(state => state.review)
     const successVisible = useModalStore(state => state.success)
     const reauthVisible = useModalStore(state => state.reauthenticate)
@@ -29,6 +31,7 @@ const ModalPortal = () => {
         <Portal>
             <AuthModal visible={authVisible} dismiss={dismiss}/>
             <ErrorModal visible={errorVisible} dismiss={dismiss}/>
+            <LogoutModal visible={logoutVisible} dismiss={dismiss}/>
             <ReviewModal visible={reviewVisible} dismiss={dismiss}/>
             <SuccessModal visible={successVisible} dismiss={dismiss}/>
             <ReauthenticateModal visible={reauthVisible} dismiss={dismiss}/>
