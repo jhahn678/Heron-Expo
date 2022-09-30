@@ -23,6 +23,8 @@ import ReviewsScreen from "../screens/waterbody/ReviewsScreen";
 import ViewImageScreen from "../screens/media/ViewImageScreen";
 import CatchListScreen from "../screens/catch/CatchListScreen";
 import LocationListScreen from "../screens/location/LocationListScreen";
+import EditProfileScreen from "../screens/profile/EditProfileScreen/EditProfileScreen";
+import SettingsScreen from "../screens/settings/SettingsScreen/SettingsScreen";
 
 const RootStack = (): JSX.Element => {
     
@@ -64,6 +66,8 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='ViewImageScreen' component={ViewImageScreen}/>
                 <Stack.Screen name='CatchListScreen' component={CatchListScreen}/>
                 <Stack.Screen name='LocationListScreen' component={LocationListScreen}/>
+                <Stack.Screen name='EditProfileScreen' component={EditProfileScreen}/>
+                <Stack.Screen name='SettingsScreen' component={SettingsScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );
