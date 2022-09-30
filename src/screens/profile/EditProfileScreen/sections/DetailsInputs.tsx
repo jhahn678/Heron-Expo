@@ -1,9 +1,14 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { TextInput } from 'react-native-paper'
+import { GetMyProfileRes } from "../../../../hooks/queries/useGetMyProfile";
 import { useEditProfileStore } from "../../../../store/auth/useEditProfileStore";
 
-const DetailsInputs = () => {
+interface Props {
+    data: GetMyProfileRes['me'] | undefined
+}
+
+const DetailsInputs = ({ data }: Props) => {
 
     const store = useEditProfileStore(store => ({
         setFirstName: store.setFirstName,
@@ -19,18 +24,25 @@ const DetailsInputs = () => {
     const [lastName, setLastName] = useState('')
     const [firstName, setFirstName] = useState('')
 
-    const handleFirstNameBlur = () => store.setFirstName(firstName)
-    const handleLastNameBlur = () => store.setLastName(lastName)
-    const handleStateBlur = () => store.setState(state)
-    const handleCityBlur = () => store.setCity(city)
-    const handleBioBlur = () => store.setBio(bio)
+    useEffect(() => store.setFirstName(firstName),[firstName])
+    useEffect(() => store.setLastName(lastName),[lastName])
+    useEffect(() => store.setState(state),[state])
+    useEffect(() => store.setCity(city),[city])
+    useEffect(() => store.setBio(bio),[bio])
+
+    useEffect(() => {
+        if(data?.bio) setBio(data.bio)
+        if(data?.city) setCity(data.city)
+        if(data?.state) setState(data.state)
+        if(data?.lastname) setLastName(data.lastname)
+        if(data?.firstname) setFirstName(data.firstname)
+    },[data])
 
     return (
         <View style={styles.container}>
             <TextInput 
                 value={firstName} 
                 onChangeText={setFirstName} 
-                onBlur={handleFirstNameBlur}
                 placeholder='First Name'
                 mode="outlined"
                 label={'First Name'}
@@ -39,7 +51,6 @@ const DetailsInputs = () => {
             <TextInput 
                 value={lastName} 
                 onChangeText={setLastName} 
-                onBlur={handleLastNameBlur}
                 placeholder='Last Name'
                 mode="outlined"
                 label={'Last Name'}
@@ -49,7 +60,6 @@ const DetailsInputs = () => {
                 <TextInput 
                     value={city} 
                     onChangeText={setCity} 
-                    onBlur={handleCityBlur}
                     placeholder='City'
                     mode="outlined"
                     label={'City'}
@@ -61,8 +71,6 @@ const DetailsInputs = () => {
                     mode={"outlined"}
                     placeholder={'State'}
                     onChangeText={setState} 
-                    onBlur={handleStateBlur}
-                    autoCapitalize={"characters"}
                     style={[styles.rowItem, { marginLeft: 4 }]}
                 />
             </View>
@@ -73,7 +81,6 @@ const DetailsInputs = () => {
                 mode={"outlined"}
                 placeholder={'Bio'}
                 onChangeText={setBio} 
-                onBlur={handleBioBlur}
                 style={[styles.margin]}
             />
         </View>

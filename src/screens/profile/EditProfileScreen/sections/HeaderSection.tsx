@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, IconButton, Text } from 'react-native-paper'
+import { IconButton, Text } from 'react-native-paper'
 import { theme } from "../../../../config/theme";
 import globalStyles from "../../../../globalStyles";
 import { useChangeAvatar } from "../../../../hooks/mutations/useChangeAvatar";
@@ -19,22 +19,25 @@ interface Props {
 const HeaderSection = ({ navigation }: Props) => {
 
     const showErrorModal = useModalStore(store => store.setError)
-    const image = useImageStore(store => store.images.slice(0,1))
+    const clearImages = useImageStore(store => store.clearImages)
+    const resetStore = useEditProfileStore(store => store.reset)
 
+    const handleGoBack = () => { resetStore(); clearImages(); navigation.goBack() }
+
+    const image = useImageStore(store => store.images[0])
     const firstname = useEditProfileStore(store => store.firstName)
     const lastname = useEditProfileStore(store => store.lastName)
     const state = useEditProfileStore(store => store.state)
     const city = useEditProfileStore(store => store.city)
     const bio = useEditProfileStore(store => store.bio)
-        
 
     const uploadImage = useUploadImages();
     const [updateProfile] = useEditProfile();
-    const [updateAvatar] = useChangeAvatar()
+    const [updateAvatar] = useChangeAvatar();
 
     const handleSave = async () => {
         if(image){
-            const uploaded = await uploadImage(image)
+            const uploaded = await uploadImage([image])
             if(!uploaded) return;
             if(uploaded.errors) showErrorModal(true, ErrorType.Upload)
             await updateAvatar({ variables: { avatar: uploaded.uploads[0] } })
@@ -46,14 +49,16 @@ const HeaderSection = ({ navigation }: Props) => {
         if(city) details.city = city;
         if(bio) details.bio = bio
         if(Object.keys(details).length === 0) return;
-        await updateProfile({ variables: { details } })
+        const res = await updateProfile({ variables: { details } })
+        console.log(res.data)
+        handleGoBack()
     }
   
     return (
         <View style={styles.container}>
             <View style={[globalStyles.frsb, globalStyles.baseline]}>
                 <View style={globalStyles.frac}>
-                    <IconButton icon='arrow-left' onPress={navigation.goBack}/>
+                    <IconButton icon='arrow-left' onPress={handleGoBack}/>
                     <Text style={styles.title}>Edit Profile</Text>
                 </View>
                 <IconButton 

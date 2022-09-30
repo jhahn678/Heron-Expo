@@ -2,7 +2,6 @@ import { RootStackScreenProps } from "../../../types/navigation";
 import { ScrollView, StyleSheet, View } from "react-native";
 import { useAuth } from "../../../store/auth/useAuth";
 import HeaderSection from "./sections/HeaderSection";
-import { Text, Dialog } from 'react-native-paper'
 import AvatarSection from "./sections/AvatarSection";
 import { useGetMyProfile } from "../../../hooks/queries/useGetMyProfile";
 import EditProfilePictureDialog from "../../../components/modals/EditProfilePictureDialog";
@@ -25,7 +24,7 @@ const EditProfileScreen = ({ navigation }: RootStackScreenProps<'EditProfileScre
                     fullName={data?.me.fullname} 
                     onAvatarPress={onAvatarPress}
                 />
-                <DetailsInputs/>
+                <DetailsInputs data={data?.me}/>
             </ScrollView>
             <EditProfilePictureDialog 
                 visible={showDialog} 

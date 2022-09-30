@@ -55,7 +55,6 @@ const MyProfileScreen = ({ navigation }: MyProfileTabsScreenProps<'ProfileTab'>)
 
   return (
     <ScrollView 
-      style={styles.container} 
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefetch}/>}
     >
       <BioSection 
@@ -103,9 +102,3 @@ const MyProfileScreen = ({ navigation }: MyProfileTabsScreenProps<'ProfileTab'>)
 }
 
 export default MyProfileScreen
-
-const styles = StyleSheet.create({
-  container: {
-
-  }
-})
