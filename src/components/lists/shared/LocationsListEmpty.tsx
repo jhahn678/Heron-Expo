@@ -3,14 +3,17 @@ import { Text } from 'react-native-paper'
 import FishermanInRaft from "../../svg/FishermanInRaft";
 
 interface Props {
-  style?: StyleProp<ViewStyle>;
+  style?: StyleProp<ViewStyle>
+  fontSize?: number
+  scale?: number
+  caption?: string
 }
 
-const LocationsListEmpty = ({ style }: Props) => {
+const LocationsListEmpty = ({ style, fontSize=14, scale=1, caption }: Props) => {
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style, { transform: [{ scale }]}]}>
       <FishermanInRaft/>
-      <Text style={styles.label}>No locations logged yet</Text>
+     <Text style={[styles.label, { fontSize }]}>{caption || "No locations available"}</Text>
     </View>
   );
 };
