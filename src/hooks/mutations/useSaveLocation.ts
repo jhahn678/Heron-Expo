@@ -1,4 +1,8 @@
 import { useMutation, gql, ApolloError } from "@apollo/client";
+import { useAuth } from "../../store/auth/useAuth";
+import { LocationQuery } from "../../types/Location";
+import { getLocationsQueryName } from "../queries/useGetLocations";
+import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
 
 const SAVE_LOCATION = gql`
   mutation ToggleSaveLocation($id: Int!) {
@@ -16,27 +20,35 @@ interface Args {
 }
 
 export const useSaveLocation = (args?: Args) => {
-    return useMutation<{ toggleSaveLocation: boolean }, Vars>(SAVE_LOCATION, {
-      onCompleted: data => {
-        if(args?.onCompleted) args.onCompleted(data)
-      },
-      onError: err => {
-        if(args?.onError) args.onError(err)
-      },
-      update: (cache, { data }, { variables }) => {
-        if (data && variables){
-            cache.writeFragment({
-              id: `Location:${variables.id}`,
-              fragment: gql`
-                fragment updatedLocation on Location {
-                  is_saved
-                }
-              `,
-              data: {
-                is_saved: data.toggleSaveLocation
+
+  const user = useAuth(store => store.id)
+
+  return useMutation<{ toggleSaveLocation: boolean }, Vars>(SAVE_LOCATION, {
+    onCompleted: data => {
+      if(args?.onCompleted) args.onCompleted(data)
+    },
+    onError: err => {
+      if(args?.onError) args.onError(err)
+    },
+    update: (cache, { data }, { variables }) => {
+      console.log(data)
+      if (data && variables){
+          cache.writeFragment({
+            id: `Location:${variables.id}`,
+            fragment: gql`
+              fragment updatedLocation on Location {
+                is_saved
               }
-            });
-        }
-      },
-    });
+            `,
+            data: {
+              is_saved: data.toggleSaveLocation
+            }
+          });
+      }
+    },
+    refetchQueries: [
+      { query: GET_MY_PROFILE_TOTALS },
+      `${getLocationsQueryName(LocationQuery.UserSaved, user)}`
+    ]
+  });
 }
