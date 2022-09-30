@@ -2,11 +2,11 @@ import { StyleSheet, View, Image, Pressable } from "react-native";
 import { Text, TouchableRipple } from 'react-native-paper'
 import dayjs from "../../../config/dayjs";
 import { GetWaterbodyCatch } from "../../../types/Catch";
-import { NavigationProp } from "../../../types/navigation";
+import { ExploreStackScreenProps } from "../../../types/navigation";
 import Avatar from '../../users/Avatar'
 
 interface Props {
-    navigation: NavigationProp
+    navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
     data: GetWaterbodyCatch
     waterbody: number
 }
@@ -38,7 +38,7 @@ export default CatchesListItem;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        height: 332,
         width: 300,
         marginRight: 16,
         overflow: 'hidden',
