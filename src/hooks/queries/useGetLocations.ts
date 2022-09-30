@@ -6,9 +6,25 @@ import { IWaterbody } from '../../types/Waterbody'
 import { useLocationStore } from '../../store/location/useLocationStore'
 import { MapResource } from '../../types/navigation'
 
-const GET_LOCATIONS = gql`
-    query Locations($type: LocationQuery!, $id: Int, $coordinates: Coordinates, $limit: Int, $offset: Int, $sort: LocationSort) {
-        locations(type: $type, id: $id, coordinates: $coordinates, limit: $limit, offset: $offset, sort: $sort) {
+export const getLocationsQueryName = (type: LocationQuery, id?: number | undefined | null) => `Locations${type}${id}`
+
+const GET_LOCATIONS = (type: LocationQuery, id?: number | undefined) => gql`
+    query ${getLocationsQueryName(type, id)}(
+        $type: LocationQuery!, 
+        $id: Int, 
+        $coordinates: Coordinates, 
+        $limit: Int, 
+        $offset: Int, 
+        $sort: LocationSort
+    ) {
+        locations(
+            type: $type, 
+            id: $id, 
+            coordinates: $coordinates, 
+            limit: $limit, 
+            offset: $offset, 
+            sort: $sort
+        ) {
             id
             privacy
             title
@@ -64,7 +80,7 @@ export const useGetLocations = ({ coordinates, ...args }: Vars) => {
       return { latitude, longitude };
     });
 
-    return useQuery<GetLocationsRes, Vars>(GET_LOCATIONS, { 
+    return useQuery<GetLocationsRes, Vars>(GET_LOCATIONS(args.type, args.id), { 
         variables: {
             ...args,
             coordinates: coordinates ?
@@ -79,7 +95,9 @@ export const locationMapResource = (type: MapResource) => {
         case MapResource.UserLocations:
             return LocationQuery.User;
         case MapResource.WaterbodyLocations:
-            return LocationQuery.Waterbody
+            return LocationQuery.Waterbody;
+        case MapResource.UserSavedLocations:
+            return LocationQuery.UserSaved;
         default:
             return LocationQuery.Waterbody;
     }
@@ -92,7 +110,7 @@ export const useLazyGetLocations = ({ coordinates, ...args}: Vars) => {
       return { latitude, longitude };
     });
 
-    return useLazyQuery<GetLocationsRes, Vars>(GET_LOCATIONS, {
+    return useLazyQuery<GetLocationsRes, Vars>(GET_LOCATIONS(args.type, args.id), {
       variables: {
         ...args,
         coordinates: coordinates

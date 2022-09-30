@@ -1,9 +1,9 @@
-import { gql, useQuery, useLazyQuery } from '@apollo/client'
+import { gql, useQuery } from '@apollo/client'
 import { IUser } from '../../types/User'
 import { IWaterbodyReview } from '../../types/Waterbody'
 
 export const GET_REVIEWS = gql`
-    query Waterbody($id: Int!, $limit: Int, $offset: Int) {
+    query Waterbody($id: Int!, $limit: Int, $offset: Int, $sort: ReviewSort) {
         waterbody(id: $id) {
             id
             rating_counts{
@@ -13,7 +13,7 @@ export const GET_REVIEWS = gql`
                 two
                 one
             }
-            reviews(limit: $limit, offset: $offset) {
+            reviews(limit: $limit, offset: $offset, sort: $sort) {
                 id
                 rating
                 text
@@ -53,24 +53,22 @@ export enum ReviewSort {
     RatingLowest = 'RATING_LOWEST'
 }
 
-interface Args {
+interface Vars {
     id: number
     limit?: number
     offset?: number,
     sort?: ReviewSort
 }
 
-interface Vars extends Args {
-    limit: number,
-    sort?: ReviewSort
+interface Args extends Omit<Vars, 'offset'> {
+    skip?: boolean
 }
 
 export const useGetWaterbodyReviews = ({ 
     id, 
-    limit=5, 
-    offset=0, 
-    sort=ReviewSort.CreatedAtNewest
+    limit=5,
+    sort=ReviewSort.CreatedAtNewest,
+    skip=false
 }: Args) => useQuery<GetWaterbodyReviews, Vars>(GET_REVIEWS, { 
-        variables: { id, limit, offset, sort },
-        skip: id === undefined
-    })
+    variables: { id, limit, sort }, skip
+})

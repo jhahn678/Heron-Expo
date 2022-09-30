@@ -4,7 +4,7 @@ import { IMedia } from '../../types/Media';
 import { IUser } from '../../types/User';
 import { IWaterbody } from '../../types/Waterbody';
 
-const GET_CATCH = gql`
+export const GET_CATCH = gql`
   query Catch($id: Int!) {
     catch(id: $id) {
       id

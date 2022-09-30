@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useLazyQuery, useQuery } from '@apollo/client'
 import { Faker } from '@faker-js/faker'
 import { IMedia } from '../../types/Media'
 
@@ -29,8 +29,18 @@ interface Vars {
     limit?: number,
 }
 
-export const useGetWaterbodyMedia = ({ id, offset=0, limit=24 }: Vars) => {
+interface Args extends Vars {
+    skip?: boolean
+}
+
+export const useGetWaterbodyMedia = ({ id, offset=0, limit=24, skip=false }: Args) => {
     return useQuery<GetWaterbodyMedia, Vars>(GET_WATERBODY_MEDIA, {
-        variables: { id, offset }
+        variables: { id, limit, offset }, skip
+    })
+}
+
+export const useLazyGetWaterbodyMedia = ({ id, limit=24, offset=0 }: Vars) => {
+    return useLazyQuery<GetWaterbodyMedia, Vars>(GET_WATERBODY_MEDIA, {
+        variables: { id, limit, offset }
     })
 }

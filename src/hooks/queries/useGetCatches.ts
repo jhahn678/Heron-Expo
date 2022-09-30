@@ -7,54 +7,54 @@ import { MapResource } from '../../types/navigation'
 import { IUser } from '../../types/User'
 import { IWaterbody } from '../../types/Waterbody'
 
-const GET_CATCHES = gql`
-  query Catches(
-    $id: Int
-    $type: CatchQuery!
-    $offset: Int
-    $limit: Int
-    $sort: CatchSort
-    $coordinates: Coordinates
-    $within: Int
-    $mediaLimit: Int
-  ) {
-    catches(
-      id: $id
-      type: $type
-      offset: $offset
-      limit: $limit
-      sort: $sort
-      within: $within
-      coordinates: $coordinates
-    ) {
-      id
-      created_at
-      species
-      title
-      waterbody {
-        id
-        name
-      }
-      user {
-        id
-        fullname
-        avatar
-      }
-      media(limit: $mediaLimit) {
-        id
-        url
-      }
-      geom
-      description
-      length
-      weight
-      rig
-      total_favorites
-      is_favorited
-    }
-  }
-`;
+export const getCatchesQueryName = (type: CatchQuery, id?: number | undefined) => `Catches${type}${id}`
 
+export const GET_CATCHES = (type: CatchQuery, id?: number | undefined) => gql`
+    query ${getCatchesQueryName(type, id)}(
+      $id: Int
+      $type: CatchQuery!
+      $offset: Int
+      $limit: Int
+      $sort: CatchSort
+      $coordinates: Coordinates
+      $within: Int
+      $mediaLimit: Int
+    ) {
+      catches(
+        id: $id
+        type: $type
+        offset: $offset
+        limit: $limit
+        sort: $sort
+        within: $within
+        coordinates: $coordinates
+      ) {
+        id
+        created_at
+        species
+        title
+        waterbody {
+          id
+          name
+        }
+        user {
+          id
+          fullname
+          avatar
+        }
+        media(limit: $mediaLimit) {
+          id
+          url
+        }
+        geom
+        description
+        length
+        weight
+        rig
+        total_favorites
+        is_favorited
+      }
+    }`
 export interface GetCatchesRes {
   catches: (Omit<ICatch, "updated_at" | "user" | "waterbody"> & {
     waterbody: Pick<IWaterbody, "id" | "name">;
@@ -94,7 +94,7 @@ export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
       return { latitude, longitude };
     });
 
-    return useQuery<GetCatchesRes, Vars>(GET_CATCHES, {
+    return useQuery<GetCatchesRes, Vars>(GET_CATCHES(args.type, args.id), {
       skip,
       variables: {
         ...args,
@@ -128,7 +128,7 @@ export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) =>
     return { latitude, longitude };
   });
 
-  return useLazyQuery<GetCatchesRes, Vars>(GET_CATCHES, {
+  return useLazyQuery<GetCatchesRes, Vars>(GET_CATCHES(args.type, args.id), {
     variables: {
       ...args,
       mediaLimit: mediaLimit ? mediaLimit : 1,
