@@ -143,6 +143,18 @@ export const apolloClient = new ApolloClient({
             },
             User: {
                 fields: {
+                    catches: {
+                        keyArgs: [
+                            'waterbody', 
+                            'species', 
+                            'date',
+                            'weight', 
+                            'length'
+                        ],
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
+                    },
                     catch_statistics: {
                         merge: (existing={}, incoming) => ({
                             ...existing, ...incoming
