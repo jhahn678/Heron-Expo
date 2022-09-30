@@ -265,6 +265,27 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             setHasMore(data.locations.length === LIMIT);
           })
           break;
+        case MapResource.UserSavedLocations:
+          getLocations().then(({ data }) => {
+            if(!data) return;
+            modal.setLocation({ dismissable: true })
+            const geometries = data.locations.map(x => ({ 
+              geometry: x.geom, 
+              properties: { 
+                id: x.id,
+                resource: GeoJsonResource.Location
+              } 
+            }));
+            if(geometries.length === 0){
+              return showError(true, ErrorType.MapNoLocations)
+            }
+            const result = handleGeoJson(geometries);
+            setGeojson(result.featureCollection);
+            setGeojsonResource(GeoJsonResource.Location);
+            setMapCamera(result.camera);
+            setHasMore(data.locations.length === LIMIT);
+          })
+          break;
         case MapResource.WaterbodyCatches:
           getCatches().then(({ data }) => {
             if (!data) return;
