@@ -30,7 +30,6 @@ const RecommendLocationButton = ({ id, ...props }: Props) => {
         if(!authenticated) return showAuthModal()
         if(!id) return;
         await recommendLocation({ variables: { id }})
-        setActive(act => !act)
     }
 
     return (

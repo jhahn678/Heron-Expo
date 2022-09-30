@@ -30,7 +30,6 @@ const SaveLocationButton = ({ id, ...props }: Props) => {
         if(!authenticated) return showAuthModal()
         if(!id) return;
         await saveLocation({ variables: { id }})
-        setActive(s => !s)
     }
 
     return (
