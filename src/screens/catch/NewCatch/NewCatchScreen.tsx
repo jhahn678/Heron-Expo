@@ -19,12 +19,16 @@ import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
 
-const NewCatchScreen = ({ navigation }: RootStackScreenProps<'NewCatchScreen'>) => {
+const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScreen'>) => {
 
-  const [loading, setLoading] = useState(false)
-  const uploadImages = useUploadImages()
+  const { params } = route;
+
   const [createCatch] = useCreateCatch()
-
+  const uploadImages = useUploadImages()
+  const [loading, setLoading] = useState(false)
+  const images = useImageStore(store => store.images)
+  const clearImages = useImageStore(store => store.clearImages)
+  
   const newCatch = useNewCatchStore(store => ({
     title: store.title,
     description: store.description,
@@ -36,11 +40,9 @@ const NewCatchScreen = ({ navigation }: RootStackScreenProps<'NewCatchScreen'>) 
     rig: store.rig
   }))
 
-  const showErrorModal = useModalStore(store => store.setError)
   const resetStore = useNewCatchStore(store => store.reset)
-  const clearImages = useImageStore(store => store.clearImages)
   const mapSnapshot = useNewCatchStore(store => store.mapSnapshot)
-  const images = useImageStore(store => store.images)
+  const showErrorModal = useModalStore(store => store.setError)
   const clearState = () => { resetStore(); clearImages() }
 
   const handleSave = async () => {
@@ -62,6 +64,7 @@ const NewCatchScreen = ({ navigation }: RootStackScreenProps<'NewCatchScreen'>) 
       setLoading(false)
       navigation.goBack()
     }catch(err){
+      console.error(err)
       setLoading(false)
       showErrorModal(true, ErrorType.CreateCatch)
     }
@@ -80,7 +83,7 @@ const NewCatchScreen = ({ navigation }: RootStackScreenProps<'NewCatchScreen'>) 
         <DescriptionInput/>
         <SpeciesInput/>
         <ImageInput/>
-        <WaterbodyInput/>
+        <WaterbodyInput selectedWaterbody={params?.waterbody}/>
         <LocationInput navigation={navigation}/>
         <MeasurementsInput/>
         <RigInput/>

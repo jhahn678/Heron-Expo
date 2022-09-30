@@ -1,9 +1,10 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { StyleSheet, KeyboardAvoidingView, Pressable, View } from "react-native";
 import { Text, TextInput, Surface, IconButton } from 'react-native-paper'
 import { theme } from "../../../../config/theme";
 import { useAutoCompleteWaterbodies } from "../../../../hooks/queries/useAutocompleteSearch";
 import { useGetNearestWaterbodies } from "../../../../hooks/queries/useGetNearestWaterbodies";
+import { GetWaterbody, useGetWaterbodyFragment } from "../../../../hooks/queries/useGetWaterbody";
 import { useNewCatchStore } from "../../../../store/mutations/useNewCatchStore";
 import { IWaterbody } from "../../../../types/Waterbody";
 
@@ -21,11 +22,23 @@ const waterbodyLocationLabel = (x: IWaterbody) => {
     )
 }
 
-const WaterbodyInput = () => {
+interface Props {
+    selectedWaterbody: number | null | undefined
+}
+
+const WaterbodyInput = ({ selectedWaterbody }: Props) => {
 
     const [input, setInput] = useState('')
     const [waterbodyData, setWaterbodyData] = useState<IWaterbody | null>(null)
     const [showNearestWaterbodies, setShowNearestWaterbodies] = useState(false)
+    const getCachedWaterbody = useGetWaterbodyFragment()
+
+    useEffect(() => {
+        if(selectedWaterbody){
+            const data = getCachedWaterbody(selectedWaterbody)
+            if(data) setWaterbodyData(data)
+        }
+    },[selectedWaterbody])
 
     const setWaterbody = useNewCatchStore(store => store.setWaterbody)
 
