@@ -30,6 +30,9 @@ export interface ModalStore {
     snack: boolean,
     snackText: string | null,
     setSnack: (value: string | false) => void
+    logout: boolean,
+    onLogoutGoBack: boolean
+    setLogout: (args: { visible: boolean, onLogoutGoBack?: boolean }) => void
     dismiss: () => void
 }
 
@@ -70,22 +73,30 @@ export const useModalStore = create<ModalStore>((set) => ({
         snack: value ? true: false, 
         snackText: value ? value : null  
     }),
+    logout: false,
+    onLogoutGoBack: false,
+    setLogout: ({ visible, onLogoutGoBack }) => set({ 
+        logout: visible,
+        onLogoutGoBack: Boolean(onLogoutGoBack)
+    }),
     dismiss: () => {
         set({
             auth: false,
-            reauthenticate: false,
-            confirmUpload: false,
-            success: false,
             error: false,
             review: false,
+            logout: false,
+            success: false,
+            confirmUpload: false,
+            reauthenticate: false,
         })
         set({
-            confirmUploadWaterbody: null,
-            successMessage: null,
+            errorTitle: null,
             successTitle: null,
             errorMessage: null,
-            errorTitle: null,
+            successMessage: null,
             reviewWaterbody: null,
+            onLogoutGoBack: false,
+            confirmUploadWaterbody: null,
         })
     }
 }))
