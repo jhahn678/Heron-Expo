@@ -6,7 +6,7 @@ import { IconButton, Surface, Title, Menu, Divider } from "react-native-paper";
 import { useGetLocations } from "../../hooks/queries/useGetLocations";
 import LocationListItem from "../../components/lists/LocationList/LocationListItem";
 import globalStyles from "../../globalStyles";
-import { LocationSort } from "../../types/Location";
+import { LocationQuery, LocationSort } from "../../types/Location";
 import { locationSortToLabel } from "../../utils/conversions/locationSortToLabel";
 import BoxLoader from "../../components/loaders/BoxLoader";
 import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterBar";
@@ -19,23 +19,43 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
 
     const { params: { id, title, type, total } } = route;
 
-    const [hasMore, setHasMore] = useState(false);
+    const [refreshing, setRefreshing] = useState(false)
     const [menuOpen, setMenuOpen] = useState(false);
     const [sort, setSort] = useState(LocationSort.CreatedAtNewest);
 
-    const { data, loading, error, fetchMore } = useGetLocations({ type, id, limit, sort }) 
+    const { data, loading, error, fetchMore, refetch } = useGetLocations({ type, id, limit, sort }) 
 
-    useEffect(() => {
-        if(data) setHasMore(data.locations.length % limit === 0)
-    },[data])
+    const handleRefetch = () => {
+      setRefreshing(true);
+      refetch().then(() => setRefreshing(false))
+    }
+
+    const handleFetchMore = () => {
+      if(!data || data.locations.length % limit !== 0) return;
+      fetchMore({ variables: { offset: data.locations.length }})
+    }
 
     const handleSort = (type: LocationSort) => () => { setSort(type); setMenuOpen(false); }
 
     const navigateUser = (id: number) => () => 
       navigation.navigate('UserProfileScreen', { id })
 
-    const navigateMapLocations = () => 
-      navigation.navigate('ViewMapScreen', { id, resource: MapResource.WaterbodyLocations })
+
+    const navigateMapLocations = () => {
+      let resource = MapResource.WaterbodyLocations
+      switch(type){
+        case LocationQuery.User:
+          resource = MapResource.UserLocations;
+          break;
+        case LocationQuery.UserSaved:
+          resource = MapResource.UserSavedLocations
+          break;
+        case LocationQuery.Waterbody:
+          resource = MapResource.WaterbodyLocations;
+          break
+      }
+      navigation.navigate('ViewMapScreen', { id, resource })
+    }
 
     const navigateMap = (id: number) => () => 
       navigation.navigate('ViewMapScreen', { resource: MapResource.Location, id })
@@ -89,19 +109,16 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
           data={data ? data.locations : new Array(6).fill(null)}
           showsVerticalScrollIndicator={false}
           estimatedItemSize={300}
-          onEndReachedThreshold={0.3}
+          refreshing={refreshing}
+          onRefresh={handleRefetch}
+          onEndReachedThreshold={0.4}
+          onEndReached={handleFetchMore}
           ListHeaderComponent={
             <ListHeaderFilterBar 
             total={total}
             sortLabel={locationSortToLabel(sort)} 
             setMenuOpen={setMenuOpen}
             />
-          }
-          onEndReached={
-            hasMore
-              ? () =>
-                  fetchMore({ variables: { offset: data?.locations.length } })
-              : null
           }
           renderItem={({ item, index }) =>
             data ? (
