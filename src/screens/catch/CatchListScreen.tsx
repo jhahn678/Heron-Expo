@@ -11,6 +11,7 @@ import globalStyles from "../../globalStyles";
 import { catchSortToLabel } from "../../utils/conversions/catchSortToLabel";
 import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterBar";
 import CatchesListEmpty from "../../components/lists/shared/CatchesListEmpty";
+import { theme } from "../../config/theme";
 
 const { width, height } = Dimensions.get('screen')
 const limit = 16;
@@ -163,7 +164,8 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 80,
+    backgroundColor: theme.colors.background,
+    height: 90,
   },
   empty: {
     alignSelf: 'center',

@@ -43,7 +43,6 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
 
   return (
     <View style={styles.container}>
-      <FiltersSection/>
       <FlashList 
         data={data?.me.catches} 
         estimatedItemSize={400}
@@ -51,6 +50,7 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
         onRefresh={handleRefetch}
         onEndReachedThreshold={.4}
         onEndReached={handleFetchMore}
+        ListHeaderComponent={<FiltersSection/>}
         renderItem={({ item }) => (
           <CatchesListItem
             data={{ ...item, is_favorited: false }}
