@@ -30,7 +30,6 @@ export class RefreshTokenLink extends ApolloLink {
     private fetchNewAccessToken: (refreshToken: string) => Promise<string | null>
     private isFetching: boolean = false;
     private operationQueue: QueuedOperation[] = [];
-    private accessToken: string | null = null;
 
     constructor(args: Args){
         super()
@@ -81,16 +80,6 @@ export class RefreshTokenLink extends ApolloLink {
                 return () => this.cancelOperation(entry)
             })
         }else{
-            if(this.accessToken){
-                const isValid = this.validateAccessToken(this.accessToken);
-                if(isValid) {
-                    // console.log('stored access token is valid')
-                    this.setAuthorization(operation, this.accessToken)
-                    return forward(operation)
-                }
-                // console.log('stored access token is invalid')
-                this.accessToken = null
-            }
             this.isFetching = true;
             return new Observable<FetchResult>((observer: Observer<FetchResult>) => {
                 this.getAccessToken()
@@ -108,7 +97,6 @@ export class RefreshTokenLink extends ApolloLink {
                     })
                     .then(res => { throw res })
                     .catch(caught => {
-                        if(typeof caught === 'string') this.accessToken = caught;
                         this.setAuthorization(operation, caught)
                         forward(operation).subscribe(observer)
                         this.executeQueue(caught)
