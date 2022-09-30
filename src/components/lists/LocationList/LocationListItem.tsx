@@ -77,7 +77,7 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
           <View style={styles.footerButtonCenter}>
             <SaveLocationButton
               id={data?.id}
-              active={data?.is_favorited}
+              active={data?.is_saved}
               style={styles.footerButton}
             />
           </View>
