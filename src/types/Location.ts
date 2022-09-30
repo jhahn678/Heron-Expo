@@ -30,8 +30,9 @@ export enum Privacy {
 }
 
 export enum LocationQuery {
-    User = 'USER',
-    Waterbody = 'WATERBODY'
+  User = 'USER',
+  UserSaved = 'USER_SAVED',
+  Waterbody = 'WATERBODY'
 }
   
 export enum LocationSort {
