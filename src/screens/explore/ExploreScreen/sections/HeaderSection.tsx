@@ -1,9 +1,9 @@
-import { useState } from 'react'
 import { Pressable, StyleSheet, View } from 'react-native'
 import SearchBar from '../../../../components/inputs/SearchBar'
-import { Title, Avatar } from 'react-native-paper'
+import { Title } from 'react-native-paper'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import { useAuth } from '../../../../store/auth/useAuth'
+import Avatar from '../../../../components/users/Avatar'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -22,21 +22,11 @@ const HeaderSection = ({ navigation }: Props) => {
         <View style={styles.header}>
             <View style={styles.titleGroup}>
                 <Title style={styles.title}>Looking for a place to fish?</Title>
-                { isAuthenticated ?
-                    avatar ?
-                        <Pressable onPress={navigateToProfile}>
-                            <Avatar.Image source={{ uri: avatar }}/>
-                        </Pressable>
-                    : firstname &&
-                        <Pressable onPress={signOut}>
-                            <Avatar.Text label={firstname[0]}/>
-                        </Pressable>
-                    : 
-                        <Pressable onPress={navigateToAuth}>
-                            <Avatar.Icon icon='account' size={52}/>
-                        </Pressable>
-
-                }
+                <Avatar 
+                    uri={avatar} 
+                    firstname={firstname} 
+                    onPress={isAuthenticated ? navigateToProfile : navigateToAuth}
+                /> 
             </View>
             <SearchBar 
                 placeholder='Search name or place'
