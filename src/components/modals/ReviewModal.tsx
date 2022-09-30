@@ -4,6 +4,7 @@ import { Button, Dialog, TextInput,  } from "react-native-paper";
 import { theme } from "../../config/theme";
 import { useCreateWaterbodyReview } from "../../hooks/mutations/useCreateWaterbodyReview";
 import { useModalStore } from "../../store/modal/useModalStore";
+import { ErrorType } from "../../utils/mapErrorTypeToDetails";
 import RatingInput from "../ratings/RatingInput";
 
 interface Props {
@@ -45,7 +46,7 @@ const ReviewModal = (props: Props) => {
                 onError: (err) => {
                     if(err.message.includes('duplicate key value')){
                         handleDismiss()
-                        setShowErrorModal(true, 'REVIEW_DUPLICATE')
+                        setShowErrorModal(true, ErrorType.ReviewDuplicate)
                     }else{
                         console.error('from review modal', err)
                         props.dismiss()
