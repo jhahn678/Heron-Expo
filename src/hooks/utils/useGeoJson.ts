@@ -31,7 +31,6 @@ export const useGeoJson = () => {
     const handleGeoJson = (features: Feature | Feature[]) => {
       const featureCollection = geojsonToFeatureCollection(features);
       const bounds = geojsonToMapBounds(featureCollection);
-      console.log(features)
       const [max, min] = bounds;
       const lngDelta = max.longitude - min.longitude;
       const latDelta = max.latitude - min.latitude;
