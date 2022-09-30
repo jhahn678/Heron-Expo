@@ -1,25 +1,34 @@
 import { gql, useQuery, useLazyQuery } from '@apollo/client'
 import { useAuth } from '../../store/auth/useAuth'
-import { IContact } from '../../types/User'
+import { IUser } from '../../types/User'
 
-const GET_MY_CONTACTS = gql`
+export const GET_MY_CONTACTS = gql`
     query Me {
         me {
             id
             contacts {
-                fullname
                 id
+                fullname
                 username
+                location
                 avatar
             }
         }
     }
 `
 
-type Contacts = { contacts: IContact[] }
 
 export interface GetMyContacts {
-    me: Contacts
+    me: {
+        contacts: Pick<
+        IUser, 
+        | 'id' 
+        | 'avatar' 
+        | 'fullname' 
+        | 'username' 
+        | 'location'
+        >[]
+    }
 }
 
 export const useGetMyContacts = () => {

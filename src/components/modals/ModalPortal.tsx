@@ -9,6 +9,7 @@ import ReauthenticateModal from "./ReauthenticateModal";
 import { useModalStore } from '../../store/modal/useModalStore'
 import SpeciesBottomSheet from "./SpeciesBottomSheet";
 import LogoutModal from "./LogoutModal";
+import ManageContactModal from "./ManageContactModal";
 
 const ModalPortal = () => {
     
@@ -20,6 +21,7 @@ const ModalPortal = () => {
     const successVisible = useModalStore(state => state.success)
     const reauthVisible = useModalStore(state => state.reauthenticate)
     const confirmUploadVisible = useModalStore(state => state.confirmUpload)
+    const manageContactVisible = useModalStore(store => store.manageContact)
 
     const snack = useModalStore(state => ({
         visible: state.snack,
@@ -36,6 +38,7 @@ const ModalPortal = () => {
             <SuccessModal visible={successVisible} dismiss={dismiss}/>
             <ReauthenticateModal visible={reauthVisible} dismiss={dismiss}/>
             <ConfirmUploadModal visible={confirmUploadVisible} dismiss={dismiss}/>
+            <ManageContactModal visible={manageContactVisible} dismiss={dismiss}/>
             <Snackbar visible={snack.visible} onDismiss={snack.dismiss} action={{ label: 'close', onPress: snack.dismiss }}>
                 {snack.text}
             </Snackbar>

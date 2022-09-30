@@ -33,6 +33,10 @@ export interface ModalStore {
     logout: boolean,
     onLogoutGoBack: boolean
     setLogout: (args: { visible: boolean, onLogoutGoBack?: boolean }) => void
+    manageContact: boolean
+    manageContactUser: number | null,
+    manageContactName: string | null,
+    setManageContact: (args: { user: number, name: string } | false) => void
     dismiss: () => void
 }
 
@@ -79,6 +83,14 @@ export const useModalStore = create<ModalStore>((set) => ({
         logout: visible,
         onLogoutGoBack: Boolean(onLogoutGoBack)
     }),
+    manageContact: false,
+    manageContactUser: null,
+    manageContactName: null,
+    setManageContact: (args) => set({
+        manageContact: args ? true : false,
+        manageContactName: args ? args.name : null,
+        manageContactUser: args ? args.user : null
+    }),
     dismiss: () => {
         set({
             auth: false,
@@ -88,6 +100,7 @@ export const useModalStore = create<ModalStore>((set) => ({
             success: false,
             confirmUpload: false,
             reauthenticate: false,
+            manageContact: false
         })
         set({
             errorTitle: null,
@@ -97,6 +110,8 @@ export const useModalStore = create<ModalStore>((set) => ({
             reviewWaterbody: null,
             onLogoutGoBack: false,
             confirmUploadWaterbody: null,
+            manageContactName: null,
+            manageContactUser: null
         })
     }
 }))
