@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import { GET_REVIEWS } from '../queries/useGetWaterbodyReviews';
 import { GET_WATERBODY } from '../queries/useGetWaterbody';
+import { GET_MY_PROFILE_TOTALS } from '../queries/useGetMyProfile';
 
 const CREATE_REVIEW = gql`
     mutation Mutation($input: NewReviewInput!) {
@@ -35,18 +36,9 @@ interface Vars {
 export const useCreateWaterbodyReview = () => {
     const result = useMutation<Res, Vars>(CREATE_REVIEW, {
         refetchQueries: ({ data }) => [
-            { 
-                query: GET_REVIEWS, 
-                variables: { 
-                    id: data?.addWaterbodyReview.waterbody.id 
-                }
-            },
-            { 
-                query: GET_WATERBODY, 
-                variables: { 
-                    id: data?.addWaterbodyReview.waterbody.id 
-                } 
-            }
+            { query: GET_REVIEWS, variables: { id: data?.addWaterbodyReview.waterbody.id } },
+            { query: GET_WATERBODY, variables: { id: data?.addWaterbodyReview.waterbody.id } },
+            { query: GET_MY_PROFILE_TOTALS }
         ]
     })
     return result;
