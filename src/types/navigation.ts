@@ -19,36 +19,45 @@ export type RootStackParams = {
     NewLocationScreen: { waterbody: number } | undefined
     ViewLocationScreen: { id: number }
     UserProfileScreen: { id: number },
+    EditProfileScreen: undefined
     UserSearchScreen: undefined
-    ViewMapScreen: { 
-        resource: MapResource
-        id?: number
-        total?: number
-    }
+    ViewMapScreen: { resource: MapResource, id?: number, total?: number }
     SaveMapScreen: { saveType: SaveType }
     CameraScreen: undefined
-    MediaGridScreen: { waterbody: number, title: string | undefined, total?: number }
-    ReviewsScreen: { waterbody: number, title: string | undefined, total?: number }
+    MediaGridScreen: { source: MediaSource, id: number, title: string | undefined, total?: number }
+    ReviewsScreen: { type: ReviewQuery, id: number, title: string | undefined, total?: number }
     /**  @URI will display only the image -- no details **/
     ViewImageScreen: { id?: number, type?: MediaType, uri?: string, title?: string | undefined }
     CatchListScreen: { type: CatchQuery, id?: number, title: string | undefined, total?: number }
     LocationListScreen: { type: LocationQuery, id: number, title: string | undefined, total?: number }
+    SettingsScreen: undefined
 }
 
 export enum MapResource {
+    Catch = 'CATCH',
+    Location = 'LOCATION',
     Waterbody = 'WATERBODY',
-    WaterbodyLocations = 'WATERBODY_LOCATIONS',
-    WaterbodyCatches = 'WATERBODY_CATCHES',
     UserCatches = 'USER_CATCHES',
     UserLocations = 'USER_LOCATIONS',
-    Location = 'LOCATION',
-    Catch = 'CATCH',
-    CatchesNearby = 'CATCHES_NEARBY'
+    CatchesNearby = 'CATCHES_NEARBY',
+    WaterbodyCatches = 'WATERBODY_CATCHES',
+    WaterbodyLocations = 'WATERBODY_LOCATIONS',
+    UserSavedLocations = 'USER_SAVED_LOCATIONS',
+}
+
+export enum MediaSource {
+    User = 'USER',
+    Waterbody = 'WATERBODY',
+}
+
+export enum ReviewQuery {
+    User = 'USER',
+    Waterbody = 'WATERBODY',
 }
 
 export enum SaveType {
-    CatchManual = 'CATCH_MANUAL_LOCATION',
-    CatchAuto = 'CATCH_CURRENT_LOCATION'
+    CatchAuto = 'CATCH_CURRENT_LOCATION',
+    CatchManual = 'CATCH_MANUAL_LOCATION'
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 
@@ -104,7 +113,27 @@ export type MyCatchesTabsScreenProps<T extends keyof MyCatchesTabsParams> =
 //         MaterialTopTabScreenProps<MyLocationsTabsParams, T>,
 //         BottomTabsScreenProps<'MyLocationsScreen'>
 //     >
-    
-export type UseNavigateParams = NavProp<RootStackParams & BottomTabsParams & ExploreStackParams>
 
-export type NavigationProp = NavProp<RootStackParams & BottomTabsParams & ExploreStackParams>
+export type MyProfileTabsParams = {
+    ProfileTab: undefined
+    FriendsTab: undefined
+}
+
+export type MyProfileTabsScreenProps<T extends keyof MyProfileTabsParams> = 
+    CompositeScreenProps<
+        MaterialTopTabScreenProps<MyProfileTabsParams, T>,
+        BottomTabsScreenProps<'MyProfileScreen'>
+    >
+
+
+type CompositeNavProp = NavProp<
+    RootStackParams & 
+    BottomTabsParams & 
+    ExploreStackParams & 
+    MyProfileTabsParams & 
+    MyCatchesTabsParams
+>
+    
+export type UseNavigateParams = NavProp<CompositeNavProp>
+
+export type NavigationProp = NavProp<CompositeNavProp>
