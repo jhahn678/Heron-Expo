@@ -11,6 +11,8 @@ export interface IUser {
     avatar: string | null
     bio: string | null
     location: string | null
+    city: string | null
+    state: string | null
     contacts: IUser[]
     total_contacts: number
     pending_contacts: IPendingContact[]
