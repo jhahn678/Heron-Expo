@@ -20,7 +20,7 @@ const LocationsSection = ({ navigation, name, waterbody, totalLocations }: Props
     })
 
     return (
-        <View style={styles.container}>
+        <View>
             <Title style={styles.title}>Saved Spots</Title>
             <Pressable onPress={navigateLocations}>
                 <View style={styles.summary}>
@@ -39,10 +39,6 @@ const LocationsSection = ({ navigation, name, waterbody, totalLocations }: Props
 export default LocationsSection;
 
 const styles = StyleSheet.create({
-    container: {
-        width: '100%',
-        paddingTop: 16
-    },
     title: {
         fontWeight: '600',
         marginBottom: 32,

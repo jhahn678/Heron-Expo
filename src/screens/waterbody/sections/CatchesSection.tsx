@@ -22,7 +22,8 @@ interface Props {
 
 const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecies }: Props) => {
 
-    const openSpecies = useBottomSheetStore(store => () => store.openSpecies(waterbody))
+    const openSpecies = useBottomSheetStore(store => store.openSpecies)
+    const handleOpenSpecies = () => openSpecies(waterbody)
 
     const { data, loading, error } = useGetCatches({ 
         limit: LIMIT, 
@@ -46,7 +47,7 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                     <Text style={{ fontWeight: '400', fontSize: 12 }}>Catches</Text>
                 </Pressable>
                 <View style={styles.divider}/>
-                <Pressable style={styles.text} onPress={openSpecies}>
+                <Pressable style={styles.text} onPress={handleOpenSpecies}>
                     <Text style={styles.number}>{totalSpecies}</Text>
                     <Text style={{ fontWeight: '400', fontSize: 12 }}>Species</Text>
                 </Pressable>
@@ -77,6 +78,7 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                     />
                 </View>
             </>}
+            <View style={styles.hdivider}/>
         </View>
     );
 };
@@ -85,17 +87,15 @@ export default CatchesSection;
 
 const styles = StyleSheet.create({
     container: {
-        borderColor: 'rgba(0,0,0,.1)',
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        width: '100%',
-        paddingTop: 16,
-        paddingBottom: 24
+        width: '100%'
     },
     title: {
         fontWeight: '600',
         marginBottom: 24,
-        marginLeft: 16
+        marginHorizontal: 16,
+        borderTopColor: '#d9d9d9',
+        borderTopWidth: 1,
+        paddingTop: 24
     },
     summary: {
         height: 120,
@@ -104,7 +104,7 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         backgroundColor: 'white',
         borderRadius: 12,
-        marginBottom: 24,
+        marginBottom: 32,
         marginHorizontal: 16
     },
     list: {
@@ -116,7 +116,7 @@ const styles = StyleSheet.create({
     },
     divider: {
         height: '40%',
-        backgroundColor: 'rgba(0,0,0,.1)',
+        backgroundColor: '#d9d9d9',
         width: 1,
     },
     number: {
@@ -131,5 +131,13 @@ const styles = StyleSheet.create({
         flexGrow: 1,
         marginLeft: 16,
         marginRight: 24
+    },
+    hdivider: {
+        height: 1,
+        backgroundColor: '#d9d9d9',
+        width: '100%',
+        marginHorizontal: 16,
+        marginTop: 36,
+        marginBottom: 24
     }
 });

@@ -9,6 +9,7 @@ import RatingGraphBar from "../../../components/ratings/RatingGraphBar";
 import WaterbodyReview from "../../../components/lists/Reviews/WaterbodyReview";
 import { useModalStore } from "../../../store/modal/useModalStore";
 import { useAuth } from "../../../store/auth/useAuth";
+import { theme } from "../../../config/theme";
 
 const { width } = Dimensions.get('screen')
 
@@ -53,7 +54,7 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
   },[data, totalReviews])
 
   return (
-    <View style={styles.container}>
+    <View>
 
       <View style={styles.header}>
         <Title style={styles.title}>
@@ -116,27 +117,22 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
 export default ReviewsSection;
 
 const styles = StyleSheet.create({
-  container: {
-    borderColor: 'rgba(0,0,0,.1)',
-    borderTopWidth: 1,
-    borderBottomWidth: 1
-  },
   header: {
     width: '100%',
     paddingHorizontal: 16,
-    paddingVertical: 16,
+    paddingBottom: 16,
     paddingRight: 28,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center'
   },
   title: {
-    fontWeight: '500',
+    fontWeight: '600'
   },
   main: {
     flexDirection: 'row',
     paddingHorizontal: 16,
-    paddingVertical: 8,
+    paddingVertical: 16,
   },
   summary: {
     marginLeft: 16,

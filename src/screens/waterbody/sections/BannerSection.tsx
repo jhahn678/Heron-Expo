@@ -108,6 +108,6 @@ const styles = StyleSheet.create({
     },
     image: {
         height: 320,
-        backgroundColor: 'rgba(0,0,0,.1)'
+        backgroundColor: '#e0e0e0'
     },
 });

@@ -28,6 +28,7 @@ const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
 
     return (
         <View style={styles.container}>
+            <View style={styles.divider}/>
             <View style={styles.header}>
                 <Title style={styles.title}>Photos {`(${totalMedia || 0})`}</Title>
                 <Button onPress={navigateToMedia}>See all photos</Button>
@@ -46,6 +47,7 @@ const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
                     )}
                 />
             }
+            <View style={styles.divider}/>
         </View>
     );
 };
@@ -54,12 +56,7 @@ export default MediaSection;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        borderColor: 'rgba(0,0,0,.1)',
-        borderTopWidth: 1,
-        borderBottomWidth: 1,
-        paddingBottom: 24,
-        paddingTop: 16
+        width: '100%'
     },
     header: {
         paddingLeft: 16,
@@ -81,5 +78,11 @@ const styles = StyleSheet.create({
         height: '100%',
         width: '100%',
         borderRadius: 12
+    },
+    divider: {
+        marginHorizontal: 16,
+        height: 1,
+        backgroundColor: '#d9d9d9',
+        marginVertical: 24
     }
 });

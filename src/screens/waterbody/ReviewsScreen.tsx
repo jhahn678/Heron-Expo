@@ -11,6 +11,7 @@ import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterB
 import { reviewSortToLabel } from "../../utils/conversions/reviewSortToLabel";
 import ReviewsListEmpty from "../../components/lists/shared/ReviewsListEmpty";
 import { GetUserReviewsRes, useGetUserReviews } from "../../hooks/queries/useGetUserReviews";
+import { theme } from "../../config/theme";
 
 const limit = 12;
 const { width } = Dimensions.get('screen')
@@ -91,13 +92,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
               <IconButton icon='arrow-left' onPress={navigation.goBack}/>
               <Title style={{ fontWeight: '500'}}>{title}</Title>
           </View>
-          { allowAdd &&
-            <IconButton 
-              size={28}
-              icon='plus' 
-              onPress={handleAddReview} 
-            />
-          }
+          { allowAdd && <IconButton size={28} icon='plus' onPress={handleAddReview} />}
       </Surface>
 
       <View style={styles.main}>
@@ -166,12 +161,13 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   heading: {
-    height: 90,
+    height: 100,
     paddingTop: 24,
     paddingRight: 8,
     flexDirection: 'row',
     justifyContent: 'space-between',
     alignItems: 'center',
+    backgroundColor: theme.colors.background
   },
   options: {
     height: 40,
@@ -182,8 +178,7 @@ const styles = StyleSheet.create({
     fontSize: 16
   },
   main: {
-    flexGrow: 1,
-    paddingHorizontal: 4
+    flexGrow: 1
   },
   sort: {
     flexDirection: 'row',
