@@ -1,5 +1,4 @@
 import React from "react";
-import { StyleSheet } from "react-native";
 import { Dialog, Button, Text } from "react-native-paper";
 import { useImagePicker } from "../../hooks/utils/useImagePicker";
 import { useImageStore } from "../../store/image/useImageStore";
@@ -42,4 +41,3 @@ const EditProfilePictureDialog = ({ visible, setVisible }: Props) => {
 
 export default EditProfilePictureDialog;
 
-const styles = StyleSheet.create({});
