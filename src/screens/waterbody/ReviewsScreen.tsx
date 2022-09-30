@@ -2,42 +2,85 @@ import globalStyles from "../../globalStyles";
 import { FlashList } from "@shopify/flash-list";
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { RootStackScreenProps } from '../../types/navigation'
+import { ReviewQuery, RootStackScreenProps } from '../../types/navigation'
 import { useModalStore } from "../../store/modal/useModalStore";
 import WaterbodyReview from "../../components/lists/Reviews/WaterbodyReview";
 import { Divider, IconButton, Menu, Surface, Title } from "react-native-paper";
-import { ReviewSort, useGetWaterbodyReviews } from "../../hooks/queries/useGetWaterbodyReviews";
+import { GetWaterbodyReview, ReviewSort, useGetWaterbodyReviews } from "../../hooks/queries/useGetWaterbodyReviews";
 import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterBar";
 import { reviewSortToLabel } from "../../utils/conversions/reviewSortToLabel";
 import ReviewsListEmpty from "../../components/lists/shared/ReviewsListEmpty";
+import { GetUserReviewsRes, useGetUserReviews } from "../../hooks/queries/useGetUserReviews";
 
-const LIMIT = 12;
+const limit = 12;
 const { width } = Dimensions.get('screen')
+
+type Data = GetWaterbodyReview[] | GetUserReviewsRes['user']['waterbody_reviews']
 
 const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScreen'>) => {
 
-  const { params } = route;
-  const [hasMore, setHasMore] = useState(false)
+  const { params: { type, id, total, title} } = route;
+
+  const [refetching, setRefetching] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
+  const [allowAdd, setAllowAdd] = useState(false)
   const [sort, setSort] = useState<ReviewSort | null>(null)
+  const [reviews, setReviews] = useState<Data>([])
+
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
   const setShowReview = useModalStore(store => store.setReview)
-  const handleAddReview = () => setShowReview(params.waterbody)
+  const handleAddReview = () => setShowReview(id)
 
-  const { data, error, loading, fetchMore } = useGetWaterbodyReviews({
-    id: params.waterbody,
-    limit: LIMIT,
-    offset: 0,
-    sort: sort ? sort : ReviewSort.CreatedAtNewest
+  const userReviews = useGetUserReviews({ 
+    id, limit, 
+    sort: sort ? sort : ReviewSort.CreatedAtNewest, 
+    skip: type !== ReviewQuery.User
+  })
+  
+  const waterbodyReviews = useGetWaterbodyReviews({ 
+    id, limit, 
+    sort: sort ? sort : ReviewSort.CreatedAtNewest, 
+    skip: type !== ReviewQuery.Waterbody
   })
 
-
+  useEffect(() => {
+    if(type === ReviewQuery.User) setAllowAdd(false)
+    if(type === ReviewQuery.Waterbody) setAllowAdd(false)
+  },[route.params])
 
   useEffect(() => {
-    if(data) setHasMore(data.waterbody.reviews.length === LIMIT)
-  }, [data])
+    switch(type){
+      case ReviewQuery.User:
+        if(!userReviews.data) return;
+        return setReviews(userReviews.data.user.waterbody_reviews)
+      case ReviewQuery.Waterbody:
+        if(!waterbodyReviews.data) return;
+        return setReviews(waterbodyReviews.data.waterbody.reviews)
+    }
+  },[userReviews.data, waterbodyReviews.data])
 
-  const toggleMenu = () => setMenuOpen(o => !o)
+  const handleFetchMore = () => {
+    switch(type){
+      case ReviewQuery.User:
+        if(!userReviews.data || userReviews.data.user.waterbody_reviews.length % limit !== 0) return;
+        return userReviews.fetchMore({ variables: { 
+          offset: userReviews.data.user.waterbody_reviews.length }});
+      case ReviewQuery.Waterbody:
+        if(!waterbodyReviews.data || waterbodyReviews.data.waterbody.reviews.length % limit !== 0) return;
+        return waterbodyReviews.fetchMore({ variables: { 
+          offset: waterbodyReviews.data.waterbody.reviews.length }});
+    }
+  }
+
+  const handleRefetch = () => {
+    setRefetching(true)
+    if(type === ReviewQuery.User){
+      userReviews.refetch().then(() => setRefetching(false))
+    }else if(type === ReviewQuery.Waterbody){
+      waterbodyReviews.refetch().then(() => setRefetching(false))
+    }
+  }
+
   const handleSort = (sort: ReviewSort) => () =>  { setSort(sort); setMenuOpen(false) }
 
   return (
@@ -46,13 +89,15 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
       <Surface style={styles.heading}>
           <View style={globalStyles.frsb}>
               <IconButton icon='arrow-left' onPress={navigation.goBack}/>
-              <Title style={{ fontWeight: '500'}}>{params.title}</Title>
+              <Title style={{ fontWeight: '500'}}>{title}</Title>
           </View>
-          <IconButton 
-            size={28}
-            icon='plus' 
-            onPress={handleAddReview} 
-          />
+          { allowAdd &&
+            <IconButton 
+              size={28}
+              icon='plus' 
+              onPress={handleAddReview} 
+            />
+          }
       </Surface>
 
       <View style={styles.main}>
@@ -83,14 +128,20 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
           />
         </Menu>
 
-        { data && data.waterbody.reviews.length > 0 ?
+        { reviews.length > 0 ?
           <FlashList
-            data={data?.waterbody.reviews}
+            data={reviews}
+            estimatedItemSize={200}
+            showsVerticalScrollIndicator={false}
+            onEndReachedThreshold={.3}
+            onEndReached={handleFetchMore}
+            refreshing={refetching}
+            onRefresh={handleRefetch}
             ListHeaderComponent={ 
               <ListHeaderFilterBar 
                 setMenuOpen={setMenuOpen} 
                 sortLabel={reviewSortToLabel(sort)} 
-                total={params.total}
+                total={total}
               />
             }
             renderItem={({ item }) => (
@@ -99,12 +150,6 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
                 navigateToUser={navigateUser(item.user.id)}
               />
             )}
-            estimatedItemSize={200}
-            showsVerticalScrollIndicator={false}
-            onEndReachedThreshold={.3}
-            onEndReached={hasMore ? () => fetchMore({ variables: 
-                { offset: data.waterbody.reviews.length }
-            }): null}
           />:
           <ReviewsListEmpty/>
         }

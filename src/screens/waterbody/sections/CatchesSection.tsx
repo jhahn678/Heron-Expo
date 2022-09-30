@@ -51,8 +51,8 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                     <Text style={{ fontWeight: '400', fontSize: 12 }}>Species</Text>
                 </Pressable>
             </View>
-            <Title style={styles.title}>Latest Catches</Title>
-            { data && data.catches.length > 0 ?
+            { (data && data.catches.length > 0) && <>
+                <Title style={styles.title}>Latest Catches</Title>
                 <View style={styles.list}>
                     <FlashList
                     horizontal
@@ -76,7 +76,7 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                     ): null}
                     />
                 </View>
-            : null}
+            </>}
         </View>
     );
 };
@@ -107,6 +107,10 @@ const styles = StyleSheet.create({
         marginBottom: 24,
         marginHorizontal: 16
     },
+    list: {
+        flex: 1,
+        width: '100%'
+    },
     text: {
         alignItems: 'center'
     },
@@ -122,9 +126,6 @@ const styles = StyleSheet.create({
     arrow: {
         position: 'absolute',
         right: 16
-    },
-    list: {
-        height: 332,
     },
     seemore: {
         flexGrow: 1,

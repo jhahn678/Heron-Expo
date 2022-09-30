@@ -1,14 +1,14 @@
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
-import { ExploreStackScreenProps } from "../../../types/navigation";
+import { ExploreStackScreenProps, ReviewQuery } from "../../../types/navigation";
 import { Button, Text, Title } from 'react-native-paper'
 import RatingDisplay from '../../../components/ratings/RatingDisplay'
 import { useGetWaterbodyReviews } from "../../../hooks/queries/useGetWaterbodyReviews";
-
 import RatingGraph from "../../../components/ratings/RatingGraph";
 import RatingGraphBar from "../../../components/ratings/RatingGraphBar";
 import WaterbodyReview from "../../../components/lists/Reviews/WaterbodyReview";
 import { useModalStore } from "../../../store/modal/useModalStore";
+import { useAuth } from "../../../store/auth/useAuth";
 
 const { width } = Dimensions.get('screen')
 
@@ -22,16 +22,21 @@ interface Props {
 
 const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, name }: Props) => {
 
-  const { data, refetch } = useGetWaterbodyReviews({ id: waterbody });
+  const { isAuthenticated } = useAuth()
+
+  const { data } = useGetWaterbodyReviews({ id: waterbody, limit: 3 });
 
   const [ratingCounts, setRatingCounts] = useState({ five: 0, four: 0, three: 0, two: 0, one: 0 })
 
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
 
-  const showReviewModal = useModalStore(store => () => store.setReview(waterbody))
+  const showReviewModal = useModalStore(store => store.setReview)
+  const showAuthModal = useModalStore(store => store.setAuth)
+
+  const handleShowReview = () => isAuthenticated ? showReviewModal(waterbody) : showAuthModal(true)
 
   const navigateReviews = () => navigation.navigate('ReviewsScreen', { 
-    waterbody, title: name, total: totalReviews
+    title: name, total: totalReviews, id: waterbody, type: ReviewQuery.Waterbody
   })
 
   useEffect(() => {
@@ -85,7 +90,7 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
       <Button 
         mode="contained"
         style={styles.leaveReview}
-        onPress={showReviewModal}
+        onPress={handleShowReview}
       >Leave a review</Button>
 
       <View style={styles.listSection}>

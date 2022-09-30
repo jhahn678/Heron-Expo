@@ -9,7 +9,7 @@ import FishIcon from "../../../components/icons/FishIcon";
 import AddLocationIcon from "../../../components/icons/AddLocationIcon";
 import { useAuth } from "../../../store/auth/useAuth";
 import { useModalStore } from "../../../store/modal/useModalStore";
-import { ExploreStackScreenProps } from "../../../types/navigation";
+import { ExploreStackScreenProps, MediaSource } from "../../../types/navigation";
 import { useImagePicker } from "../../../hooks/utils/useImagePicker";
 import { useImageStore } from "../../../store/image/useImageStore";
 import { ShareType } from "../../../hooks/utils/useShareContent";
@@ -26,7 +26,6 @@ interface Props {
 
 const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Props) => {
 
-    
     const { openImagePicker } = useImagePicker()
     const setImages = useImageStore(state => state.setImages)
     const showConfirmUpload = useModalStore(state => state.setConfirmUpload)
@@ -46,9 +45,7 @@ const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Pro
     const handleAddLocation = () => navigation.navigate('NewLocationScreen', { waterbody: id })
 
     const handleMediaScreen = () => navigation.navigate('MediaGridScreen', { 
-        waterbody: id, 
-        total: totalMedia, 
-        title: name
+        source: MediaSource.Waterbody, id, total: totalMedia, title: name
     })
 
     return (

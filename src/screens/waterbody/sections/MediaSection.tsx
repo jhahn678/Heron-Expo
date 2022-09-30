@@ -3,23 +3,28 @@ import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import { Button, Title } from "react-native-paper";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
-import BoxLoader from "../../../components/loaders/BoxLoader";
 import { useGetWaterbodyMedia } from "../../../hooks/queries/useGetWaterbodyMedia";
 import { MediaType } from "../../../types/Media";
-import { ExploreStackScreenProps } from "../../../types/navigation";
+import { ExploreStackScreenProps, MediaSource } from "../../../types/navigation";
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
     waterbody: number
     totalMedia: number | undefined
-    name: string |  undefined
+    name: string | undefined
 }
+
+const LIMIT = 8;
 
 const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
 
-    const { data, loading, error } = useGetWaterbodyMedia({ id: waterbody, limit: 8 })
-    const navigateToImage = (id: number) => () => navigation.navigate('ViewImageScreen', { id, type: MediaType.Waterbody, title: name })
-    const navigateToMedia = () => navigation.navigate('MediaGridScreen', { title: name, waterbody, total: totalMedia})
+    const { data, loading, error } = useGetWaterbodyMedia({ id: waterbody, limit: LIMIT })
+    
+    const navigateToImage = (id: number) => () => navigation.navigate('ViewImageScreen', { 
+        id, type: MediaType.Waterbody, title: name })
+
+    const navigateToMedia = () => navigation.navigate('MediaGridScreen', { 
+        title: name, source: MediaSource.Waterbody, id: waterbody, total: totalMedia })
 
     return (
         <View style={styles.container}>
@@ -27,28 +32,20 @@ const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
                 <Title style={styles.title}>Photos {`(${totalMedia || 0})`}</Title>
                 <Button onPress={navigateToMedia}>See all photos</Button>
             </View>
-            <FlashList horizontal
-                showsHorizontalScrollIndicator={false}
-                data={data ? data.waterbody.media : new Array(6).fill(null)} 
-                contentContainerStyle={{ paddingLeft: 16 }}
-                estimatedItemSize={200}
-                ListFooterComponent={<ListFooterSeeMore onPress={navigateToMedia}/>}
-                renderItem={({ item }) => (
-                    data ? 
-                    <Pressable onPress={navigateToImage(item.id)} style={styles.imageSurface}>
-                        <Image
-                        source={{ uri: item.url }} 
-                        style={styles.image}
-                        resizeMode='cover'
-                        />
-                    </Pressable> : 
-                    <BoxLoader 
-                        height={200} 
-                        width={200} 
-                        style={{ marginRight: 8 }}
-                    />
-                )}
-            />
+            { (data && data?.waterbody.media.length > 0) &&
+                <FlashList horizontal
+                    showsHorizontalScrollIndicator={false}
+                    data={data.waterbody.media} 
+                    contentContainerStyle={{ paddingLeft: 16, paddingTop: 16 }}
+                    estimatedItemSize={200}
+                    ListFooterComponent={<ListFooterSeeMore onPress={navigateToMedia}/>}
+                    renderItem={({ item }) => (
+                        <Pressable onPress={navigateToImage(item.id)} style={styles.imageSurface}>
+                            <Image source={{ uri: item.url }} style={styles.image} resizeMode='cover'/>
+                        </Pressable>
+                    )}
+                />
+            }
         </View>
     );
 };
@@ -58,7 +55,6 @@ export default MediaSection;
 const styles = StyleSheet.create({
     container: {
         width: '100%',
-        height: 300,
         borderColor: 'rgba(0,0,0,.1)',
         borderTopWidth: 1,
         borderBottomWidth: 1,
@@ -67,7 +63,6 @@ const styles = StyleSheet.create({
     },
     header: {
         paddingLeft: 16,
-        paddingBottom: 16,
         paddingRight: 28,
         flexDirection: 'row',
         alignItems: 'center',
