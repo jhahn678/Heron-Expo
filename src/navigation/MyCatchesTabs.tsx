@@ -1,6 +1,6 @@
 import { View, StyleSheet } from 'react-native'
 import { createMaterialTopTabNavigator } from '@react-navigation/material-top-tabs'
-import { BottomTabsScreenProps, ExploreStackScreenProps, MyCatchesTabsParams } from "../types/navigation";
+import { BottomTabsScreenProps, MyCatchesTabsParams } from "../types/navigation";
 import CatchesTabView from "../screens/catch/MyCatches/CatchesTabView";
 import StatisticsTabView from "../screens/catch/MyCatches/StatisticsTabView";
 import HeadingSection from '../screens/catch/MyCatches/sections/HeadingSection';
