@@ -2,9 +2,9 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { createMaterialTopTabNavigator } from "@react-navigation/material-top-tabs";
 import { BottomTabsScreenProps, MyProfileTabsParams } from "../types/navigation";
-import HeaderSection from "../screens/profile/sections/HeaderSection";
+import HeaderSection from "../screens/profile/MyProfileScreen/sections/HeaderSection";
 import MyProfileScreen from "../screens/profile/MyProfileScreen/MyProfileScreen";
-import ContactsTabScreen from "../screens/profile/ContactsTabScreen/ContactsTabScreen";
+import ContactsTabScreen from "../screens/profile/MyProfileScreen/ContactsTabScreen";
 
 const Tab = createMaterialTopTabNavigator<MyProfileTabsParams>();
 

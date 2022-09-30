@@ -3,7 +3,7 @@ import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import { theme } from "../../../config/theme";
+import { theme } from "../../../../config/theme";
 
 interface Props {
     bio: string | null | undefined
@@ -42,7 +42,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         justifyContent: 'space-between',
         paddingVertical: 12,
-        paddingHorizontal: 24,
+        paddingHorizontal: 16,
         backgroundColor: theme.colors.secondary
     },
     date: {

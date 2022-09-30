@@ -1,10 +1,10 @@
 import React, { useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Text, IconButton, Menu, Divider } from 'react-native-paper'
-import Avatar from "../../../components/users/Avatar";
-import { BottomTabsScreenProps } from "../../../types/navigation";
-import { useGetMyProfile } from "../../../hooks/queries/useGetMyProfile";
-import { ShareType, useShareContent } from "../../../hooks/utils/useShareContent";
+import Avatar from "../../../../components/users/Avatar";
+import { BottomTabsScreenProps } from "../../../../types/navigation";
+import { useGetMyProfile } from "../../../../hooks/queries/useGetMyProfile";
+import { ShareType, useShareContent } from "../../../../hooks/utils/useShareContent";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 const { width } = Dimensions.get('screen')
