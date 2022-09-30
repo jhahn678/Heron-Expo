@@ -22,10 +22,11 @@ export interface AuthStore {
     avatar: string | null
     isAuthenticated: boolean,
     setUser: (data: AuthResponse) => Promise<void>,
-    signOut: () => void,
+    signOut: () => Promise<void>,
     autoSignIn: (token: string) => Promise<void>,
     getAccessToken: () => Promise<string | null>,
-    refreshAccessToken: () => Promise<string | null>
+    refreshAccessToken: () => Promise<string | null>,
+    setDetails: (args: { firstname?: string, username?: string, avatar?: string }) => void
 }
 
 
@@ -41,6 +42,7 @@ export const useAuth = create<AuthStore>((set) => ({
         await SecureStore.setItemAsync(SecureStoreKeys.ACCESS_TOKEN, accessToken)
         set({ isAuthenticated: true, ...user })
     },
+    setDetails: details => set({ ...details }),
     signOut: async () => {
         await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)
         await SecureStore.deleteItemAsync(SecureStoreKeys.ACCESS_TOKEN)
