@@ -21,13 +21,19 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
 
     const [sort, setSort] = useState(CatchSort.CreatedAtNewest)
     const [menuOpen, setMenuOpen] = useState(false);
-    const [hasMore, setHasMore] = useState(false);
+    const [refreshing, setRefreshing] = useState(false)
 
-    const { data, loading, error, fetchMore } = useGetCatches({ type, id, sort, limit }) 
-    
-    useEffect(() => {
-        if(data) setHasMore(data.catches.length % limit === 0)
-    }, [data])
+    const { data, loading, error, refetch, fetchMore } = useGetCatches({ type, id, sort, limit }) 
+
+    const handleRefresh = () => {
+      setRefreshing(true)
+      refetch().then(() => setRefreshing(false))
+    }
+
+    const handleFetchMore = () => {
+      if(!data || data.catches.length % limit !== 0) return;
+      fetchMore({ variables: { offset: data.catches.length } })
+    } 
 
     const handleSort = (type: CatchSort) => () => { setSort(type); setMenuOpen(false) }
 
@@ -41,21 +47,16 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
       navigation.navigate("ViewMapScreen", { resource: MapResource.Catch, id });
 
     const navigateMapCatches = () => {
-        let resource: MapResource;
         switch(type){
           case CatchQuery.User:
-            resource = MapResource.UserCatches; 
-            break;
+            return navigation.navigate('ViewMapScreen', { id, resource: MapResource.UserCatches })
           case CatchQuery.Waterbody:
-            resource = MapResource.WaterbodyCatches; 
-            break;
+            return navigation.navigate('ViewMapScreen', { id, resource: MapResource.WaterbodyCatches })
           case CatchQuery.Coordinates:
-            resource = MapResource.CatchesNearby;
-            break;
+            return navigation.navigate('ViewMapScreen', { id, resource: MapResource.CatchesNearby })
           default:
             return;
         }
-        navigation.navigate('ViewMapScreen', { resource, id })
       }
 
     return (
@@ -107,10 +108,10 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
           <FlashList
             data={data ? data.catches : new Array(6).fill(null)}
             showsVerticalScrollIndicator={false}
-            onEndReachedThreshold={0.3}
-            onEndReached={hasMore? () =>
-              fetchMore({ variables: { offset: data?.catches.length } }) : null
-            }
+            onEndReachedThreshold={0.4}
+            onRefresh={handleRefresh}
+            refreshing={refreshing}
+            onEndReached={handleFetchMore}
             estimatedItemSize={300}
             ListHeaderComponent={
               <ListHeaderFilterBar 
