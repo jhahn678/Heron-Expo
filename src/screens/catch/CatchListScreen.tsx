@@ -26,6 +26,8 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
 
     const { data, loading, error, refetch, fetchMore } = useGetCatches({ type, id, sort, limit }) 
 
+    console.log(loading)
+
     const handleRefresh = () => {
       setRefreshing(true)
       refetch().then(() => setRefreshing(false))
@@ -68,12 +70,14 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
             <IconButton icon="arrow-left" onPress={navigation.goBack} />
             <Title style={styles.title}>{title}</Title>
           </View>
-          <IconButton
-            onPress={navigateMapCatches}
-            icon="map"
-            size={28}
-            style={{ marginRight: 8 }}
-          />
+          { type !== CatchQuery.Following &&
+            <IconButton
+              onPress={navigateMapCatches}
+              icon="map"
+              size={28}
+              style={{ marginRight: 8 }}
+            />
+          }
         </Surface>
 
         <Menu
