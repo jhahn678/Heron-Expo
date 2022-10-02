@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import { Avatar, Button, IconButton, Surface, Title } from "react-native-paper";
-import { useGetImageMock } from "../../../__mocks";
 import dayjs from "../../config/dayjs";
 import globalStyles from "../../globalStyles";
 import { useGetImageQuery } from "../../hooks/queries/useGetImage";
@@ -12,8 +11,7 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
 
     const { width } = Dimensions.get('screen')
     const { params: { id, type, uri, title } } = route;
-    // const { data, loading, error } = useGetImageQuery({ id, type })
-    const { data, loading, error } = useGetImageMock({ loading: false, error: false})
+    const { data, loading, error } = useGetImageQuery({ id, type })
     const navigateProfile = () => navigation.navigate('UserProfileScreen', { id: data?.user.id! })
 
     return (
