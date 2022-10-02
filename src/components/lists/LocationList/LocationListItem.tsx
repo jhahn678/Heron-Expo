@@ -49,7 +49,7 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
           <Text style={styles.near} numberOfLines={1}>
             {data.waterbody.name}
             {"  "}&bull;{"  "}
-            {data.nearest_geoplace}
+            {data.nearest_place}
           </Text>
 
           <Image style={styles.image} source={{ uri: data.media[0]?.url }}/>
