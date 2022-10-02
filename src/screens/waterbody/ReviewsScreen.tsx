@@ -12,11 +12,14 @@ import { reviewSortToLabel } from "../../utils/conversions/reviewSortToLabel";
 import ReviewsListEmpty from "../../components/lists/shared/ReviewsListEmpty";
 import { GetUserReviewsRes, useGetUserReviews } from "../../hooks/queries/useGetUserReviews";
 import { theme } from "../../config/theme";
+import { IWaterbody } from "../../types/Waterbody";
 
 const limit = 12;
 const { width } = Dimensions.get('screen')
 
-type Data = GetWaterbodyReview[] | GetUserReviewsRes['user']['waterbody_reviews']
+export type WaterbodyReviews = (GetWaterbodyReview & { 
+  waterbody: Pick<IWaterbody, 'id' | 'name'>
+})[] | GetUserReviewsRes['user']['waterbody_reviews']
 
 const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScreen'>) => {
 
@@ -26,7 +29,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
   const [menuOpen, setMenuOpen] = useState(false)
   const [allowAdd, setAllowAdd] = useState(false)
   const [sort, setSort] = useState<ReviewSort | null>(null)
-  const [reviews, setReviews] = useState<Data>([])
+  const [reviews, setReviews] = useState<WaterbodyReviews>([])
 
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
   const setShowReview = useModalStore(store => store.setReview)
@@ -56,7 +59,12 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
         return setReviews(userReviews.data.user.waterbody_reviews)
       case ReviewQuery.Waterbody:
         if(!waterbodyReviews.data) return;
-        return setReviews(waterbodyReviews.data.waterbody.reviews)
+        return setReviews(waterbodyReviews.data.waterbody.reviews.map(x => ({
+          ...x, waterbody: { 
+            id: waterbodyReviews.data?.waterbody.id as number,
+            name: waterbodyReviews.data?.waterbody.name as string
+          }
+        })))
     }
   },[userReviews.data, waterbodyReviews.data])
 
