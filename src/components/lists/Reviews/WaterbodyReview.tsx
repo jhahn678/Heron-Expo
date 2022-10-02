@@ -2,14 +2,14 @@ import React from 'react'
 import { View, StyleSheet, Pressable, ViewStyle, StyleProp } from 'react-native'
 import { Text } from 'react-native-paper'
 import Avatar from '../../users/Avatar'
-import { GetWaterbodyReview } from '../../../hooks/queries/useGetWaterbodyReviews'
 import RatingDisplay from '../../ratings/RatingDisplay'
 import dayjs from '../../../config/dayjs'
 import globalStyles from '../../../globalStyles'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import MapMarkerIcon from '../../icons/MapMarkerIcon'
+import { WaterbodyReviews } from '../../../screens/waterbody/ReviewsScreen'
 
 interface Props {
-    data: GetWaterbodyReview,
+    data: WaterbodyReviews[number],
     navigateToUser: () => void
     style?: StyleProp<ViewStyle>
 }
@@ -39,8 +39,8 @@ const WaterbodyReview = ({ data, navigateToUser, style }: Props) => {
             </View>
             { data.text && <Text style={styles.text}>{data.text}</Text> }
             <View style={styles.waterbody}>
-                <Icon name="map-legend" size={24}/>
-                <Text style={styles.waterbodyName}>{"Susquehanna River"}</Text>
+                <MapMarkerIcon/>
+                <Text style={styles.waterbodyName}>{data.waterbody.name}</Text>
             </View>
         </View>
     );
