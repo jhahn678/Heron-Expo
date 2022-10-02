@@ -2,14 +2,18 @@ import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 import FishermanFishing from "../../svg/FishermanFishing";
 
 interface Props {
-    style?: StyleProp<ViewStyle>
+  style?: StyleProp<ViewStyle>
+  fontSize?: number
+  scale?: number
+  caption?: string
 }
 
-const NoImagesUploaded = (props: Props) => {
+const NoImagesUploaded = ({ style, fontSize=14, scale=1, caption }: Props) => {
+  
   return (
-    <View style={[styles.container, props.style]}>
+    <View style={[styles.container, style, { transform: [{ scale }]}]}>
       <FishermanFishing/>
-      <Text style={styles.text}>No uploaded images</Text>
+      <Text style={[styles.label, { fontSize }]}>{caption || "No uploaded images"}</Text>
     </View>
   );
 };
@@ -23,7 +27,7 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
-    text: {
+    label: {
         fontWeight: '500',
         fontSize: 10,
         marginTop: 16
