@@ -26,8 +26,6 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
 
     const { data, loading, error, refetch, fetchMore } = useGetCatches({ type, id, sort, limit }) 
 
-    console.log(loading)
-
     const handleRefresh = () => {
       setRefreshing(true)
       refetch().then(() => setRefreshing(false))

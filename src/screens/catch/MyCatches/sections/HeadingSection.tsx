@@ -1,19 +1,16 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { FAB, IconButton, Title } from 'react-native-paper';
+import { IconButton, Title } from 'react-native-paper';
 import { theme } from '../../../../config/theme'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useNavigation } from "@react-navigation/native";
-import { MapResource, UseNavigateParams } from "../../../../types/navigation";
+import { BottomTabsScreenProps, MapResource } from "../../../../types/navigation";
 import { useAuth } from "../../../../store/auth/useAuth";
-import globalStyles from "../../../../globalStyles";
-
 
 const HeadingSection = () => {
 
     const id = useAuth(store => store.id)
 
-    const navigation = useNavigation<UseNavigateParams>()
+    const navigation = useNavigation<BottomTabsScreenProps<'MyCatchesScreen'>['navigation']>()
 
     const navigateToMap = () => {
         if(!id) return;
@@ -29,7 +26,6 @@ const HeadingSection = () => {
                 mode='contained'
                 size={24}
             />
-            {/* <FAB icon='plus' customSize={48} mode='flat' style={{ borderRadius: 32 }}/> */}
         </View>
     );
 };
