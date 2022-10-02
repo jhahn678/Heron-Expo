@@ -14,11 +14,7 @@ const SearchUsersScreen = ({ navigation }: RootStackScreenProps<'UserSearchScree
     
     const [input, setInput] = useState('')
     const throttled = useThrottleInputValue({ input })
-    const { data, isLoading, isError, status } = useSearchUsers(throttled)
-
-    useEffect(() => {
-        console.log(status)
-    },[data])
+    const { data, isLoading, isError } = useSearchUsers(throttled)
 
     const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
 
