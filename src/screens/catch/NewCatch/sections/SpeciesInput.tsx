@@ -4,6 +4,8 @@ import { useNewCatchStore } from "../../../../store/mutations/useNewCatchStore";
 import { fish_species } from "../../../../data/fish-species";
 import { IconButton, Surface, TextInput } from "react-native-paper";
 import { theme } from "../../../../config/theme";
+import FishIcon from "../../../../components/icons/FishIcon";
+import FishAltIcon from "../../../../components/icons/FishAltIcon";
 
 const SpeciesInput = () => {
 
@@ -46,7 +48,7 @@ const SpeciesInput = () => {
                     onChangeText={setInput}
                     theme={{ roundness: 6 }}
                     placeholder="Species"
-                    right={<TextInput.Icon name='fish'/>}
+                    right={<TextInput.Icon name={({ size, color }) => <FishIcon size={size} color={color}/>}/>}
                 />
             }
             <View style={styles.resultsContainer}>
