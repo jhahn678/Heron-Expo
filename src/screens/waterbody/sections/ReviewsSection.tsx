@@ -3,13 +3,15 @@ import { Dimensions, StyleSheet, View } from "react-native";
 import { ExploreStackScreenProps, ReviewQuery } from "../../../types/navigation";
 import { Button, Text, Title } from 'react-native-paper'
 import RatingDisplay from '../../../components/ratings/RatingDisplay'
-import { useGetWaterbodyReviews } from "../../../hooks/queries/useGetWaterbodyReviews";
+import { GetWaterbodyReview, useGetWaterbodyReviews } from "../../../hooks/queries/useGetWaterbodyReviews";
 import RatingGraph from "../../../components/ratings/RatingGraph";
 import RatingGraphBar from "../../../components/ratings/RatingGraphBar";
 import WaterbodyReview from "../../../components/lists/Reviews/WaterbodyReview";
 import { useModalStore } from "../../../store/modal/useModalStore";
 import { useAuth } from "../../../store/auth/useAuth";
-import { theme } from "../../../config/theme";
+import { IWaterbody } from "../../../types/Waterbody";
+
+type Review = GetWaterbodyReview & { waterbody: Pick<IWaterbody, 'id' | 'name'> }
 
 const { width } = Dimensions.get('screen')
 
@@ -28,6 +30,7 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
   const { data } = useGetWaterbodyReviews({ id: waterbody, limit: 3 });
 
   const [ratingCounts, setRatingCounts] = useState({ five: 0, four: 0, three: 0, two: 0, one: 0 })
+  const [reviews, setReviews]= useState<Review[]>([])
 
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
 
@@ -50,6 +53,14 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
         four: rating_counts.four / totalReviews * 100,
         five: rating_counts.five / totalReviews * 100,
       })
+    }
+    if(data){
+      setReviews(data.waterbody.reviews.map(x => ({
+        ...x, waterbody: {
+          id: data.waterbody.id,
+          name: data.waterbody.name
+        }
+      })))
     }
   },[data, totalReviews])
 
@@ -95,12 +106,9 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
       >Leave a review</Button>
 
       <View style={styles.listSection}>
-          { data && data.waterbody.reviews.slice(0,3).map((x) => (
-            <WaterbodyReview 
-              key={x.id} data={x} 
-              navigateToUser={navigateUser(x.user.id)}
-            />
-          ))}
+        { reviews.map(x => (
+          <WaterbodyReview key={x.id} data={x} navigateToUser={navigateUser(x.user.id)}/> 
+        ))}
       </View>
 
       { totalReviews && totalReviews > 3 ?
