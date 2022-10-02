@@ -1,49 +1,116 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { theme } from "../../../config/theme";
-import { ActivityIndicator, Text } from 'react-native-paper'
-import { Pressable, StyleSheet, View } from "react-native";
+import { Text, TouchableRipple } from 'react-native-paper'
+import { StyleSheet, View } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { MyProfileTabsScreenProps } from "../../../types/navigation";
-import { useGetMyContacts } from "../../../hooks/queries/useGetMyContacts";
+import { GetMyFollowing, useGetMyFollowing } from "../../../hooks/queries/useGetUserFollowing";
+import { useGetMyTotalFollows } from "../../../hooks/queries/useGetTotalFollows";
 import { FlashList } from "@shopify/flash-list";
 import ContactsListItem from "../../../components/lists/ContactsList/ContactsListItem";
+import globalStyles from "../../../globalStyles";
+import { GetMyFollowers, useGetMyFollowers } from "../../../hooks/queries/useGetUserFollowers";
+import FindUsers from "./sections/FindUsers";
+
+enum Users {
+  Following,
+  Followers
+}
+
+const limit = 20;
 
 const ContactsTabScreen = ({ navigation }: MyProfileTabsScreenProps<'FriendsTab'>) => {
 
-  const navigateUserSearch = () => {}
+  const [followType, setFollowType] = useState(Users.Following)
 
+  const [data, setData] = useState<GetMyFollowing['me']['following'] | GetMyFollowers['me']['followers']>([])
+
+  const navigateUserSearch = () => navigation.navigate('UserSearchScreen')
   const navigateToUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
 
-  const { data, loading, error, refetch } = useGetMyContacts()
+  const following = useGetMyFollowing({ limit, skip: followType !== Users.Following })
+  const followers = useGetMyFollowers({ limit, skip: followType !== Users.Followers })
+  const totals = useGetMyTotalFollows()
+
+  useEffect(() => {
+    switch(followType){
+      case Users.Following:
+        if(following.data){
+          setData(following.data.me.following);
+        }
+      case Users.Followers:
+        if(followers.data){
+          setData(followers.data.me.followers);
+        }
+    }
+  }, [followers.data, following.data])
 
   const [refetching, setRefetching] = useState(false)
-  const handleRefetch = () => { setRefetching(true); refetch().then(() => setRefetching(false))}
+
+  const handleRefetch = async () => { 
+    setRefetching(true)
+    if(followType === Users.Followers) await followers.refetch()
+    if(followType === Users.Following) await following.refetch()
+    setRefetching(false)
+  }
+
+  const handleFetchMore = async () => {
+    if(!totals.data) return;
+    switch(followType){
+      case Users.Followers:
+        if(data.length === totals.data.me.total_followers) return;
+        await followers.fetchMore({ variables: { offset: data.length }})
+      case Users.Following:
+        if(data.length === totals.data.me.total_following) return;
+        await following.fetchMore({ variables: { offset: data.length }})
+    }
+  }
 
   return (
     <View style={styles.container}>
       <View style={styles.top}>
-        <Text style={styles.date}>{
-          data ? data.me.contacts.length === 1 ? 
-          `${data.me.contacts.length} Friend` :
-          `${data.me.contacts.length} Friends` :
-          <ActivityIndicator color={theme.colors.surfaceVariant}/>
-        }</Text>
-        <Pressable onPress={navigateUserSearch} style={styles.button}>
-            <Text style={styles.edit}>Find Users</Text>
-            <Icon name='magnify' color={theme.colors.primary} size={14}/>
-        </Pressable>
+        <View style={globalStyles.frac}>
+          <TouchableRipple 
+            onPress={() => setFollowType(Users.Following)} 
+            style={
+              followType === Users.Following ? 
+              [styles.active, styles.margin] : 
+              [styles.button, styles.margin]}>
+              <Text style={styles.edit}>Following</Text>
+          </TouchableRipple>
+          <TouchableRipple 
+            onPress={() => setFollowType(Users.Followers)} 
+            style={followType === Users.Followers ? styles.active : styles.button}>
+              <Text style={styles.edit}>Followers</Text>
+          </TouchableRipple>
+        </View>
+         <TouchableRipple onPress={navigateUserSearch} style={styles.button}>
+          <View style={globalStyles.frac}>
+            <Text style={styles.edit}>Search Users</Text>
+            <Icon name='magnify' color={theme.colors.primary} size={18}/>
+          </View>
+        </TouchableRipple>
       </View>
       { data ? 
-        <FlashList
-          data={data.me.contacts}
-          estimatedItemSize={80}
-          refreshing={refetching}
-          onRefresh={handleRefetch}
-          renderItem={({ item }) => (
-            <ContactsListItem data={item} navigateUser={navigateToUser(item.id)}/>
-          )}
-        /> 
-      :null}
+        data.length > 0 ?
+          <FlashList
+            data={data}
+            estimatedItemSize={80}
+            refreshing={refetching}
+            onRefresh={handleRefetch}
+            onEndReachedThreshold={.3}
+            onEndReached={handleFetchMore}
+            renderItem={({ item }) => (
+              <ContactsListItem data={item} navigateUser={navigateToUser(item.id)}/>
+            )}
+          /> 
+        : <FindUsers navigateUserSearch={navigateUserSearch}/>
+        : (following.loading || followers.loading) ?
+          <Text>Failed to load users</Text>
+        : (following.error || followers.error) ?
+          <Text>Failed to load users</Text>
+        : null
+      }
     </View>
   );
 };
@@ -55,34 +122,50 @@ const styles = StyleSheet.create({
     flex: 1
   },
   top: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      justifyContent: 'space-between',
-      paddingVertical: 12,
-      paddingHorizontal: 16,
-      backgroundColor: theme.colors.secondary
-    },
-    date: {
-        fontWeight: '500',
-        color: theme.colors.onSecondary
-    },
-    button: {
-      flexDirection: 'row',
-      alignItems: 'center',
-      borderColor: theme.colors.primary,
-      borderWidth: 2,
-      paddingHorizontal: 16,
-      paddingVertical: 4,
-      borderRadius: 6,
-      backgroundColor: theme.colors.surfaceVariant,
-    },
-    edit: {
-      marginRight: 4,
-      fontWeight: '500',
-      color: theme.colors.primary
-    },
-    list: {
-      flex: 1,
-      width: '100%'
-    }
+    width: '100%',
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 12,
+    paddingHorizontal: 16,
+    justifyContent: 'space-between',
+    backgroundColor: theme.colors.secondary
+  },
+  date: {
+    fontWeight: '500',
+    color: theme.colors.onSecondary
+  },
+  edit: {
+    marginRight: 4,
+    fontWeight: '500',
+    color: theme.colors.primary
+  },
+  list: {
+    flex: 1,
+    width: '100%'
+  },
+  button: {
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    backgroundColor: theme.colors.surfaceVariant,
+  },
+  active: {
+    height: 36,
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    borderColor: theme.colors.primary,
+    borderWidth: 2,
+    paddingHorizontal: 10,
+    borderRadius: 6,
+    backgroundColor: theme.colors.primaryContainer,
+  },
+  margin: {
+    marginRight: 8 
+  }
 });

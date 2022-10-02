@@ -50,12 +50,13 @@ const styles = StyleSheet.create({
         color: theme.colors.onSecondary
     },
     button: {
+        height: 36,
         flexDirection: 'row',
+        justifyContent: 'center',
         alignItems: 'center',
         borderColor: theme.colors.primary,
         borderWidth: 2,
         paddingHorizontal: 12,
-        paddingVertical: 4,
         borderRadius: 6,
         backgroundColor: theme.colors.surfaceVariant,
     },

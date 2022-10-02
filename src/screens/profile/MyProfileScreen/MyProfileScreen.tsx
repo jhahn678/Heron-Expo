@@ -55,6 +55,7 @@ const MyProfileScreen = ({ navigation }: MyProfileTabsScreenProps<'ProfileTab'>)
 
   return (
     <ScrollView 
+      showsVerticalScrollIndicator={false}
       refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefetch}/>}
     >
       <BioSection 
