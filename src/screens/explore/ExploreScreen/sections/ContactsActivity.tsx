@@ -3,20 +3,21 @@ import { StyleSheet, View } from 'react-native'
 import { Title, Text, ActivityIndicator } from 'react-native-paper'
 import RecentActivityHorizontalList from '../../../../components/lists/RecentActivityHorizontal/RecentActivityHorizontalList'
 import { useGetRecentActivityQuery } from '../../../../hooks/queries/useGetRecentActivity'
+import { CatchQuery } from '../../../../types/Catch'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
 }
 
-const ContactsActivity = ({
-    navigation
-}: Props): JSX.Element => {
+const ContactsActivity = ({ navigation }: Props) => {
 
     const { data, loading, error } = useGetRecentActivityQuery()
 
     const handleNavigateToCatch = (id: number) => navigation.navigate('ViewCatchScreen', { id })
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
+    const handleNavigateSeeMore = () => navigation.navigate('CatchListScreen', { 
+        type: CatchQuery.Following, title: 'Recent Activity' })
     
     return (
         <View style={styles.container}>
@@ -27,6 +28,7 @@ const ContactsActivity = ({
                         data={data.activityFeed} 
                         onNavigateToCatch={handleNavigateToCatch}
                         onNavigateToProfile={handleNavigateToProfile}
+                        onNavigateSeeMore={handleNavigateSeeMore}
                     />
                 : 
                     <Text style={styles.message}>Your friends have not logged any catches yet 🐟</Text>
