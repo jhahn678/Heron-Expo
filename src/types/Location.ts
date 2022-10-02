@@ -11,6 +11,10 @@ export interface ILocation {
     geom: Point | Polygon | LineString
     created_at: Date
     hexcolor: string
+    nearest_place: string
+    total_favorites: number
+    is_favorited: boolean
+    is_saved: boolean
 }
 
 export interface NewLocation {

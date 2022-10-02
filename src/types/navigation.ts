@@ -82,7 +82,7 @@ export type ExploreStackScreenProps<T extends keyof ExploreStackParams> =
 
 export type BottomTabsParams = {
     ExploreStack: NavigatorScreenParams<ExploreStackParams>,
-    MyLocationsScreen: undefined,
+    MyPlacesScreen: undefined,
     MyCatchesScreen: undefined,
     MyProfileScreen: undefined
 }
@@ -104,15 +104,16 @@ export type MyCatchesTabsScreenProps<T extends keyof MyCatchesTabsParams> =
         BottomTabsScreenProps<'MyCatchesScreen'>
     >
 
-// export type MyLocationsTabsParams = {
+export type MyPlacesTabsParams = {
+    MyLocationsList: undefined
+    MySavedPlaces: undefined
+}
 
-// }
-
-// export type MyLocationsTabsScreenProps<T extends keyof MyLocationsTabsParams> = 
-//     CompositeScreenProps<
-//         MaterialTopTabScreenProps<MyLocationsTabsParams, T>,
-//         BottomTabsScreenProps<'MyLocationsScreen'>
-//     >
+export type MyPlacesTabsScreenProps<T extends keyof MyPlacesTabsParams> = 
+    CompositeScreenProps<
+        MaterialTopTabScreenProps<MyPlacesTabsParams, T>,
+        BottomTabsScreenProps<'MyPlacesScreen'>
+    >
 
 export type MyProfileTabsParams = {
     ProfileTab: undefined
@@ -131,7 +132,8 @@ type CompositeNavProp = NavProp<
     BottomTabsParams & 
     ExploreStackParams & 
     MyProfileTabsParams & 
-    MyCatchesTabsParams
+    MyCatchesTabsParams &
+    MyPlacesTabsParams
 >
     
 export type UseNavigateParams = NavProp<CompositeNavProp>
