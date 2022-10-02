@@ -6,6 +6,7 @@ export const GET_REVIEWS = gql`
     query Waterbody($id: Int!, $limit: Int, $offset: Int, $sort: ReviewSort) {
         waterbody(id: $id) {
             id
+            name
             rating_counts{
                 five
                 four
@@ -35,6 +36,7 @@ export interface GetWaterbodyReview extends Omit<IWaterbodyReview, 'user' | 'wat
 export interface GetWaterbodyReviews {
     waterbody: {
         id: number,
+        name: string
         rating_counts: {
             five: number
             four: number

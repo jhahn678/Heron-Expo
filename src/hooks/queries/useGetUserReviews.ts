@@ -27,31 +27,31 @@ query User($id: Int!, $limit: Int, $offset: Int, $sort: ReviewSort) {
 `
 
 export interface GetUserReviewsRes {
-    user: {
-        id: number,
-        waterbody_reviews: {
-            id: number
-            waterbody: Pick<IWaterbody, 'id' | 'name'>
-            user: Pick<IUser, 'id' | 'avatar' | 'fullname'>
-            rating: number
-            text: string
-            created_at: Date
-        }[]
-    }
+  user: {
+      id: number,
+      waterbody_reviews: {
+          id: number
+          waterbody: Pick<IWaterbody, 'id' | 'name'>
+          user: Pick<IUser, 'id' | 'avatar' | 'fullname'>
+          rating: number
+          text: string
+          created_at: Date
+      }[]
+  }
 }
 
 interface Vars {
-    id: number
-    limit?: number
-    offset?: number
-    sort?: ReviewSort
+  id: number
+  limit?: number
+  offset?: number
+  sort?: ReviewSort
 }
 
 interface Args extends Omit<Vars, 'offset'>{
-    skip?: boolean
+  skip?: boolean
 }
 
 export const useGetUserReviews = ({ 
-    skip=false, ...variables 
+  skip=false, ...variables 
 }: Args) => useQuery<GetUserReviewsRes, Vars>(GET_USER_REVIEWS, { variables, skip })
 
