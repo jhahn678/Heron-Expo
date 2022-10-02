@@ -1,6 +1,5 @@
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 import ExploreStack from "./ExploreStack";
-import MyLocationsScreen from "../screens/location/MyLocationsScreen";
 import { BottomTabsParams } from "../types/navigation";
 import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
@@ -9,6 +8,7 @@ import FishIcon from "../components/icons/FishIcon";
 import MyProfileTabs from "./MyProfileTabs";
 import { useAuth } from "../store/auth/useAuth";
 import PromptAuthenticationScreen from "../screens/auth/PromptAuthenticationScreen";
+import MyPlacesTabs from "./MyPlacesTabs";
 
 
 const BottomTabs = (): JSX.Element => {
@@ -38,10 +38,10 @@ const BottomTabs = (): JSX.Element => {
                 )}}
             />
             <Tabs.Screen 
-                name='MyLocationsScreen' 
-                component={isAuthenticated ? MyLocationsScreen : PromptAuthenticationScreen} 
+                name="MyPlacesScreen"
+                component={isAuthenticated ? MyPlacesTabs : PromptAuthenticationScreen} 
                 options={{ 
-                    tabBarLabel: 'Locations',
+                    tabBarLabel: 'Places',
                     tabBarIcon: ({ color, size }) => (
                         <IonIcon name='location-outline' color={color} size={size}/>
                 )}}
