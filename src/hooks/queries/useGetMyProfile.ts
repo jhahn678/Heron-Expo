@@ -24,7 +24,8 @@ export const GET_MY_PROFILE_TOTALS = gql`
             id
             bio
             created_at
-            total_contacts
+            total_followers
+            total_following
             total_locations
             total_saved_locations
             total_saved_waterbodies
@@ -52,7 +53,8 @@ export interface GetMyProfileRes {
 
 export interface GetMyProfileTotalsRes {
     me: Pick<IUser, 'id' | 'created_at' | 'bio'> & {
-        total_contacts: number
+        total_following: number
+        total_followers: number
         total_locations: number
         total_saved_locations: number
         total_saved_waterbodies: number

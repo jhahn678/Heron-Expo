@@ -7,6 +7,12 @@ export interface Details {
     title: string | null
 }
 
+interface ManageContactsArgs {
+    user: number, 
+    name: string | null, 
+    username: string
+}
+
 
 export interface ModalStore {
     auth: boolean
@@ -36,7 +42,8 @@ export interface ModalStore {
     manageContact: boolean
     manageContactUser: number | null,
     manageContactName: string | null,
-    setManageContact: (args: { user: number, name: string } | false) => void
+    manageContactUsername: string | null,
+    setManageContact: (args: ManageContactsArgs | false) => void
     dismiss: () => void
 }
 
@@ -86,10 +93,12 @@ export const useModalStore = create<ModalStore>((set) => ({
     manageContact: false,
     manageContactUser: null,
     manageContactName: null,
+    manageContactUsername: null,
     setManageContact: (args) => set({
         manageContact: args ? true : false,
         manageContactName: args ? args.name : null,
-        manageContactUser: args ? args.user : null
+        manageContactUser: args ? args.user : null,
+        manageContactUsername: args ? args.username: null,
     }),
     dismiss: () => {
         set({
@@ -111,7 +120,8 @@ export const useModalStore = create<ModalStore>((set) => ({
             onLogoutGoBack: false,
             confirmUploadWaterbody: null,
             manageContactName: null,
-            manageContactUser: null
+            manageContactUser: null,
+            manageContactUsername: null,
         })
     }
 }))

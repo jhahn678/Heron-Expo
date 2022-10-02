@@ -165,6 +165,18 @@ export const apolloClient = new ApolloClient({
                         merge: (existing=[], incoming) => ([
                             ...existing, ...incoming
                         ])
+                    },
+                    following: {
+                        keyArgs: false,
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
+                    },
+                    followers: {
+                        keyArgs: false,
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
                     }
                 }
             }
