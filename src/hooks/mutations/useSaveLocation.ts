@@ -36,7 +36,7 @@ export const useSaveLocation = (args?: Args) => {
           cache.writeFragment({
             id: `Location:${variables.id}`,
             fragment: gql`
-              fragment updatedLocation on Location {
+              fragment updatedLocation${variables.id} on Location {
                 is_saved
               }
             `,
