@@ -83,16 +83,24 @@ export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
 
     const [skip, setSkip] = useState(true)
 
-    useEffect(() => {
-      if(args.type === CatchQuery.User || args.type === CatchQuery.Waterbody){
-        args.id ? setSkip(false) : setSkip(true)
-      }
-    }, [args.type, args.id]);
-    
     const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
       if (!latitude || !longitude) return null;
       return { latitude, longitude };
     });
+
+    useEffect(() => {
+      switch(args.type){
+        case CatchQuery.User:
+          return setSkip(!Boolean(args.id)) //If no ID, skip query
+        case CatchQuery.Waterbody:
+          return setSkip(!Boolean(args.id)) //If no ID, skip query
+        case CatchQuery.Coordinates:
+          return setSkip(!Boolean(storedCoordinates || coordinates)) //If no coords available, skip query
+        case CatchQuery.Following:
+          return setSkip(false)
+      }
+    }, [args.type, args.id]);
+    
 
     return useQuery<GetCatchesRes, Vars>(GET_CATCHES(args.type, args.id), {
       skip,

@@ -24,9 +24,9 @@ export default ListFooterSeeMore
 
 const styles = StyleSheet.create({
     container: {
-        height: '90%',
+        height: '100%',
         justifyContent: 'center',
-        marginRight: 50
+        marginRight: 40
     },
     content: { 
         flexDirection: 'row-reverse',

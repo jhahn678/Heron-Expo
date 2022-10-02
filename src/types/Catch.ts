@@ -34,7 +34,8 @@ export enum CatchSort {
 }
 
 export enum CatchQuery {
-    Coordinates = 'COORDINATES',
-    User = 'USER',
-    Waterbody = 'WATERBODY'
-  }
+  Coordinates = 'COORDINATES',
+  Following = 'FOLLOWING',
+  User = 'USER',
+  Waterbody = 'WATERBODY'
+}
