@@ -22,7 +22,7 @@ const MyProfileTabs = ({ navigation }: BottomTabsScreenProps<'MyProfileScreen'>)
                 <Tab.Screen
                     name='FriendsTab'
                     component={ContactsTabScreen}
-                    options={{ tabBarLabel: 'Friends' }}
+                    options={{ tabBarLabel: 'Contacts' }}
                 />
             </Tab.Navigator>
         </View>
