@@ -33,13 +33,6 @@ const WaterbodyInput = ({ selectedWaterbody }: Props) => {
     const [showNearestWaterbodies, setShowNearestWaterbodies] = useState(false)
     const getCachedWaterbody = useGetWaterbodyFragment()
 
-    useEffect(() => {
-        if(selectedWaterbody){
-            const data = getCachedWaterbody(selectedWaterbody)
-            if(data) setWaterbodyData(data)
-        }
-    },[selectedWaterbody])
-
     const setWaterbody = useNewCatchStore(store => store.setWaterbody)
 
     const handleSetWaterbody = (x: IWaterbody) => () => { 
@@ -47,6 +40,13 @@ const WaterbodyInput = ({ selectedWaterbody }: Props) => {
         setWaterbodyData(x);
         setShowNearestWaterbodies(false);
     }
+
+    useEffect(() => {
+        if(selectedWaterbody){
+            const data = getCachedWaterbody(selectedWaterbody)
+            if(data) handleSetWaterbody(data)()
+        }
+    },[selectedWaterbody])
 
     const handleClearWaterbody = () => { setWaterbody(); setWaterbodyData(null) }
     const handleShowNearest = (value: boolean) => () => setShowNearestWaterbodies(value)

@@ -6,6 +6,8 @@ import { useMyCatchesModalStore } from '../../../store/modal/useMyCatchesModalSt
 import { MapResource, MyCatchesTabsScreenProps } from '../../../types/navigation'
 import FiltersSection from './sections/FiltersSection'
 import { useState } from 'react'
+import { ActivityIndicator } from 'react-native-paper'
+import CatchesListEmpty from '../../../components/lists/shared/CatchesListEmpty'
 
 const { width } = Dimensions.get('screen')
 const limit = 15;
@@ -43,23 +45,34 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
 
   return (
     <View style={styles.container}>
-      <FlashList 
-        data={data?.me.catches} 
-        estimatedItemSize={400}
-        refreshing={refetching}
-        onRefresh={handleRefetch}
-        onEndReachedThreshold={.4}
-        onEndReached={handleFetchMore}
-        ListHeaderComponent={<FiltersSection/>}
-        renderItem={({ item }) => (
-          <CatchesListItem
-            data={{ ...item, is_favorited: false }}
-            navigateToCatch={navigateToCatch(item.id)}
-            navigateToMap={navigateToMap(item.id)}
-            navigateToUser={navigateToUser(item.user.id)}
+      { 
+        data && data.me.catches.length > 0 ?
+          <FlashList 
+            data={data.me.catches} 
+            estimatedItemSize={400}
+            refreshing={refetching}
+            onRefresh={handleRefetch}
+            onEndReachedThreshold={.4}
+            onEndReached={handleFetchMore}
+            ListHeaderComponent={<FiltersSection/>}
+            renderItem={({ item }) => (
+              <CatchesListItem
+                data={{ ...item, is_favorited: false }}
+                navigateToCatch={navigateToCatch(item.id)}
+                navigateToMap={navigateToMap(item.id)}
+                navigateToUser={navigateToUser(item.user.id)}
+              />
+            )}
           />
-        )}
-      />
+        : loading ? 
+          <ActivityIndicator size={48} style={styles.empty}/> 
+        : 
+          <CatchesListEmpty 
+            scale={.8} 
+            fontSize={16} 
+            style={styles.empty}
+          />
+      }
     </View>
   )
 }
@@ -73,5 +86,8 @@ const styles = StyleSheet.create({
   search: {
     width: width - 48,
     marginTop: 16,
+  },
+  empty: {
+    marginTop: 150
   }
 })

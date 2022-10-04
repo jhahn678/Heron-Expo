@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { TextInput } from "react-native-paper";
 import { useNewCatchStore } from "../../../../store/mutations/useNewCatchStore";
@@ -13,7 +13,7 @@ const TitleInput = () => {
         <View style={styles.container}>
             <TextInput 
                 mode='outlined'  
-                placeholder="Title you catch"
+                placeholder="Title your catch"
                 label={'Title'}
                 theme={{ roundness: 6 }}
                 value={input}

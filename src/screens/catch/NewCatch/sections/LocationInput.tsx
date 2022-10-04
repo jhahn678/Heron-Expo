@@ -1,4 +1,3 @@
-import { useState } from "react";
 import { Dimensions, Pressable, StyleSheet, View, Image } from "react-native";
 import { theme } from "../../../../config/theme";
 import globalStyles from "../../../../globalStyles";
@@ -16,39 +15,45 @@ interface Props {
 
 const LocationInput = ({ navigation }: Props) => {
 
-    const navigateMapCurrentLocation = () => navigation.navigate('SaveMapScreen', { saveType: SaveType.CatchAuto })
-    const navigateMapManualLocation = () => navigation.navigate('SaveMapScreen', { saveType: SaveType.CatchManual})
-    const snapshot = useNewCatchStore(store => store.mapSnapshot)
-    const coordinates = useNewCatchStore(store => store.coordinates)
-    const handleClearLocation = useNewCatchStore(store => () => {
-        store.setCoordinates(); 
-        store.setMapSnapshot();
-    })
+    const navigateMapCurrentLocation = () => navigation
+        .navigate('SaveMapScreen', { saveType: SaveType.CatchAuto })
+    const navigateMapManualLocation = () => navigation
+        .navigate('SaveMapScreen', { saveType: SaveType.CatchManual})
+
+    const store = useNewCatchStore(store => ({
+        snapshot: store.mapSnapshot,
+        setPoint: store.setPoint,
+        setMapSnapshot: store.setMapSnapshot
+    }))
+
+    const handleClearLocation = () => { store.setPoint(); store.setMapSnapshot() }
 
     return (
         <View style={styles.container}>
             <Text style={styles.title}>Pin a location</Text>
-            { coordinates ? 
-            <Card style={styles.selected}>
-                <IconButton 
-                    size={16} 
-                    icon='close' 
-                    mode="contained" 
-                    style={styles.remove} 
-                    onPress={handleClearLocation}
-                />
-                <Image source={{ uri: snapshot?.uri }} style={styles.snapshot} resizeMode={'cover'}/>
-            </Card> :
-            <View style={globalStyles.frsb}>
-                <Pressable style={styles.pressable} onPress={navigateMapManualLocation}>
-                    <MCIcon name='map-plus' size={48} color={theme.colors.onSecondaryContainer}/>
-                    <Text style={styles.label}>Manually</Text>
-                </Pressable>
-                <Pressable style={styles.pressable} onPress={navigateMapCurrentLocation}>
-                    <Icon name='my-location' size={48} color={theme.colors.onSecondaryContainer}/>
-                    <Text style={styles.label}>Current location</Text>
-                </Pressable>
-            </View>
+            { 
+                store.snapshot ? 
+                    <Card style={styles.selected}>
+                        <IconButton 
+                            size={16} 
+                            icon='close' 
+                            mode="contained" 
+                            style={styles.remove} 
+                            onPress={handleClearLocation}
+                        />
+                        <Image source={{ uri: store.snapshot.uri }} style={styles.snapshot} resizeMode={'cover'}/>
+                    </Card> 
+                :
+                    <View style={globalStyles.frsb}>
+                        <Pressable style={styles.pressable} onPress={navigateMapManualLocation}>
+                            <MCIcon name='map-plus' size={48} color={theme.colors.onSecondaryContainer}/>
+                            <Text style={styles.label}>Manually</Text>
+                        </Pressable>
+                        <Pressable style={styles.pressable} onPress={navigateMapCurrentLocation}>
+                            <Icon name='my-location' size={48} color={theme.colors.onSecondaryContainer}/>
+                            <Text style={styles.label}>Current location</Text>
+                        </Pressable>
+                    </View>
             }
         </View>
     );

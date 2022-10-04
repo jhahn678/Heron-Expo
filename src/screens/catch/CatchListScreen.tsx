@@ -32,8 +32,10 @@ const CatchListScreen = ({ navigation, route }: RootStackScreenProps<'CatchListS
     }
 
     const handleFetchMore = () => {
-      if(!data || data.catches.length % limit !== 0) return;
-      fetchMore({ variables: { offset: data.catches.length } })
+      if(!data || data.catches.length === 0) return;
+      if(data.catches.length % limit === 0){
+        fetchMore({ variables: { offset: data.catches.length } })
+      }
     } 
 
     const handleSort = (type: CatchSort) => () => { setSort(type); setMenuOpen(false) }

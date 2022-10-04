@@ -4,7 +4,7 @@ import { RootStackScreenProps } from '../../../types/navigation'
 import Header from './sections/Header'
 import TitleInput from './sections/TitleInput'
 import DescriptionInput from './sections/DescriptionInput'
-import ImageInput from './sections/ImageInput'
+import ImageInput from '../../../components/inputs/ImageInput'
 import WaterbodyInput from './sections/WaterbodyInput'
 import { useNewCatchStore } from '../../../store/mutations/useNewCatchStore'
 import { useImageStore } from '../../../store/image/useImageStore'
@@ -34,7 +34,7 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
     description: store.description,
     species: store.species,
     waterbody: store.waterbody,
-    coordinates: store.coordinates,
+    point: store.point,
     length: store.length,
     weight: store.weight,
     rig: store.rig
@@ -60,7 +60,6 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
       }
       const variables = { newCatch: { ...newCatch, media } }
       const results = await createCatch({ variables })
-      console.log(results)
       setLoading(false)
       navigation.goBack()
     }catch(err){
