@@ -154,7 +154,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
               />
             )}
           />:
-          <ReviewsListEmpty/>
+          <ReviewsListEmpty style={styles.empty}/>
         }
       </View>
 
@@ -194,5 +194,8 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     marginVertical: 12,
     marginHorizontal: 12
+  },
+  empty: {
+    marginTop: 150
   }
 });
