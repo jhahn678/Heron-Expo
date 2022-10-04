@@ -32,8 +32,10 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
     }
 
     const handleFetchMore = () => {
-      if(!data || data.locations.length % limit !== 0) return;
-      fetchMore({ variables: { offset: data.locations.length }})
+      if(!data || data.locations.length === 0) return;
+      if(data.locations.length % limit === 0){
+        fetchMore({ variables: { offset: data.locations.length }})
+      }
     }
 
     const handleSort = (type: LocationSort) => () => { setSort(type); setMenuOpen(false); }
