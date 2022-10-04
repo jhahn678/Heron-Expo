@@ -1,6 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
-import { CatchQuery, CatchSort, ICatch } from '../../types/Catch'
-import { getCatchesQueryName, GET_CATCHES } from '../queries/useGetCatches'
+import { Point } from 'geojson'
+import { CatchQuery } from '../../types/Catch'
+import { getCatchesQueryName } from '../queries/useGetCatches'
 import { GET_MY_PROFILE_TOTALS } from '../queries/useGetMyProfile'
 import { GET_WATERBODY } from '../queries/useGetWaterbody'
 
@@ -17,7 +18,7 @@ mutation Mutation($newCatch: NewCatch!) {
 export interface NewCatchArgs {
     newCatch: {
       waterbody?: number | undefined
-      coordinates?: [number, number] | undefined
+      point?: Point | undefined
       title?: string | undefined
       description?: string | undefined
       species?: string | undefined
@@ -40,12 +41,10 @@ export interface NewCatchRes {
   }
 }
 
-export const useCreateCatch = () => {
-    return useMutation<NewCatchRes, NewCatchArgs>(CREATE_CATCH, {
+export const useCreateCatch = () => useMutation<NewCatchRes, NewCatchArgs>(CREATE_CATCH, {
         refetchQueries: ({ data }) => [
           { query: GET_WATERBODY, variables: { id: data?.createCatch.waterbody.id } },
           { query: GET_MY_PROFILE_TOTALS },
           `${getCatchesQueryName(CatchQuery.Waterbody, data?.createCatch.waterbody.id)}`
         ]
     })
-}
