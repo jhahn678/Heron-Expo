@@ -25,6 +25,7 @@ const FilterSpeciesBottomSheet = () => {
         <BottomSheet
             ref={ref}
             snapPoints={['30%']}
+            containerStyle={{ zIndex: 100 }}
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}

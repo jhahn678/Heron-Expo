@@ -1,5 +1,5 @@
 import React, { useEffect, useRef, useState } from "react";
-import { Dimensions, Pressable, StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
@@ -55,6 +55,7 @@ const FilterLengthBottomSheet = () => {
         <BottomSheet
             ref={ref}
             snapPoints={['32%']}
+            containerStyle={{ zIndex: 100 }}
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}

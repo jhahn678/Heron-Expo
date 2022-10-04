@@ -52,6 +52,7 @@ const FilterWeightBottomSheet = () => {
         <BottomSheet
             ref={ref}
             snapPoints={['32%']}
+            containerStyle={{ zIndex: 100 }}
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}
