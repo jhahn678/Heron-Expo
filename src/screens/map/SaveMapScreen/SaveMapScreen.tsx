@@ -1,15 +1,17 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { RootStackScreenProps, SaveType } from '../../../types/navigation'
-import MapView, { LatLng, MapEvent, Marker } from 'react-native-maps'
+import MapView, { LatLng, MapEvent, Marker, Polygon } from 'react-native-maps'
 import { useNewCatchStore } from '../../../store/mutations/useNewCatchStore'
 import { useLocationStore } from '../../../store/location/useLocationStore'
 import { useFocusEffect } from '@react-navigation/native'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
-import { FAB, IconButton } from 'react-native-paper'
+import { FAB, IconButton, SegmentedButtons } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { theme } from '../../../config/theme'
+import { useNewLocationStore } from '../../../store/mutations/useNewLocationStore'
+import uuid from 'react-native-uuid'
 
 const { width, height } = Dimensions.get('screen')
 
@@ -18,19 +20,33 @@ enum Resource {
   Location
 }
 
+enum GeometryType {
+  Point = 'POINT',
+  Polygon = 'POLYGON'
+}
+
 const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScreen'>) => {
 
   const map = useRef<MapView | null>(null)
   const [resource, setResource] = useState<Resource | null>(null)
   const { params: { saveType } } = route;
   const [mapReady, setMapReady] = useState(false)
-  const [coordinates, setCoordinates] = useState<LatLng | null>(null)
+  const [point, setPoint] = useState<LatLng | null>(null)
+  const [polygon, setPolygon] = useState<LatLng[]>([])
+  const [geometryType, setGeometryType] = useState<GeometryType | null>(null)
 
   const setError = useModalStore(store => store.setError)
 
   const newCatch = useNewCatchStore(store => ({
     setMapSnapshot: store.setMapSnapshot,
-    setCoordinates: store.setCoordinates,
+    setPoint: store.setPoint,
+    reset: store.reset
+  }))
+
+  const newLocation = useNewLocationStore(store => ({
+    setMapSnapshot: store.setMapSnapshot,
+    setPolygon: store.setPolygon,
+    setPoint: store.setPoint,
     reset: store.reset
   }))
 
@@ -42,18 +58,26 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
   }))
 
   useEffect(() => {
-    if(coordinates && map.current) {
+    if(point && map.current) {
       map.current.animateCamera({ 
-        center: coordinates,
+        center: point,
         zoom: 15 
       })
     }
-  },[coordinates])
-
-  const handlePress = () => {}
+  },[point])
 
   const handleLongPress = ({ nativeEvent }: MapEvent) => {
-    setCoordinates(nativeEvent.coordinate)
+    setPoint(nativeEvent.coordinate)
+  }
+
+  const handlePress = ({ nativeEvent }: MapEvent) => {
+    if(resource !== Resource.Location) return;
+    if(geometryType === GeometryType.Polygon){
+      setPolygon(state => ([ ...state, nativeEvent.coordinate]))
+    }
+    if(geometryType === GeometryType.Point){
+      setPoint(nativeEvent.coordinate)
+    }
   }
 
   const handleCurrentLocation = () => {
@@ -65,18 +89,39 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     }
   }
 
+  const handleGeometryTypeChange = (value: string) => {
+    if(value === GeometryType.Point) {
+      setPolygon([])
+      setGeometryType(value)
+    }
+    if(value === GeometryType.Polygon) {
+      setPoint(null)
+      setGeometryType(value)
+    }
+  } 
+
   const handleConfirm = async () => {
     switch(resource){
       case Resource.Catch:
-        if(!coordinates) return;
-        const image = await map.current?.takeSnapshot({ height, width })
-        newCatch.setMapSnapshot(image)
-        newCatch.setCoordinates([coordinates.longitude, coordinates.latitude])
-        setResource(null)
-        navigation.goBack()
+        if(!point || !map.current) return;
+        map.current.takeSnapshot({ height, width })
+          .then(image => {
+            newCatch.setMapSnapshot(image)
+            newCatch.setPoint(point)
+            setResource(null);
+            navigation.goBack();
+          })
         break;
       case Resource.Location:
-        setResource(null)
+        if(!point || !map.current) return;
+        map.current.takeSnapshot({ height, width })
+          .then(image => {
+            newLocation.setMapSnapshot(image);
+            if(geometryType === GeometryType.Point) newLocation.setPoint(point)
+            if(geometryType === GeometryType.Polygon) newLocation.setPolygon(polygon)
+            setResource(null);
+            navigation.goBack();
+          })
         break;
       default:
         console.log('unhandled save');
@@ -89,11 +134,22 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       switch(saveType){
         case SaveType.CatchAuto:
           if(!location.coordinates) return setError(true, ErrorType.MapCurrentLocation)
-          setCoordinates(location.coordinates)
+          setPoint(location.coordinates)
           setResource(Resource.Catch)
           break;
         case SaveType.CatchManual:
           setResource(Resource.Catch)
+          if(location.coordinates) handleCurrentLocation()
+          break;
+        case SaveType.LocationAuto:
+          if(!location.coordinates) return setError(true, ErrorType.MapCurrentLocation)
+          setPoint(location.coordinates)
+          setResource(Resource.Location)
+          setGeometryType(GeometryType.Point)
+          break;
+        case SaveType.LocationManual:
+          setResource(Resource.Location)
+          setGeometryType(GeometryType.Point)
           if(location.coordinates) handleCurrentLocation()
           break;
         default:
@@ -120,18 +176,48 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
           )}
         />
       </View>
-      { coordinates ?
-        <FAB
-          icon="check"
-          theme={{ roundness: 1 }}
-          customSize={64}
-          onPress={handleConfirm}
-          style={styles.confirm}
-        /> :
-        <Text style={styles.tip}>
-          Press and hold to add a marker
-        </Text>
+
+      { geometryType && 
+        <View style={styles.geometry}>
+          <SegmentedButtons
+            value={geometryType}
+            onValueChange={handleGeometryTypeChange}
+            density='regular'
+            buttons={[
+              {
+                value: GeometryType.Point,
+                icon: 'vector-point',
+                label: 'Point',
+
+              },
+              {
+                value: GeometryType.Polygon,
+                icon: 'vector-polygon',
+                label: 'Polygon'
+              },
+            ]}
+          />
+        </View>
       }
+      
+      { resource === Resource.Catch && (
+        point ?
+          <FAB
+            icon="check"
+            theme={{ roundness: 1 }}
+            customSize={64}
+            onPress={handleConfirm}
+            style={styles.confirm}
+          /> 
+        :
+          <Text style={styles.tip}>
+            Press and hold to add a marker
+          </Text>
+      )}
+      {/* { resource === Resource.Location && (
+        geometryType === GeometryType.Point ?
+        geometryType === GeometryType.Polygon ?
+      )} */}
       <MapView
         ref={map}
         style={styles.map}
@@ -139,7 +225,24 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
         onLongPress={handleLongPress}
         onPress={handlePress}
       >
-        { coordinates && <Marker coordinate={coordinates}/> }
+        { polygon.length > 0 && 
+          <Polygon 
+            coordinates={polygon} 
+            fillColor={'rgba(0,0,0,.3)'} 
+            strokeColor={theme.colors.primary} 
+            strokeWidth={2}
+          /> 
+        }
+        { polygon.length > 0 &&
+          polygon.map((x) => (
+            <Marker 
+              coordinate={x} 
+              key={uuid.v4().toString()} 
+              draggable={true}
+            />
+          ))
+        }
+        { point && <Marker coordinate={point}/> }
       </MapView>
     </View>
   )
@@ -180,6 +283,13 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.surfaceVariant,
     paddingHorizontal: 16,
     paddingVertical: 12,
+    borderRadius: 24
+  },
+  geometry: {
+    position: "absolute",
+    bottom: 48,
+    zIndex: 100,
+    backgroundColor: theme.colors.surfaceVariant,
     borderRadius: 24
   }
 })
