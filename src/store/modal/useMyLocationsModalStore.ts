@@ -1,4 +1,5 @@
 import create from "zustand";
+import { LocationSort, Privacy } from "../../types/Location";
 
 export interface LocationsModalStore {
     minDate: Date | undefined,
@@ -11,6 +12,14 @@ export interface LocationsModalStore {
     setWaterbody: (waterbody?: number | undefined) => void
     waterbodyVisible: boolean
     setWaterbodyVisible: (visible?: boolean) => void
+    privacy: Privacy | undefined,
+    setPrivacy: (value?: Privacy) => void
+    privacyVisible: boolean
+    setPrivacyVisible: (visible?: boolean) => void
+    sort: LocationSort | undefined
+    setSort: (value?: LocationSort) => void
+    sortVisible: boolean
+    setSortVisible: (visible?: boolean) => void
     reset: () => void
 }
 
@@ -33,6 +42,14 @@ export const useMyLocationsModalStore = create<LocationsModalStore>((set, get) =
     },
     waterbodyVisible: false,
     setWaterbodyVisible: (waterbodyVisible=true) => set({ waterbodyVisible }),
+    privacy: undefined,
+    setPrivacy: privacy => set({ privacy }),
+    privacyVisible: false,
+    setPrivacyVisible: (privacyVisible=true) => set({ privacyVisible }),
+    sort: LocationSort.CreatedAtNewest,
+    setSort: (sort=LocationSort.CreatedAtNewest) => set({ sort }),
+    sortVisible: false,
+    setSortVisible: (sortVisible=true) => set({ sortVisible }),
     reset: () => set({
         minDate: undefined,
         maxDate: undefined,

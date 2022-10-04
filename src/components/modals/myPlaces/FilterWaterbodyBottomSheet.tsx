@@ -1,46 +1,50 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet } from "react-native";
 import BottomSheet, { BottomSheetFlatList }  from "@gorhom/bottom-sheet";
-import { Title } from "react-native-paper";
+import { Title, Text } from "react-native-paper";
 import SelectableItem from "../../lists/shared/SelectableItem";
-import { useGetMyCatchWaterbodies } from "../../../hooks/queries/useGetUserCatchStatistics";
 import Backdrop from "../Backdrop";
 import { useMyLocationsModalStore } from "../../../store/modal/useMyLocationsModalStore";
+import { useGetMyLocationStatistics } from "../../../hooks/queries/useGetUserLocationsStatistics";
 
 const FilterWaterbodyBottomSheet = () => {
 
-    const { data } = useGetMyCatchWaterbodies() // needs changed
+    const { data } = useGetMyLocationStatistics()  
     const ref = useRef<BottomSheet | null>(null)
-
+    const [backdrop, setBackdrop] = useState(false)
     const setModalVisible = useMyLocationsModalStore(store => store.setWaterbodyVisible)
     const setWaterbody = useMyLocationsModalStore(store => store.setWaterbody)
     const waterbodies = useMyLocationsModalStore(store => store.waterbody)
     const modalVisible = useMyLocationsModalStore(store => store.waterbodyVisible)
 
-    const handleBackdrop = () => { if(ref.current) ref.current.close() }
-    const handleClose = () => setModalVisible(false)
+    const handleBackdrop = () => { setBackdrop(false); if(ref.current) ref.current.close() }
+    const handleClose = () => { setBackdrop(false); setModalVisible(false) }
     const handleSelect = (value: number) => () => setWaterbody(value)
 
     useEffect(() => {
-        if(ref.current && modalVisible) ref.current.expand()
+        if(ref.current && modalVisible) {
+            setBackdrop(true)
+            ref.current.expand()
+        }
     },[modalVisible])
 
     return (
         <BottomSheet
             ref={ref}
-            snapPoints={['30%']}
             index={-1}
-            enablePanDownToClose={true}
+            snapPoints={['30%']}
             onClose={handleClose}
-            backdropComponent={modalVisible ? (
+            enablePanDownToClose={true}
+            containerStyle={{ zIndex: 100 }}
+            backdropComponent={backdrop ? (
                 () => <Backdrop onPress={handleBackdrop}/>
             ) : null}
         >
             <Title style={styles.title}>Waterbodies</Title>
-            { data && data.me.catch_statistics.waterbody_counts ?
+            { data && data.me.location_statistics.waterbody_counts ?
                 <BottomSheetFlatList
                     contentContainerStyle={styles.content}
-                    data={data.me.catch_statistics.waterbody_counts}
+                    data={data.me.location_statistics.waterbody_counts}
                     renderItem={({ item }) => (
                         <SelectableItem 
                             key={item.waterbody.id} 
@@ -51,7 +55,7 @@ const FilterWaterbodyBottomSheet = () => {
                         />
                     )}
                 />
-            : null}
+            : <Text style={styles.empty}>No Saved Locations Available</Text>}
 
         </BottomSheet>
     );
@@ -67,6 +71,12 @@ const styles = StyleSheet.create({
     content: {
         paddingVertical: 16,
         paddingHorizontal: 8
+    },
+    empty: {
+        fontWeight: '500',
+        fontStyle: 'italic',
+        marginLeft: 24,
+        marginTop: 16
     }
 });
 
