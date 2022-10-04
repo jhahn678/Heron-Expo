@@ -1,22 +1,31 @@
 import React from 'react'
-import { StyleSheet, View, Image } from 'react-native'
+import { StyleSheet, View, Image, ViewStyle, StyleProp } from 'react-native'
 import { Card, Text } from 'react-native-paper'
-import { WaterbodyListItem } from '../../../types/Waterbody'
+import { IWaterbody } from '../../../types/Waterbody'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../../../globalStyles'
 import { truncateTotal } from '../../../utils/conversions/truncateTotal'
+import { IMedia } from '../../../types/Media'
+
+export interface WaterbodyListItem extends Omit<IWaterbody, 'weight' | 'oid'> {
+  media: Pick<IMedia, "url" | "id">[];
+  total_catches: number;
+  total_locations: number;
+  average_rating: number | null;
+}
 
 
 interface Props<T> {
   data: T,
   /** Navigates to waterbody screen */
   navigate: (id: number) => void
+  containerStyle?: ViewStyle
 }
 
-const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate }: Props<T>) => {
+const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate, containerStyle }: Props<T>) => {
   
   return (
-    <Card style={styles.container} onPress={() => navigate(data.id)} elevation={0}>
+    <Card style={[styles.container, containerStyle]} onPress={() => navigate(data.id)} elevation={0}>
       <Image source={{ uri: data.media[0]?.url }} style={styles.image} />
       <View style={styles.heading}>
         <Text style={styles.title} numberOfLines={1}>

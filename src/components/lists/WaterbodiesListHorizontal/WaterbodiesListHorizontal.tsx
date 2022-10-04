@@ -1,6 +1,5 @@
 import { FlashList } from '@shopify/flash-list'
-import WaterbodiesListItem from './WaterbodiesListItem'
-import { WaterbodyListItem } from '../../../types/Waterbody'
+import WaterbodiesListItem, { WaterbodyListItem } from './WaterbodiesListItem'
 import ListFooterSeeMore from '../shared/ListFooterSeeMore'
 import WaterbodiesListLoader from '../../loaders/WaterbodyListLoader'
 
