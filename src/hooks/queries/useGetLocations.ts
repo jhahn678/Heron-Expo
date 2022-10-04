@@ -58,7 +58,6 @@ export interface GetLocationsRes {
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     waterbody: Pick<IWaterbody, "id" | "name">;
     media: Pick<IMedia, "url" | "id">[];
-    nearest_geoplace: string;
     total_favorites: number;
     is_favorited: boolean;
     is_saved: boolean
