@@ -3,14 +3,17 @@ import { Text } from 'react-native-paper'
 import FishingFromBoat from "../../svg/FishingFromBoat";
 
 interface Props {
-  style?: StyleProp<ViewStyle>;
+    style?: StyleProp<ViewStyle>
+    fontSize?: number
+    scale?: number
+    caption?: string
 }
 
-const ReviewsListEmpty = ({ style }: Props) => {
+const ReviewsListEmpty = ({ style, fontSize=14, scale=1, caption }: Props) => {
   return (
-    <View style={[styles.container, style]}>
+    <View style={[styles.container, style, { transform: [{ scale }]}]}>
       <FishingFromBoat/>
-      <Text style={styles.label}>No Reviews Yet</Text>
+      <Text style={[styles.label, { fontSize }]}>{caption || "No Reviews yet"}</Text>
     </View>
   );
 };
@@ -20,7 +23,6 @@ export default ReviewsListEmpty;
 const styles = StyleSheet.create({
   container: {
     alignItems: "center",
-    marginTop: '50%'
   },
   label: {
     fontWeight: "500",
