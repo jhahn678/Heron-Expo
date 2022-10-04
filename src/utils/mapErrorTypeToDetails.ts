@@ -9,6 +9,7 @@ export enum ErrorType {
     CreateCatch = 'CREATE_CATCH',
     MapCatch = 'MAP_CATCH',
     Location = 'LOCATION',
+    CreateLocation = 'CREATE_LOCATION',
     MapLocation = 'MAP_LOCATION',
     MapNoCatches = 'MAP_NO_CATCHES',
     MapNoCatchesLogged = 'MAP_NO_CATCHES_LOGGED',
@@ -42,6 +43,10 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
     LOCATION: {
         title: '',
         message: '',
+    },
+    CREATE_LOCATION: {
+        title: 'Something went wrong 😵‍💫',
+        message: 'Could not create location. Please try again'
     },
     MAP_LOCATION: {
         title: 'Something went wrong 😵‍💫',
