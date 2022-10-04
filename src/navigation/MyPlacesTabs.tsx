@@ -4,16 +4,19 @@ import { BottomTabsScreenProps, MyPlacesTabsParams } from "../types/navigation";
 import { FAB } from 'react-native-paper';
 import HeadingSection from '../screens/location/MyPlacesTabs/sections/HeadingSection';
 import AddLocationIcon from '../components/icons/AddLocationIcon';
-import SavedPlacesTabView from '../screens/location/MyPlacesTabs/SavedPlacesTabView';
+import SavedPlacesTabView from '../screens/location/MyPlacesTabs/SavedLocationsTabView';
 import MyLocationsTabView from '../screens/location/MyPlacesTabs/MyLocationsTabView';
 import FilterWaterbodyBottomSheet from '../components/modals/myPlaces/FilterWaterbodyBottomSheet';
 import FilterDateBottomSheet from '../components/modals/myPlaces/FilterDateBottomSheet';
+import FilterPrivacyBottomSheet from '../components/modals/myPlaces/FilterPrivacyBottomSheet';
+import FilterSortBottomSheet from '../components/modals/myPlaces/FilterSortBottomSheet';
+import SavedWaterbodiesTabView from '../screens/location/MyPlacesTabs/SavedWaterbodiesTabView';
 
 const Tab = createMaterialTopTabNavigator<MyPlacesTabsParams>();
 
 const MyPlacesTabs = ({ navigation }: BottomTabsScreenProps<'MyPlacesScreen'>) => {
 
-    const handleNewLocation = () => navigation.navigate('NewLocationScreen')
+    const navigateNewLocation = () => navigation.navigate('NewLocationScreen')
 
     return (
         <View style={styles.container}>
@@ -22,12 +25,17 @@ const MyPlacesTabs = ({ navigation }: BottomTabsScreenProps<'MyPlacesScreen'>) =
                 <Tab.Screen
                 name={'MyLocationsList'}
                 component={MyLocationsTabView}
-                options={{ tabBarLabel: 'My Locations' }}
+                options={{ tabBarLabel: 'Saved' }}
                 />
                 <Tab.Screen
-                name={'MySavedPlaces'}
+                name={'MySavedLocations'}
                 component={SavedPlacesTabView}
-                options={{ tabBarLabel: 'Saved' }}
+                options={{ tabBarLabel: 'Bookmarked' }}
+                />
+                <Tab.Screen
+                name={'MySavedWaterbodies'}
+                component={SavedWaterbodiesTabView}
+                options={{ tabBarLabel: 'Fisheries' }}
                 />
             </Tab.Navigator>
             <FAB 
@@ -35,13 +43,15 @@ const MyPlacesTabs = ({ navigation }: BottomTabsScreenProps<'MyPlacesScreen'>) =
                     <AddLocationIcon color={color} size={size}/>
                 )} 
                 animated={false}
-                onPress={handleNewLocation}
+                onPress={navigateNewLocation}
                 customSize={64} 
                 theme={{ roundness: 2 }}
                 style={styles.fab}
             />
             <FilterDateBottomSheet/>
             <FilterWaterbodyBottomSheet/>
+            <FilterPrivacyBottomSheet/>
+            <FilterSortBottomSheet/>
         </View>
     );
 };
