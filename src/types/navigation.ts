@@ -57,7 +57,9 @@ export enum ReviewQuery {
 
 export enum SaveType {
     CatchAuto = 'CATCH_CURRENT_LOCATION',
-    CatchManual = 'CATCH_MANUAL_LOCATION'
+    CatchManual = 'CATCH_MANUAL_LOCATION',
+    LocationAuto = 'LOCATION_CURRENT_LOCATION',
+    LocationManual = 'LOCATION_MANUAL_LOCATION'
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 
@@ -106,7 +108,8 @@ export type MyCatchesTabsScreenProps<T extends keyof MyCatchesTabsParams> =
 
 export type MyPlacesTabsParams = {
     MyLocationsList: undefined
-    MySavedPlaces: undefined
+    MySavedLocations: undefined
+    MySavedWaterbodies: undefined
 }
 
 export type MyPlacesTabsScreenProps<T extends keyof MyPlacesTabsParams> = 
