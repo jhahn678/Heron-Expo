@@ -59,7 +59,7 @@ const MeasurementsInput = () => {
                     value={length}
                     style={{ flex: 1 }}
                     onChangeText={setLength}
-                    left={<TextInput.Icon name="ruler" size={16}/>}
+                    left={<TextInput.Icon icon={'ruler'} size={16}/>}
                     right={<TextInput.Affix text="in"/>}
                     error={lengthError}
                 />
@@ -71,7 +71,7 @@ const MeasurementsInput = () => {
                     value={weight}
                     style={{ flex: 1, marginLeft: 16 }}
                     onChangeText={setWeight}
-                    left={<TextInput.Icon name="scale" size={16}/>}
+                    left={<TextInput.Icon icon={"scale"} size={16}/>}
                     right={<TextInput.Affix text="oz"/>}
                     error={weightError}
                 />
