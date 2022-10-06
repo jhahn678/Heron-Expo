@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { RootStackScreenProps, SaveType } from '../../../types/navigation'
-import MapView, { LatLng, MapEvent, Marker, Polygon, Polyline } from 'react-native-maps'
+import MapView, { Marker, Polygon, Polyline } from 'react-native-maps'
 import { useNewCatchStore } from '../../../store/mutations/useNewCatchStore'
 import { useLocationStore } from '../../../store/location/useLocationStore'
 import { useFocusEffect } from '@react-navigation/native'
@@ -11,21 +11,10 @@ import { FAB, IconButton, SegmentedButtons } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { theme } from '../../../config/theme'
 import { useNewLocationStore } from '../../../store/mutations/useNewLocationStore'
-import uuid from 'react-native-uuid'
-import { createMidpoint, createMidpoints, MidPoint, PolygonPoint } from '../../../utils/map/createMidpoints'
 import PromptDeletePoint from '../../../components/modals/map/PromptDeletePoint'
+import { Geometry, Resource, useCreateGeometry } from '../../../hooks/utils/useCreateGeometry'
 
 const { width, height } = Dimensions.get('screen')
-
-enum Resource {
-  Catch,
-  Location
-}
-
-enum Geometry {
-  Point = 'POINT',
-  Polygon = 'POLYGON'
-}
 
 const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScreen'>) => {
   
@@ -33,17 +22,32 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
   const map = useRef<MapView | null>(null)
   const [resource, setResource] = useState<Resource | null>(null)
   const [geometry, setGeometry] = useState<Geometry>(Geometry.Point)
-  const [promptDelete, setPromptDelete] = useState(false)
-  const [midpoints, setMidpoints] = useState<MidPoint[]>([])
-  const [selectedPoint, setSelectedPoint] = useState<PolygonPoint | null>(null)
-  const [repositionPoint, setRepositionPoint] = useState<LatLng | null>(null)
-  const [repositionAnchorOne, setRepositionAnchorOne] = useState<PolygonPoint | null>(null)
-  const [repositionAnchorTwo, setRepositionAnchorTwo] = useState<PolygonPoint | null>(null)
-
-  const [point, setPoint] = useState<LatLng | null>(null)
-  const [polygon, setPolygon] = useState<PolygonPoint[]>([])
-
   const setError = useModalStore(store => store.setError)
+
+  const {
+    point,
+    polygon,
+    midpoints,
+    selectedPoint,
+    promptDelete,
+    repositionPoint,
+    repositionAnchorOne,
+    repositionAnchorTwo,
+    setPoint,
+    setPolygon,
+    setPromptDelete,
+    setSelectedPoint,
+    handlePress,
+    handleLongPress,
+    handleMarkerPress,
+    handleMarkerDragEnd,
+    handleMidpointDragStart,
+    handleMidpointDragEnd,
+    handlePolygonDragEnd,
+    handlePolygonDragStart,
+    handleRepositionDrag,
+    handleDeletePoint
+  } = useCreateGeometry({ resource, geometry, map })
 
   //store for NewCatch state
   const newCatch = useNewCatchStore(store => ({
@@ -100,115 +104,6 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     },[route])
   );
 
-
-  //centers map view when point is changed
-  useEffect(() => {
-    if(point && map.current) {
-      map.current.animateCamera({ 
-        center: point,
-        zoom: 15 
-      })
-    }
-  },[point])
-
-  useEffect(() => {
-    if(polygon.length > 1){
-      setMidpoints(
-        polygon.length === 2
-        ? createMidpoint(polygon[0], polygon[1])
-        : createMidpoints(polygon)
-      )
-    }else{
-      setMidpoints([])
-    }
-  },[polygon])
-
-  const handleLongPress = ({ nativeEvent }: MapEvent) => {
-    if(resource === Resource.Catch){
-      setPoint(nativeEvent.coordinate)
-    }
-  }
-
-  const handleMarkerDragEnd = ({ nativeEvent }: MapEvent) => setPoint(nativeEvent.coordinate)
-  
-  const handleRepositionDrag = ({ nativeEvent: { coordinate }}: MapEvent) => setRepositionPoint(coordinate)
-  
-  const handlePolygonDragStart = (id: string) => ({ nativeEvent: { coordinate }}: MapEvent) => {
-    const index = polygon.findIndex(x => x.id === id)
-    setRepositionPoint(coordinate)
-    setRepositionAnchorOne(polygon[index === polygon.length - 1 ? 0 : index + 1])
-    setRepositionAnchorTwo(polygon[index === 0 ? polygon.length - 1 : index - 1])
-  }
-
-  const handlePolygonDragEnd = (id: string) => ({ nativeEvent: { coordinate }}: MapEvent) => {
-    setPolygon(state => {
-      const index = state.findIndex(x => x.id === id)
-      return [
-        ...state.slice(0,index), 
-        { id: state[index].id, coordinate }, 
-        ...state.slice(index + 1)
-      ]
-    })
-    setRepositionPoint(null)
-    setRepositionAnchorOne(null)
-    setRepositionAnchorTwo(null)
-  }
-
-  const handleMarkerPress = ({ nativeEvent }: MapEvent<{ 
-    action: 'marker-press', id: string
-  }>) => setSelectedPoint(polygon.find(x => x.id === nativeEvent.id) || null)
-
-  const handleDeletePoint = () => {
-    if(!selectedPoint) return;
-    if(Geometry.Point) setPoint(null)
-    if(Geometry.Polygon) setPolygon(state => ([
-      ...state.filter(x => x.id !== selectedPoint.id)
-    ]))
-    setPromptDelete(false)
-    setSelectedPoint(null)
-  }
-
-  const handleMidpointDragStart = (midpoint: MidPoint) => ({ nativeEvent: { coordinate } }: MapEvent) => {
-    setRepositionPoint(coordinate)
-    const left = polygon.find(x => x.id === midpoint.left)
-    if(left) setRepositionAnchorOne(left)
-    const right = polygon.find(x => x.id === midpoint.right)
-    if(right) setRepositionAnchorTwo(right)
-  }
-
-  const handleMidpointDragEnd = (midpoint: MidPoint) => ({ nativeEvent: { coordinate } }: MapEvent) => {
-    let index: number;
-    const left = polygon.findIndex(x => x.id === midpoint.left);
-    const right = polygon.findIndex(x => x.id === midpoint.right);
-    if(polygon.length > 2 && left === 0 && right === polygon.length - 1){
-      index = polygon.length;
-    }else if(polygon.length > 2 && right === 0 && left === polygon.length - 1){
-      index = polygon.length;
-    }else{
-      index = left > right ? left : right;
-    }
-    setPolygon(state => ([
-      ...state.slice(0, index),
-      { id: uuid.v4().toString(), coordinate },
-      ...state.slice(index)
-    ]))
-    setRepositionPoint(null)
-    setRepositionAnchorOne(null)
-    setRepositionAnchorTwo(null)
-  }
-
-
-  const handlePress = ({ nativeEvent: { coordinate } }: MapEvent) => {
-    if(resource !== Resource.Location) return;
-    if(geometry === Geometry.Point) return setPoint(coordinate)
-    if(geometry === Geometry.Polygon){
-      setPolygon(state => ([
-        ...state,
-        { id: uuid.v4().toString(), coordinate }
-      ]))
-    }
-  }
-
   const handleCurrentLocation = () => {
     if(location.coordinates && map.current){
       map.current.animateCamera({
@@ -227,7 +122,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       setPoint(null)
       setGeometry(value)
     }
-  } 
+  }
 
   const handleConfirm = async () => {
     if(!point || !map.current) return;
@@ -242,16 +137,16 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     if(resource === Resource.Location){
       map.current.takeSnapshot({ height, width })
         .then(image => {
-          if(geometry === Geometry.Polygon) {
+        if(geometry === Geometry.Polygon) {
             newLocation.setPolygon(polygon.map(x => x.coordinate))
-          }else if(geometry === Geometry.Point) {
+        }else if(geometry === Geometry.Point) {
             newLocation.setPoint(point)
-          } 
-          newLocation.setMapSnapshot(image);
-          navigation.goBack();
+        } 
+        newLocation.setMapSnapshot(image);
+        navigation.goBack();
         })
     }
-  }
+    }
 
   return (
     <View style={styles.container}>
