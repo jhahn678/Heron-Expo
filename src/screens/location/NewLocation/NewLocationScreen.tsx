@@ -14,6 +14,7 @@ import TitleInput from './sections/TitleInput'
 import DescriptionInput from './sections/DescriptionInput'
 import ImageInput from '../../../components/inputs/ImageInput'
 import LocationInput from './sections/LocationInput'
+import PrivacyInput from './sections/PrivacyInput'
 
 
 const NewLocationScreen = ({ navigation }: RootStackScreenProps<'NewLocationScreen'>) => {
@@ -76,6 +77,7 @@ const NewLocationScreen = ({ navigation }: RootStackScreenProps<'NewLocationScre
       <ScrollView contentContainerStyle={styles.main} keyboardShouldPersistTaps='handled'>
         <TitleInput/>
         <DescriptionInput/>
+        <PrivacyInput/>
         <LocationInput navigation={navigation}/>
         <ImageInput/>
         <Button 
