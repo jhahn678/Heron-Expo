@@ -7,7 +7,7 @@ import { useLocationStore } from '../../../store/location/useLocationStore'
 import { useFocusEffect } from '@react-navigation/native'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
-import { FAB, IconButton, SegmentedButtons } from 'react-native-paper'
+import { Button, FAB, IconButton, SegmentedButtons } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { theme } from '../../../config/theme'
 import { useNewLocationStore } from '../../../store/mutations/useNewLocationStore'
@@ -125,10 +125,11 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
   }
 
   const handleConfirm = async () => {
-    if(!point || !map.current) return;
+    if(!map.current) return;
     if(resource === Resource.Catch){
       map.current.takeSnapshot({ height, width })
         .then(image => {
+          if(!point) return;
           newCatch.setMapSnapshot(image)
           newCatch.setPoint(point)
           navigation.goBack();
@@ -138,8 +139,10 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       map.current.takeSnapshot({ height, width })
         .then(image => {
         if(geometry === Geometry.Polygon) {
+            if(polygon.length < 3) return;
             newLocation.setPolygon(polygon.map(x => x.coordinate))
         }else if(geometry === Geometry.Point) {
+            if(!point) return
             newLocation.setPoint(point)
         } 
         newLocation.setMapSnapshot(image);
@@ -166,6 +169,12 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
           )}
         />
       </View>
+
+      { (point || polygon.length > 2) &&
+        <Button style={styles.save} mode='contained' onPress={handleConfirm}>
+          Save
+        </Button>
+      }
 
       { resource === Resource.Location && 
           <View style={styles.geometry}>
@@ -374,4 +383,10 @@ const styles = StyleSheet.create({
     padding: 16,
     backgroundColor: theme.colors.secondaryContainer
   },
+  save: {
+    position: 'absolute',
+    bottom: 120,
+    zIndex: 100,
+    width: '45%'
+  }
 })
