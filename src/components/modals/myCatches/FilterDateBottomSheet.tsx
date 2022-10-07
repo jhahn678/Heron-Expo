@@ -82,7 +82,7 @@ const FilterDateBottomSheet = () => {
                             value={localMinDate ? dayjs(localMinDate).format('MM/DD/YYYY') : undefined}
                             placeholder="mm/dd/yyyy" 
                             mode="outlined" 
-                            right={<TextInput.Icon name='close' size={16} onPress={handleClearMin}/>}
+                            right={<TextInput.Icon icon='close' size={16} onPress={handleClearMin}/>}
                         />
                     </Pressable>
                 </View>
@@ -94,7 +94,7 @@ const FilterDateBottomSheet = () => {
                             placeholder="mm/dd/yyyy" 
                             value={localMaxDate ? dayjs(localMaxDate).format('MM/DD/YYYY') : undefined}
                             mode="outlined" 
-                            right={<TextInput.Icon name='close' size={16} onPress={handleClearMax}/>}
+                            right={<TextInput.Icon icon='close' size={16} onPress={handleClearMax}/>}
                         />
                     </Pressable>
                 </View>

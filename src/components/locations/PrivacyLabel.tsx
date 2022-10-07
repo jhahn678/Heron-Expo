@@ -2,6 +2,7 @@ import { StyleProp, StyleSheet, Text, TextStyle, View, ViewStyle } from "react-n
 import Icon from 'react-native-vector-icons/FontAwesome5'
 import { Privacy } from "../../types/Location";
 import { privacyToLabel } from "../../utils/conversions/privacyToLabel";
+import { privacyToIcon } from "../../utils/conversions/privacyToIcon";
 
 interface Props {
     privacy: Privacy | undefined
@@ -12,19 +13,6 @@ interface Props {
 
 const PrivacyLabel = ({ privacy, style, labelStyle, iconSize=12 }: Props) => {
 
-    const privacyToIcon = () => {
-        switch(privacy){
-            case Privacy.Friends:
-                return 'user-friends';
-            case Privacy.Private:
-                return 'user-shield';
-            case Privacy.Public:
-                return 'globe';
-            default:
-                return 'globe'
-        }
-    }
-
     if(!privacy) return null;
 
     return (
@@ -32,7 +20,7 @@ const PrivacyLabel = ({ privacy, style, labelStyle, iconSize=12 }: Props) => {
             <Text style={[styles.label, labelStyle]}>
                 {privacyToLabel(privacy)}
             </Text>
-            <Icon name={privacyToIcon()} size={iconSize}/>
+            <Icon name={privacyToIcon(privacy)} size={iconSize}/>
         </View>
     );
 };

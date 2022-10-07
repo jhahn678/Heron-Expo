@@ -4,7 +4,7 @@ import { Dimensions, Image, Pressable, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { GetLocationRes, useGetLocationFragment } from "../../../hooks/queries/useGetLocation";
-import { NavigationProp } from "../../../types/navigation";
+import { NavigationProp, RootStackScreenProps } from "../../../types/navigation";
 import { useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../store/auth/useAuth";
 import Avatar from "../../users/Avatar";
@@ -24,7 +24,7 @@ const { width } = Dimensions.get('window')
 const LocationsBottomSheet = () => {
 
   const { id } = useAuth()
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<RootStackScreenProps<'ViewMapScreen'>['navigation']>();
   const [data, setData] = useState<GetLocationRes['location'] | null>(null);
   const getFromCache = useGetLocationFragment();
   const visible = useMapModalStore((store) => store.locationVisible);
@@ -88,14 +88,14 @@ const LocationsBottomSheet = () => {
       </View>
 
       <View style={[styles.images, styles.hpadding]}>
-        {data?.media && data.media.length > 0 ? (
+        {data && data.media.length > 0 ? (
           data.media.slice(0, 2).map(({ id, url }) => (
             <Pressable
-              key={id}
+              key={`${id}${url}`}
               style={styles.image}
               onPress={navigateToImage(url)}
             >
-              <Image source={{ uri: url }} />
+              <Image source={{ uri: url }} style={{ flex: 1 }} resizeMode='cover'/>
             </Pressable>
           ))
         ) : (
@@ -191,6 +191,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     width: width * 0.5 - 20,
     borderRadius: 12,
+    overflow: 'hidden'
   },
   favorites: {
     fontWeight: "500",

@@ -4,7 +4,7 @@ import { Dimensions, Pressable, StyleSheet, View, Image, GestureResponderEvent }
 import React, { useEffect, useState } from "react";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { useGetCatchFragment, GetCatchRes } from "../../../hooks/queries/useGetCatch";
-import { NavigationProp } from "../../../types/navigation";
+import { NavigationProp, RootStackScreenProps } from "../../../types/navigation";
 import { useNavigation } from "@react-navigation/native";
 import globalStyles from "../../../globalStyles";
 import Avatar from "../../users/Avatar";
@@ -19,7 +19,7 @@ const { width } = Dimensions.get('screen')
 
 const CatchesBottomSheet = () => {
   
-  const navigation = useNavigation<NavigationProp>();
+  const navigation = useNavigation<RootStackScreenProps<'ViewMapScreen'>['navigation']>();
   const [data, setData] = useState<GetCatchRes["catch"] | null>(null);
   const getFromCache = useGetCatchFragment();
   const visible = useMapModalStore((store) => store.catchVisible);
@@ -31,18 +31,21 @@ const CatchesBottomSheet = () => {
     navigation.navigate("ViewImageScreen", { uri });
 
   const navigateToUser = () => {
-    if (!data?.user.id) return;
-    navigation.navigate("UserProfileScreen", { id: data?.user.id });
+    if (data) navigation.navigate("UserProfileScreen", { id: data.user.id });
   }
 
   const navigateToCatch = () => {
-    if(!data?.id) return;
-    navigation.navigate('ViewCatchScreen', { id: data.id })
+    if(data) navigation.navigate('ViewCatchScreen', { id: data.id })
   }
 
   const navigateToWaterbody = () => {
-    if(!data?.waterbody.id) return;
-    navigation.navigate('WaterbodyScreen', { id: data?.waterbody.id})
+    if(data) navigation.navigate('MainTabs', { 
+      screen: 'ExploreStack', 
+      params: { 
+        screen: 'WaterbodyScreen', 
+        params: { id: data.waterbody.id } 
+      }
+    })
   }
 
   useEffect(() => {

@@ -40,17 +40,17 @@ const SearchBar = (props: Props): JSX.Element => {
                 value={props.value || ''}
                 onChangeText={props.setValue}
                 multiline={false}
-                right={<TextInput.Icon name='close' size={24}/>}
+                right={<TextInput.Icon icon='close' size={24}/>}
                 left={
                     props.goBack ? 
                     <TextInput.Icon 
-                        name='arrow-left' 
+                        icon='arrow-left' 
                         size={24} 
                         color='#000'
                         onPress={props.goBack}
                     /> :
                     <TextInput.Icon
-                        name='magnify' 
+                        icon='magnify' 
                         size={24} 
                         color='#000'
                     />
