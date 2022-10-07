@@ -140,7 +140,11 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
         .then(image => {
         if(geometry === Geometry.Polygon) {
             if(polygon.length < 3) return;
-            newLocation.setPolygon(polygon.map(x => x.coordinate))
+            //first and last point must be the same
+            newLocation.setPolygon([
+              ...polygon.map(x => x.coordinate), 
+              polygon[0].coordinate
+            ])
         }else if(geometry === Geometry.Point) {
             if(!point) return
             newLocation.setPoint(point)
