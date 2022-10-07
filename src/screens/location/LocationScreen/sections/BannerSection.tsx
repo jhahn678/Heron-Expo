@@ -6,6 +6,7 @@ import ImagePagination from "../../../../components/lists/shared/ImagePagination
 import { GetLocationRes } from "../../../../hooks/queries/useGetLocation";
 import { useImagePaginationIndicator } from "../../../../hooks/utils/useImagePaginationIndicator";
 import { ShareType } from "../../../../hooks/utils/useShareContent";
+import { MediaType } from "../../../../types/Media";
 import { RootStackScreenProps } from "../../../../types/navigation";
 
 const { height, width } = Dimensions.get('screen')
@@ -19,7 +20,8 @@ interface Props {
 const BannerSection = ({ navigation, media, id }: Props) => {
 
     const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
-    const navigateToImage = (id: number) => () => navigation.navigate("ViewImageScreen", { id });
+    const navigateToImage = (id: number) => () => navigation
+        .navigate("ViewImageScreen", { id, type: MediaType.Location });
 
     return (
         <View style={styles.container}>

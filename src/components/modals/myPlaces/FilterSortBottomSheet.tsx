@@ -1,7 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { Title } from "react-native-paper";
+import { RadioButton, Title } from "react-native-paper";
 import SelectableItem from "../../lists/shared/SelectableItem";
 import Backdrop from "../Backdrop";
 import { useMyLocationsModalStore } from "../../../store/modal/useMyLocationsModalStore";
@@ -16,6 +16,7 @@ const FilterSortBottomSheet = () => {
     const modalVisible = useMyLocationsModalStore(store => store.sortVisible)
     const setModalVisible = useMyLocationsModalStore(store => store.setSortVisible)
 
+    const handleChange = (value: string) => setSort(value as unknown as LocationSort)
     const handleBackdrop = () => { setBackdrop(false); if(ref.current) ref.current.close() }
     const handleClose = () => { setBackdrop(false); setModalVisible(false) }
 
@@ -29,8 +30,9 @@ const FilterSortBottomSheet = () => {
     return (
         <BottomSheet
             ref={ref}
-            snapPoints={['30%']}
+            snapPoints={['32%']}
             index={-1}
+            style={{ paddingHorizontal: 4 }}
             containerStyle={{ zIndex: 100 }}
             enablePanDownToClose={true}
             onClose={handleClose}
@@ -39,26 +41,26 @@ const FilterSortBottomSheet = () => {
             ) : null}
         >
             <Title style={styles.title}>Shared With</Title>
-            <View style={styles.content}>
-                <SelectableItem 
+            <RadioButton.Group value={sort} onValueChange={handleChange}>
+                <RadioButton.Item
                     label={'Most Recent'}
-                    activeValues={[sort]}
                     value={LocationSort.CreatedAtNewest} 
-                    onPress={() => setSort(LocationSort.CreatedAtNewest)}
+                    labelVariant={'labelLarge'}
+                    labelStyle={{ fontSize: 16}}
                 />
-                <SelectableItem 
+                <RadioButton.Item
                     label={'Oldest'}
-                    activeValues={[sort]}
-                    value={LocationSort.CreatedAtOldest}  
-                    onPress={() => setSort(LocationSort.CreatedAtOldest)}
+                    value={LocationSort.CreatedAtOldest} 
+                    labelVariant={'labelLarge'}
+                    labelStyle={{ fontSize: 16}}
                 />
-                <SelectableItem 
+                <RadioButton.Item
                     label={'Most Recommended'}
-                    activeValues={[sort]}
                     value={LocationSort.MostRecommended} 
-                    onPress={() => setSort(LocationSort.MostRecommended)}
+                    labelVariant={'labelLarge'}
+                    labelStyle={{ fontSize: 16}}
                 />
-            </View>
+            </RadioButton.Group>
 
         </BottomSheet>
     );
@@ -69,11 +71,8 @@ export default FilterSortBottomSheet;
 const styles = StyleSheet.create({
     title: {
         fontWeight: '600',
-        paddingHorizontal: 24,
+        paddingHorizontal: 16,
+        marginBottom: 12
     },
-    content: {
-        paddingVertical: 16,
-        paddingHorizontal: 8
-    }
 });
 

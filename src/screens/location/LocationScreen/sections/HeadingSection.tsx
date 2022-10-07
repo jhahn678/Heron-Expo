@@ -43,7 +43,7 @@ const HeadingSection = ({ navigation, data }: Props) => {
             <View style={globalStyles.baseline}>
                 <Text style={styles.at}>near</Text>
                 <Text style={styles.place} numberOfLines={1}>
-                    {data?.nearest_geoplace}
+                    {data?.nearest_place}
                 </Text>
             </View>
             <View style={styles.user}>

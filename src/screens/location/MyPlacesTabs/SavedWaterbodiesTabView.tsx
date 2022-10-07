@@ -30,7 +30,7 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
     return (
         <View style={styles.container}>
             {
-                data && data.me.saved_waterbodies.length > 0 ? 
+                data ? 
                     <FlashList
                     estimatedItemSize={300}
                     showsVerticalScrollIndicator={false}
@@ -39,6 +39,14 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
                     onEndReached={handleFetchMore}
                     onEndReachedThreshold={.4}
                     data={data.me.saved_waterbodies}
+                    ListEmptyComponent={
+                        <CatchesListEmpty
+                            caption="No saved fisheries" 
+                            scale={.8} 
+                            fontSize={16} 
+                            style={styles.empty}
+                        />
+                    }
                     renderItem={({ item }) => (
                         <WaterbodiesListItem 
                             data={item} 
@@ -49,13 +57,7 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
                     />
                 : loading ?
                     <ActivityIndicator size={48} style={styles.empty}/>
-                : 
-                    <CatchesListEmpty
-                        caption="No Saved Locations" 
-                        scale={.8} 
-                        fontSize={16} 
-                        style={styles.empty}
-                    />
+                : null
             }
         </View>
     );
@@ -68,7 +70,7 @@ const styles = StyleSheet.create({
         flex: 1,
     },
     empty: {
-        marginTop: 150
+        marginTop: 200
     },
     card: {
         width: width - 32,

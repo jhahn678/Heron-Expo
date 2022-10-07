@@ -32,7 +32,7 @@ const FilterWaterbodyBottomSheet = () => {
         <BottomSheet
             ref={ref}
             index={-1}
-            snapPoints={['30%']}
+            snapPoints={['35%']}
             onClose={handleClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}

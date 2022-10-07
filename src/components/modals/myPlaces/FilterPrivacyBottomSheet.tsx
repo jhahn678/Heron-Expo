@@ -43,19 +43,19 @@ const FilterPrivacyBottomSheet = () => {
                 <SelectableItem 
                     label={'Public'}
                     value={Privacy.Public} 
-                    activeValues={[privacy]}
+                    activeValues={privacy}
                     onPress={() => setPrivacy(Privacy.Public)}
                 />
                 <SelectableItem 
                     label={'Friends Only'}
                     value={Privacy.Friends}  
-                    activeValues={[privacy]}
+                    activeValues={privacy}
                     onPress={() => setPrivacy(Privacy.Friends)}
                 />
                 <SelectableItem 
                     label={'Private'}
                     value={Privacy.Private} 
-                    activeValues={[privacy]}
+                    activeValues={privacy}
                     onPress={() => setPrivacy(Privacy.Private)}
                 />
             </View>

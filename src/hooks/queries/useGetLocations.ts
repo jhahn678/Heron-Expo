@@ -45,7 +45,7 @@ const GET_LOCATIONS = (type: LocationQuery, id?: number | undefined) => gql`
             geom
             hexcolor
             created_at
-            nearest_geoplace
+            nearest_place
             total_favorites
             is_favorited
             is_saved

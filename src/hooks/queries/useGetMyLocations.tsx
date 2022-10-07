@@ -1,17 +1,18 @@
 import { useQuery, gql } from '@apollo/client'
 import { useAuth } from '../../store/auth/useAuth'
-import { ILocation } from '../../types/Location'
+import { ILocation, Privacy } from '../../types/Location'
 import { IMedia } from '../../types/Media'
 import { IUser } from '../../types/User'
 import { IWaterbody } from '../../types/Waterbody'
 
 export const GET_MY_LOCATIONS = gql`
-query Locations($date: DateRange, $waterbody: [Int!], $offset: Int, $limit: Int) {
+query MyLocations($date: DateRange, $privacy: [Privacy!] ,$waterbody: [Int!], $offset: Int, $limit: Int) {
   me {
     id
     locations(
         date: $date, 
         waterbody: $waterbody, 
+        privacy: $privacy,
         offset: $offset, 
         limit: $limit
     ) {
@@ -60,6 +61,7 @@ interface Vars {
         min?: Date
         max?: Date
     },
+    privacy?: Privacy[]
     waterbody?: number[]
     offset?: number
     limit?: number

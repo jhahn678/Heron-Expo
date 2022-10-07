@@ -44,7 +44,7 @@ const MyLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MyLocations
     return (
         <View style={styles.container}>
             { 
-                data && data.me.locations.length > 0 ?
+                data ?
                     <FlashList 
                         data={data.me.locations} 
                         estimatedItemSize={400}
@@ -52,6 +52,14 @@ const MyLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MyLocations
                         onRefresh={handleRefetch}
                         onEndReachedThreshold={.4}
                         onEndReached={handleFetchMore}
+                        ListEmptyComponent={
+                            <LocationsListEmpty 
+                                scale={.7} 
+                                fontSize={18} 
+                                style={styles.empty}
+                                caption={'No saved locations'}
+                            />
+                        }
                         ListHeaderComponent={<FiltersSection/>}
                         renderItem={({ item }) => (
                         <LocationListItem
@@ -63,13 +71,8 @@ const MyLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MyLocations
                         )}
                     /> 
                 : loading ? 
-                    <ActivityIndicator size={48} style={styles.empty}/> 
-                : 
-                    <LocationsListEmpty 
-                        scale={.7} 
-                        fontSize={18} 
-                        style={styles.empty}
-                    />
+                    <ActivityIndicator size={48} style={styles.empty}/>
+                : null
             }
         </View>
     );
@@ -82,6 +85,6 @@ const styles = StyleSheet.create({
         flex: 1
     },
     empty: {
-        marginTop: 150
+        marginTop: 140
     }
 });

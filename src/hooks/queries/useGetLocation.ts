@@ -27,7 +27,7 @@ const GET_LOCATION = gql`
       geom
       hexcolor
       created_at
-      nearest_geoplace
+      nearest_place
       total_favorites
       is_favorited
       is_saved
@@ -40,7 +40,7 @@ export interface GetLocationRes {
     waterbody: Pick<IWaterbody, "id" | "name">;
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     media: Pick<IMedia, "url" | "id">[]
-    nearest_geoplace: string
+    nearest_place: string
     total_favorites: number;
     is_favorited: boolean;
     is_saved: boolean
@@ -87,7 +87,7 @@ export const useGetLocationFragment = () => {
               geom
               hexcolor
               created_at
-              nearest_geoplace
+              nearest_place
               total_favorites
               is_favorited
               is_saved

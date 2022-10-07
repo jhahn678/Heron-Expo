@@ -33,7 +33,7 @@ const SavedLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySavedL
     return (
         <View style={styles.container}>
             { 
-                data && data.me.saved_locations.length > 0 ?
+                data ?
                     <FlashList
                         estimatedItemSize={300}
                         showsVerticalScrollIndicator={false}
@@ -41,6 +41,15 @@ const SavedLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySavedL
                         onRefresh={handleRefetch}
                         onEndReached={handleFetchMore}
                         onEndReachedThreshold={.4}
+                        contentContainerStyle={{ paddingTop: 16 }}
+                        ListEmptyComponent={
+                            <ReviewsListEmpty 
+                                caption="No bookmarked locations" 
+                                scale={.8} 
+                                fontSize={16} 
+                                style={styles.empty}
+                            />
+                        }
                         data={data.me.saved_locations} 
                         renderItem={({ item }) => (
                             <LocationListItem 
@@ -53,13 +62,7 @@ const SavedLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySavedL
                     /> 
                 : loading ?
                     <ActivityIndicator size={48} style={styles.empty}/>
-                : 
-                    <ReviewsListEmpty 
-                        caption="No Saved Fisheries" 
-                        scale={.8} 
-                        fontSize={16} 
-                        style={styles.empty}
-                    />
+                : null
             } 
         </View>
     );
@@ -72,6 +75,6 @@ const styles = StyleSheet.create({
         flex: 1
     },
     empty: {
-        marginTop: 150
+        marginTop: 200
     }
 });

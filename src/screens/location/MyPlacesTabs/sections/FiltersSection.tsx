@@ -3,9 +3,16 @@ import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet } from "react-native";
 import { Chip } from 'react-native-paper'
 import { useMyLocationsModalStore } from "../../../../store/modal/useMyLocationsModalStore";
+import { Privacy } from "../../../../types/Location";
 import { dateRangeToLabel } from "../../../../utils/conversions/dateRangeToLabel";
 import { locationSortToLabel } from "../../../../utils/conversions/locationSortToLabel";
 import { privacyToLabel } from "../../../../utils/conversions/privacyToLabel";
+
+const privacyArrayToLabel = (value: Privacy[]) => {
+  if(value.length === 1) return privacyToLabel(value[0]);
+  if(value.length === 3) return 'All';
+  return value.map(x => privacyToLabel(x)).join(' + ')
+}
 
 const WATERBODY_NAME = gql`
     fragment WaterbodyName on Waterbody{
@@ -30,7 +37,7 @@ const FiltersSection = () => {
   const [dateLabel, setDateLabel] = useState('Date')
   useEffect(() => setDateLabel(dateRangeToLabel(minDate, maxDate)),[minDate, maxDate])
   const [privacyLabel, setPrivacyLabel] = useState('Privacy')
-  useEffect(() => setPrivacyLabel(privacy ? privacyToLabel(privacy) : 'Privacy'),[privacy])
+  useEffect(() => setPrivacyLabel(privacy ? privacyArrayToLabel(privacy) : 'Privacy'),[privacy])
   const [sortLabel, setSortLabel] = useState('Sort')
   useEffect(() => setSortLabel(sort ? locationSortToLabel(sort) : 'Sort'),[sort])
   const [waterbodyLabel, setWaterbodyLabel] = useState('Waterbody')
