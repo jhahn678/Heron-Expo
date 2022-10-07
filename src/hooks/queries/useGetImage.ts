@@ -56,16 +56,18 @@ interface Args {
 
 interface Vars {
     /** undefined will trigger skip */
-    id?: number 
+    id: number | undefined
     /** undefined will trigger skip */
-    type?: MediaType
+    type: MediaType | undefined
 }
 
 export interface GetImage {
-    id: number
-    url: string
-    created_at: Date
-    user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
+    media: {
+        id: number
+        url: string
+        created_at: Date
+        user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
+    }
 }
 
 export const useGetImageQuery = (args: Args) => useQuery<GetImage, Vars>(GET_IMAGE, { 
