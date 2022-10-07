@@ -6,7 +6,7 @@ import { IUser } from '../../types/User'
 import { IWaterbody } from '../../types/Waterbody'
 
 export const GET_MY_CATCHES = gql`
-    query Me(
+    query MyCatches(
         $waterbody: [Int!], 
         $species: [String!], 
         $weight: Range, 

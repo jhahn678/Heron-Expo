@@ -45,6 +45,7 @@ export const useCreateCatch = () => useMutation<NewCatchRes, NewCatchArgs>(CREAT
         refetchQueries: ({ data }) => [
           { query: GET_WATERBODY, variables: { id: data?.createCatch.waterbody.id } },
           { query: GET_MY_PROFILE_TOTALS },
-          `${getCatchesQueryName(CatchQuery.Waterbody, data?.createCatch.waterbody.id)}`
+          `${getCatchesQueryName(CatchQuery.Waterbody, data?.createCatch.waterbody.id)}`,
+          'MyCatches'
         ]
     })
