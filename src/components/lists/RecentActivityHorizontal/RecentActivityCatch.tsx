@@ -1,12 +1,5 @@
 import React from 'react'
-import { 
-    StyleSheet, 
-    View, 
-    StyleProp, 
-    ViewStyle, 
-    Image, 
-    Pressable
-} from 'react-native'
+import { StyleSheet, View, StyleProp, ViewStyle, Image, } from 'react-native'
 import { Card, Text } from 'react-native-paper'
 import { RecentActivity } from '../../../hooks/queries/useGetRecentActivity'
 import Avatar from '../../users/Avatar'
@@ -38,16 +31,13 @@ const RecentActivityCatch = <T extends RecentActivity>({
                 </View>
             </View>
             <Image source={{ uri: data.media[0]?.url }} style={styles.image}/>
-            {
-                data.species ? 
-                    <Text style={styles.caption}>
-                        Caught a {data.species} at {data.waterbody.name}
-                    </Text>
-                :
-                    <Text style={styles.caption}>
-                        Logged a catch at {data.waterbody.name}
-                    </Text>
-            }
+            <Text style={styles.caption}>
+                { 
+                    data.species ? 
+                    `Caught a ${data.species} at ${data.waterbody.name}` : 
+                    `Logged a catch at ${data.waterbody.name}`
+                }
+            </Text>
         </Card>
     )
 }
@@ -56,6 +46,7 @@ export default RecentActivityCatch
 
 const styles = StyleSheet.create({
     container: {
+        height: 340,
         width: 300,
         backgroundColor: 'white',
         marginRight: 16,
@@ -64,7 +55,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly'
     },
     image: {
-        height: 220,
+        flex: 1,
         width: '100%',
         backgroundColor: '#e0e0e0'
     },
@@ -86,6 +77,6 @@ const styles = StyleSheet.create({
     caption: {
         fontSize: 14,
         fontWeight: '500',
-        padding: 12,
+        padding: 12
     }
 })

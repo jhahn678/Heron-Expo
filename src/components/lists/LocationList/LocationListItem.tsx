@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     fontSize: 12,
   },
   near: {
-    marginLeft: 12,
+    paddingHorizontal: 12,
     marginBottom: 8,
     fontSize: 12,
     fontWeight: '500'
