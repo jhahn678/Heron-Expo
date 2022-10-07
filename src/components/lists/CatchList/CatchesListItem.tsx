@@ -59,9 +59,15 @@ const CatchesListItem = ({
             {data.weight && `  \u2022  ${data.weight} oz`}
           </Text>
 
-          {data.media.length > 0 && (
+          {data && (
             <Image
-              source={{ uri: data.media[0]?.url }}
+              source={{ uri:
+                data.media.length > 0 ? 
+                data.media[0].url :
+                data.map_image ?
+                data.map_image.url :
+                undefined
+              }}
               style={styles.image}
               resizeMode="cover"
             />

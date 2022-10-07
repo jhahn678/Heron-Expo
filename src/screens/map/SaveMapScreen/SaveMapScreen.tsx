@@ -175,9 +175,15 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       </View>
 
       { (point || polygon.length > 2) &&
-        <Button style={styles.save} mode='contained' onPress={handleConfirm}>
-          Save
-        </Button>
+        <FAB
+          icon={() => <Icon name='check' size={24}/>}
+          label='Save'
+          animated={false}
+          theme={{ roundness: 2 }}
+          customSize={48}
+          onPress={handleConfirm}
+          style={styles.confirm}
+        />
       }
 
       { resource === Resource.Location && 
@@ -212,20 +218,11 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
         />
       }
       
-      { resource === Resource.Catch && (
-        point ?
-          <FAB
-            icon="check"
-            theme={{ roundness: 1 }}
-            customSize={64}
-            onPress={handleConfirm}
-            style={styles.confirm}
-          /> 
-        :
+      { (resource === Resource.Catch && !point) &&
           <Text style={styles.tip}>
             Press and hold to add a marker
           </Text>
-      )}
+      }
       
       <MapView
         ref={map}
@@ -346,9 +343,9 @@ const styles = StyleSheet.create({
   },
   confirm: {
     position: "absolute",
-    bottom: 24,
-    right: 24,
-    zIndex: 100
+    bottom: 120,
+    zIndex: 100,
+    width: 200,
   },
   tip: {
     position: "absolute",
@@ -386,11 +383,5 @@ const styles = StyleSheet.create({
     borderRadius: 100,
     padding: 16,
     backgroundColor: theme.colors.secondaryContainer
-  },
-  save: {
-    position: 'absolute',
-    bottom: 120,
-    zIndex: 100,
-    width: '45%'
   }
 })

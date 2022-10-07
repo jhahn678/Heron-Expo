@@ -28,7 +28,16 @@ const CatchesListItem = ({ data, navigation }: Props) => {
                 </View>
             </TouchableRipple>
             <Pressable onPress={navigateCatch} style={styles.image}>
-                <Image style={styles.image} source={{ uri: data.media[0]?.url }}/>
+                <Image 
+                    style={styles.image} 
+                    source={{ uri: 
+                        data.media.length > 0 ? 
+                        data.media[0].url :
+                        data.map_image ?
+                        data.map_image.url :
+                        undefined
+                    }}
+                />
             </Pressable>
         </View>
     );

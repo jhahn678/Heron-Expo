@@ -19,6 +19,7 @@ const ViewCatchScreen = ({ navigation, route }: RootStackScreenProps<'ViewCatchS
         id={id} 
         navigation={navigation} 
         media={data?.catch.media}
+        mapImage={data?.catch.map_image}
       />
       <HeadingSection 
         id={id}
@@ -30,7 +31,7 @@ const ViewCatchScreen = ({ navigation, route }: RootStackScreenProps<'ViewCatchS
         <MapSection 
           id={id} 
           navigation={navigation} 
-          uri={data?.catch.media[0]?.url}
+          uri={data?.catch.map_image?.url}
         />
       }
     </ScrollView>

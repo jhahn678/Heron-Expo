@@ -31,7 +31,6 @@ export const useSaveLocation = (args?: Args) => {
       if(args?.onError) args.onError(err)
     },
     update: (cache, { data }, { variables }) => {
-      console.log(data)
       if (data && variables){
           cache.writeFragment({
             id: `Location:${variables.id}`,

@@ -26,6 +26,10 @@ export const GET_CATCH = gql`
         id
         url
       }
+      map_image {
+        id
+        url
+      }
       created_at
       total_favorites
       is_favorited
@@ -41,6 +45,7 @@ export interface GetCatchRes {
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     waterbody: Pick<IWaterbody, "id" | "name">;
     media: Pick<IMedia, "url" | 'id'>[];
+    map_image?: Pick<IMedia, "url" | 'id'>
     total_favorites: number
     is_favorited: boolean
   };

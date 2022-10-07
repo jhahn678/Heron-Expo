@@ -52,15 +52,16 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
     if(mapSnapshot) newImages.push(mapSnapshot);
     try{
       let media: UploadResult['uploads'] | undefined;
+      let map_image: UploadResult['uploads'][number] | undefined;
       if(newImages.length > 0){
-        const uploaded = await uploadImages(newImages)
-        if(!uploaded) return setLoading(false)
-        const { uploads, errors } = uploaded;
-        // if(errors) //do something
-        media = uploads;
+        const res = await uploadImages(newImages)
+        if(!res) return setLoading(false)
+        if(mapSnapshot) map_image = res.uploads.pop()
+        if(res.uploads.length > 0) media = res.uploads;
       }
-      const variables = { newCatch: { ...newCatch, media } }
-      const results = await createCatch({ variables })
+      await createCatch({ variables: { 
+        newCatch: { ...newCatch, media, map_image }
+      }})
       setLoading(false)
       navigation.goBack()
     }catch(err){

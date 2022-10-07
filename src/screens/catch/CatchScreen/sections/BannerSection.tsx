@@ -17,17 +17,23 @@ interface Info {
 interface Props {
     navigation: RootStackScreenProps<'ViewCatchScreen'>['navigation']
     media: GetCatchRes['catch']['media'] | undefined
+    mapImage: GetCatchRes['catch']['map_image'] | undefined
     id: number
 }
 
 const { width, height } = Dimensions.get('window')
 
-const BannerSection = ({ navigation, id, media }: Props) => {
+const BannerSection = ({ navigation, id, media=[], mapImage }: Props) => {
+
     
     const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
 
-    const navigateToImage = (id: number) => () => navigation
-      .navigate("ViewImageScreen", { id, type: MediaType.Catch });
+    const navigateToImage = (id: number) => () => {
+        if(!media && !mapImage) return;
+        navigation.navigate("ViewImageScreen", { 
+            id, type: media ? MediaType.Catch : MediaType.MapCatch 
+        })
+    }
 
     return (
       <View style={styles.container}>
@@ -37,7 +43,7 @@ const BannerSection = ({ navigation, id, media }: Props) => {
           <ImagePagination currentIndex={currentIndex} media={media}/>
         }
         <FlatList
-          data={media || []}
+          data={media.length > 0 ? media : mapImage ? [mapImage] : undefined}
           horizontal={true}
           pagingEnabled={true}
           onViewableItemsChanged={handleViewableItemsChanged}

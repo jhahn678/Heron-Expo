@@ -28,5 +28,7 @@ export interface UserAvatar extends IMedia{}
 export enum MediaType {
     Catch = 'CATCH',
     Location = 'LOCATION',
-    Waterbody = 'WATERBODY'
+    Waterbody = 'WATERBODY',
+    MapCatch = 'MAP_CATCH',
+    MapLocation = 'MAP_LOCATION'
   }

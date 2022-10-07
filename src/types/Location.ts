@@ -1,17 +1,18 @@
 import { Point, Polygon, LineString } from 'geojson'
-import { MediaInput } from './Media'
+import { IMedia, MediaInput } from './Media'
 
 export interface ILocation {
     id: number,
     privacy: Privacy
     user: number,
     waterbody: number,
-    title: string,
-    description: string,
+    title?: string,
+    description?: string,
     geom: Point | Polygon | LineString
     created_at: Date
-    hexcolor: string
+    hexcolor?: string
     nearest_place: string
+    map_image?: IMedia | null
     total_favorites: number
     is_favorited: boolean
     is_saved: boolean

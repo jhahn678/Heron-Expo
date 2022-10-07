@@ -11,22 +11,23 @@ import CatchesNearby from './sections/CatchesNearby'
 
 const ViewLocationScreen = ({ navigation, route }: RootStackScreenProps<'ViewLocationScreen'>) => {
     
-    const { params: { id } } = route;
-    const { data, loading, error } = useGetLocation({ id })
+    const { params } = route;
+    const { data, loading, error, variables } = useGetLocation({ id: params.id })
 
     return (
         <ScrollView style={styles.container}>
             <BannerSection 
-                id={id}
+                id={params.id}
                 navigation={navigation} 
-                media={data?.location.media} 
+                media={data?.location.media}
+                mapImage={data?.location.map_image}
             />
             <HeadingSection 
                 data={data?.location}
                 navigation={navigation}
             />
             <ActionBar 
-                id={id}
+                id={params.id}
                 navigation={navigation} 
                 isSaved={data?.location.is_saved}
                 isFavorited={data?.location.is_favorited}
@@ -34,9 +35,9 @@ const ViewLocationScreen = ({ navigation, route }: RootStackScreenProps<'ViewLoc
             />
             <Description description={data?.location.description}/>
             <MapSection 
-                id={id} 
+                id={params.id} 
                 navigation={navigation} 
-                uri={data?.location.media[0]?.url}
+                uri={data?.location.map_image.url}
             />
             <CatchesNearby 
                 navigation={navigation}

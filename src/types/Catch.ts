@@ -14,6 +14,7 @@ export interface ICatch {
   title?: string;
   /** OUNCES */
   weight?: number;
+  map_image?: IMedia | null
   created_at: Date;
   updated_at?: Date;
 }
@@ -22,7 +23,8 @@ export interface GetWaterbodyCatch extends Pick<
     ICatch, 'id' | 'species' | 'created_at'
 >{
     user: Pick<IUser, 'fullname' | 'id' | 'avatar'>
-    media: Pick<IMedia, 'url'>[]
+    media: Pick<IMedia, 'url' | 'id'>[]
+    map_image?: Pick<IMedia, 'url' | 'id'>
 }
 
 export enum CatchSort {

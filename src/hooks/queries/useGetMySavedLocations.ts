@@ -27,6 +27,10 @@ query SavedLocations($offset: Int) {
         id
         url
       }
+      map_image {
+        id
+        url
+      }
       geom
       hexcolor
       created_at
@@ -45,6 +49,7 @@ export interface GetMySavedLocations {
             user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
             waterbody: Pick<IWaterbody, 'id' | 'name'>
             media: Pick<IMedia, 'id' | 'url'>[]
+            map_image: Pick<IMedia, "url" | "id">
             total_favorites: number
             is_favorited: boolean
             is_saved: boolean

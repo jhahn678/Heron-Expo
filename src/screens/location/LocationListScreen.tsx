@@ -1,5 +1,5 @@
 import { Dimensions, StyleSheet, View } from "react-native";
-import React, { useEffect, useState } from "react";
+import React, { useState } from "react";
 import { MapResource, RootStackScreenProps } from "../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
 import { IconButton, Surface, Title, Menu, Divider } from "react-native-paper";

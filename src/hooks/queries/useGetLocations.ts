@@ -42,6 +42,10 @@ const GET_LOCATIONS = (type: LocationQuery, id?: number | undefined) => gql`
                 id
                 url
             }
+            map_image {
+                id
+                url
+            }
             geom
             hexcolor
             created_at
@@ -58,6 +62,7 @@ export interface GetLocationsRes {
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     waterbody: Pick<IWaterbody, "id" | "name">;
     media: Pick<IMedia, "url" | "id">[];
+    map_image: Pick<IMedia, "url" | "id">
     total_favorites: number;
     is_favorited: boolean;
     is_saved: boolean

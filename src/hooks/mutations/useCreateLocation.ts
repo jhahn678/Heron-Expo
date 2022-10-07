@@ -25,6 +25,10 @@ export interface CreateLocationVars {
         point: Point | undefined,
         polygon: Polygon | undefined,
         hexcolor: string | undefined
+        map_image?: {
+            url: string
+            key: string
+        } | undefined,
         media?: {
           url: string
           key: string

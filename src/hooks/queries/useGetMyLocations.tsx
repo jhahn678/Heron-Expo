@@ -34,6 +34,10 @@ query MyLocations($date: DateRange, $privacy: [Privacy!] ,$waterbody: [Int!], $o
         id
         url
       }
+      map_image {
+        id
+        url
+      }
       geom
       hexcolor
       created_at
@@ -52,6 +56,7 @@ export interface GetMyLocationsRes {
             user: Pick<IUser, 'id' | 'fullname' | 'avatar'>,
             waterbody: Pick<IWaterbody, 'id' | 'name'>,
             media: Pick<IMedia, 'id' | 'url'>[]
+            map_image: Pick<IMedia, "url" | "id">
         })[]
     }
 }

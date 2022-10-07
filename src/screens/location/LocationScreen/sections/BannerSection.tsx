@@ -15,13 +15,19 @@ interface Props {
     navigation: RootStackScreenProps<'ViewLocationScreen'>['navigation'],
     id: number | undefined
     media: GetLocationRes['location']['media'] | undefined
+    mapImage: GetLocationRes['location']['map_image'] | undefined
 }
 
-const BannerSection = ({ navigation, media, id }: Props) => {
+const BannerSection = ({ navigation, media=[], mapImage, id }: Props) => {
 
     const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
-    const navigateToImage = (id: number) => () => navigation
-        .navigate("ViewImageScreen", { id, type: MediaType.Location });
+    
+    const navigateToImage = (id: number) => () => {
+        if(!media && !mapImage) return;
+        navigation.navigate("ViewImageScreen", { 
+            id, type: media ? MediaType.Location : MediaType.MapLocation 
+        })
+    }
 
     return (
         <View style={styles.container}>
@@ -31,7 +37,7 @@ const BannerSection = ({ navigation, media, id }: Props) => {
                 <ImagePagination currentIndex={currentIndex} media={media}/>
             }
             <FlatList
-                data={media}
+                data={media.length > 0 ? media : mapImage ? [mapImage] : undefined}
                 horizontal={true}
                 pagingEnabled={true}
                 onViewableItemsChanged={handleViewableItemsChanged}

@@ -74,8 +74,7 @@ const styles = StyleSheet.create({
     title: {
         paddingHorizontal: 16,
         fontWeight: "600",
-        fontSize: 28,
-        marginBottom: 4,
+        fontSize: 24
     },
     at: {
         paddingHorizontal: 16,

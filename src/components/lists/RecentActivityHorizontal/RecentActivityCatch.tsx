@@ -30,7 +30,17 @@ const RecentActivityCatch = <T extends RecentActivity>({
                     <Text style={styles.created}>{dateToCalendar(data.created_at)}</Text>
                 </View>
             </View>
-            <Image source={{ uri: data.media[0]?.url }} style={styles.image}/>
+            <Image 
+                style={styles.image}
+                source={{ uri: 
+                    data ? data.media.length > 0 ?
+                        data.media[0].url
+                    : data.map_image ?
+                        data.map_image.url
+                    : undefined
+                    : undefined
+                }} 
+            />
             <Text style={styles.caption}>
                 { 
                     data.species ? 

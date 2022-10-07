@@ -52,7 +52,16 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
             {data.nearest_place}
           </Text>
 
-          <Image style={styles.image} source={{ uri: data.media[0]?.url }}/>
+          <Image 
+            style={styles.image} 
+            source={{ uri: 
+              data.media.length > 0 ? 
+              data.media[0].url : 
+              data.map_image ? 
+              data.map_image.url :
+              undefined 
+            }}
+          />
 
           {data.total_favorites > 0 ? (
             data.total_favorites === 1 ? (

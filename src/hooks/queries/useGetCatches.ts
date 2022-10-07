@@ -46,6 +46,10 @@ export const GET_CATCHES = (type: CatchQuery, id?: number | undefined) => gql`
           id
           url
         }
+        map_image {
+          id
+          url
+        }
         geom
         description
         length
@@ -60,6 +64,7 @@ export interface GetCatchesRes {
     waterbody: Pick<IWaterbody, "id" | "name">;
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     media: Pick<IMedia, "url" | "id">[];
+    map_image?: Pick<IMedia, "url" | "id">
     total_favorites: number;
     is_favorited: boolean;
   })[];

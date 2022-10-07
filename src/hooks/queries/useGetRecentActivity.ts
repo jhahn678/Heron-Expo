@@ -24,6 +24,10 @@ const GET_RECENT_ACTIVITY = gql`
                 id
                 url
             }
+            map_image{
+                id
+                url
+            }
         }
     }
 `
@@ -33,13 +37,11 @@ export interface RecentActivity
   user: Pick<IUser, "id" | "fullname" | "avatar">;
   waterbody: Pick<IWaterbody, "id" | "name">;
   media: Pick<IMedia, "url" | "id">[];
+  map_image?: Pick<IMedia, "url" | "id">
 }
 
 export interface GetRecentActivity {
     activityFeed: RecentActivity[]
 }
 
-export const useGetRecentActivityQuery = () => {
-    const result = useQuery<GetRecentActivity>(GET_RECENT_ACTIVITY)
-    return result;
-}
+export const useGetRecentActivityQuery = () => useQuery<GetRecentActivity>(GET_RECENT_ACTIVITY)

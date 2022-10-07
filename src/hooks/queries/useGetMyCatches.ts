@@ -50,6 +50,10 @@ export const GET_MY_CATCHES = gql`
                     id
                     url
                 }
+                map_image{
+                    id
+                    url
+                }
             }
   }
 }
@@ -62,6 +66,7 @@ export interface GetMyCatchesRes {
             waterbody: Pick<IWaterbody, 'id' | 'name'>
             total_favorites: number
             media: Pick<IMedia, 'id' | 'url'>[]
+            map_image: Pick<IMedia, 'id' | 'url'>
         })[]
     }
 }

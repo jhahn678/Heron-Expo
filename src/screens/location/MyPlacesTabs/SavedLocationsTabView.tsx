@@ -36,11 +36,11 @@ const SavedLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySavedL
                 data ?
                     <FlashList
                         estimatedItemSize={300}
-                        showsVerticalScrollIndicator={false}
                         refreshing={refetching}
                         onRefresh={handleRefetch}
-                        onEndReached={handleFetchMore}
                         onEndReachedThreshold={.4}
+                        onEndReached={handleFetchMore}
+                        showsVerticalScrollIndicator={false}
                         contentContainerStyle={{ paddingTop: 16 }}
                         ListEmptyComponent={
                             <ReviewsListEmpty 

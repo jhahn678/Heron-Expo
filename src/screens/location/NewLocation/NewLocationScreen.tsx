@@ -52,15 +52,15 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
     if(mapSnapshot) newImages.push(mapSnapshot);
     try{
       let media: UploadResult['uploads'] | undefined;
+      let map_image: UploadResult['uploads'][number] | undefined;
       if(newImages.length > 0){
-        const uploaded = await uploadImages(newImages)
-        if(!uploaded) return setLoading(false)
-        const { uploads, errors } = uploaded;
-        // if(errors) //do something
-        media = uploads;
+        const res = await uploadImages(newImages)
+        if(!res) return setLoading(false)
+        if(mapSnapshot) map_image = res.uploads.pop()
+        if(res.uploads.length > 0) media = res.uploads;
       }
       await createLocation({ variables: {
-        location: { ...location, media }
+        location: { ...location, media, map_image }
       }})
       setLoading(false)
       navigation.goBack()

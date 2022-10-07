@@ -50,7 +50,6 @@ const HeaderSection = ({ navigation }: Props) => {
         if(bio) details.bio = bio
         if(Object.keys(details).length === 0) return;
         const res = await updateProfile({ variables: { details } })
-        console.log(res.data)
         handleGoBack()
     }
   

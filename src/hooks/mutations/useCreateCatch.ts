@@ -25,9 +25,13 @@ export interface NewCatchArgs {
       weight?: number | undefined
       length?: number | undefined
       rig?: string | undefined
+      map_image?: {
+        url: string
+        key: string
+      } | undefined,
       media?: {
-          url: string
-          key: string
+        url: string
+        key: string
       }[] | undefined
     }
 }

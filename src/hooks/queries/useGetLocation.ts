@@ -24,6 +24,10 @@ const GET_LOCATION = gql`
         id
         url
       }
+      map_image {
+        id
+        url
+      }
       geom
       hexcolor
       created_at
@@ -36,10 +40,11 @@ const GET_LOCATION = gql`
 `;
 
 export interface GetLocationRes {
-  location: Omit<ILocation, "user" | "waterbody"> & {
+  location: Omit<ILocation, "user" | "waterbody" | 'map_image'> & {
     waterbody: Pick<IWaterbody, "id" | "name">;
     user: Pick<IUser, "id" | "fullname" | "avatar">;
     media: Pick<IMedia, "url" | "id">[]
+    map_image: Pick<IMedia, "url" | "id">
     nearest_place: string
     total_favorites: number;
     is_favorited: boolean;
@@ -51,9 +56,7 @@ interface Vars {
     id: number
 }
 
-export const useGetLocation = (variables: Vars) => {
-    return useQuery<GetLocationRes, Vars>(GET_LOCATION, { variables })
-}
+export const useGetLocation = (variables: Vars) => useQuery<GetLocationRes, Vars>(GET_LOCATION, { variables })
 
 export const useLazyGetLocation = (variables: Vars) => {
     return useQuery<GetLocationRes, Vars>(GET_LOCATION, { variables })
@@ -62,7 +65,7 @@ export const useLazyGetLocation = (variables: Vars) => {
 export const useGetLocationFragment = () => {
     const client = useApolloClient()
 
-    return  (id: number | undefined) => {
+    return (id: number | undefined) => {
         if(!id) return null;
         return client.readFragment<GetLocationRes["location"]>({
           id: `Location:${id}`,
@@ -82,6 +85,11 @@ export const useGetLocationFragment = () => {
                 name
               }
               media {
+                id
+                url
+              }
+              map_image {
+                id
                 url
               }
               geom
