@@ -14,6 +14,7 @@ interface Props {
     value?: string,
     setValue?: (value: string) => void
     onPress?: (e: NativeSyntheticEvent<NativeTouchEvent>) => void
+    onClear?: () => void
     /** @default false */
     autofocus?: boolean
     /** @default true */
@@ -40,7 +41,13 @@ const SearchBar = (props: Props): JSX.Element => {
                 value={props.value || ''}
                 onChangeText={props.setValue}
                 multiline={false}
-                right={<TextInput.Icon icon='close' size={24}/>}
+                right={
+                    <TextInput.Icon 
+                        icon='close' 
+                        onPress={props.onClear} 
+                        size={24}
+                    />
+                }
                 left={
                     props.goBack ? 
                     <TextInput.Icon 
