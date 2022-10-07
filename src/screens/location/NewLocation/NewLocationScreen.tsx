@@ -15,9 +15,13 @@ import DescriptionInput from './sections/DescriptionInput'
 import ImageInput from '../../../components/inputs/ImageInput'
 import LocationInput from './sections/LocationInput'
 import PrivacyInput from './sections/PrivacyInput'
+import SelectPrivacyBottomSheet from './sections/SelectPrivacyBottomSheet'
+import WaterbodyInput from '../../../components/inputs/WaterbodyInput'
 
 
-const NewLocationScreen = ({ navigation }: RootStackScreenProps<'NewLocationScreen'>) => {
+const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocationScreen'>) => {
+
+  const { params } = route;
 
   const [createLocation] = useCreateLocation()
 
@@ -38,6 +42,7 @@ const NewLocationScreen = ({ navigation }: RootStackScreenProps<'NewLocationScre
 
   const resetStore = useNewLocationStore(store => store.reset)
   const mapSnapshot = useNewLocationStore(store => store.mapSnapshot)
+  const setWaterbody = useNewLocationStore(store => store.setWaterbody)
   const showErrorModal = useModalStore(store => store.setError)
   const clearState = () => { resetStore(); clearImages() }
 
@@ -72,22 +77,30 @@ const NewLocationScreen = ({ navigation }: RootStackScreenProps<'NewLocationScre
   },[])
   
   return (
-    <View>
+    <View style={styles.container}>
       <Header navigation={navigation}/>
       <ScrollView contentContainerStyle={styles.main} keyboardShouldPersistTaps='handled'>
         <TitleInput/>
         <DescriptionInput/>
+        <WaterbodyInput 
+          title={"Select Fishery"}
+          setWaterbody={setWaterbody} 
+          selectedWaterbody={params?.waterbody}
+        />
         <PrivacyInput/>
         <LocationInput navigation={navigation}/>
         <ImageInput/>
         <Button 
           mode='contained' 
+          theme={{ colors: { surfaceDisabled: '#d9d9d9' }}}
           style={styles.button}
           labelStyle={styles.label}
           onPress={handleSave}
+          disabled={!location.waterbody || (!location.point && !location.polygon)}
         >Save</Button>
       </ScrollView>
       { loading && <LoadingBackdrop/> }
+      <SelectPrivacyBottomSheet/>
     </View>
   )
 }
@@ -96,11 +109,12 @@ export default NewLocationScreen
 
 const styles = StyleSheet.create({
   container: {
-    width: '100%'
+    width: '100%',
+    height: '100%'
   },
   main: {
-    paddingVertical: 16,
-    minHeight: 1500
+    paddingTop: 16,
+    paddingBottom: 50
   },
   button: {
     marginTop: 36,

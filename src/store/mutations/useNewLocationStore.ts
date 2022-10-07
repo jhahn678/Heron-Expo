@@ -8,6 +8,7 @@ export interface NewLocationStore {
     title: string | undefined
     description: string | undefined
     privacy: Privacy,
+    privacyVisible: boolean,
     waterbody: number | undefined,
     point: Point | undefined,
     polygon: Polygon | undefined,
@@ -17,6 +18,8 @@ export interface NewLocationStore {
     setDescription: (value?: string) => void
     setWaterbody: (value?: number) => void
     setHexcolor: (value?: string) => void
+    setPrivacy: (value: Privacy) => void
+    setPrivacyVisible: (value: boolean) => void
     setPoint: (value?: LatLng) => void
     setPolygon: (value?: LatLng[]) => void
     setMapSnapshot: (value?: string) => void
@@ -27,6 +30,7 @@ export const useNewLocationStore = create<NewLocationStore>((set) => ({
     title: undefined,
     description: undefined,
     privacy: Privacy.Public,
+    privacyVisible: false,
     waterbody: undefined,
     point: undefined,
     polygon: undefined,
@@ -36,6 +40,8 @@ export const useNewLocationStore = create<NewLocationStore>((set) => ({
     setDescription: description => set({ description }),
     setWaterbody: waterbody => set({ waterbody }),
     setHexcolor: hexcolor => set({ hexcolor }),
+    setPrivacy: privacy => set({ privacy }),
+    setPrivacyVisible: privacyVisible => set({ privacyVisible }),
     setPoint: coordinates => {
         if(!coordinates) return set({ point: undefined })
         const { latitude, longitude } = coordinates;

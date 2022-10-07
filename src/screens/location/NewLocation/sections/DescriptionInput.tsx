@@ -5,15 +5,15 @@ import { useNewLocationStore } from "../../../../store/mutations/useNewLocationS
 
 const DescriptionInput = () => {
 
-    const setDescription = useNewLocationStore(store => store.setDescription)
     const [value, setValue] = useState('')
     const handleBlur = () => setDescription(value)
+    const setDescription = useNewLocationStore(store => store.setDescription)
 
     return (
         <View style={styles.container}>
             <TextInput
                 mode='outlined'  
-                placeholder="Share some details about this location"
+                placeholder={"Share some details about this location. Access information, parking, regulations, etc."}
                 label={'Description'}
                 numberOfLines={5}
                 theme={{ roundness: 6 }}
