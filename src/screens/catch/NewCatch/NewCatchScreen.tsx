@@ -5,7 +5,6 @@ import Header from './sections/Header'
 import TitleInput from './sections/TitleInput'
 import DescriptionInput from './sections/DescriptionInput'
 import ImageInput from '../../../components/inputs/ImageInput'
-import WaterbodyInput from './sections/WaterbodyInput'
 import { useNewCatchStore } from '../../../store/mutations/useNewCatchStore'
 import { useImageStore } from '../../../store/image/useImageStore'
 import LocationInput from './sections/LocationInput'
@@ -18,6 +17,7 @@ import { UploadResult, useUploadImages } from '../../../hooks/mutations/useUploa
 import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
+import WaterbodyInput from '../../../components/inputs/WaterbodyInput'
 
 const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScreen'>) => {
 
@@ -40,6 +40,7 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
     rig: store.rig
   }))
 
+  const setWaterbody = useNewCatchStore(store => store.setWaterbody)
   const resetStore = useNewCatchStore(store => store.reset)
   const mapSnapshot = useNewCatchStore(store => store.mapSnapshot)
   const showErrorModal = useModalStore(store => store.setError)
@@ -82,7 +83,7 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
         <DescriptionInput/>
         <SpeciesInput/>
         <ImageInput/>
-        <WaterbodyInput selectedWaterbody={params?.waterbody}/>
+        <WaterbodyInput selectedWaterbody={params?.waterbody} setWaterbody={setWaterbody}/>
         <LocationInput navigation={navigation}/>
         <MeasurementsInput/>
         <RigInput/>

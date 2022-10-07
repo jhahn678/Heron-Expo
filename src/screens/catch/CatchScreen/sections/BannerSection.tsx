@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from "react";
+import React from "react";
 import { StyleSheet, View, Dimensions, Pressable, Image, FlatList, ViewToken } from "react-native";
 import { RootStackScreenProps } from "../../../../types/navigation";
 import BackButton from "../../../../components/buttons/BackButton";
@@ -7,6 +7,7 @@ import ShareButton from "../../../../components/buttons/ShareButton";
 import { ShareType } from "../../../../hooks/utils/useShareContent";
 import ImagePagination from "../../../../components/lists/shared/ImagePagination";
 import { useImagePaginationIndicator } from "../../../../hooks/utils/useImagePaginationIndicator";
+import { MediaType } from "../../../../types/Media";
 
 interface Info {
   viewableItems: ViewToken[],
@@ -25,7 +26,8 @@ const BannerSection = ({ navigation, id, media }: Props) => {
     
     const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
 
-    const navigateToImage = (id: number) => () => navigation.navigate("ViewImageScreen", { id });
+    const navigateToImage = (id: number) => () => navigation
+      .navigate("ViewImageScreen", { id, type: MediaType.Catch });
 
     return (
       <View style={styles.container}>

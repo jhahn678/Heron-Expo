@@ -48,7 +48,7 @@ const SpeciesInput = () => {
                     onChangeText={setInput}
                     theme={{ roundness: 6 }}
                     placeholder="Species"
-                    right={<TextInput.Icon name={({ size, color }) => <FishIcon size={size} color={color}/>}/>}
+                    right={<TextInput.Icon icon={({ size, color }) => <FishIcon size={size} color={color}/>}/>}
                 />
             }
             <View style={styles.resultsContainer}>
