@@ -188,7 +188,7 @@ export const useGetLocationsQueryMock = ({ error=false, limit=20, loading=false 
       media: new Array(1)
         .fill(null)
         .map(() => ({ id: Math.random(), url: faker.image.nature() })),
-      nearest_geoplace: `${faker.address.cityName()}, ${faker.address.state()}`,
+      nearest_place: `${faker.address.cityName()}, ${faker.address.state()}`,
       is_favorited: false,
       total_favorites: Math.floor(Math.random() * 10) + 1,
       is_saved: false
@@ -255,7 +255,7 @@ export const useGetLocationFragementMock = (privacy: Privacy) => () => {
     media: new Array(1)
       .fill(null)
       .map(() => ({ id: Math.random(), url: faker.image.nature() })),
-    nearest_geoplace: `${faker.address.cityName()}, ${faker.address.state()}`,
+    nearest_place: `${faker.address.cityName()}, ${faker.address.state()}`,
     is_favorited: false,
     total_favorites:
       privacy === Privacy.Public ? Math.floor(Math.random() * 10) + 1 : 0,
