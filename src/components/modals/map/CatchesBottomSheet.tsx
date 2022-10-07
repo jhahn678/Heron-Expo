@@ -1,10 +1,10 @@
 import { Text } from "react-native-paper";
 import BottomSheet from "@gorhom/bottom-sheet";
-import { Dimensions, Pressable, StyleSheet, View, Image, GestureResponderEvent } from "react-native";
+import { Dimensions, Pressable, StyleSheet, View, Image } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { useGetCatchFragment, GetCatchRes } from "../../../hooks/queries/useGetCatch";
-import { NavigationProp, RootStackScreenProps } from "../../../types/navigation";
+import { RootStackScreenProps } from "../../../types/navigation";
 import { useNavigation } from "@react-navigation/native";
 import globalStyles from "../../../globalStyles";
 import Avatar from "../../users/Avatar";
@@ -59,7 +59,7 @@ const CatchesBottomSheet = () => {
     <BottomSheet
       enablePanDownToClose={dismissable}
       onClose={onClose}
-      snapPoints={["12%", "45%"]}
+      snapPoints={["12%", "48%"]}
       index={0}
     >
       <Pressable style={[globalStyles.frac, styles.hpadding]} onPress={navigateToCatch}>
@@ -75,7 +75,7 @@ const CatchesBottomSheet = () => {
         </Text>
       </View>
 
-      <View style={[globalStyles.frac, { marginTop: 12 }, styles.hpadding]}>
+      <View style={[globalStyles.frac, { marginTop: 20 }, styles.hpadding]}>
         <Avatar
           fullname={data?.user.fullname}
           uri={data?.user.avatar}
@@ -138,7 +138,7 @@ const styles = StyleSheet.create({
   waterbody: {
     fontSize: 18,
     fontWeight: "600",
-    marginTop: 6,
+    marginTop: 10,
   },
   label: {
     fontWeight: "400",

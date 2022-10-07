@@ -6,26 +6,33 @@ import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { GetWaterbodyRes, useGetWaterbodyFragment } from "../../../hooks/queries/useGetWaterbody";
 import RatingDisplay from '../../ratings/RatingDisplay';
 import { useNavigation } from "@react-navigation/native";
-import { NavigationProp } from "../../../types/navigation";
+import { MediaSource, RootStackScreenProps } from "../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IceFishing from "../../svg/IceFishing";
+import FishIcon from "../../icons/FishIcon";
 
 const { width } = Dimensions.get("window");
 
 const WaterbodyBottomSheet = () => {
-    const navigation = useNavigation<NavigationProp>()
+    const navigation = useNavigation<RootStackScreenProps<'ViewMapScreen'>['navigation']>()
     const [data, setData] = useState<GetWaterbodyRes['waterbody'] | null>(null)
     const getFromCache = useGetWaterbodyFragment()
     const visible = useMapModalStore(store => store.waterbodyVisible)
     const waterbody = useMapModalStore(store => store.waterbodyId)
 
     const navigateToImage = (uri: string) => () => navigation.navigate('ViewImageScreen', { uri })
-    const navigateToMedia = () => waterbody && navigation.navigate('MediaGridScreen', { waterbody, title: data?.name })
+
+    const navigateToMedia = () => {
+      if(waterbody) navigation.navigate('MediaGridScreen', {
+        source: MediaSource.Waterbody,
+        id: waterbody,
+        title: data?.name 
+      })
+    }
 
     useEffect(() => {
         if(!waterbody) setData(null)
         if(waterbody) setData(getFromCache(waterbody))
-        // setData(useGetWaterbodyFragmentMock())
     },[waterbody])
 
     if(!visible) return null;
@@ -39,20 +46,19 @@ const WaterbodyBottomSheet = () => {
         <Title style={styles.title}>{data?.name}</Title>
         <View style={styles.subheading}>
           <RatingDisplay
+            noRatingLabel={"No Reviews Available"}
             rating={data?.average_rating}
             numberOfRatings={data?.total_reviews}
-            ratingBackgroundColor={"#e0e0e0"}
+            ratingBackgroundColor={"#d9d9d9"}
             backgroundColor="white"
-            style={{ marginLeft: 16 }}
           />
-          <Text style={styles.stat}>
-            {"  "}&bull;{"  "}
-            {data?.total_catches} catches
-          </Text>
-          <Text style={styles.stat}>
-            {"  "}&bull;{"  "}
-            {data?.total_locations} locations
-          </Text>
+          <View style={styles.stats}>
+            <Text style={styles.stat}>{data?.total_catches}</Text>
+            <FishIcon color="#000" size={20}/>
+            <View style={styles.divider}/>
+            <Text style={styles.stat}>{data?.total_catches}</Text>
+            <Icon name='map-marker-multiple-outline' size={20}/>
+          </View>
         </View>
         {data && data.media.length > 0 ? (
           <BottomSheetFlatList
@@ -93,14 +99,23 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 28,
     fontWeight: "600",
-    marginVertical: 8,
+    marginVertical: 12,
     marginHorizontal: 16,
   },
   subheading:{
-    flexDirection: 'row'
+    flexDirection: 'row',
+    justifyContent: 'space-between',
+    alignItems: 'flex-end',
+    paddingHorizontal: 16
+  },
+  stats: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    marginRight: 8
   },
   stat: {
-    alignSelf: 'flex-end',
+    fontSize: 16,
+    marginRight: 4,
     fontWeight: '500'
   },
   left: {
@@ -137,6 +152,11 @@ const styles = StyleSheet.create({
   noImagesText: {
     fontWeight: '500',
     marginTop: 12
+  },
+  divider: {
+    marginHorizontal: 12,
+    height: 16,
+    width: 1,
+    backgroundColor: '#d9d9d9'
   }
-  
 });

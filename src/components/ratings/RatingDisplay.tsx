@@ -10,6 +10,7 @@ interface Props {
     onPress?: () => void
     style?: StyleProp<ViewStyle>
     hideLabel?: boolean
+    noRatingLabel?: string
     backgroundColor?: string
     ratingBackgroundColor?: string
 }
@@ -18,6 +19,7 @@ const RatingDisplay = ({
     ratingBackgroundColor,
     backgroundColor,
     numberOfRatings,
+    noRatingLabel="Be the first to leave a review!",
     hideLabel=false,
     iconSize=28,
     onPress, 
@@ -38,7 +40,7 @@ const RatingDisplay = ({
             />
             {hideLabel === false && (numberOfRatings === 0 ?
                 <Text style={styles.labelNoRating}>
-                    Be the first to leave a review!
+                    {noRatingLabel}
                 </Text> :
                 <Text style={styles.label}>
                     {rating || 0} stars   &bull;   {numberOfRatings || 0} { numberOfRatings === 1 ? 'rating' : 'ratings'}
