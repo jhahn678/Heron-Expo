@@ -1,5 +1,5 @@
-import React, { useRef, useState } from 'react'
-import { Dimensions, StyleSheet, TextInput, View } from 'react-native'
+import React, { useState } from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import SearchBar from '../../../components/inputs/SearchBar'
 import { FlashList } from '@shopify/flash-list'
 import { ExploreStackScreenProps } from '../../../types/navigation'
@@ -23,6 +23,7 @@ const SearchBarScreen = ({ navigation }: ExploreStackScreenProps<'SearchBarScree
           value={input} 
           autofocus={true}
           goBack={navigation.goBack}
+          onClear={() => setInput('')}
           setValue={setInput}
           placeholder='Search place or waterbody'
           style={{ marginLeft: 8, width: (width*.9)}}

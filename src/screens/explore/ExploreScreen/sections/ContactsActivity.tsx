@@ -47,7 +47,6 @@ const styles = StyleSheet.create({
     container: {
         width: '100%',
         marginTop: 32,
-        marginBottom: 24,
     },
     title: {
         fontSize: 24,
