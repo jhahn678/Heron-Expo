@@ -35,13 +35,19 @@ const CatchesNearby = ({ waterbody, geom, navigation }: Props) => {
         <View style={styles.container}>
             <Text style={styles.title}>Catches Nearby</Text>
             { data ?
-                data?.catches.length > 0 ?
                 <FlashList
                     horizontal={true}
                     showsHorizontalScrollIndicator={false}
                     estimatedItemSize={350}
                     contentContainerStyle={{ paddingLeft: 16 }}
                     data={data?.catches} 
+                    ListEmptyComponent={
+                        <CatchesListEmpty 
+                            scale={.7} 
+                            fontSize={16} 
+                            caption={'No Catches Nearby'}
+                        />
+                    }
                     renderItem={({ item }) => (
                         <RecentActivityCatch 
                             data={item} key={item.id}
@@ -50,7 +56,6 @@ const CatchesNearby = ({ waterbody, geom, navigation }: Props) => {
                         />
                     )}
                 />
-                : <CatchesListEmpty scale={.7} fontSize={16} caption={'No Catches Nearby'}/>
                 : loading ? new Array(3).fill(null).map((_,i) => <BoxLoader key={i}/>)
                 : null
             }
@@ -62,14 +67,14 @@ export default CatchesNearby;
 
 const styles = StyleSheet.create({
     container: {
-        paddingTop: 24,
         paddingBottom: 32,
-        borderTopWidth: 1,
-        borderTopColor: '#e0e0e0',
     },
     title: {
-        marginBottom: 24,
-        paddingHorizontal: 16,
+        borderTopWidth: 1,
+        borderTopColor: '#d9d9d9',
+        paddingTop: 32,
+        marginBottom: 8,
+        marginHorizontal: 16,
         fontSize: 20,
         fontWeight: '500'
     }
