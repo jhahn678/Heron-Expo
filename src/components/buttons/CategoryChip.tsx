@@ -1,5 +1,5 @@
 import React from 'react'
-import { StyleSheet, Pressable } from 'react-native'
+import { StyleSheet, Pressable, Dimensions } from 'react-native'
 import { Text, useTheme } from 'react-native-paper'
 import { useSearchParamStore } from '../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../types/navigation'
@@ -8,6 +8,8 @@ import IsometricLake from '../svg/IsometricLake'
 import IsometricPond from '../svg/IsometricPond'
 import IsometricRiver from '../svg/IsometricRiver'
 import IsometricCreek from '../svg/IsometricCreek'
+import { theme } from '../../config/theme'
+const { width } = Dimensions.get('screen')
 
 interface Props {
   navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -19,18 +21,17 @@ interface Props {
 
 const CategoryChip = ({ value, label, navigation }: Props) => {
 
-  const { colors } = useTheme()
   const { classificationsAppend } = useSearchParamStore()
 
   const handleSelect = () => {
     classificationsAppend(value)
-    navigation.navigate('SearchResultsScreen', { placeholder: `${label} near you`})
+    navigation.navigate('SearchResultsScreen', { title: `${label} near you`})
   }
 
   return (
     <Pressable onPress={handleSelect} 
       style={[styles.container, {
-        elevation: 3, shadowColor: colors.backdrop, 
+        elevation: 3, shadowColor: theme.colors.backdrop, 
         shadowOffset: { height: 2, width: 0 }, 
         shadowRadius: 2, shadowOpacity: .2 
     }]}>
@@ -57,10 +58,10 @@ const styles = StyleSheet.create({
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    backgroundColor: 'white',
-    height: 72,
-    width: '45%',
-    marginTop: '5%',
+    backgroundColor: theme.colors.background,
+    height: 76,
+    width: (width - 72) / 2, // 24 PL + 24 PR on parent container + 24 for space between
+    marginBottom: 24,
     borderRadius: 12,
     paddingRight: 16
   },

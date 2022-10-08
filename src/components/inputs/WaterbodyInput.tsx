@@ -91,7 +91,7 @@ const styles = StyleSheet.create({
     selected: {
         paddingVertical: 16,
         paddingHorizontal: 16,
-        backgroundColor: theme.colors.surface,
+        backgroundColor: theme.colors.background,
         borderRadius: 6,
         borderWidth: 1,
         borderColor: theme.colors.onSecondaryContainer,

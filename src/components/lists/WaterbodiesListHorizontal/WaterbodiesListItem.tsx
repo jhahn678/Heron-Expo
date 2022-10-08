@@ -1,11 +1,12 @@
 import React from 'react'
-import { StyleSheet, View, Image, ViewStyle, StyleProp } from 'react-native'
+import { StyleSheet, View, Image, ViewStyle } from 'react-native'
 import { Card, Text } from 'react-native-paper'
 import { IWaterbody } from '../../../types/Waterbody'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../../../globalStyles'
 import { truncateTotal } from '../../../utils/conversions/truncateTotal'
 import { IMedia } from '../../../types/Media'
+import { waterbodyLocationLabel } from '../../../utils/conversions/waterbodyLocationToLabel'
 
 export interface WaterbodyListItem extends Omit<IWaterbody, 'weight' | 'oid'> {
   media: Pick<IMedia, "url" | "id">[];
@@ -31,35 +32,14 @@ const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate, cont
         <Text style={styles.title} numberOfLines={1}>
           {data.name}
         </Text>
-        {data.average_rating && (
-          <View style={globalStyles.frac}>
-            <Text style={styles.rating}>{data.average_rating}</Text>
-            <Icon name="star" size={14} color={'#f1c40f'}/>
-          </View>
-        )}
+        <View style={globalStyles.frac}>
+          <Text style={styles.rating}>{data.average_rating || 0}</Text>
+          <Icon name="star" size={14} color={'#f1c40f'}/>
+        </View>
       </View>
-      {data.admin_two && data.admin_two.length === 1 ? (
-        <Text style={styles.place} numberOfLines={1}>
-          {data.admin_two[0]}, {data.admin_one[0]}
-        </Text>
-      ) : data.admin_one.length === 1 ? (
-        <Text style={styles.place} numberOfLines={1}>
-          {data.admin_one[0]}, {data.country}
-        </Text>
-      ) : data.admin_one.length > 1 && data.subregion ? (
-        <Text style={styles.place} numberOfLines={1}>
-          {data.subregion} {data.country}
-        </Text>
-      ) : data.admin_one.length > 1 ? (
-        <Text style={styles.place} numberOfLines={1}>
-          {`${data.admin_one[0]} + ${data.admin_one.length - 1} more`},{" "}
-          {data.ccode}
-        </Text>
-      ) : (
-        <Text style={styles.place} numberOfLines={1}>
-          {data.country}
-        </Text>
-      )}
+      <Text style={styles.place} numberOfLines={1}>
+          {waterbodyLocationLabel(data)}
+      </Text>
       <Text style={styles.totals}>
         {truncateTotal(data.total_catches)} catches logged
         {"  "}&bull;{"  "}
@@ -73,8 +53,8 @@ export default WaterbodiesListItem
 
 const styles = StyleSheet.create({
   container: {
-    width: 300,
     height: 320,
+    width: 300,
     marginVertical: 24,
     borderRadius: 12,
     marginRight: 16

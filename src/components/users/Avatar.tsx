@@ -1,6 +1,7 @@
-import React, { RefAttributes } from "react";
+import React from "react";
+import ContentLoader, { Circle } from "react-content-loader/native";
 import { StyleSheet, StyleProp, ViewStyle, Pressable, ViewProps, View } from "react-native";
-import { Avatar as PaperAvatar, AvatarIconProps, AvatarImageProps, AvatarTextProps, Theme } from "react-native-paper";
+import { Avatar as PaperAvatar, Theme } from "react-native-paper";
 import { fullNameToInitials } from "../../utils/conversions/fullNameToInitials";
 
 interface Props {
@@ -12,16 +13,36 @@ interface Props {
     onPress?: () => void
     theme?: Theme,
     size?: number
+    loading?: boolean
 }
 
 const Avatar = ({ 
-    uri, fullname, firstname, lastname, style, onPress, size, theme
+    loading,
+    uri, 
+    fullname, 
+    firstname, 
+    lastname, 
+    style, 
+    onPress, 
+    size=64, 
+    theme
 }: Props): JSX.Element => {
 
     return (
         <Pressable onPress={onPress}>
         { 
-            uri ?
+            loading? 
+                <ContentLoader 
+                    speed={1}
+                    width={size}
+                    height={size}
+                    viewBox={`0 0 ${size} ${size}`}
+                    backgroundColor="#e3e3e3"
+                    foregroundColor="#f0f0f0"
+                >
+                    <Circle cx={size/2} cy={size/2} r={size/2} />
+                </ContentLoader>
+            : uri ?
                 <PaperAvatar.Image 
                     size={size}
                     theme={theme}

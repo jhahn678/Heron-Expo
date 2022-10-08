@@ -5,6 +5,7 @@ import { WaterbodyResult } from "../../../hooks/queries/useSearchWaterbodies";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from "../../../globalStyles";
 import { truncateTotal } from "../../../utils/conversions/truncateTotal";
+import { waterbodyLocationLabel } from "../../../utils/conversions/waterbodyLocationToLabel";
 
 interface Props {
     onPress: () => void,
@@ -14,41 +15,20 @@ interface Props {
 const WaterbodySearchResult = ({ onPress, data }: Props) => {
     
     return (
-      <Card style={styles.container} onPress={onPress}>
+      <Card style={styles.container} onPress={onPress} elevation={0}>
         <Image source={{ uri: data.media[0]?.url }} style={styles.image} />
         <View style={[styles.heading]}>
           <Title style={styles.title} numberOfLines={1}>
             {data.name}
           </Title>
-          {data.average_rating && (
-            <View style={globalStyles.frac}>
-              <Text style={styles.rating}>{data.average_rating}</Text>
-              <Icon name="star" size={14} />
-            </View>
-          )}
+          <View style={globalStyles.frac}>
+            <Text style={styles.rating}>{data.average_rating || 0}</Text>
+            <Icon name="star" size={14} />
+          </View>
         </View>
-        {data.admin_two && data.admin_two.length === 1 ? (
-          <Text style={styles.place} numberOfLines={1}>
-            {data.admin_two[0]}, {data.admin_one[0]}
-          </Text>
-        ) : data.admin_one.length === 1 ? (
-          <Text style={styles.place} numberOfLines={1}>
-            {data.admin_one[0]}, {data.country}
-          </Text>
-        ) : data.admin_one.length > 1 && data.subregion ? (
-          <Text style={styles.place} numberOfLines={1}>
-            {data.subregion} {data.country}
-          </Text>
-        ) : data.admin_one.length > 1 ? (
-          <Text style={styles.place} numberOfLines={1}>
-            {`${data.admin_one[0]} + ${data.admin_one.length - 1} more`},{" "}
-            {data.ccode}
-          </Text>
-        ) : (
-          <Text style={styles.place} numberOfLines={1}>
-            {data.country}
-          </Text>
-        )}
+        <Text style={styles.place} numberOfLines={1}>
+          {waterbodyLocationLabel(data)}
+        </Text>
         <Text style={styles.totals}>
           {truncateTotal(data.total_catches)} catches logged
           {"  "}&bull;{"  "}
@@ -62,11 +42,11 @@ export default WaterbodySearchResult;
 
 const styles = StyleSheet.create({
   container: {
-    height: 370,
+    height: 360,
     width: "90%",
     alignSelf: "center",
     borderRadius: 12,
-    marginBottom: 16,
+    marginBottom: 24,
   },
   heading: {
     flexDirection: "row",

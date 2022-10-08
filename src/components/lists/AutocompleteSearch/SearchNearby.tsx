@@ -15,7 +15,7 @@ const SearchNearby = ({ navigation }: Props) => {
     
     const handlePress = () => {
         if(hasPermission){
-            navigation.navigate('SearchResultsScreen', { placeholder: 'Results near me'})
+            navigation.navigate('SearchResultsScreen', { title: 'Results near me'})
         }else{
             alert('Location sharing must be turned on to use this feature')
         }
@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         borderRadius: 12,
-        backgroundColor: 'rgba(0,0,0,.05)',
+        backgroundColor: '#d9d9d9',
         marginBottom: 8
     },
     title: {

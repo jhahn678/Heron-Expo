@@ -35,7 +35,7 @@ surface: {
     image: {
         height: '100%',
         width: '100%',
-        backgroundColor: '#e0e0e0',
+        backgroundColor: '#d9d9d9',
         borderRadius: 12
     },
     button: {
