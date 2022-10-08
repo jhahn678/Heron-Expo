@@ -42,9 +42,9 @@ const styles = StyleSheet.create({
         flexDirection: 'row',
         flexWrap: 'wrap',
         alignItems: 'center',
-        justifyContent: 'space-around',
+        justifyContent: 'space-between',
         width: '100%',
-        marginTop: 16,
-        paddingHorizontal: '5%'
+        marginTop: 24,
+        paddingHorizontal: 24
     }
 })

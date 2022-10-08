@@ -1,4 +1,4 @@
-import { StyleSheet, ScrollView } from 'react-native'
+import { ScrollView } from 'react-native'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import CategorySection from './sections/CategorySection'
 import HeaderSection from './sections/HeaderSection'
@@ -15,7 +15,7 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
   const { hasCoordinates } = useLocationStore()
   
   return (
-    <ScrollView style={styles.container} contentContainerStyle={{ paddingBottom: '10%'}}>
+    <ScrollView contentContainerStyle={{ paddingBottom: '10%'}}>
       <HeaderSection navigation={navigation}/>
       <CategorySection navigation={navigation}/>
       <NearbySection navigation={navigation}/>
@@ -32,9 +32,3 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
 }
 
 export default ExploreScreen
-
-const styles = StyleSheet.create({
-  container: {
-
-  }
-})

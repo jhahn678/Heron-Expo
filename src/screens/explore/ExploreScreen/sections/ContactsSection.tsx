@@ -62,7 +62,7 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: '600',
         paddingLeft: 24,
-        marginBottom: 16
+        marginBottom: 24
     },
     error: {
         marginTop: 24,

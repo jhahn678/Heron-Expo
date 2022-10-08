@@ -1,21 +1,22 @@
 import React from 'react'
 import { FlashList } from '@shopify/flash-list'
 import { StyleSheet, View, Dimensions } from 'react-native'
-import { ActivityIndicator, Text } from 'react-native-paper'
-import SearchBar from '../../../components/inputs/SearchBar'
+import { ActivityIndicator, Card, Text } from 'react-native-paper'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useSearchWaterbodiesQuery } from '../../../hooks/queries/useSearchWaterbodies'
 import { useLocationStore } from '../../../store/location/useLocationStore'
 import { useSearchParamStore } from '../../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import WaterbodySearchResult from '../../../components/lists/WaterbodySearch/WaterbodySearchResult'
+import globalStyles from '../../../globalStyles'
 
 
 const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'SearchResultsScreen'>) => {
 
-  const { width } = Dimensions.get('screen')
   const { params } = route; 
   const { latitude, longitude } = useLocationStore()
-  const { value, classifications, adminOne, geoplace, sort, resetSearchParams } = useSearchParamStore()
+  const value = useSearchParamStore(store => store.value)
+  const { classifications, adminOne, geoplace, sort, resetSearchParams } = useSearchParamStore()
 
   const { data, loading, error, fetchMore } = useSearchWaterbodiesQuery({
     value, classifications, adminOne, sort, 
@@ -23,15 +24,14 @@ const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'Sea
     latitude: geoplace ? geoplace.geom.coordinates[1] : latitude
   })
 
-  const handleSearchBarPress = () => {
-    resetSearchParams()
-    navigation.navigate('SearchBarScreen')
-  }
-
   const handleBack = () => {
     resetSearchParams()
     navigation.goBack()
   }
+  
+  const handleFetchMore = () => fetchMore({ 
+    variables: { offset: data?.waterbodies.length }
+  })
 
   const navigateToWaterbody = (id: number) => () => {
     resetSearchParams()
@@ -40,25 +40,25 @@ const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'Sea
 
   return (
     <View style={styles.container}>
-      <View style={[styles.header, { width: width * .94 }]}>
-        <SearchBar 
-          onPress={handleSearchBarPress}
-          goBack={handleBack}
-          value={value || undefined}
-          enabled={false}
-          placeholder={
-            params ? params.placeholder : 
-            geoplace ? geoplace.name : 
+      <Card style={styles.header}>
+        <View style={globalStyles.frac}>
+          <Icon name={'arrow-left'} size={24} onPress={handleBack}/>
+          <Text style={styles.title} numberOfLines={1}>{
+            params ? params.title : 
+            geoplace ? `Results near ${geoplace.name}` : 
             'Search place or waterbody'
-          }
-          style={{ marginLeft: 8, width: (width*.90)}}
-        />
-      </View>
+          }</Text>
+        </View>
+      </Card>
       { 
         data ? 
           <FlashList
             data={data?.waterbodies}
             estimatedItemSize={300}
+            contentContainerStyle={styles.content}
+            ListEmptyComponent={() => (
+              <Text style={styles.empty}>0 results matched</Text>
+            )}
             renderItem={({ item }) => (
               <WaterbodySearchResult 
                 key={item.id}
@@ -66,15 +66,8 @@ const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'Sea
                 onPress={navigateToWaterbody(item.id)}
               />
             )}
-            ListEmptyComponent={() => (
-              <Text style={styles.empty}>0 results matched</Text>
-            )}
             onEndReachedThreshold={.5}
-            onEndReached={() => fetchMore({ 
-              variables: { 
-                offset: data?.waterbodies.length 
-              }
-            })}
+            onEndReached={handleFetchMore}
           />
         : loading ? <ActivityIndicator size={48}/>
         : error && <Text style={styles.empty}>There was an error</Text>
@@ -91,16 +84,25 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   header: {
-    alignSelf: 'center',
-    paddingTop: 64,
-    paddingBottom: 24,
+    display: 'flex',
     flexDirection: 'row',
     alignItems: 'center',
+    paddingTop: 48,
+    paddingHorizontal: 16,
+    paddingBottom: 24,
+    borderRadius: 0,
   },
   empty: {
     textAlign: 'center',
     marginTop: 64,
     fontSize: 16,
     fontWeight: '500'
+  },
+  content: {
+    paddingTop: 24
+  },
+  title: {
+    fontSize: 20,
+    marginLeft: 16
   }
 })
