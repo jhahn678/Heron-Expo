@@ -13,15 +13,20 @@ interface Props {
 
 const ListHeaderFilterBar = ({ total, sortLabel, setMenuOpen, style }: Props) => {
 
+  const handleOpenMenu = () => setMenuOpen(x => !x)
+
   return (
     <View style={[styles.chips, style]}>
       <View style={globalStyles.frac}>
-        {!total ? <Text style={styles.total}>{8} results</Text> : null}
+        {total ? <Text style={styles.total}>{total} results</Text> : null}
         <Chip style={styles.chip}>
           {sortLabel}
         </Chip>
       </View>
-      <Chip style={styles.chip} icon='chevron-down' onPress={() => setMenuOpen(o => !o)} mode='outlined'>
+      <Chip 
+        style={styles.chip} 
+        icon='chevron-down' 
+        onPress={handleOpenMenu} mode='outlined'>
         Sort By
       </Chip>
     </View>

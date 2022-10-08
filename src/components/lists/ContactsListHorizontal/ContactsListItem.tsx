@@ -16,7 +16,7 @@ const ContactsListItem = <T extends IContact>({
 
   return (
     <Pressable onPress={onPress} style={[styles.container, style]}>
-      <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname}/>
+      <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname} size={72}/>
       <Text style={styles.name}>{data.fullname}</Text>
     </Pressable>
   )
@@ -30,9 +30,8 @@ const styles = StyleSheet.create({
     alignItems: 'center'
   },
   name: {
-    fontSize: 12,
     fontWeight: '600',
-    textAlign: 'center',
-    marginTop: 6
+    marginTop: 6,
+    textAlign: 'center'
   }
 })

@@ -158,18 +158,18 @@ const styles = StyleSheet.create({
     position: "relative",
   },
   title: {
-    fontWeight: '500'
+    fontWeight: '500',
   },
   header: {
     position: "relative",
     zIndex: 100,
     width: "100%",
-    paddingTop: 24,
+    paddingTop: 32,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: theme.colors.background,
-    height: 90,
+    height: 100,
   },
   empty: {
     alignSelf: 'center',

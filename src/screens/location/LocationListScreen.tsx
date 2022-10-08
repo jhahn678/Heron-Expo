@@ -163,11 +163,11 @@ const styles = StyleSheet.create({
     position: "relative",
     zIndex: 100,
     width: "100%",
-    paddingTop: 24,
+    paddingTop: 32,
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    height: 90,
+    height: 100,
     backgroundColor: theme.colors.background,
   },
   title: {

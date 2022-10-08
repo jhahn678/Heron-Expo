@@ -51,10 +51,11 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: '600',
-        paddingHorizontal: '6%',
+        paddingHorizontal: 24,
     },
     message: {
-        paddingTop: 36,
+        marginTop: 48,
+        marginBottom: 24,
         fontWeight: '600',
         alignSelf: 'center'
     }
