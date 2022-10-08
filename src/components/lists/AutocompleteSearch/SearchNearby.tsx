@@ -40,7 +40,7 @@ const styles = StyleSheet.create({
         alignItems: 'center',
         alignSelf: 'center',
         borderRadius: 12,
-        backgroundColor: '#d9d9d9',
+        backgroundColor: "#e3e3e3",
         marginBottom: 8
     },
     title: {

@@ -58,7 +58,7 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.primary,
         borderWidth: 2,
         paddingHorizontal: 12,
-        borderRadius: 6,
+        borderRadius: 10,
         backgroundColor: theme.colors.surfaceVariant,
     },
     edit: {

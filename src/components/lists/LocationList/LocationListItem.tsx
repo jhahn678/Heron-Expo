@@ -115,8 +115,7 @@ const styles = StyleSheet.create({
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingLeft: 12,
-    paddingVertical: 8,
+    padding: 12,
   },
   user: {
     flexDirection: "row",
@@ -143,7 +142,7 @@ const styles = StyleSheet.create({
   },
   image: {
     width: "100%",
-    height: 200,
+    height: 250,
     backgroundColor: "#e0e0e0",
   },
   footer: {

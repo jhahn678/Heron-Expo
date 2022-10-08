@@ -13,6 +13,7 @@ import ReviewsListEmpty from "../../components/lists/shared/ReviewsListEmpty";
 import { GetUserReviewsRes, useGetUserReviews } from "../../hooks/queries/useGetUserReviews";
 import { theme } from "../../config/theme";
 import { IWaterbody } from "../../types/Waterbody";
+import RectangleLoader from "../../components/loaders/RectangleLoader";
 
 const limit = 12;
 const { width } = Dimensions.get('screen')
@@ -30,6 +31,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
   const [allowAdd, setAllowAdd] = useState(false)
   const [sort, setSort] = useState<ReviewSort | null>(null)
   const [reviews, setReviews] = useState<WaterbodyReviews>([])
+  const [loading, setLoading] = useState(false)
 
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
   const setShowReview = useModalStore(store => store.setReview)
@@ -67,6 +69,10 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
         })))
     }
   },[userReviews.data, waterbodyReviews.data])
+
+  useEffect(() => {
+    setLoading(userReviews.loading || waterbodyReviews.loading)
+  },[userReviews.loading, waterbodyReviews.loading])
 
   const handleFetchMore = () => {
     switch(type){
@@ -131,15 +137,18 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
           />
         </Menu>
 
-        { reviews.length > 0 ?
+        {
           <FlashList
-            data={reviews}
+            data={loading ? new Array(8).fill(null) : reviews}
             estimatedItemSize={200}
             showsVerticalScrollIndicator={false}
             onEndReachedThreshold={.3}
             onEndReached={handleFetchMore}
             refreshing={refetching}
             onRefresh={handleRefetch}
+            ListEmptyComponent={
+              <ReviewsListEmpty style={styles.empty}/>
+            }
             ListHeaderComponent={ 
               <ListHeaderFilterBar 
                 setMenuOpen={setMenuOpen} 
@@ -147,14 +156,15 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
                 total={total}
               />
             }
-            renderItem={({ item }) => (
+            renderItem={loading ? () => (
+              <RectangleLoader height={150} width={width - 32} style={styles.loader}/> 
+            ): ({ item }) => (
               <WaterbodyReview 
                 key={item.id} data={item} 
                 navigateToUser={navigateUser(item.user.id)}
               />
             )}
-          />:
-          <ReviewsListEmpty style={styles.empty}/>
+          /> 
         }
       </View>
 
@@ -197,5 +207,9 @@ const styles = StyleSheet.create({
   },
   empty: {
     marginTop: 150
+  },
+  loader: {
+    marginLeft: 16,
+    marginBottom: 16
   }
 });

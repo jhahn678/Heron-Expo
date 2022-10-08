@@ -151,7 +151,7 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.primary,
     borderWidth: 2,
     paddingHorizontal: 10,
-    borderRadius: 6,
+    borderRadius: 10,
     backgroundColor: theme.colors.surfaceVariant,
   },
   active: {
@@ -162,8 +162,8 @@ const styles = StyleSheet.create({
     borderColor: theme.colors.primary,
     borderWidth: 2,
     paddingHorizontal: 10,
-    borderRadius: 6,
-    backgroundColor: theme.colors.primaryContainer,
+    borderRadius: 10,
+    backgroundColor: theme.colors.secondaryContainer,
   },
   margin: {
     marginRight: 8 

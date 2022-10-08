@@ -7,6 +7,7 @@ import { AutocompleteGeoplace } from '../../../types/Geoplace'
 import FAIcon from 'react-native-vector-icons/FontAwesome5'//'water'
 import MCIcon from 'react-native-vector-icons/MaterialIcons' //'park'
 import IonIcon from 'react-native-vector-icons/Ionicons' // 'flag-outline'
+import { waterbodyLocationLabel } from '../../../utils/conversions/waterbodyLocationToLabel'
 
 
 interface Props {
@@ -31,9 +32,9 @@ const AutocompleteResult = ({ data, navigation }: Props) => {
         backgroundColor: 
           data.type === 'GEOPLACE' ? 
           data.fcode === 'PRK' ?  
-          'rgb(200, 223, 194)' : 
-          'rgb(226, 213, 233)' : 
-          'rgb(188, 207, 219)'
+          '#D4F4D1' :
+          '#F2D1F4' : 
+          '#d1e5f4'
       }]} 
       onPress={
         data.type === 'GEOPLACE' ? 
@@ -52,16 +53,8 @@ const AutocompleteResult = ({ data, navigation }: Props) => {
         <Text style={styles.name}>{data.name}</Text>
         <Text style={styles.location}>
         { data.type === 'WATERBODY' ? (
-            data.admin_two && data.admin_two.length === 1 ?
-                `${data.admin_two[0]}, ${data.admin_one[0]}` :
-            data.admin_one.length === 1 ?
-                `${data.admin_one[0]}, ${data.country}` :
-            data.admin_one.length > 1 && data.subregion ?
-                `${data.subregion} ${data.country}` :
-            data.admin_one.length > 1 ?
-                `${data.admin_one[0]} + ${data.admin_one.length - 1} more, ${data.ccode}` :
-                `${data.country}`
-          ) : (
+            waterbodyLocationLabel(data)
+          ):(
             data.admin_one && data.admin_two ?
               `${data.admin_two}, ${data.admin_one}` :
               `${data.admin_one}, ${data.country}`          
