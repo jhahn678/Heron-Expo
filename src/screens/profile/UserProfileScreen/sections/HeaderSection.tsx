@@ -1,13 +1,11 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Card, Chip, Text } from 'react-native-paper'
-import ShareButton from "../../../../components/buttons/ShareButton";
 import Avatar from "../../../../components/users/Avatar";
-import { theme } from "../../../../config/theme";
-import globalStyles from "../../../../globalStyles";
 import { GetUserProfileRes } from "../../../../hooks/queries/useGetUserProfile";
-import { ShareType } from "../../../../hooks/utils/useShareContent";
+import { ShareType, useShareContent } from "../../../../hooks/utils/useShareContent";
 import { RootStackScreenProps } from "../../../../types/navigation";
+import { FollowType } from "../../../../types/User";
 import HeaderUserLoading from "../../MyProfileScreen/loaders/HeaderUserLoading";
 const { width } = Dimensions.get('screen')
 
@@ -19,8 +17,24 @@ interface Props {
 
 const HeaderSection = ({ data, loading, navigation }: Props) => {
 
+    const shareContent = useShareContent()
+
+    const handleShareContent = () => shareContent({ url: '', shareType: ShareType.Profile })
+
     const navigateToImage = () => {
         if(data && data.avatar) navigation.navigate('ViewImageScreen', { uri: data.avatar })
+    }
+
+    const navigateFollowing = () => {
+        if(data) navigation.navigate('ContactsListScreen', { 
+            id: data.id, type: FollowType.Following
+        })
+    }
+
+    const navigateFollowers = () => {
+        if(data) navigation.navigate('ContactsListScreen', {
+            id: data.id, type: FollowType.Followers
+        })
     }
 
     return (
@@ -36,11 +50,11 @@ const HeaderSection = ({ data, loading, navigation }: Props) => {
                 { data ?
                     <View>
                         <Text style={styles.name} numberOfLines={1}>
-                            {data.fullname || data.firstname}
+                            {data.fullname || data.firstname || data.username}
                         </Text>
                         { data.location && 
                             <Text style={styles.location} numberOfLines={1}>
-                                {data.location || 'Harrisburg, PA'}
+                                {data.location}
                             </Text>
                         }
                     </View> :
@@ -49,17 +63,17 @@ const HeaderSection = ({ data, loading, navigation }: Props) => {
             </View>
             <View style={styles.chips}>
                 <Chip 
-                onPress={() => {}} 
+                onPress={navigateFollowing} 
                 style={styles.chip} 
                 icon='account-multiple'
                 >{`Following`}</Chip>
                 <Chip 
-                onPress={() => {}} 
+                onPress={navigateFollowers} 
                 style={styles.chip} 
                 icon='account-multiple-outline'
                 >{`Followers`}</Chip>
                 <Chip 
-                onPress={() => {}} 
+                onPress={handleShareContent} 
                 style={styles.chip} 
                 icon='share-variant'
                 >{'Share'}</Chip>

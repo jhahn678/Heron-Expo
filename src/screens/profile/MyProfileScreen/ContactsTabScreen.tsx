@@ -11,34 +11,30 @@ import ContactsListItem from "../../../components/lists/ContactsList/ContactsLis
 import globalStyles from "../../../globalStyles";
 import { GetMyFollowers, useGetMyFollowers } from "../../../hooks/queries/useGetUserFollowers";
 import FindUsers from "./sections/FindUsers";
-
-enum Users {
-  Following,
-  Followers
-}
+import { FollowType } from "../../../types/User";
 
 const limit = 20;
 
 const ContactsTabScreen = ({ navigation }: MyProfileTabsScreenProps<'FriendsTab'>) => {
 
-  const [followType, setFollowType] = useState(Users.Following)
+  const [followType, setFollowType] = useState(FollowType.Following)
 
   const [data, setData] = useState<GetMyFollowing['me']['following'] | GetMyFollowers['me']['followers']>([])
 
   const navigateUserSearch = () => navigation.navigate('UserSearchScreen')
   const navigateToUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
 
-  const following = useGetMyFollowing({ limit, skip: followType !== Users.Following })
-  const followers = useGetMyFollowers({ limit, skip: followType !== Users.Followers })
+  const following = useGetMyFollowing({ limit, skip: followType !== FollowType.Following })
+  const followers = useGetMyFollowers({ limit, skip: followType !== FollowType.Followers })
   const totals = useGetMyTotalFollows()
 
   useEffect(() => {
     switch(followType){
-      case Users.Following:
+      case FollowType.Following:
         if(following.data){
           setData(following.data.me.following);
         }
-      case Users.Followers:
+      case FollowType.Followers:
         if(followers.data){
           setData(followers.data.me.followers);
         }
@@ -49,18 +45,18 @@ const ContactsTabScreen = ({ navigation }: MyProfileTabsScreenProps<'FriendsTab'
 
   const handleRefetch = async () => { 
     setRefetching(true)
-    if(followType === Users.Followers) await followers.refetch()
-    if(followType === Users.Following) await following.refetch()
+    if(followType === FollowType.Followers) await followers.refetch()
+    if(followType === FollowType.Following) await following.refetch()
     setRefetching(false)
   }
 
   const handleFetchMore = async () => {
     if(!totals.data) return;
     switch(followType){
-      case Users.Followers:
+      case FollowType.Followers:
         if(data.length === totals.data.me.total_followers) return;
         await followers.fetchMore({ variables: { offset: data.length }})
-      case Users.Following:
+      case FollowType.Following:
         if(data.length === totals.data.me.total_following) return;
         await following.fetchMore({ variables: { offset: data.length }})
     }
@@ -71,16 +67,16 @@ const ContactsTabScreen = ({ navigation }: MyProfileTabsScreenProps<'FriendsTab'
       <View style={styles.top}>
         <View style={globalStyles.frac}>
           <TouchableRipple 
-            onPress={() => setFollowType(Users.Following)} 
+            onPress={() => setFollowType(FollowType.Following)} 
             style={
-              followType === Users.Following ? 
+              followType === FollowType.Following ? 
               [styles.active, styles.margin] : 
               [styles.button, styles.margin]}>
               <Text style={styles.edit}>Following</Text>
           </TouchableRipple>
           <TouchableRipple 
-            onPress={() => setFollowType(Users.Followers)} 
-            style={followType === Users.Followers ? styles.active : styles.button}>
+            onPress={() => setFollowType(FollowType.Followers)} 
+            style={followType === FollowType.Followers ? styles.active : styles.button}>
               <Text style={styles.edit}>Followers</Text>
           </TouchableRipple>
         </View>
