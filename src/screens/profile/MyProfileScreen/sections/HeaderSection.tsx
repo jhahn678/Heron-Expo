@@ -33,7 +33,7 @@ const HeaderSection = ({ navigation }: Props) => {
     <View style={styles.container}>
       <View style={styles.user}>
         <Avatar 
-          size={72}
+          size={80}
           loading={loading}
           fullname={data?.me.fullname} 
           uri={data?.me.avatar}
@@ -76,10 +76,11 @@ const styles = StyleSheet.create({
   },
   name: {
     fontWeight: '600',
-    fontSize: 22,
+    fontSize: 24,
     marginLeft: 12
   },
   location: {
+    fontSize: 16,
     marginTop: 2,
     marginLeft: 12,
   },
