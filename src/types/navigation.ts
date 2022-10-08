@@ -5,6 +5,7 @@ import { CompositeScreenProps, NavigationProp as NavProp, NavigatorScreenParams 
 import { MediaType } from "./Media"
 import { CatchQuery } from "./Catch"
 import { LocationQuery } from "./Location"
+import { FollowType } from "./User"
 
 
 export type RootStackParams = {
@@ -31,6 +32,7 @@ export type RootStackParams = {
     CatchListScreen: { type: CatchQuery, id?: number, title: string | undefined, total?: number }
     LocationListScreen: { type: LocationQuery, id: number, title: string | undefined, total?: number }
     SettingsScreen: undefined
+    ContactsListScreen: { id: number, type: FollowType }
 }
 
 export enum MapResource {

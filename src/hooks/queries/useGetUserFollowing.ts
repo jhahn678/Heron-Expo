@@ -12,6 +12,7 @@ export const GET_USER_FOLLOWING = gql`
                 username
                 location
                 avatar
+                am_following
             }
         }
     }
@@ -19,32 +20,35 @@ export const GET_USER_FOLLOWING = gql`
 
 export interface GetUserFollowing {
     user: {
-        following: Pick<
-        IUser, 
-        | 'id' 
-        | 'avatar' 
-        | 'fullname' 
-        | 'username' 
-        | 'location'
-        >[]
+        following: (Pick<
+            IUser, 
+            | 'id' 
+            | 'avatar' 
+            | 'fullname' 
+            | 'username' 
+            | 'location'
+            > & {
+                am_following: boolean
+            })[]
     }
 }
 
-interface Vars {
+export interface UserFollowsVars {
+    id: number,
     limit?: number
     offset?: number
 }
 
-export const useGetUserFollowing = ({ limit=20, skip=false }: { limit?: number, skip?: boolean }) => {
+export const useGetUserFollowing = ({ id, limit=20, skip=false }: { id: number, limit?: number, skip?: boolean }) => {
     const notAuthenticated = useAuth(store => !store.isAuthenticated) 
-    return useQuery<GetUserFollowing, Vars>(GET_USER_FOLLOWING, { 
-        variables: { limit }, 
+    return useQuery<GetUserFollowing, UserFollowsVars>(GET_USER_FOLLOWING, { 
+        variables: { id, limit }, 
         skip: notAuthenticated ? true : skip ? true : false
     })
 }
 
-export const useLazyGetUserFollowing = ({ limit=20 }: { limit?: number}) => {
-    return useLazyQuery<GetUserFollowing, Vars>(GET_USER_FOLLOWING, { variables: { limit }})
+export const useLazyGetUserFollowing = ({ id, limit=20 }: { id: number, limit?: number}) => {
+    return useLazyQuery<GetUserFollowing, UserFollowsVars>(GET_USER_FOLLOWING, { variables: { id, limit }})
 }
 
 
@@ -77,20 +81,20 @@ export interface GetMyFollowing {
     }
 }
 
-interface Vars {
+export interface MyFollowsVars {
     limit?: number
     offset?: number
 }
 
 export const useGetMyFollowing = ({ limit=20, skip=false }: { limit?: number, skip?: boolean }) => {
     const notAuthenticated = useAuth(store => !store.isAuthenticated) 
-    return useQuery<GetMyFollowing, Vars>(GET_MY_FOLLOWING, { 
+    return useQuery<GetMyFollowing, MyFollowsVars>(GET_MY_FOLLOWING, { 
         variables: { limit }, 
         skip: notAuthenticated ? true : skip ? true : false
     })
 }
 
 export const useLazyGetMyFollowing = ({ limit=20 }: { limit?: number}) => {
-    const result = useLazyQuery<GetMyFollowing, Vars>(GET_MY_FOLLOWING, { variables: { limit }})
+    const result = useLazyQuery<GetMyFollowing, MyFollowsVars>(GET_MY_FOLLOWING, { variables: { limit }})
     return result
 }

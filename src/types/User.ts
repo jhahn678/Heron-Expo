@@ -32,3 +32,8 @@ export interface IPendingContact {
     status: 'TO' | 'FROM'
     sent_at: Date
 }
+
+export enum FollowType {
+  Following,
+  Followers
+}

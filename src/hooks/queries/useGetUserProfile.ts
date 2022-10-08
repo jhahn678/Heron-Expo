@@ -6,8 +6,8 @@ export const GET_USER_PROFILE = gql`
         user(id: $id) {
             id
             firstname
-            lastname
             fullname
+            username
             bio
             avatar
             city
@@ -30,8 +30,8 @@ export interface GetUserProfileRes {
     user: Pick<IUser, 
         | 'id' 
         | 'firstname' 
-        | 'lastname' 
         | 'fullname' 
+        | 'username'
         | 'bio' 
         | 'avatar' 
         | 'city' 

@@ -40,5 +40,9 @@ export interface GetUserTotalFollows {
     }
 }
 
-export const useGetUserTotalFollows = () => useQuery<GetMyTotalFollows>(
-    GET_USER_TOTAL_FOLLOWS, { fetchPolicy: 'cache-first' })
+interface Vars {
+    id: number
+}
+
+export const useGetUserTotalFollows = ({ id }: Vars) => useQuery<GetUserTotalFollows, Vars>(
+    GET_USER_TOTAL_FOLLOWS, { variables: { id }, fetchPolicy: 'cache-first' })
