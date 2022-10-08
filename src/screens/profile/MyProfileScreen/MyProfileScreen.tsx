@@ -21,10 +21,7 @@ const MyProfileScreen = ({ navigation }: MyProfileTabsScreenProps<'ProfileTab'>)
   const { data, loading, error, refetch } = useGetMyProfileTotals()
   const [refreshing, setRefreshing] = useState(false)
 
-  const handleRefetch = () => {
-    setRefreshing(true);
-    refetch().then(() => setRefreshing(false))
-  }
+  const handleRefetch = () => { setRefreshing(true); refetch().then(() => setRefreshing(false)) }
 
   const navigateCatches = () => {
     if(id) navigation.navigate("CatchListScreen", { 
@@ -64,39 +61,44 @@ const MyProfileScreen = ({ navigation }: MyProfileTabsScreenProps<'ProfileTab'>)
         navigateToEdit={navigateEdit}
       />
       <ProfileSection 
+        loading={loading}
         label={'Catches'} 
         onPress={navigateCatches}
         icon={<CatchIcon size={32}/>} 
         value={data?.me.total_catches}
       />
       <ProfileSection 
+        loading={loading}
         label={'Locations'} 
         onPress={navigateLocations}
         icon={<DockIcon size={32}/>} 
         value={data?.me.total_locations}
       />
       <ProfileSection 
+        loading={loading}
         label={'Saved Locations'} 
         onPress={navigateSavedLocations}
         icon={<BookmarksIcon size={28}/>} 
         value={data?.me.total_saved_locations}
       />
       <ProfileSection 
+        loading={loading}
         label={'Reviews'} 
         onPress={navigateReviews}
         icon={<ReviewsIcon size={28}/>} 
         value={data?.me.total_reviews}
       />
       <ProfileSection 
+        loading={loading}
         label={'Media'} 
         onPress={navigateMedia}
         icon={<GalleryIcon size={28}/>} 
         value={data?.me.total_media}
       />
-      <ProfileSection 
+      <ProfileSection      
         label={'Gear'} 
         icon={<TackleBoxIcon size={32}/>} 
-        value={0}
+        value={'Coming soon'}
       />
     </ScrollView>
   )

@@ -5,7 +5,7 @@ import Avatar from "../../../../components/users/Avatar";
 import { BottomTabsScreenProps } from "../../../../types/navigation";
 import { useGetMyProfile } from "../../../../hooks/queries/useGetMyProfile";
 import { ShareType, useShareContent } from "../../../../hooks/utils/useShareContent";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import HeaderUserLoading from "../loaders/HeaderUserLoading";
 
 const { width } = Dimensions.get('screen')
 
@@ -34,14 +34,18 @@ const HeaderSection = ({ navigation }: Props) => {
       <View style={styles.user}>
         <Avatar 
           size={72}
+          loading={loading}
           fullname={data?.me.fullname} 
           uri={data?.me.avatar}
           onPress={navigateImage}
         />
-        <View>
-          <Text style={styles.name}>{data?.me.fullname}</Text>
-          <Text style={styles.location}>{data?.me.location || 'Harrisburg, Pennsylvania'}</Text>
-        </View>
+        { data ?
+            <View>
+              <Text style={styles.name}>{data?.me.fullname}</Text>
+              <Text style={styles.location}>{data?.me.location || 'Harrisburg, Pennsylvania'}</Text>
+            </View> :
+           <HeaderUserLoading/>
+        }
       </View>
       <IconButton onPress={handleMenu} icon={'dots-vertical'} style={styles.menu} />
     </View>

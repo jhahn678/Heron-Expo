@@ -4,6 +4,7 @@ import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../../../config/theme";
+import BioLoader from "../loaders/BioLoader";
 
 interface Props {
     bio: string | null | undefined
@@ -22,14 +23,14 @@ const BioSection = ({ bio, createdAt, navigateToEdit }: Props) => {
                     <Icon name='pencil' color={theme.colors.primary} size={14}/>
                 </Pressable>
             </View>
-            { bio && <>
-                <Text style={styles.title}>Bio</Text>
-                <View style={styles.box}>
-                    <Text style={styles.text}>{bio}</Text>
-                </View>
-                <View style={styles.divider}/>
-            </>}
-            
+            <Text style={styles.title}>Bio</Text>
+                { bio ? 
+                    <View style={styles.box}>
+                        <Text style={styles.text}>{bio}</Text>
+                    </View> :
+                    <BioLoader/>
+                }
+            <View style={styles.divider}/>
         </View>
     );
 };

@@ -2,22 +2,27 @@ import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
 import { Text } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import RectangleLoader from "../../../../components/loaders/RectangleLoader";
 
 interface Props {
     icon: React.ReactNode
     label: string
     value: string | number | undefined
     onPress?: () => void
+    loading?: boolean
 }
 
-const ProfileSection = ({ icon, label, value, onPress }: Props) => {
+const ProfileSection = ({ icon, label, value, onPress, loading }: Props) => {
   return (
     <Pressable style={styles.container} onPress={onPress}>
         <View style={styles.left}>
             {icon}
             <View style={styles.text}>
                 <Text style={styles.label}>{label}</Text>
-                <Text style={styles.value}>{value || '–'}</Text>
+                { loading ?
+                    <RectangleLoader style={{ marginTop: 6 }} width={100}/>
+                    : <Text style={styles.value}>{value || '–'}</Text>
+                }
             </View>
         </View>
         <Icon name='chevron-right' size={32} style={styles.chevron}/>
