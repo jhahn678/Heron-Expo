@@ -3,6 +3,7 @@ import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import { Button, IconButton, Surface, Title } from "react-native-paper";
 import Avatar from "../../components/users/Avatar";
 import dayjs from "../../config/dayjs";
+import { theme } from "../../config/theme";
 import globalStyles from "../../globalStyles";
 import { useGetImageQuery } from "../../hooks/queries/useGetImage";
 import { RootStackScreenProps } from "../../types/navigation";
@@ -60,6 +61,7 @@ const styles = StyleSheet.create({
         height: 80,
         flexDirection: 'row',
         alignItems: 'flex-end',
+        backgroundColor: theme.colors.background,
     },
     title: {
         fontWeight: '500',

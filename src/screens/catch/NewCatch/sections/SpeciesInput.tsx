@@ -2,10 +2,9 @@ import React, { useEffect, useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import { useNewCatchStore } from "../../../../store/mutations/useNewCatchStore";
 import { fish_species } from "../../../../data/fish-species";
-import { IconButton, Surface, TextInput } from "react-native-paper";
+import { IconButton, TextInput } from "react-native-paper";
 import { theme } from "../../../../config/theme";
 import FishIcon from "../../../../components/icons/FishIcon";
-import FishAltIcon from "../../../../components/icons/FishAltIcon";
 
 const SpeciesInput = () => {
 
