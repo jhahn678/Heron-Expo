@@ -1,6 +1,5 @@
 import React, { useState } from 'react'
 import { StyleSheet, ScrollView, RefreshControl, View } from 'react-native'
-import { Text } from 'react-native-paper'
 import BookmarksIcon from '../../../components/icons/BookmarksIcon'
 import CatchIcon from '../../../components/icons/CatchIcon'
 import DockIcon from '../../../components/icons/DockIcon'

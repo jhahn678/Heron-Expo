@@ -74,11 +74,9 @@ const Avatar = ({
                 <PaperAvatar.Icon 
                     size={size}
                     theme={theme}
-                    icon='account-circle' 
+                    icon='account' 
                     style={[styles.avatar, style]}
                 /> 
-
-
         }
         </Pressable>
     )
