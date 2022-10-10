@@ -1,5 +1,4 @@
 import { StyleSheet, StyleProp, ViewStyle } from 'react-native'
-import { useTheme } from 'react-native-paper';
 import { AirbnbRating } from "react-native-ratings";
 
 interface Props {
@@ -11,7 +10,6 @@ interface Props {
 
 const RatingInput = ({ iconSize=40, value, setValue, style }: Props) => {
 
-    const {colors} = useTheme()
 
     return (
             <AirbnbRating

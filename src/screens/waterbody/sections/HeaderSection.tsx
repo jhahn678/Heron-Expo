@@ -4,37 +4,41 @@ import { Title, Text } from "react-native-paper";
 import WaterbodyHeaderLoader from "../../../components/loaders/WaterbodyHeaderLoader";
 import RatingDisplay from "../../../components/ratings/RatingDisplay";
 import { GetWaterbody } from "../../../hooks/queries/useGetWaterbody";
-import { useModalStore } from "../../../store/modal/useModalStore";
+import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
+import { ExploreStackScreenProps, ReviewQuery } from "../../../types/navigation";
+import { waterbodyLocationLabel } from "../../../utils/conversions/waterbodyLocationToLabel";
 
 interface Props {
     id: number
     data: GetWaterbody | undefined
+    navigation:  ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
 }
 
-const HeaderSection = ({ data, id }: Props) => {
+const HeaderSection = ({ navigation, data, id }: Props) => {
 
-    const showReviewModal = useModalStore(store => store.setReview)
+    const showReviewModal = useReviewModalStore(store => store.showWaterbodyReview)
 
-    const handleStartReview = () => showReviewModal(id)
+    const handleReviews = () => {
+        if(data && data.total_reviews === 0) {
+            showReviewModal({ waterbody: id, name: data.name })
+        }else if(data){
+            navigation.navigate('ReviewsScreen', { 
+                type: ReviewQuery.Waterbody, 
+                id: data.id, title: data.name,
+                total: data.total_reviews
+            })
+        }
+    }
+    
     return (
         <View style={styles.header}>
             <View>
             { data ? 
                 <>
                     <Title style={styles.title}>{data.name}</Title>
-                    <Text style={styles.location}>{
-                        data.admin_one && data.admin_one.length > 0 ? 
-                        data.admin_two && data.admin_two.length === 1 ?
-                        `${data.admin_two[0]}, ${data.admin_one[0]}` :
-                        data.admin_one.length === 1 ?
-                        `${data.admin_one[0]}, ${data.country}` :
-                        `${data.admin_one[0]} + ${data.admin_one.length - 1} more, ${data.ccode}` :    
-                        data.subregion ?
-                        `${data.subregion} ${data.country}` :
-                        `${data.country}`
-                    }</Text>
+                    <Text style={styles.location}>{waterbodyLocationLabel(data)}</Text>
                     <RatingDisplay 
-                        onPress={handleStartReview} 
+                        onPress={handleReviews} 
                         style={{ marginTop: 16 }} 
                         numberOfRatings={data.total_reviews} 
                         rating={data.average_rating}

@@ -1,35 +1,33 @@
 import React from "react";
-import { Pressable, ScrollView, StyleSheet, View, Image, StyleProp, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, View, Image, ViewStyle, StyleProp } from "react-native";
 import { IconButton, Text } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../config/theme";
 import { useImagePicker } from "../../hooks/utils/useImagePicker";
 import { useImageStore } from "../../store/image/useImageStore";
+import { BottomSheetScrollView } from '@gorhom/bottom-sheet'
 
 interface Props {
-    /** @default true */
-    showLabel?: boolean
+    style?: StyleProp<ViewStyle>
     contentStyle?: StyleProp<ViewStyle>
 }
 
-const ImageInput = ({ showLabel=true, contentStyle }: Props) => {
+const BottomSheetImageInput = ({ style, contentStyle }: Props) => {
 
     const { openImagePicker } = useImagePicker()
     const imageStore = useImageStore()
 
     const handleAddImage = async () => {
         const res = await openImagePicker()
-        if(!res) return;
-        imageStore.appendImages(res);
+        if(res) imageStore.appendImages(res);
     }
 
     const handleRemoveImage = (id: string) => () => imageStore.removeImages(id)
 
     return (
-        <View>
-            { showLabel && <Text style={styles.title}>Add media</Text>}
-            <ScrollView 
-                horizontal 
+        <View style={[styles.container, style]}>
+            <BottomSheetScrollView 
+                horizontal={true}
                 contentContainerStyle={[styles.content, contentStyle]} 
                 showsHorizontalScrollIndicator={false}
             >
@@ -51,17 +49,20 @@ const ImageInput = ({ showLabel=true, contentStyle }: Props) => {
                     )) :
                     new Array(2).fill(null).map((_,x) => <View key={x} style={styles.image}/>)
                 }
-            </ScrollView>
+            </BottomSheetScrollView>
         </View>
     );
 };
 
-export default ImageInput;
+export default BottomSheetImageInput;
 
 const styles = StyleSheet.create({
+    container: {
+        height: 172,
+    },
     content: {
-        paddingHorizontal: 16,
-        paddingTop: 16
+        paddingTop: 16,
+        paddingHorizontal: 24,
     },
     title: {
         paddingHorizontal: 16,
@@ -70,8 +71,8 @@ const styles = StyleSheet.create({
         marginTop: 24
     },
     pressable: {
-        height: 150,
-        width: 150,
+        height: 140,
+        width: 140,
         justifyContent: 'center',
         alignItems: 'center',
         backgroundColor: theme.colors.surfaceVariant,
@@ -80,8 +81,8 @@ const styles = StyleSheet.create({
         borderColor: theme.colors.onSecondaryContainer,
     },
     image: {
-        height: 150,
-        width: 150,
+        height: 140,
+        width: 140,
         marginLeft: 12,
         justifyContent: 'center',
         alignItems: 'center',

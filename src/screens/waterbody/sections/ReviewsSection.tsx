@@ -10,6 +10,7 @@ import WaterbodyReview from "../../../components/lists/Reviews/WaterbodyReview";
 import { useModalStore } from "../../../store/modal/useModalStore";
 import { useAuth } from "../../../store/auth/useAuth";
 import { IWaterbody } from "../../../types/Waterbody";
+import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
 
 type Review = GetWaterbodyReview & { waterbody: Pick<IWaterbody, 'id' | 'name'> }
 
@@ -34,10 +35,14 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
 
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
 
-  const showReviewModal = useModalStore(store => store.setReview)
+  const showReviewModal = useReviewModalStore(store => store.showWaterbodyReview)
   const showAuthModal = useModalStore(store => store.setAuth)
 
-  const handleShowReview = () => isAuthenticated ? showReviewModal(waterbody) : showAuthModal(true)
+  const handleShowReview = () => {
+    if(data) isAuthenticated ? 
+      showReviewModal({ waterbody, name: data.waterbody.name}) : 
+      showAuthModal(true)
+  }
 
   const navigateReviews = () => navigation.navigate('ReviewsScreen', { 
     title: name, total: totalReviews, id: waterbody, type: ReviewQuery.Waterbody

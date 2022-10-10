@@ -9,6 +9,7 @@ export interface Images extends Pick<ImageInfo, 'uri' | 'height' | 'width'>{
 
 export interface ImageStore {
     images: Images[]
+    getImages: () => Images[]
     setImages: (data: ImageInfo | ImageInfo[]) => void
     appendImages: (data: ImageInfo | ImageInfo[] | CameraCapturedPicture) => void 
     removeImages: (id: string | string[]) => void
@@ -61,5 +62,6 @@ export const useImageStore = create<ImageStore>((set, get) => ({
     },
     clearImages: () => {
         set({ images: [] })
-    }
+    },
+    getImages: () => get().images
 }))

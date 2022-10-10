@@ -30,9 +30,8 @@ export interface ModalStore {
     errorMessage: string | null
     errorTitle: string | null
     setError: (value?: boolean, type?: ErrorType) => void
-    review: boolean,
-    reviewWaterbody: number | null
-    setReview: (waterbody: number | null, value?: boolean) => void
+    loading: boolean
+    setLoading: (value?: boolean) => void
     snack: boolean,
     snackText: string | null,
     setSnack: (value: string | false) => void
@@ -72,12 +71,8 @@ export const useModalStore = create<ModalStore>((set) => ({
         const { message, title } = mapErrorTypeToDetails(type);
         set({ error: value, errorMessage: message, errorTitle: title })
     },
-    review: false,
-    reviewWaterbody: null,
-    setReview: (waterbody, value=true) => set({ 
-        review: value, 
-        reviewWaterbody: waterbody 
-    }),
+    loading: false,
+    setLoading: loading => set({ loading }), 
     snack: false,
     snackText: null,
     setSnack: value => set({
@@ -104,7 +99,6 @@ export const useModalStore = create<ModalStore>((set) => ({
         set({
             auth: false,
             error: false,
-            review: false,
             logout: false,
             success: false,
             confirmUpload: false,
@@ -116,7 +110,6 @@ export const useModalStore = create<ModalStore>((set) => ({
             successTitle: null,
             errorMessage: null,
             successMessage: null,
-            reviewWaterbody: null,
             onLogoutGoBack: false,
             confirmUploadWaterbody: null,
             manageContactName: null,

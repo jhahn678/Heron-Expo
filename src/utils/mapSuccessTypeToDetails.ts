@@ -26,8 +26,7 @@ const SuccessDetails: { [index in SuccessType]: Details } = {
     REVIEW: {
         title: 'Review submitted! 😄',
         message: 'Your review has been successfully saved. \
-        Adding reviews is a huge help, not only to us, but \
-        the rest of the community as well!'
+        Adding reviews is a huge help to us and the rest of the community!'
     },
     DEFAULT: {
         title: 'Success 🎉',
