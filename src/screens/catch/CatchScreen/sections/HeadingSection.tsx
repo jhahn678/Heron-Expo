@@ -11,11 +11,12 @@ import { GetCatchRes } from "../../../../hooks/queries/useGetCatch";
 import { ShareType } from "../../../../hooks/utils/useShareContent";
 import { MapResource, RootStackScreenProps } from "../../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import RectangleLoader from "../../../../components/loaders/RectangleLoader";
 
 interface Props {
-  navigation: RootStackScreenProps<"ViewCatchScreen">["navigation"];
-  data: GetCatchRes["catch"] | undefined
   id: number
+  data: GetCatchRes["catch"] | undefined
+  navigation: RootStackScreenProps<"ViewCatchScreen">["navigation"];
 }
 
 const HeadingSection = ({ navigation, data, id }: Props) => {
@@ -40,25 +41,43 @@ const HeadingSection = ({ navigation, data, id }: Props) => {
     
     return (
       <View style={styles.container}>
-        <Title style={styles.title}>{data?.title || "Untitled Catch"}</Title>
-        <Pressable style={globalStyles.baseline} onPress={navigateToWaterbody}>
-          <Text style={styles.at}>at</Text>
-          <Text style={styles.place} numberOfLines={1}>
-            {data?.waterbody.name}
-          </Text>
-        </Pressable>
-        <View style={styles.user}>
+        { data ? 
+          <>
+            <Title style={styles.title}>{data.title || "Untitled Catch"}</Title>
+            <Pressable style={globalStyles.baseline} onPress={navigateToWaterbody}>
+              <Text style={styles.at}>at</Text>
+              <Text style={styles.place} numberOfLines={1}>
+                {data.waterbody.name}
+              </Text>
+            </Pressable>
+          </> :
+          <>
+            <RectangleLoader height={32} width={300} style={{ marginLeft: 16 }}/>
+            <RectangleLoader height={24} width={250} style={{ marginLeft: 16, marginTop: 12 }}/>
+          </>
+        }
+       <View style={styles.user}>
           <Avatar
             size={28}
+            loading={!Boolean(data)}
             fullname={data?.user.fullname}
             uri={data?.user.avatar}
             onPress={navigateToUser}
           />
-          <Text style={styles.name}>{data?.user.fullname}</Text>
-          <View style={styles.divider} />
-          <Text style={styles.created}>
-            Logged {dayjs(data?.created_at).fromNow()}
-          </Text>
+          { data ? 
+            <>
+              <Text style={styles.name}>{data.user.fullname}</Text>
+              <View style={styles.divider} />
+              <Text style={styles.created}>
+                Logged {dayjs(data.created_at).fromNow()}
+              </Text>
+            </> :
+            <>
+              <RectangleLoader height={18} width={100} style={{ marginLeft: 12 }}/>
+              <View style={styles.divider} />
+              <RectangleLoader height={18} width={120} />
+            </>
+          }
         </View>
         {data && data.total_favorites > 0 &&
           <Text style={styles.likes}>

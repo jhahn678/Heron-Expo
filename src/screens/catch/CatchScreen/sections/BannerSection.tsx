@@ -9,11 +9,6 @@ import ImagePagination from "../../../../components/lists/shared/ImagePagination
 import { useImagePaginationIndicator } from "../../../../hooks/utils/useImagePaginationIndicator";
 import { MediaType } from "../../../../types/Media";
 
-interface Info {
-  viewableItems: ViewToken[],
-  changed: ViewToken[]
-}
-
 interface Props {
     navigation: RootStackScreenProps<'ViewCatchScreen'>['navigation']
     media: GetCatchRes['catch']['media'] | undefined

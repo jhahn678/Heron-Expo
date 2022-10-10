@@ -24,6 +24,7 @@ const ReviewBodyBottomSheet = () => {
         setInput('')
         setNextVisible(true);
     }
+
     useEffect(() => { if(ref.current) visible ? ref.current.expand(): ref.current.close() },[visible])
 
     return (
@@ -55,6 +56,7 @@ const ReviewBodyBottomSheet = () => {
                     style={styles.button}
                     onPress={handleNext}
                     mode="contained" 
+                    disabled={input.length < 10}
                     theme={{ roundness: 2 }}
                 >Next</Button>
             </View>

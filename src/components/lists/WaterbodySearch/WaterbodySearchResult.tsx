@@ -23,7 +23,7 @@ const WaterbodySearchResult = ({ onPress, data }: Props) => {
           </Title>
           <View style={globalStyles.frac}>
             <Text style={styles.rating}>{data.average_rating || 0}</Text>
-            <Icon name="star" size={14} />
+            <Icon name="star" size={14} color={'#f1c40f'}/>
           </View>
         </View>
         <Text style={styles.place} numberOfLines={1}>

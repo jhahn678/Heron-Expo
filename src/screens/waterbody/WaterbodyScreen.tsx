@@ -23,7 +23,7 @@ import { useUploadImages } from '../../hooks/mutations/useUploadImages';
 import { useAddWaterbodyMediaMutation as useAddWaterbodyMedia } from '../../hooks/mutations/useAddWaterbodyMedia';
 
 const handleError = (error: ApolloError) => error.message
-    .includes('duplicate key value') ? ErrorType.ReviewDuplicate : ErrorType.Default
+    .includes('waterbody_review_one_per_user') ? ErrorType.ReviewDuplicate : ErrorType.Default
 
 const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'WaterbodyScreen'>): JSX.Element => {
 
@@ -53,11 +53,6 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
         const input = getValues();
         if(!input) return;
         setLoading(true)
-        await createReview({ 
-            variables: { input },
-            onCompleted: () => { handleResetReview(); setShowSuccess(true, 'REVIEW') },
-            onError: (err) => { setShowErrorModal(true, handleError(err)); handleResetReview() }
-        })
         if(images.length > 0){
             const pending = images.map(({ uri, id }) => ({ uri, id }))
             const res = await uploadImages(pending)
@@ -66,8 +61,12 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                 if(res.uploads.length !== pending.length) setShowErrorModal(true, ErrorType.UploadPartial)
             }
         } 
+        await createReview({ 
+            variables: { input },
+            onCompleted: () => { handleResetReview(); setShowSuccess(true, 'REVIEW') },
+            onError: (err) => { setShowErrorModal(true, handleError(err)); handleResetReview() }
+        })
         setLoading(false)
-        handleResetReview()
     }
 
     useEffect(() => {},[])

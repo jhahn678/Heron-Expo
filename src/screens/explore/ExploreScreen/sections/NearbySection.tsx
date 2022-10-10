@@ -21,7 +21,7 @@ const NearbySection = ({ navigation }: Props) => {
 
     const navigateViewMore = (): void => {
         setSort('distance')
-        navigation.navigate('SearchResultsScreen', { placeholder: 'Results near you'})
+        navigation.navigate('SearchResultsScreen', { title: 'Results near you'})
     }
 
     const navigateToWaterbody = (id: number): void => {

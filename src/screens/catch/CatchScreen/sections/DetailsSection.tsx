@@ -1,4 +1,4 @@
-import { StyleSheet, Text, View } from "react-native";
+ import { StyleSheet, Text, View } from "react-native";
 import React from "react";
 import { GetCatchRes } from "../../../../hooks/queries/useGetCatch";
 import dayjs from "../../../../config/dayjs";
@@ -12,9 +12,7 @@ interface Props {
 }
 
 const DetailsSection = ({ data }: Props) => {
-
-
-
+  
     return (
       <View style={styles.container}>
         { data?.description &&

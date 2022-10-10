@@ -46,6 +46,7 @@ const ReviewRatingBottomSheet = () => {
                     style={styles.button}
                     onPress={handleNext}
                     mode="contained" 
+                    disabled={rating === null}
                     theme={{ roundness: 2 }}
                 >Next</Button>
             </View>

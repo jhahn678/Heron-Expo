@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { useGetCatchQuery } from '../../../hooks/queries/useGetCatch';
+import { GetCatchRes, useGetCatchQuery } from '../../../hooks/queries/useGetCatch';
 import { RootStackScreenProps } from '../../../types/navigation'
 import BannerSection from './sections/BannerSection';
 import DetailsSection from './sections/DetailsSection';

@@ -53,8 +53,8 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
         message: 'Could not display location in map'
     },
     REVIEW_DUPLICATE: {
-        title: '',
-        message: '',
+        title: 'Duplicate Review',
+        message: "It looks like you've already left a review for this fishery.",
     },
     MAP_CURRENT_LOCATION: {
         title: 'There was an issue 🤔',
