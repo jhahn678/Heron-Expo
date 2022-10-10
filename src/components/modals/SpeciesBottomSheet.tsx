@@ -32,6 +32,7 @@ const SpeciesBottomSheet = () => {
             snapPoints={['40%']} index={-1} 
             ref={ref} onClose={closeSpecies}
             enablePanDownToClose={true}
+            containerStyle={{ zIndex: 100 }}
             backdropComponent={isSpeciesOpen ? (
                 () => <Backdrop onPress={closeSpecies}/>
             ) : null}

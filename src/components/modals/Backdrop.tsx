@@ -10,6 +10,7 @@ const Backdrop = ({ onPress }: Props) => {
             onPress={onPress}
             style={{ 
                 position: 'absolute',
+                zIndex: 50,
                 top: 0,
                 left: 0,
                 height: '100%', 

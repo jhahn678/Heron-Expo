@@ -1,4 +1,5 @@
-import { ScrollView } from 'react-native'
+import React from 'react'
+import { ScrollView, View } from 'react-native'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import CategorySection from './sections/CategorySection'
 import HeaderSection from './sections/HeaderSection'
@@ -15,19 +16,19 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
   const { hasCoordinates } = useLocationStore()
   
   return (
-    <ScrollView contentContainerStyle={{ paddingBottom: '10%'}}>
-      <HeaderSection navigation={navigation}/>
-      <CategorySection navigation={navigation}/>
-      <NearbySection navigation={navigation}/>
-      <ContactsSection navigation={navigation}/>
-      { isAuthenticated && <ContactsActivity navigation={navigation}/> }
-      { hasCoordinates &&
-        <>
-          <NearbyCategorySection navigation={navigation} classification='lake'/>
-          <NearbyCategorySection navigation={navigation} classification='river'/>
-        </>
-      }
-    </ScrollView>
+      <ScrollView contentContainerStyle={{ paddingBottom: '10%'}}>
+        <HeaderSection navigation={navigation}/>
+        <CategorySection navigation={navigation}/>
+        <NearbySection navigation={navigation}/>
+        <ContactsSection navigation={navigation}/>
+        { isAuthenticated && <ContactsActivity navigation={navigation}/> }
+        { hasCoordinates &&
+          <>
+            <NearbyCategorySection navigation={navigation} classification='lake'/>
+            <NearbyCategorySection navigation={navigation} classification='river'/>
+          </>
+        }
+      </ScrollView>
   )
 }
 

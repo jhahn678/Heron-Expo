@@ -1,4 +1,4 @@
-import { Pressable, StyleSheet, View } from 'react-native'
+import { StyleSheet, View } from 'react-native'
 import SearchBar from '../../../../components/inputs/SearchBar'
 import { Title } from 'react-native-paper'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
@@ -11,12 +11,11 @@ interface Props {
 
 const HeaderSection = ({ navigation }: Props) => {
 
-    const { isAuthenticated, firstname, avatar, signOut } = useAuth()
+    const { isAuthenticated, firstname, avatar } = useAuth()
 
+    const navigateToAuth = () => navigation.navigate('HomeAuthScreen')
     const navigateToSearch = () => navigation.navigate('SearchBarScreen')
     const navigateToProfile = () => navigation.navigate('MyProfileScreen')
-    const navigateToAuth = () => navigation.navigate('HomeAuthScreen')
-    
 
     return (
         <View style={styles.header}>
@@ -26,12 +25,12 @@ const HeaderSection = ({ navigation }: Props) => {
                     uri={avatar} 
                     firstname={firstname} 
                     onPress={isAuthenticated ? navigateToProfile : navigateToAuth}
-                /> 
+                />
             </View>
             <SearchBar 
-                placeholder='Search name or place'
-                onPress={navigateToSearch} 
                 enabled={false}
+                onPress={navigateToSearch}
+                placeholder={'Search name or place'}
             />
         </View>
     )
