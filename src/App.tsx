@@ -17,7 +17,7 @@ import { GestureHandlerRootView } from 'react-native-gesture-handler'
 export default function App() { 
   const [appIsReady, setAppIsReady] = useState(false)
 
-  const autoSignIn = useAuth(state => state.autoSignIn)
+  const autoSignIn = useAuth(store => store.autoSignIn)
 
   const prepareApp = async () => {
     try{
