@@ -13,6 +13,7 @@ import { RetryLink } from "@apollo/client/link/retry";
 import { SecureStoreKeys } from "../types/SecureStore";
 import { RefreshTokenLink } from "../utils/RefreshTokenLink";
 import jwtDecode, { JwtPayload } from "jwt-decode";
+import { WaterbodyMedia } from "../types/Media";
 
 const ACCESS_TOKEN_BUFFER = 1000 * 60 // 1 minute
 const REFRESH_TOKEN_BUFFER = 1000 * 5 // 5 seconds
@@ -135,9 +136,19 @@ export const apolloClient = new ApolloClient({
                     },
                     media: {
                         keyArgs: false,
-                        merge: (existing=[], incoming) => ([
-                            ...existing, ...incoming
-                        ])
+                        merge: (existing:WaterbodyMedia[]=[], incoming:WaterbodyMedia[], { args }) => {
+                            if(existing.length === 0 || !args) return incoming;
+                            const { offset=0 } = args as { limit: number, offset: number }
+                            if(offset === existing.length){
+                                return [...existing, ...incoming];
+                            }else if(offset > 0){
+                                return [ ...existing.slice(offset), ...incoming ]
+                            }else if(incoming.length > existing.length) {
+                                return incoming;
+                            }else{
+                                return existing;
+                            }
+                        }
                     }
                 }
             },

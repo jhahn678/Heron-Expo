@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client'
 import { MediaInput, WaterbodyMedia } from '../../types/Media'
+import { GET_WATERBODY, WATERBODY_MEDIA_LIMIT } from '../queries/useGetWaterbody'
 
 const ADD_WATERBODY_MEDIA = gql`
     mutation WaterbodyMedia($id: Int!, $media: [MediaInput!]!) {
@@ -19,7 +20,10 @@ interface Response {
     addWaterbodyMedia: Pick<WaterbodyMedia, 'id' | 'url'>[]
 }
 
-export const useAddWaterbodyMediaMutation = () => {
-    const result = useMutation<Response, Variables>(ADD_WATERBODY_MEDIA)
-    return result
+export const useAddWaterbodyMediaMutation = (id: number | undefined | null) => {
+    return useMutation<Response, Variables>(ADD_WATERBODY_MEDIA, {
+        refetchQueries: [
+            { query: GET_WATERBODY, variables: { id, mediaLimit: WATERBODY_MEDIA_LIMIT } }
+        ]
+    })
 }

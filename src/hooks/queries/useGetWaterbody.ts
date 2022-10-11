@@ -3,6 +3,8 @@ import { CatchSort } from '../../types/Catch'
 import { IMedia } from '../../types/Media'
 import { IWaterbody } from '../../types/Waterbody'
 
+export const WATERBODY_MEDIA_LIMIT = 6
+
 export const GET_WATERBODY = gql`
   query Waterbody($id: Int!, $mediaLimit: Int) {
     waterbody(id: $id) {
@@ -52,8 +54,8 @@ export interface GetWaterbodyVars {
 
 export const useGetWaterbody = (id: number) => {
     const result = useQuery<GetWaterbodyRes>(GET_WATERBODY, {
-        variables: { id, mediaLimit: 1 },
-        skip: !Boolean(id)
+      variables: { id, mediaLimit: WATERBODY_MEDIA_LIMIT },
+      skip: !Boolean(id)
     })
     return result;
 }

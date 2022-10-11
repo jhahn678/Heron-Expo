@@ -1,5 +1,6 @@
 import { gql, useMutation } from '@apollo/client'
 import { IMedia, MediaInput } from '../../types/Media'
+import { WATERBODY_MEDIA_LIMIT } from '../queries/useGetWaterbody'
 
 const UPLOAD_MEDIA = gql`
     mutation CatchMedia ($id: Int!, $media: [MediaInput!]!) {

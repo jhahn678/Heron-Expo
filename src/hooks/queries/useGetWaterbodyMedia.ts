@@ -1,5 +1,4 @@
-import { gql, useLazyQuery, useQuery } from '@apollo/client'
-import { Faker } from '@faker-js/faker'
+import { gql, useLazyQuery, useQuery, WatchQueryFetchPolicy } from '@apollo/client'
 import { IMedia } from '../../types/Media'
 
 const GET_WATERBODY_MEDIA = gql`
@@ -14,7 +13,6 @@ const GET_WATERBODY_MEDIA = gql`
         }
     }
 `
-
 
 export interface GetWaterbodyMedia {
     waterbody: {
@@ -31,11 +29,19 @@ interface Vars {
 
 interface Args extends Vars {
     skip?: boolean
+    initialFetchPolicy?: WatchQueryFetchPolicy
 }
 
-export const useGetWaterbodyMedia = ({ id, offset=0, limit=24, skip=false }: Args) => {
+export const useGetWaterbodyMedia = ({ 
+    id, 
+    offset=0, 
+    limit=24, 
+    skip=false, 
+    initialFetchPolicy='cache-first'
+}: Args) => {
     return useQuery<GetWaterbodyMedia, Vars>(GET_WATERBODY_MEDIA, {
-        variables: { id, limit, offset }, skip
+        skip, initialFetchPolicy,
+        variables: { id, limit, offset }
     })
 }
 

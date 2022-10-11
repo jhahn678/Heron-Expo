@@ -1,20 +1,20 @@
 import React from "react";
 import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
 import { Button, IconButton, Surface, Title } from "react-native-paper";
+import RectangleLoader from "../../components/loaders/RectangleLoader";
 import Avatar from "../../components/users/Avatar";
 import dayjs from "../../config/dayjs";
 import { theme } from "../../config/theme";
 import globalStyles from "../../globalStyles";
 import { useGetImageQuery } from "../../hooks/queries/useGetImage";
 import { RootStackScreenProps } from "../../types/navigation";
-
+const { width, height } = Dimensions.get('screen')
 
 const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageScreen'>) => {
 
-    const { width } = Dimensions.get('screen')
     const { params: { id, type, title, uri } } = route;
 
-    const { data, loading, error } = useGetImageQuery({ id, type })
+    const { data, loading } = useGetImageQuery({ id, type })
 
     const navigateProfile = () => {
         if(data) navigation.navigate('UserProfileScreen', { id: data.media.user.id })
@@ -28,25 +28,38 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
                     { title && <Title style={styles.title}>{title}</Title>}
                 </View>
             </Surface>
-            <Image 
-                source={{ uri: data ? data.media.url : uri ? uri : undefined }}
-                style={[styles.image, { width }]} 
-                resizeMode='contain'
-            />
-            { data &&  
-                <View style={styles.footer}>
-                    <Avatar onPress={navigateProfile} fullname={data.media.user.fullname} uri={data.media.user.avatar}/>
+            { (data || uri) ?
+                <Image 
+                    source={{ uri: data ? data.media.url : uri }}
+                    style={[styles.image, { width }]} 
+                    resizeMode='contain'
+                /> :
+                <RectangleLoader height={height*.5} width={width} style={styles.image}/>
+            }
+            <View style={styles.footer}>
+                <Avatar 
+                    loading={loading} 
+                    onPress={navigateProfile} 
+                    fullname={data?.media.user.fullname} 
+                    uri={data?.media.user.avatar}
+                />
+                { data ? 
                     <View style={styles.details}>
                         <Text style={styles.name}>{data.media.user.fullname}</Text>
                         <Text style={styles.date}>{dayjs(data.media.created_at).fromNow()}</Text>
+                    </View> :
+                    <View style={styles.details}>
+                        <RectangleLoader width={140} height={18}/>
+                        <RectangleLoader width={120} height={16} style={{ marginTop: 4 }}/>
                     </View>
-                    <Button 
-                        onPress={navigateProfile} icon='arrow-right' 
-                        style={{ alignItems: 'flex-end', flexGrow: 1 }}
-                        contentStyle={{ flexDirection: 'row-reverse'}}
-                    >View profile</Button>
-                </View>
-            }
+
+                }
+                <Button 
+                    onPress={navigateProfile} icon='arrow-right' 
+                    style={{ alignItems: 'flex-end', flexGrow: 1 }}
+                    contentStyle={{ flexDirection: 'row-reverse'}}
+                >View profile</Button>
+            </View>
         </View>
     )
 }

@@ -1,7 +1,7 @@
-import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
+import { StyleSheet, View, Image, Dimensions, Pressable } from "react-native";
 import React, { useEffect, useState } from "react";
 import { MediaSource, RootStackScreenProps } from "../../types/navigation";
-import { GetWaterbodyMedia, useGetWaterbodyMedia, useLazyGetWaterbodyMedia } from "../../hooks/queries/useGetWaterbodyMedia";
+import { GetWaterbodyMedia, useGetWaterbodyMedia } from "../../hooks/queries/useGetWaterbodyMedia";
 import { FlashList } from "@shopify/flash-list";
 import { IconButton, Surface, Title } from "react-native-paper";
 import BoxLoader from "../../components/loaders/BoxLoader";
@@ -9,36 +9,38 @@ import { useModalStore } from "../../store/modal/useModalStore";
 import { useImageStore } from "../../store/image/useImageStore";
 import { useImagePicker } from "../../hooks/utils/useImagePicker";
 import globalStyles from "../../globalStyles";
-import { GetUserMediaRes, useGetUserMedia, useLazyGetUserMedia } from "../../hooks/queries/useGetUserMedia";
-import CatchesListEmpty from "../../components/lists/shared/CatchesListEmpty";
+import { GetUserMediaRes, useGetUserMedia } from "../../hooks/queries/useGetUserMedia";
 import LocationsListEmpty from "../../components/lists/shared/LocationsListEmpty";
 import { theme } from "../../config/theme";
+import { MediaType } from "../../types/Media";
 
 const limit = 24;
 const { width } = Dimensions.get('screen')  
 
-type Data = GetWaterbodyMedia['waterbody']['media'] | GetUserMediaRes['user']['media'] | null
-type Page = { offset: number, next: boolean }
+type Data = GetWaterbodyMedia['waterbody']['media'] | GetUserMediaRes['user']['media']
 
 const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridScreen'>) => {
 
     const { params: { title, source, id, total } } = route;
 
-    const [media, setMedia] = useState<Data>(null)
+    const [media, setMedia] = useState<Data>([])
     const [loading, setLoading] = useState(false)
     const [allowAdd, setAllowAdd] = useState(false)
-    const [{ next, offset }, setPage] = useState<Page>({ offset: 0, next: false })
 
     const { 
         data: waterbodyMedia, 
         loading: waterbodyLoading,
-        fetchMore: fetchMoreWaterbodyMedia 
-    } = useGetWaterbodyMedia({ id, limit, skip: source !== MediaSource.Waterbody });
+        fetchMore: fetchMoreWaterbodyMedia,
+    } = useGetWaterbodyMedia({ 
+        id, limit, 
+        skip: source !== MediaSource.Waterbody, 
+        initialFetchPolicy: 'cache-and-network' 
+    })
 
     const { 
         data: userMedia, 
         loading: userLoading,
-        fetchMore: fetchMoreUserMedia 
+        fetchMore: fetchMoreUserMedia,
     } = useGetUserMedia({ id, limit, skip: source !== MediaSource.User })
 
     useEffect(() => {
@@ -47,34 +49,26 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
                 setAllowAdd(false)
                 if(!userMedia) return;
                 setMedia(userMedia.user.media);
-                setPage({
-                    offset: userMedia.user.media.length,
-                    next: userMedia.user.media.length % limit === 0
-                })
                 break;
             case MediaSource.Waterbody:
                 setAllowAdd(true)
                 if(!waterbodyMedia) return;
                 setMedia(waterbodyMedia.waterbody.media);
-                setPage({
-                    offset: waterbodyMedia.waterbody.media.length,
-                    next: waterbodyMedia.waterbody.media.length % limit === 0
-                })
                 break;
         }
     },[waterbodyMedia, userMedia])
 
     useEffect(() => {
-        setLoading((waterbodyLoading || userLoading) && media === null)
+        setLoading((waterbodyLoading || userLoading) && media.length === 0)
     },[waterbodyLoading, userLoading])
 
     const handleFetchMore = () => {
-        if(!next) return;
+        if(media.length === 0 || media.length % limit !== 0) return;
         switch(source){
             case MediaSource.User:
-                return fetchMoreUserMedia({ variables: { offset } })
+                return fetchMoreUserMedia({ variables: { offset: media.length } })
             case MediaSource.Waterbody:
-                return fetchMoreWaterbodyMedia({ variables: { offset } })
+                return fetchMoreWaterbodyMedia({ variables: { offset: media.length } })
         }
     }
 
@@ -82,13 +76,15 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
     const setImages = useImageStore(state => state.setImages)
     const showConfirmUpload = useModalStore(state => state.setConfirmUpload)
 
+    const navigateImage = (id: number) => () => navigation
+        .navigate('ViewImageScreen', { type: MediaType.Waterbody, id })
+
     const handleAddImages = async () => {
         const result = await openImagePicker()
         if(!result) return;
         setImages(result)
         showConfirmUpload(id, true)
     }
-
 
     return (
         <View style={styles.container}>
@@ -119,7 +115,7 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
                             }}
                         /> 
                     )}
-                /> : (media && media.length > 0) ?
+                /> : 
                 <FlashList
                     numColumns={2}
                     data={media}
@@ -128,23 +124,28 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
                     contentContainerStyle={{ paddingTop: width * .01 }}
                     onEndReachedThreshold={.3}
                     onEndReached={handleFetchMore}
+                    ListEmptyComponent={
+                        <LocationsListEmpty 
+                            scale={.8} 
+                            fontSize={16} 
+                            style={{ marginTop: '50%' }} 
+                            caption={'No Media Available'}
+                        />
+                    }
                     renderItem={({ item }) => (
-                        <Image key={item.id} 
-                            source={{ uri: item.url }}
-                            style={[styles.image, { 
-                                width: width * .49,
-                                height: width * .49,
-                                marginBottom: width * .01,
-                                marginLeft: width * .005
-                            }]}
-                        /> 
+                        <Pressable onPress={navigateImage(item.id)}>
+                            <Image 
+                                key={item.id}
+                                source={{ uri: item.url }}
+                                style={[styles.image, { 
+                                    width: width * .49,
+                                    height: width * .49,
+                                    marginBottom: width * .01,
+                                    marginLeft: width * .005
+                                }]}
+                            /> 
+                        </Pressable>
                     )}
-                /> :
-                <LocationsListEmpty 
-                    scale={.8} 
-                    fontSize={16} 
-                    style={{ marginTop: '50%' }} 
-                    caption={'No Media Available'}
                 />
             }
         </View>
