@@ -55,7 +55,6 @@ const styles = StyleSheet.create({
   container: {
     height: 320,
     width: 300,
-    marginVertical: 24,
     borderRadius: 12,
     marginRight: 16
   },

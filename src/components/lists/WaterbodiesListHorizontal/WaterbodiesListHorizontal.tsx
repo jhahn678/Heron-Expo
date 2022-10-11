@@ -1,4 +1,5 @@
 import { FlashList } from '@shopify/flash-list'
+import { View } from 'react-native'
 import WaterbodiesListItem, { WaterbodyListItem } from './WaterbodiesListItem'
 import ListFooterSeeMore from '../shared/ListFooterSeeMore'
 import WaterbodiesListLoader from '../../loaders/WaterbodyListLoader'
@@ -14,24 +15,22 @@ const WaterbodiesListHorizontal = <T extends WaterbodyListItem>({
 }: Props<T>) => {
 
     return (
-        <FlashList 
-            horizontal data={data ? data : new Array(6).fill(null)}
-            estimatedItemSize={300}
-            showsHorizontalScrollIndicator={false}
-            contentContainerStyle={{ paddingLeft: 20 }}
-            renderItem={({ item }) => (
-                data ? 
-                <WaterbodiesListItem 
-                    data={item} key={item.id}
-                    navigate={() => navigateToWaterbody(item.id)}
-                /> : 
-                <WaterbodiesListLoader 
-                    key={Math.random()}
-                    style={{ marginLeft: '1%', marginTop: 24 }}
-                />
-            )} 
-            ListFooterComponent={() => <ListFooterSeeMore onPress={navigateViewMore}/>}
-        />
+        <View style={{ height: 368, paddingVertical: 24 }}>
+            <FlashList 
+                data={data}
+                horizontal={true}
+                estimatedItemSize={300}
+                showsHorizontalScrollIndicator={false}
+                contentContainerStyle={{ paddingLeft: 20 }}
+                renderItem={({ item }) => (
+                    <WaterbodiesListItem 
+                        data={item} key={item.id}
+                        navigate={() => navigateToWaterbody(item.id)}
+                    />
+                )} 
+                ListFooterComponent={() => <ListFooterSeeMore onPress={navigateViewMore}/>}
+            />
+        </View>
     )
 }
 
