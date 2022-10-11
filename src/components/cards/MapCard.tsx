@@ -1,6 +1,7 @@
-import { Pressable, StyleSheet, Image, StyleProp, ViewStyle } from "react-native";
+import { Pressable, StyleSheet, Image, StyleProp, ViewStyle, Dimensions } from "react-native";
 import React from "react";
 import { Button, Surface } from "react-native-paper";
+const { width } = Dimensions.get('screen')
 
 interface Props {
     navigateToMap: () => void
@@ -18,6 +19,7 @@ const MapCard = ({ navigateToMap, uri, style }: Props) => {
                 icon={'map'} 
                 style={styles.button} 
                 mode='contained-tonal'
+                theme={{ roundness: 2 }}
                 contentStyle={{ flexDirection: 'row-reverse' }}
             >View in Map</Button>
         </Surface>
@@ -29,20 +31,20 @@ export default MapCard;
 
 const styles = StyleSheet.create({
 surface: {
-        height: 230,
-        width: '80%'
-    },
-    image: {
-        height: '100%',
-        width: '100%',
-        backgroundColor: '#d9d9d9',
-        borderRadius: 12
-    },
-    button: {
-        position: 'absolute',
-        alignSelf: 'center',
-        bottom: 16,
-        borderRadius: 12,
-        width: '70%'
-    }
+    height: 230,
+    width: width * .8
+},
+image: {
+    height: '100%',
+    width: '100%',
+    backgroundColor: '#d9d9d9',
+    borderRadius: 12
+},
+button: {
+    position: 'absolute',
+    alignSelf: 'center',
+    bottom: 16,
+    borderRadius: 12,
+    width: '70%'
+}
 });
