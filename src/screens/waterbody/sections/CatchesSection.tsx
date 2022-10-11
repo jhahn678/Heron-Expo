@@ -1,6 +1,6 @@
 import React from "react";
-import { StyleSheet, View, Pressable } from "react-native";
-import { Text, Title } from 'react-native-paper'
+import { StyleSheet, View, Pressable, Dimensions } from "react-native";
+import { Button, Text, Title } from 'react-native-paper'
 import FishermanCatchingFish from "../../../components/svg/FishermanCatchingFish";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
@@ -8,9 +8,13 @@ import { CatchQuery, CatchSort } from "../../../types/Catch";
 import CatchesListItem from "../../../components/lists/CatchesListHorizontal/CatchesListItem";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import { useBottomSheetStore } from '../../../store/modal/useBottomSheetStore'
+import RectangleLoader from "../../../components/loaders/RectangleLoader";
+import FishIcon from "../../../components/icons/FishIcon";
 import { useGetCatches } from "../../../hooks/queries/useGetCatches";
+import ScrollViewListLoader from "../../../components/loaders/ScrollViewListLoader";
+const { width } = Dimensions.get('screen')
 
-const LIMIT = 3;
+const limit = 3;
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
@@ -25,8 +29,8 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
     const openSpecies = useBottomSheetStore(store => store.openSpecies)
     const handleOpenSpecies = () => openSpecies(waterbody)
 
-    const { data, loading, error } = useGetCatches({ 
-        limit: LIMIT, 
+    const { data } = useGetCatches({ 
+        limit,
         id: waterbody, 
         type: CatchQuery.Waterbody, 
         sort: CatchSort.CreatedAtNewest,
@@ -43,41 +47,62 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                 <FishermanCatchingFish/>
                 <View style={styles.divider}/>
                 <Pressable style={styles.text} onPress={navigateCatches}>
-                    <Text style={styles.number}>{totalCatches}</Text>
+                    { totalCatches !== undefined ? 
+                        <Text style={styles.number}>{totalCatches}</Text> : 
+                        <RectangleLoader height={28} width={28} style={styles.totalLoading}/>
+                    }
                     <Text style={{ fontWeight: '400', fontSize: 12 }}>Catches</Text>
                 </Pressable>
                 <View style={styles.divider}/>
                 <Pressable style={styles.text} onPress={handleOpenSpecies}>
-                    <Text style={styles.number}>{totalSpecies}</Text>
+                    { totalSpecies !== undefined ? 
+                        <Text style={styles.number}>{totalSpecies}</Text> :
+                        <RectangleLoader height={28} width={28} style={styles.totalLoading}/>
+                    }
                     <Text style={{ fontWeight: '400', fontSize: 12 }}>Species</Text>
                 </Pressable>
             </View>
-            { (data && data.catches.length > 0) && <>
-                <Title style={styles.title}>Latest Catches</Title>
-                <View style={styles.list}>
-                    <FlashList
-                    horizontal
-                    data={data.catches} 
-                    estimatedItemSize={300}
-                    showsHorizontalScrollIndicator={false}
-                    contentContainerStyle={{ paddingLeft: 16, paddingRight: 32 }}
-                    renderItem={({ item }) => (
-                        <CatchesListItem
-                            key={item.id}
-                            data={item}
-                            navigation={navigation}
-                            waterbody={waterbody}
+            <Title style={styles.title}>Latest Catches</Title>
+            { data ? 
+                data.catches.length > 0 ?
+                    <View style={{ height: 332 }}>
+                        <FlashList
+                        horizontal
+                        data={data.catches} 
+                        estimatedItemSize={300}
+                        showsHorizontalScrollIndicator={false}
+                        contentContainerStyle={{ paddingLeft: 16, paddingRight: 32 }}
+                        renderItem={({ item }) => (
+                            <CatchesListItem
+                                key={item.id}
+                                data={item}
+                                navigation={navigation}
+                                waterbody={waterbody}
+                            />
+                        )} 
+                        ListFooterComponent={data.catches.length === limit ? () => (
+                            <ListFooterSeeMore
+                                onPress={navigateCatches} 
+                                style={styles.seemore}
+                            />
+                        ): null}
                         />
-                    )} 
-                    ListFooterComponent={data && data.catches.length === LIMIT ? () => (
-                        <ListFooterSeeMore
-                            onPress={navigateCatches} 
-                            style={styles.seemore}
-                        />
-                    ): null}
-                    />
-                </View>
-            </>}
+                    </View> 
+                :
+                    <View style={styles.listempty}><View>
+                        <Text style={styles.emptytext}>Be the first to report a catch here!</Text>
+                        <Button
+                            mode="contained-tonal" 
+                            theme={{ roundness: 2 }}
+                            contentStyle={{ flexDirection: 'row-reverse'}}
+                            icon={({ color, size }) => (
+                            <FishIcon size={size} color={color}/>
+                            )}
+                        >New Catch</Button>
+                    </View></View>
+                :
+                    <ScrollViewListLoader/>
+            }
             <View style={styles.hdivider}/>
         </View>
     );
@@ -107,10 +132,6 @@ const styles = StyleSheet.create({
         marginBottom: 32,
         marginHorizontal: 16
     },
-    list: {
-        flex: 1,
-        width: '100%'
-    },
     text: {
         alignItems: 'center'
     },
@@ -139,5 +160,19 @@ const styles = StyleSheet.create({
         marginHorizontal: 16,
         marginTop: 36,
         marginBottom: 24
+    },
+    totalLoading: {
+        marginBottom: 10,
+        position: 'relative',
+        top: 6
+    },
+    listempty: {
+        marginTop: 16,
+        width: width - 32,
+        alignItems: 'center'
+    },
+    emptytext: {
+        fontWeight: '500',
+        marginBottom: 12
     }
 });

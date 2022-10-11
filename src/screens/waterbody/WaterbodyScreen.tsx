@@ -29,7 +29,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
 
     const { params: { id } } = route;
 
-    const { data, loading, error } = useGetWaterbody(id)
+    const { data } = useGetWaterbody(id)
 
     const setLoading = useModalStore(store => store.setLoading)
     const setShowSuccess = useModalStore(store => store.setSuccess)
@@ -44,8 +44,8 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     const handleResetReview = () => { resetReview(); clearImages() }
 
     const uploadImages = useUploadImages()
-    const [createReview, result] = useCreateWaterbodyReview()
-    const [saveImages] = useAddWaterbodyMedia()
+    const [createReview] = useCreateWaterbodyReview()
+    const [saveImages] = useAddWaterbodyMedia(id)
 
     const getValues = useReviewModalStore(store => store.getValues)
 
@@ -69,8 +69,6 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
         setLoading(false)
     }
 
-    useEffect(() => {},[])
-
     useEffect(() => navigation.addListener('blur', handleResetReview), [])
   
     return (
@@ -80,7 +78,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                     id={id} 
                     navigation={navigation} 
                     name={data?.waterbody.name}
-                    media={data?.waterbody.media}
+                    media={data?.waterbody.media.slice(0,6)}
                     isSaved={data?.waterbody.is_saved}
                     totalMedia={data?.waterbody.total_media} 
                 />

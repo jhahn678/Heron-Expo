@@ -108,6 +108,7 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
         mode="contained"
         style={styles.leaveReview}
         onPress={handleShowReview}
+        theme={{ roundness: 2 }}
       >Leave a review</Button>
 
       <View style={styles.listSection}>

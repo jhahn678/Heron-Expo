@@ -3,6 +3,7 @@ import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import { Button, Title } from "react-native-paper";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
+import ScrollViewListLoader from "../../../components/loaders/ScrollViewListLoader";
 import { useGetWaterbodyMedia } from "../../../hooks/queries/useGetWaterbodyMedia";
 import { MediaType } from "../../../types/Media";
 import { ExploreStackScreenProps, MediaSource } from "../../../types/navigation";
@@ -14,38 +15,47 @@ interface Props {
     name: string | undefined
 }
 
-const LIMIT = 8;
+const limit = 8;
 
-const MediaSection = ({ navigation, waterbody, name, totalMedia }: Props) => {
+const MediaSection = ({ navigation, waterbody, name, totalMedia: total }: Props) => {
 
-    const { data, loading, error } = useGetWaterbodyMedia({ id: waterbody, limit: LIMIT })
-    
+    const { data } = useGetWaterbodyMedia({ id: waterbody, limit })
+
     const navigateToImage = (id: number) => () => navigation.navigate('ViewImageScreen', { 
         id, type: MediaType.Waterbody, title: name })
 
     const navigateToMedia = () => navigation.navigate('MediaGridScreen', { 
-        title: name, source: MediaSource.Waterbody, id: waterbody, total: totalMedia })
+        source: MediaSource.Waterbody,  title: name, id: waterbody, total })
 
     return (
         <View style={styles.container}>
             <View style={styles.divider}/>
             <View style={styles.header}>
-                <Title style={styles.title}>Photos {`(${totalMedia || 0})`}</Title>
+                <Title style={styles.title}>Photos {`(${total || 0})`}</Title>
                 <Button onPress={navigateToMedia}>See all photos</Button>
             </View>
-            { (data && data?.waterbody.media.length > 0) &&
-                <FlashList horizontal
-                    showsHorizontalScrollIndicator={false}
-                    data={data.waterbody.media} 
-                    contentContainerStyle={{ paddingLeft: 16, paddingTop: 16 }}
-                    estimatedItemSize={200}
-                    ListFooterComponent={<ListFooterSeeMore onPress={navigateToMedia}/>}
-                    renderItem={({ item }) => (
-                        <Pressable onPress={navigateToImage(item.id)} style={styles.imageSurface}>
-                            <Image source={{ uri: item.url }} style={styles.image} resizeMode='cover'/>
-                        </Pressable>
-                    )}
-                />
+            { data ? 
+                data.waterbody.media.length > 0 ?
+                    <View style={styles.flashlist}>
+                        <FlashList 
+                            horizontal
+                            estimatedItemSize={200}
+                            data={data.waterbody.media.slice(0,limit)} 
+                            showsHorizontalScrollIndicator={false}
+                            contentContainerStyle={{ paddingLeft: 16 }}
+                            ListFooterComponent={<ListFooterSeeMore onPress={navigateToMedia}/>}
+                            renderItem={({ item }) => (
+                                <Pressable onPress={navigateToImage(item.id)} style={styles.imageSurface}>
+                                    <Image source={{ uri: item.url }} style={styles.image} resizeMode='cover'/>
+                                </Pressable>
+                            )}
+                        />
+                    </View>
+                : null :  
+                    <ScrollViewListLoader 
+                        itemSize={{ height: 200, width: 200 }} 
+                        contentContainerStyle={{ padding: 16 }}
+                    />
             }
             <View style={styles.divider}/>
         </View>
@@ -56,7 +66,7 @@ export default MediaSection;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%'
+        width: '100%',
     },
     header: {
         paddingLeft: 16,
@@ -68,11 +78,15 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: '600'
     },
+    flashlist: {
+        height: 232
+    },
     imageSurface: {
         height: 200,
         width: 200,
         borderRadius: 12,
-        marginRight: 8,
+        marginRight: 12,
+        marginTop: 24
     },
     image: {
         height: '100%',

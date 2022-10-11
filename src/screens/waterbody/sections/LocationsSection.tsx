@@ -5,6 +5,7 @@ import FishermanDock from "../../../components/svg/FishermanDock";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { LocationQuery } from "../../../types/Location";
+import RectangleLoader from "../../../components/loaders/RectangleLoader";
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
@@ -27,7 +28,10 @@ const LocationsSection = ({ navigation, name, waterbody, totalLocations }: Props
                     <FishermanDock/>
                     <View style={styles.divider}/>
                     <View style={styles.text}>
-                        <Text style={styles.number}>{totalLocations}</Text>
+                        { totalLocations !== undefined ? 
+                            <Text style={styles.number}>{totalLocations}</Text> :
+                            <RectangleLoader height={28} width={28} style={styles.totalLoading}/>
+                        }
                         <Text style={{ fontWeight: '400', fontSize: 12 }}>Saved Spots</Text>
                     </View>
                 </View>
@@ -57,6 +61,11 @@ const styles = StyleSheet.create({
     },
     text: {
         alignItems: 'center'
+    },
+    totalLoading: {
+        marginBottom: 10,
+        position: 'relative',
+        top: 6
     },
     divider: {
         height: '40%',

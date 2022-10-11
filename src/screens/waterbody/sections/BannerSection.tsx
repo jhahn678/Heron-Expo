@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { FAB } from 'react-native-paper'
-import { Pressable, StyleSheet, Image, View } from "react-native";
+import { Pressable, StyleSheet, Image, View, FlatList, Dimensions } from "react-native";
 import SaveIconButton from "../../../components/buttons/SaveIconButton";
 import ShareButton from "../../../components/buttons/ShareButton";
 import BackButton from "../../../components/buttons/BackButton";
@@ -14,6 +14,9 @@ import { useImagePicker } from "../../../hooks/utils/useImagePicker";
 import { useImageStore } from "../../../store/image/useImageStore";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import { GetWaterbodyRes } from "../../../hooks/queries/useGetWaterbody";
+import { useImagePaginationIndicator } from "../../../hooks/utils/useImagePaginationIndicator";
+import ImagePagination from "../../../components/lists/shared/ImagePagination";
+const { width } = Dimensions.get('screen')
 
 interface Props {
     navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation'] 
@@ -32,6 +35,7 @@ const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Pro
     const isAuthenticated = useAuth(store => store.isAuthenticated)
     const showAuthModal = useModalStore(store => () => store.setAuth(true))
     const [fabOpen, setFabOpen] = useState(false);
+    const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
 
     const handleAddImage = async () => {
         const result = await openImagePicker()
@@ -44,23 +48,28 @@ const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Pro
 
     const handleAddLocation = () => navigation.navigate('NewLocationScreen', { waterbody: id })
 
-    const handleMediaScreen = () => navigation.navigate('MediaGridScreen', { 
+    const navigateMediaScreen = () => navigation.navigate('MediaGridScreen', { 
         source: MediaSource.Waterbody, id, total: totalMedia, title: name
     })
 
+
     return (
-        <View>
-            <Pressable onPress={handleMediaScreen}>
-                <Image 
-                    source={{ 
-                        uri: 
-                            (media && media.length > 0)
-                            ? media[0].url 
-                            : undefined 
-                    }} 
-                    style={styles.image}
-                />
-            </Pressable>
+        <View style={styles.container}>
+            <FlatList
+                data={media || []}
+                horizontal={true}
+                pagingEnabled={true}
+                onViewableItemsChanged={handleViewableItemsChanged}
+                showsHorizontalScrollIndicator={false}
+                renderItem={({ item }) => (
+                    <Pressable onPress={navigateMediaScreen}>
+                        <Image source={{ uri: item.url }} resizeMode={'cover'} style={styles.image}/>
+                    </Pressable>
+                )}
+            />
+            {(media && media.length > 0) && 
+                <ImagePagination currentIndex={currentIndex} media={media}/>
+            }
             <BackButton style={styles.back}/>
             <ShareButton style={styles.share} shareType={ShareType.Waterbody} id={id}/>
             <SaveIconButton style={styles.save} waterbody={id} saved={isSaved}/>
@@ -91,6 +100,10 @@ const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Pro
 export default BannerSection;
 
 const styles = StyleSheet.create({
+    container: {
+        width,
+        height: 320,
+    },
     back: {
         position: 'absolute',
         top: 36,
@@ -107,7 +120,8 @@ const styles = StyleSheet.create({
         right: 16,
     },
     image: {
+        width,
         height: 320,
-        backgroundColor: '#e0e0e0'
+        backgroundColor: '#d9d9d9'
     },
 });
