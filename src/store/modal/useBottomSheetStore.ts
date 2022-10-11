@@ -9,6 +9,10 @@ export interface BottomSheetStore {
     setSpeciesRef: (ref: React.MutableRefObject<BottomSheet | null>) => void
     openSpecies: (id: number) => void
     closeSpecies: () => void
+    waterbodyUpload: boolean
+    setWaterbodyUpload: (waterbody?: number | false) => void
+    mediaGridUpload: boolean
+    setMediaGridUpload: (waterbody?: number | false) => void
 }
 
 export const useBottomSheetStore = create<BottomSheetStore>((set, get) => ({
@@ -25,5 +29,15 @@ export const useBottomSheetStore = create<BottomSheetStore>((set, get) => ({
         const ref = get().speciesRef;
         if(ref) ref.current?.close();
         set({ isSpeciesOpen: false, waterbody: null })
-    }
+    },
+    waterbodyUpload: false,
+    setWaterbodyUpload: waterbody => set({
+        waterbodyUpload: Boolean(waterbody),
+        waterbody: waterbody || null
+    }),
+    mediaGridUpload: false,
+    setMediaGridUpload: waterbody => set({
+        mediaGridUpload: Boolean(waterbody),
+        waterbody: waterbody || null
+    }),
 }))

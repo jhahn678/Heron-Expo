@@ -5,14 +5,13 @@ import { GetWaterbodyMedia, useGetWaterbodyMedia } from "../../hooks/queries/use
 import { FlashList } from "@shopify/flash-list";
 import { IconButton, Surface, Title } from "react-native-paper";
 import BoxLoader from "../../components/loaders/BoxLoader";
-import { useModalStore } from "../../store/modal/useModalStore";
-import { useImageStore } from "../../store/image/useImageStore";
-import { useImagePicker } from "../../hooks/utils/useImagePicker";
 import globalStyles from "../../globalStyles";
 import { GetUserMediaRes, useGetUserMedia } from "../../hooks/queries/useGetUserMedia";
 import LocationsListEmpty from "../../components/lists/shared/LocationsListEmpty";
 import { theme } from "../../config/theme";
 import { MediaType } from "../../types/Media";
+import { useBottomSheetStore } from "../../store/modal/useBottomSheetStore";
+import WaterbodyMediaUploadModal from "../../components/modals/WaterbodyMediaUploadModal";
 
 const limit = 24;
 const { width } = Dimensions.get('screen')  
@@ -24,8 +23,11 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
     const { params: { title, source, id, total } } = route;
 
     const [media, setMedia] = useState<Data>([])
-    const [loading, setLoading] = useState(false)
+    const [loading, setLoading] = useState(true)
     const [allowAdd, setAllowAdd] = useState(false)
+    const setUploadVisible = useBottomSheetStore(store => store.setMediaGridUpload)
+    const uploadVisible = useBottomSheetStore(store => store.mediaGridUpload)
+    const handleAddImages = () => setUploadVisible(id)
 
     const { 
         data: waterbodyMedia, 
@@ -72,19 +74,8 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
         }
     }
 
-    const { openImagePicker } = useImagePicker()
-    const setImages = useImageStore(state => state.setImages)
-    const showConfirmUpload = useModalStore(state => state.setConfirmUpload)
-
     const navigateImage = (id: number) => () => navigation
         .navigate('ViewImageScreen', { type: MediaType.Waterbody, id })
-
-    const handleAddImages = async () => {
-        const result = await openImagePicker()
-        if(!result) return;
-        setImages(result)
-        showConfirmUpload(id, true)
-    }
 
     return (
         <View style={styles.container}>
@@ -148,6 +139,7 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
                     )}
                 />
             }
+            <WaterbodyMediaUploadModal visible={uploadVisible} setVisible={setUploadVisible}/>
         </View>
     );
 };

@@ -36,6 +36,8 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
         sort: CatchSort.CreatedAtNewest,
     })
 
+    const navigateNewCatch = () => navigation.navigate('NewCatchScreen', { waterbody })
+
     const navigateCatches = () => navigation.navigate('CatchListScreen', { 
         type: CatchQuery.Waterbody, id: waterbody, title: name, total: totalCatches 
     })
@@ -91,7 +93,8 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                 :
                     <View style={styles.listempty}><View>
                         <Text style={styles.emptytext}>Be the first to report a catch here!</Text>
-                        <Button
+                        <Button 
+                            onPress={navigateNewCatch}
                             mode="contained-tonal" 
                             theme={{ roundness: 2 }}
                             contentStyle={{ flexDirection: 'row-reverse'}}
@@ -168,7 +171,7 @@ const styles = StyleSheet.create({
     },
     listempty: {
         marginTop: 16,
-        width: width - 32,
+        width: width,
         alignItems: 'center'
     },
     emptytext: {

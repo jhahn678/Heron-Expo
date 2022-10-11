@@ -5,6 +5,7 @@ interface Props {
 }
 
 const Backdrop = ({ onPress }: Props) => {
+
     return (
         <Pressable 
             onPress={onPress}

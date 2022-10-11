@@ -16,6 +16,7 @@ import { ShareType } from "../../../hooks/utils/useShareContent";
 import { GetWaterbodyRes } from "../../../hooks/queries/useGetWaterbody";
 import { useImagePaginationIndicator } from "../../../hooks/utils/useImagePaginationIndicator";
 import ImagePagination from "../../../components/lists/shared/ImagePagination";
+import { useBottomSheetStore } from "../../../store/modal/useBottomSheetStore";
 const { width } = Dimensions.get('screen')
 
 interface Props {
@@ -29,20 +30,14 @@ interface Props {
 
 const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Props) => {
 
-    const { openImagePicker } = useImagePicker()
-    const setImages = useImageStore(state => state.setImages)
-    const showConfirmUpload = useModalStore(state => state.setConfirmUpload)
     const isAuthenticated = useAuth(store => store.isAuthenticated)
-    const showAuthModal = useModalStore(store => () => store.setAuth(true))
+    const setAuthVisible = useModalStore(store => store.setAuth)
+    const setUpload = useBottomSheetStore(store => store.setWaterbodyUpload)
+    const showAuthModal = () => setAuthVisible(true)
     const [fabOpen, setFabOpen] = useState(false);
     const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
 
-    const handleAddImage = async () => {
-        const result = await openImagePicker()
-        if(!result) return;
-        setImages(result)
-        showConfirmUpload(id, true)
-    }
+    const handleAddImage = () => setUpload(id)
 
     const handleAddCatch = () => navigation.navigate('NewCatchScreen', { waterbody: id })
 
@@ -76,6 +71,8 @@ const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Pro
             <FAB.Group
                 visible={true} open={fabOpen}
                 icon={fabOpen ? 'close' : 'plus'}
+                onStateChange={({ open }) => setFabOpen(open)}
+                onPress={() => setFabOpen(o => !o)}
                 actions={[
                     { 
                         icon: ({ color }) => <AddImageIcon color={color}/>,
@@ -90,8 +87,6 @@ const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Pro
                         onPress: isAuthenticated ? handleAddLocation : showAuthModal
                     }
                 ]}
-                onStateChange={({ open }) => setFabOpen(open)}
-                onPress={() => setFabOpen(o => !o)}
             />
         </View>
     );

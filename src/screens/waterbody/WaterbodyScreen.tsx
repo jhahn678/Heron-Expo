@@ -14,13 +14,16 @@ import ReviewImagesBottomSheet from '../../components/modals/review/ReviewImages
 import Backdrop from '../../components/modals/Backdrop';
 import { useReviewModalStore } from '../../store/mutations/useReviewModalStore';
 import { useImageStore } from '../../store/image/useImageStore';
-import { useEffect } from 'react';
+import React, { useEffect } from 'react';
 import { useCreateWaterbodyReview } from '../../hooks/mutations/useCreateWaterbodyReview';
 import { useModalStore } from '../../store/modal/useModalStore';
 import { ErrorType } from '../../utils/mapErrorTypeToDetails';
 import { ApolloError } from '@apollo/client';
 import { useUploadImages } from '../../hooks/mutations/useUploadImages';
 import { useAddWaterbodyMediaMutation as useAddWaterbodyMedia } from '../../hooks/mutations/useAddWaterbodyMedia';
+import WaterbodyMediaUploadModal from '../../components/modals/WaterbodyMediaUploadModal';
+import SpeciesBottomSheet from '../../components/modals/SpeciesBottomSheet';
+import { useBottomSheetStore } from '../../store/modal/useBottomSheetStore';
 
 const handleError = (error: ApolloError) => error.message
     .includes('waterbody_review_one_per_user') ? ErrorType.ReviewDuplicate : ErrorType.Default
@@ -31,6 +34,8 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
 
     const { data } = useGetWaterbody(id)
 
+    const uploadVisible = useBottomSheetStore(store => store.waterbodyUpload)
+    const setUploadVisible = useBottomSheetStore(store => store.setWaterbodyUpload)
     const setLoading = useModalStore(store => store.setLoading)
     const setShowSuccess = useModalStore(store => store.setSuccess)
     const setShowErrorModal = useModalStore(store => store.setError)
@@ -117,9 +122,11 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                     averageRating={data?.waterbody.average_rating}
                 />
             </ScrollView>
+            <SpeciesBottomSheet/>
             <ReviewRatingBottomSheet/>
             <ReviewBodyBottomSheet/>
             <ReviewImagesBottomSheet onSubmit={handleSubmit}/>
+            <WaterbodyMediaUploadModal visible={uploadVisible} setVisible={setUploadVisible}/>
             { backdrop && <Backdrop onPress={handleResetReview}/>}
         </View>
     )

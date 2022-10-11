@@ -45,7 +45,7 @@ export const useImageStore = create<ImageStore>((set, get) => ({
             set({ images: [ ...images, ...newImages ]})
         }else{
             const { uri, height, width } = data;
-            set({ images: [ ...images, { 
+            set({ images: [ ...images, {
                 uri, height, width, id: uuid.v4().toString()
             }]})
         }
