@@ -7,7 +7,7 @@ const WaterbodyHeaderLoader = () => {
     <ContentLoader 
         speed={2}
         width={270}
-        height={140}
+        height={138}
         viewBox="0 0 270 140"
         backgroundColor="#e3e3e3"
         foregroundColor="#e6e6e6"
