@@ -17,9 +17,9 @@ const FilterWaterbodyBottomSheet = () => {
     const waterbodies = useMyCatchesModalStore(store => store.waterbody)
     const modalVisible = useMyCatchesModalStore(store => store.waterbodyVisible)
 
-    const handleBackdrop = () => { if(ref.current) ref.current.close() }
     const handleClose = () => setModalVisible(false)
     const handleSelect = (value: number) => () => setWaterbody(value)
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
 
     useEffect(() => {
         if(ref.current && modalVisible) ref.current.expand()

@@ -1,8 +1,7 @@
 import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import { StyleSheet } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { RadioButton, Title } from "react-native-paper";
-import SelectableItem from "../../lists/shared/SelectableItem";
 import Backdrop from "../Backdrop";
 import { useMyLocationsModalStore } from "../../../store/modal/useMyLocationsModalStore";
 import { LocationSort } from "../../../types/Location";
@@ -10,21 +9,17 @@ import { LocationSort } from "../../../types/Location";
 const FilterSortBottomSheet = () => {
 
     const ref = useRef<BottomSheet | null>(null)
-    const [backdrop, setBackdrop] = useState(false)
     const sort = useMyLocationsModalStore(store => store.sort)
     const setSort = useMyLocationsModalStore(store => store.setSort)
     const modalVisible = useMyLocationsModalStore(store => store.sortVisible)
     const setModalVisible = useMyLocationsModalStore(store => store.setSortVisible)
 
     const handleChange = (value: string) => setSort(value as unknown as LocationSort)
-    const handleBackdrop = () => { setBackdrop(false); if(ref.current) ref.current.close() }
-    const handleClose = () => { setBackdrop(false); setModalVisible(false) }
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
+    const handleClose = () => setModalVisible(false)
 
     useEffect(() => {
-        if(ref.current && modalVisible) {
-            setBackdrop(true)
-            ref.current.expand()
-        }
+        if(ref.current && modalVisible) ref.current.expand()
     },[modalVisible])
 
     return (
@@ -36,7 +31,7 @@ const FilterSortBottomSheet = () => {
             containerStyle={{ zIndex: 100 }}
             enablePanDownToClose={true}
             onClose={handleClose}
-            backdropComponent={backdrop ? (
+            backdropComponent={modalVisible ? (
                 () => <Backdrop onPress={handleBackdrop} />
             ) : null}
         >

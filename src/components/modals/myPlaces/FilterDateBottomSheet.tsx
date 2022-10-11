@@ -10,7 +10,6 @@ import Backdrop from "../Backdrop";
 const FilterDateBottomSheet = () => {
 
     const ref = useRef<BottomSheet | null>(null)
-    const [backdrop, setBackdrop] = useState(false)
     const [pickerVisible, setPickerVisible] = useState(false)
     const [pickingFor, setPickingFor] = useState<null | 'MIN' | 'MAX'>(null)
     const [localMinDate, setLocalMinDate] = useState<Date | undefined>(undefined)
@@ -18,7 +17,7 @@ const FilterDateBottomSheet = () => {
 
     const modalVisible = useMyLocationsModalStore(store => store.dateVisible)
     const setModalVisible = useMyLocationsModalStore(store => store.setDateVisible)
-    const handleClose = () => { setBackdrop(false); setModalVisible(false) }
+    const handleClose = () => setModalVisible(false)
     const setMinDate = useMyLocationsModalStore(store => store.setMinDate)
     const setMaxDate = useMyLocationsModalStore(store => store.setMaxDate)
     const storedMinDate = useMyLocationsModalStore(store => store.minDate)
@@ -27,7 +26,6 @@ const FilterDateBottomSheet = () => {
     useEffect(() => {
         if(ref.current && modalVisible) {
             ref.current.expand()
-            setBackdrop(true)
             setLocalMinDate(storedMinDate)
             setLocalMaxDate(storedMaxDate)
         }
@@ -58,11 +56,10 @@ const FilterDateBottomSheet = () => {
     const handleSave = () => {
         setMinDate(localMinDate);
         setMaxDate(localMaxDate);
-        setBackdrop(false)
         if(ref.current) ref.current.close()
     }
 
-    const handleBackdrop = () => { setBackdrop(false); if(ref.current) ref.current.close() }
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
     const handleClearMin = () => setLocalMinDate(undefined)
     const handleClearMax = () => setLocalMaxDate(undefined)
     const handleClearValues = () => { setLocalMinDate(undefined); setLocalMaxDate(undefined) }
@@ -75,7 +72,7 @@ const FilterDateBottomSheet = () => {
             containerStyle={{ zIndex: 100 }}
             enablePanDownToClose={true}
             onClose={handleClose}
-            backdropComponent={backdrop ? (
+            backdropComponent={modalVisible ? (
                 () => <Backdrop onPress={handleBackdrop} />
             ) : null}
         >

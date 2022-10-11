@@ -5,6 +5,7 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
 import { Title, Text, Button  } from "react-native-paper";
 import { theme } from "../../../config/theme";
+import Backdrop from "../Backdrop";
 
 const { width } = Dimensions.get('screen')
 
@@ -25,6 +26,7 @@ const FilterLengthBottomSheet = () => {
     const ref = useRef<BottomSheet | null>(null)
     const setModalVisible = useMyCatchesModalStore(store => store.setLengthVisible)
     const handleClose = () => setModalVisible(false)
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
     const setMinLength = useMyCatchesModalStore(store => store.setMinLength)
     const setMaxLength = useMyCatchesModalStore(store => store.setMaxLength)
     const modalVisible = useMyCatchesModalStore(store => store.lengthVisible)
@@ -59,6 +61,9 @@ const FilterLengthBottomSheet = () => {
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}
+            backdropComponent={modalVisible ? (
+                () => <Backdrop onPress={handleBackdrop}/>
+            ) : null}
         >
             <Title style={styles.title}>Length</Title>
             <View style={styles.content}>

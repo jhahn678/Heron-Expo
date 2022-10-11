@@ -10,20 +10,16 @@ import { Privacy } from "../../../types/Location";
 const FilterPrivacyBottomSheet = () => {
 
     const ref = useRef<BottomSheet | null>(null)
-    const [backdrop, setBackdrop] = useState(false)
     const setModalVisible = useMyLocationsModalStore(store => store.setPrivacyVisible)
     const setPrivacy = useMyLocationsModalStore(store => store.setPrivacy)
     const privacy = useMyLocationsModalStore(store => store.privacy)
     const modalVisible = useMyLocationsModalStore(store => store.privacyVisible)
 
-    const handleBackdrop = () => { setBackdrop(false); if(ref.current) ref.current.close() }
-    const handleClose = () => { setBackdrop(false); setModalVisible(false) }
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
+    const handleClose = () => setModalVisible(false)
 
     useEffect(() => {
-        if(ref.current && modalVisible) {
-            setBackdrop(true)
-            ref.current.expand()
-        }
+        if(ref.current && modalVisible) ref.current.expand()
     },[modalVisible])
 
     return (
@@ -34,7 +30,7 @@ const FilterPrivacyBottomSheet = () => {
             containerStyle={{ zIndex: 100 }}
             enablePanDownToClose={true}
             onClose={handleClose}
-            backdropComponent={backdrop ? (
+            backdropComponent={modalVisible ? (
                 () => <Backdrop onPress={handleBackdrop} />
             ) : null}
         >

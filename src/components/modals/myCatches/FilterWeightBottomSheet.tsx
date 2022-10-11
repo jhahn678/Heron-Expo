@@ -5,6 +5,7 @@ import MultiSlider from '@ptomasroos/react-native-multi-slider'
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
 import { Title, Text, Button  } from "react-native-paper";
 import { theme } from "../../../config/theme";
+import Backdrop from "../Backdrop";
 
 const { width } = Dimensions.get('screen')
 
@@ -22,6 +23,7 @@ const FilterWeightBottomSheet = () => {
     const ref = useRef<BottomSheet | null>(null)
     const setModalVisible = useMyCatchesModalStore(store => store.setWeightVisible)
     const handleClose = () => setModalVisible(false)
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
     const setMinWeight = useMyCatchesModalStore(store => store.setMinWeight)
     const setMaxWeight = useMyCatchesModalStore(store => store.setMaxWeight)
     const modalVisible = useMyCatchesModalStore(store => store.weightVisible)
@@ -56,6 +58,9 @@ const FilterWeightBottomSheet = () => {
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}
+            backdropComponent={modalVisible ? (
+                () => <Backdrop onPress={handleBackdrop}/>
+            ) : null}
         >
             <Title style={styles.title}>Weight</Title>
             <View style={styles.content}>
@@ -64,20 +69,18 @@ const FilterWeightBottomSheet = () => {
                     <Text style={styles.label}>{maxLabel}</Text>
                 </View>
                 <MultiSlider
-                step={4}
-                min={8}
-                max={320}
-                values={values}
-                onValuesChange={handleChangeValues}
-                sliderLength={width-72}
-                trackStyle={styles.track}
-                selectedStyle={styles.selected}
-                markerStyle={styles.marker}
+                    step={4} min={8} 
+                    max={320} values={values}
+                    onValuesChange={handleChangeValues}
+                    sliderLength={width-72}
+                    trackStyle={styles.track}
+                    selectedStyle={styles.selected}
+                    markerStyle={styles.marker}
                 />
                 <Button 
-                mode="contained-tonal" 
-                style={styles.button}
-                onPress={handleSave}
+                    mode="contained-tonal" 
+                    style={styles.button}
+                    onPress={handleSave}
                 >Save</Button>
             </View>
         </BottomSheet>

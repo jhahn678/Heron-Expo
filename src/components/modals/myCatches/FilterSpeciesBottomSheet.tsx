@@ -5,6 +5,7 @@ import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalSt
 import { Title } from "react-native-paper";
 import SelectableItem from "../../lists/shared/SelectableItem";
 import { useGetMyCatchStatistics } from "../../../hooks/queries/useGetUserCatchStatistics";
+import Backdrop from "../Backdrop";
 
 const FilterSpeciesBottomSheet = () => {
 
@@ -12,6 +13,7 @@ const FilterSpeciesBottomSheet = () => {
     const ref = useRef<BottomSheet | null>(null)
     const setModalVisible = useMyCatchesModalStore(store => store.setSpeciesVisible)
     const handleClose = () => setModalVisible(false)
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
     const setSpecies = useMyCatchesModalStore(store => store.setSpecies)
     const species = useMyCatchesModalStore(store => store.species)
     const handleSelect = (value: string) => () => setSpecies(value)
@@ -29,6 +31,9 @@ const FilterSpeciesBottomSheet = () => {
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}
+            backdropComponent={modalVisible ? (
+                () => <Backdrop onPress={handleBackdrop}/>
+            ) : null}
         >
             <Title style={styles.title}>Species</Title>
             { data && data.me.catch_statistics.species_counts ?

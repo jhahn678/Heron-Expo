@@ -28,7 +28,7 @@ const ConfirmUploadModal = (props: Props) => {
 
     const clearImages = useImageStore(state => state.clearImages)
     const images = useImageStore(state => state.images)
-    const [saveImages, { loading }] = useAddWaterbodyMediaMutation()
+    const [saveImages, { loading }] = useAddWaterbodyMediaMutation(waterbody)
 
     const uploadImages = useUploadImages()
 

@@ -5,6 +5,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker'
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
 import { Button, TextInput, Title } from "react-native-paper";
 import dayjs from "../../../config/dayjs";
+import Backdrop from "../Backdrop";
 
 const FilterDateBottomSheet = () => {
 
@@ -17,6 +18,7 @@ const FilterDateBottomSheet = () => {
     const modalVisible = useMyCatchesModalStore(store => store.dateVisible)
     const setModalVisible = useMyCatchesModalStore(store => store.setDateVisible)
     const handleClose = () => setModalVisible(false)
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
     const setMinDate = useMyCatchesModalStore(store => store.setMinDate)
     const setMaxDate = useMyCatchesModalStore(store => store.setMaxDate)
     const storedMinDate = useMyCatchesModalStore(store => store.minDate)
@@ -70,6 +72,9 @@ const FilterDateBottomSheet = () => {
             index={-1}
             enablePanDownToClose={true}
             onClose={handleClose}
+            backdropComponent={modalVisible ? (
+                () => <Backdrop onPress={handleBackdrop}/>
+            ) : null}
         >
             <Title style={styles.title}>Dates</Title>
             <View style={styles.container}>

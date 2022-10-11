@@ -11,21 +11,17 @@ const FilterWaterbodyBottomSheet = () => {
 
     const { data } = useGetMyLocationStatistics()  
     const ref = useRef<BottomSheet | null>(null)
-    const [backdrop, setBackdrop] = useState(false)
     const setModalVisible = useMyLocationsModalStore(store => store.setWaterbodyVisible)
     const setWaterbody = useMyLocationsModalStore(store => store.setWaterbody)
     const waterbodies = useMyLocationsModalStore(store => store.waterbody)
     const modalVisible = useMyLocationsModalStore(store => store.waterbodyVisible)
 
-    const handleBackdrop = () => { setBackdrop(false); if(ref.current) ref.current.close() }
-    const handleClose = () => { setBackdrop(false); setModalVisible(false) }
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
+    const handleClose = () => setModalVisible(false)
     const handleSelect = (value: number) => () => setWaterbody(value)
 
     useEffect(() => {
-        if(ref.current && modalVisible) {
-            setBackdrop(true)
-            ref.current.expand()
-        }
+        if(ref.current && modalVisible) ref.current.expand()
     },[modalVisible])
 
     return (
@@ -36,7 +32,7 @@ const FilterWaterbodyBottomSheet = () => {
             onClose={handleClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}
-            backdropComponent={backdrop ? (
+            backdropComponent={modalVisible ? (
                 () => <Backdrop onPress={handleBackdrop}/>
             ) : null}
         >
