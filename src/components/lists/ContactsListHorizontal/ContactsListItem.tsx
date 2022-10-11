@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native'
-import { Text } from 'react-native-paper'
+import { Card, Text } from 'react-native-paper'
 import { IContact } from '../../../types/User'
 import Avatar from '../../users/Avatar'
 
@@ -15,10 +15,12 @@ const ContactsListItem = <T extends IContact>({
 }: Props<T>) => {
 
   return (
-    <Pressable onPress={onPress} style={[styles.container, style]}>
-      <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname} size={72}/>
-      <Text style={styles.name}>{data.fullname}</Text>
-    </Pressable>
+    <Card onPress={onPress} style={[styles.container, style]} elevation={0}>
+      <Card.Content style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
+        <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname} size={78}/>
+        <Text style={styles.name}>{data.fullname}</Text>
+      </Card.Content>
+    </Card>
   )
 }
 
@@ -26,12 +28,13 @@ export default ContactsListItem
 
 const styles = StyleSheet.create({
   container: {
-    width: 100,
-    alignItems: 'center'
+    height: 152,
+    width: 124,
+    borderRadius: 12
   },
   name: {
-    fontWeight: '600',
-    marginTop: 6,
+    fontWeight: '500',
+    marginTop: 8,
     textAlign: 'center'
   }
 })
