@@ -32,37 +32,34 @@ const SavedLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySavedL
 
     return (
         <View style={styles.container}>
-            { 
-                data ?
-                    <FlashList
-                        estimatedItemSize={300}
-                        refreshing={refetching}
-                        onRefresh={handleRefetch}
-                        onEndReachedThreshold={.4}
-                        onEndReached={handleFetchMore}
-                        showsVerticalScrollIndicator={false}
-                        contentContainerStyle={{ paddingTop: 16 }}
-                        ListEmptyComponent={
-                            <ReviewsListEmpty 
-                                caption="No bookmarked locations" 
-                                scale={.8} 
-                                fontSize={16} 
-                                style={styles.empty}
-                            />
-                        }
-                        data={data.me.saved_locations} 
-                        renderItem={({ item }) => (
-                            <LocationListItem 
-                                data={item}
-                                navigateToMap={navigateToMap(item.id)}
-                                navigateToUser={navigateToUser(item.user.id)}
-                                navigateToWaterbody={navigateToWaterbody(item.waterbody.id)}
-                            />
-                        )}
-                    /> 
-                : loading ?
-                    <ActivityIndicator size={48} style={styles.empty}/>
-                : null
+            { data ?
+                <FlashList
+                    estimatedItemSize={300}
+                    refreshing={refetching}
+                    onRefresh={handleRefetch}
+                    onEndReachedThreshold={.4}
+                    onEndReached={handleFetchMore}
+                    showsVerticalScrollIndicator={false}
+                    contentContainerStyle={{ paddingTop: 16 }}
+                    ListEmptyComponent={
+                        <ReviewsListEmpty 
+                            caption="No bookmarked locations" 
+                            scale={.8} 
+                            fontSize={16} 
+                            style={styles.empty}
+                        />
+                    }
+                    data={data.me.saved_locations} 
+                    renderItem={({ item }) => (
+                        <LocationListItem 
+                            data={item}
+                            navigateToMap={navigateToMap(item.id)}
+                            navigateToUser={navigateToUser(item.user.id)}
+                            navigateToWaterbody={navigateToWaterbody(item.waterbody.id)}
+                        />
+                    )}
+                /> 
+                : <ActivityIndicator size={48} style={styles.empty}/>
             } 
         </View>
     );

@@ -29,9 +29,8 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
 
     return (
         <View style={styles.container}>
-            {
-                data ? 
-                    <FlashList
+            { data ? 
+                <FlashList
                     estimatedItemSize={300}
                     showsVerticalScrollIndicator={false}
                     refreshing={refetching}
@@ -39,6 +38,7 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
                     onEndReached={handleFetchMore}
                     onEndReachedThreshold={.4}
                     data={data.me.saved_waterbodies}
+                    contentContainerStyle={{ paddingTop: 16 }}
                     ListEmptyComponent={
                         <CatchesListEmpty
                             caption="No saved fisheries" 
@@ -54,10 +54,8 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
                             containerStyle={styles.card}
                         />
                     )}
-                    />
-                : loading ?
-                    <ActivityIndicator size={48} style={styles.empty}/>
-                : null
+                />
+                : <ActivityIndicator size={48} style={styles.empty}/>
             }
         </View>
     );

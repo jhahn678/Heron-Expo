@@ -43,36 +43,33 @@ const MyLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MyLocations
 
     return (
         <View style={styles.container}>
-            { 
-                data ?
-                    <FlashList 
-                        data={data.me.locations} 
-                        estimatedItemSize={400}
-                        refreshing={refetching}
-                        onRefresh={handleRefetch}
-                        onEndReachedThreshold={.4}
-                        onEndReached={handleFetchMore}
-                        ListEmptyComponent={
-                            <LocationsListEmpty 
-                                scale={.7} 
-                                fontSize={18} 
-                                style={styles.empty}
-                                caption={'No saved locations'}
-                            />
-                        }
-                        ListHeaderComponent={<FiltersSection/>}
-                        renderItem={({ item }) => (
-                        <LocationListItem
-                            data={item}
-                            navigateToWaterbody={navigateToWaterbody(item.waterbody.id)}
-                            navigateToMap={navigateToMap(item.id)}
-                            navigateToUser={navigateToUser(item.user.id)}
+            { data ?
+                <FlashList 
+                    data={data.me.locations} 
+                    estimatedItemSize={400}
+                    refreshing={refetching}
+                    onRefresh={handleRefetch}
+                    onEndReachedThreshold={.4}
+                    onEndReached={handleFetchMore}
+                    ListEmptyComponent={
+                        <LocationsListEmpty 
+                            scale={.7} 
+                            fontSize={18} 
+                            style={styles.empty}
+                            caption={'No saved locations'}
                         />
-                        )}
-                    /> 
-                : loading ? 
-                    <ActivityIndicator size={48} style={styles.empty}/>
-                : null
+                    }
+                    ListHeaderComponent={<FiltersSection/>}
+                    renderItem={({ item }) => (
+                    <LocationListItem
+                        data={item}
+                        navigateToWaterbody={navigateToWaterbody(item.waterbody.id)}
+                        navigateToMap={navigateToMap(item.id)}
+                        navigateToUser={navigateToUser(item.user.id)}
+                    />
+                    )}
+                /> 
+                : <ActivityIndicator size={48} style={styles.empty}/>
             }
         </View>
     );
