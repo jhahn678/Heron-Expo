@@ -2,6 +2,7 @@ import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Title, Text, ActivityIndicator } from 'react-native-paper'
 import RecentActivityHorizontalList from '../../../../components/lists/RecentActivityHorizontal/RecentActivityHorizontalList'
+import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
 import { useGetRecentActivityQuery } from '../../../../hooks/queries/useGetRecentActivity'
 import { CatchQuery } from '../../../../types/Catch'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
@@ -22,8 +23,8 @@ const ContactsActivity = ({ navigation }: Props) => {
     return (
         <View style={styles.container}>
             <Title style={styles.title}>Recent activity</Title>
-            { 
-                data ? data.activityFeed.length > 0 ?
+            { data ? 
+                data.activityFeed.length > 0 ?
                     <RecentActivityHorizontalList 
                         data={data.activityFeed} 
                         onNavigateToCatch={handleNavigateToCatch}
@@ -32,10 +33,12 @@ const ContactsActivity = ({ navigation }: Props) => {
                     />
                 : 
                     <Text style={styles.message}>Your friends have not logged any catches yet 🐟</Text>
-                : loading ?
-                    <ActivityIndicator size='large' style={styles.message}/>
-                : error &&
-                    <Text style={styles.message}>Error loading recent activity</Text>
+                : 
+                    <ScrollViewListLoader 
+                        itemSize={{ height: 300, width: 300 }}
+                        contentContainerStyle={{ padding: 20 }}
+                        itemStyle={{ marginRight: 16 }}
+                    />
             }
         </View>
     )

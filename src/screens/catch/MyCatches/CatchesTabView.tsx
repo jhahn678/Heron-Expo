@@ -45,8 +45,7 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
 
   return (
     <View style={styles.container}>
-      { 
-        data && data.me.catches.length > 0 ?
+      { data ?
           <FlashList 
             data={data.me.catches} 
             estimatedItemSize={400}
@@ -55,6 +54,13 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
             onEndReachedThreshold={.4}
             onEndReached={handleFetchMore}
             ListHeaderComponent={<FiltersSection/>}
+            ListEmptyComponent={
+              <CatchesListEmpty 
+                scale={.8} 
+                fontSize={16} 
+                style={styles.empty}
+              />
+            }
             renderItem={({ item }) => (
               <CatchesListItem
                 data={{ ...item, is_favorited: false }}
@@ -64,14 +70,7 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
               />
             )}
           />
-        : loading ? 
-          <ActivityIndicator size={48} style={styles.empty}/> 
-        : 
-          <CatchesListEmpty 
-            scale={.8} 
-            fontSize={16} 
-            style={styles.empty}
-          />
+        : <ActivityIndicator size={48} style={styles.empty}/> 
       }
     </View>
   )

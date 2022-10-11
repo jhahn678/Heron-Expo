@@ -1,5 +1,5 @@
 import React from "react";
-import { StyleSheet, View, Dimensions, Pressable, Image, FlatList, ViewToken } from "react-native";
+import { StyleSheet, View, Dimensions, Pressable, Image, FlatList } from "react-native";
 import { RootStackScreenProps } from "../../../../types/navigation";
 import BackButton from "../../../../components/buttons/BackButton";
 import { GetCatchRes } from "../../../../hooks/queries/useGetCatch";

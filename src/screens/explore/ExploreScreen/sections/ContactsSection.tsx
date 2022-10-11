@@ -6,6 +6,7 @@ import ContactsListHorizontal from '../../../../components/lists/ContactsListHor
 import { useGetMyFollowing } from '../../../../hooks/queries/useGetUserFollowing'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import { useAuth } from '../../../../store/auth/useAuth'
+import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
 
 const limit = 20;
 
@@ -24,19 +25,16 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
     return (
         <View style={styles.container}>
             <Title style={styles.title}>Your fishing pals</Title>
-            {   data ? data.me.following.length > 0 ? 
+            { data ? 
+                data.me.following.length > 0 ? 
                     <ContactsListHorizontal 
                         data={data.me.following} 
                         onNavigateToProfile={handleNavigateToProfile}
                     />
                 : 
                     <NavigateToUserSearch/>
-                : loading ?
-                    <ActivityIndicator size='large' style={{ marginTop: 16 }}/>
-                : error ? 
-                    <Text style={styles.error}>Error loading users</Text>
-                : !isAuthenticated &&
-                    <>
+                : !isAuthenticated ?
+                    <View>
                         <Text style={styles.message}>Login to connect with other fishermen🎣</Text>
                         <Button 
                             theme={{ roundness: 2 }}
@@ -44,8 +42,12 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                             style={styles.button} 
                             onPress={handleNavigateToAuth}
                         >Sign in</Button>
-                    </>
-
+                    </View>
+                :
+                    <ScrollViewListLoader
+                        itemSize={{ height: 154, width: 132 }}
+                        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 4}}
+                    />
             }
         </View>
     )
@@ -55,7 +57,6 @@ export default ContactsSection;
 
 const styles = StyleSheet.create({
     container: {
-        height: 150,
         width: '100%',
         marginTop: 32,
     },

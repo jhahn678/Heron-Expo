@@ -7,6 +7,7 @@ import EnableLocationButton from '../../../../components/buttons/EnableLocationB
 import WaterbodiesListHorizontal from '../../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListHorizontal'
 import { useGetNearbyWaterbodies } from '../../../../hooks/queries/useGetNearbyWaterbodies'
 import { useSearchParamStore } from '../../../../store/search/useSearchParamStore'
+import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -17,7 +18,7 @@ const NearbySection = ({ navigation }: Props) => {
     const { setSort } = useSearchParamStore()
     const { latitude, longitude, hasPermission } = useLocationStore()
     
-    const { data, loading, error } = useGetNearbyWaterbodies({ latitude, longitude })
+    const { data, error } = useGetNearbyWaterbodies({ latitude, longitude })
 
     const navigateViewMore = (): void => {
         setSort('distance')
@@ -31,16 +32,23 @@ const NearbySection = ({ navigation }: Props) => {
     return (
         <View style={[styles.container, { height: (hasPermission === false || error) ? 150 : 400}]}>
             <Title style={styles.title}>What's nearby</Title>
-            { hasPermission === false ? 
-                <EnableLocationButton 
-                    for='waterbodies' 
-                    style={styles.nearby}
-                /> :
-                <WaterbodiesListHorizontal 
-                    data={data?.waterbodies}
-                    navigateViewMore={navigateViewMore}
-                    navigateToWaterbody={navigateToWaterbody}
-                />
+            { 
+                hasPermission === false ? 
+                    <EnableLocationButton 
+                        for='waterbodies' 
+                        style={styles.nearby}
+                    /> 
+                : data ?
+                    <WaterbodiesListHorizontal 
+                        data={data.waterbodies}
+                        navigateViewMore={navigateViewMore}
+                        navigateToWaterbody={navigateToWaterbody}
+                    />
+                :
+                    <ScrollViewListLoader 
+                        itemSize={{ height: 320, width: 300 }}
+                        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 24 }}
+                    />
             }
         </View>
     )

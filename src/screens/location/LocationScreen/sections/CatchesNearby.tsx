@@ -9,6 +9,7 @@ import RecentActivityCatch from "../../../../components/lists/RecentActivityHori
 import { RootStackScreenProps } from "../../../../types/navigation";
 import BoxLoader from "../../../../components/loaders/BoxLoader";
 import CatchesListEmpty from "../../../../components/lists/shared/CatchesListEmpty";
+import ScrollViewListLoader from "../../../../components/loaders/ScrollViewListLoader";
 
 interface Props {
     navigation: RootStackScreenProps<'ViewLocationScreen'>['navigation']
@@ -56,8 +57,10 @@ const CatchesNearby = ({ waterbody, geom, navigation }: Props) => {
                         />
                     )}
                 />
-                : loading ? new Array(3).fill(null).map((_,i) => <BoxLoader key={i}/>)
-                : null
+                :   <ScrollViewListLoader 
+                        itemSize={{ height: 300, width: 300 }} 
+                        contentContainerStyle={{ paddingHorizontal: 16, paddingVertical: 24 }}
+                    />
             }
         </View>
     );
