@@ -45,8 +45,8 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                     </View>
                 :
                     <ScrollViewListLoader
-                        itemSize={{ height: 154, width: 132 }}
-                        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 4}}
+                        itemSize={{ height: 164, width: 132 }}
+                        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 8}}
                     />
             }
         </View>
