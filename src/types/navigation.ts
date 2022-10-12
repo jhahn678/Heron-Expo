@@ -6,6 +6,7 @@ import { MediaType } from "./Media"
 import { CatchQuery } from "./Catch"
 import { LocationQuery } from "./Location"
 import { FollowType } from "./User"
+import { LatLng } from "react-native-maps"
 
 
 export type RootStackParams = {
@@ -23,7 +24,7 @@ export type RootStackParams = {
     EditProfileScreen: undefined
     UserSearchScreen: undefined
     ViewMapScreen: { resource: MapResource, id?: number, total?: number }
-    SaveMapScreen: { saveType: SaveType }
+    SaveMapScreen: { saveType: SaveType, center?: LatLng }
     CameraScreen: undefined
     MediaGridScreen: { source: MediaSource, id: number, title: string | undefined, total?: number }
     ReviewsScreen: { type: ReviewQuery, id: number, title: string | undefined, total?: number }
@@ -33,6 +34,9 @@ export type RootStackParams = {
     LocationListScreen: { type: LocationQuery, id: number, title: string | undefined, total?: number }
     SettingsScreen: undefined
     ContactsListScreen: { id: number, type: FollowType }
+    EditCatchScreen: { id: number }
+    EditLocationScreen: { id: number }
+    EditReviewScreen: { id: number }
 }
 
 export enum MapResource {
@@ -61,7 +65,11 @@ export enum SaveType {
     CatchAuto = 'CATCH_CURRENT_LOCATION',
     CatchManual = 'CATCH_MANUAL_LOCATION',
     LocationAuto = 'LOCATION_CURRENT_LOCATION',
-    LocationManual = 'LOCATION_MANUAL_LOCATION'
+    LocationManual = 'LOCATION_MANUAL_LOCATION',
+    CatchAutoEdit = 'CATCH_EDIT_CURRENT_LOCATION',
+    CatchManualEdit = 'CATCH_EDIT_MANUAL_LOCATION',
+    LocationAutoEdit = 'LOCATION_EDIT_CURRENT_LOCATION',
+    LocationManualEdit = 'LOCATION_EDIT_MANUAL_LOCATION',
 }
 
 export type RootStackScreenProps<T extends keyof RootStackParams> = 

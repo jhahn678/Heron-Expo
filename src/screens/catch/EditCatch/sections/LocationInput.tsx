@@ -1,32 +1,55 @@
 import { Dimensions, Pressable, StyleSheet, View, Image } from "react-native";
 import { theme } from "../../../../config/theme";
 import globalStyles from "../../../../globalStyles";
-import { useNewCatchStore } from "../../../../store/mutations/useNewCatchStore";
 import { RootStackParams, RootStackScreenProps, SaveType } from "../../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Card, Text, IconButton } from 'react-native-paper'
+import { useEditCatchStore } from "../../../../store/mutations/useEditCatchStore";
+import { Point } from "geojson";
+import { useEffect, useState } from "react";
 
 const { width } = Dimensions.get('screen')
 
 interface Props {
     navigation: RootStackScreenProps<keyof RootStackParams>['navigation']
+    mapImage: {
+        id: number
+        key: string
+        url: string
+    } | undefined,
+    geom: Point | undefined
 }
 
-const LocationInput = ({ navigation }: Props) => {
+const LocationInput = ({ navigation, mapImage, geom }: Props) => {
+
+    const [savedValue, setSavedValue] = useState<Pick<Props, 'mapImage' | 'geom'> | null>(null)
+
+    useEffect(() => {
+        setSavedValue({ mapImage, geom })
+    }, [mapImage, geom]);
 
     const navigateMapCurrentLocation = () => navigation
-        .navigate('SaveMapScreen', { saveType: SaveType.CatchAuto })
-    const navigateMapManualLocation = () => navigation
-        .navigate('SaveMapScreen', { saveType: SaveType.CatchManual})
+        .navigate('SaveMapScreen', { saveType: SaveType.CatchAutoEdit })
 
-    const store = useNewCatchStore(store => ({
+    const navigateMapManualLocation = () => navigation
+        .navigate('SaveMapScreen', { 
+            saveType: SaveType.CatchManualEdit, 
+            center: geom ? { 
+                longitude: geom.coordinates[0], 
+                latitude: geom.coordinates[1] 
+            } : undefined
+        }) 
+
+    const store = useEditCatchStore(store => ({
         snapshot: store.mapSnapshot,
         setPoint: store.setPoint,
         setMapSnapshot: store.setMapSnapshot
     }))
 
-    const handleClearLocation = () => { store.setPoint(); store.setMapSnapshot() }
+    const handleClearLocation = () => { store.setPoint(null); store.setMapSnapshot(null) }
+
+    const handleClearSavedLocation = () => { setSavedValue(null); handleClearLocation() }
 
     return (
         <View style={styles.container}>
@@ -47,6 +70,21 @@ const LocationInput = ({ navigation }: Props) => {
                             resizeMode={'cover'}
                         />
                     </Card> 
+                : (savedValue && savedValue.mapImage) ?
+                    <Card style={styles.selected}>
+                        <IconButton 
+                            size={16} 
+                            icon='close' 
+                            mode="contained" 
+                            style={styles.remove} 
+                            onPress={handleClearSavedLocation}
+                        />
+                        <Image 
+                            source={{ uri: savedValue.mapImage.url }} 
+                            style={styles.snapshot} 
+                            resizeMode={'cover'}
+                        />
+                    </Card> 
                 :
                     <View style={globalStyles.frsb}>
                         <Pressable style={styles.pressable} onPress={navigateMapManualLocation}>
@@ -60,7 +98,7 @@ const LocationInput = ({ navigation }: Props) => {
                     </View>
             }
         </View>
-    );
+    )
 };
 
 export default LocationInput;

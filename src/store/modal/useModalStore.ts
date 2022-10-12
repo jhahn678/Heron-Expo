@@ -29,6 +29,10 @@ export interface ModalStore {
     setError: (value?: boolean, type?: ErrorType) => void
     loading: boolean
     setLoading: (value?: boolean) => void
+    confirmDelete: boolean
+    confirmDeleteMessage: string | null
+    confirmDeleteCallback: (() => Promise<void>) | null
+    setConfirmDelete: (args?:{ message: string, confirm: () => Promise<void> }) => void
     snack: boolean,
     snackText: string | null,
     setSnack: (value: string | false) => void
@@ -64,6 +68,22 @@ export const useModalStore = create<ModalStore>((set) => ({
     },
     loading: false,
     setLoading: loading => set({ loading }), 
+    confirmDelete: false,
+    confirmDeleteMessage: null,
+    confirmDeleteCallback: null,
+    setConfirmDelete: args => {
+        args ?
+        set({
+            confirmDelete: true,
+            confirmDeleteMessage: args.message,
+            confirmDeleteCallback: args.confirm,
+        }) : 
+        set({
+            confirmDelete: false,
+            confirmDeleteMessage: null,
+            confirmDeleteCallback: null,
+        })
+    },
     snack: false,
     snackText: null,
     setSnack: value => set({
@@ -92,8 +112,9 @@ export const useModalStore = create<ModalStore>((set) => ({
             error: false,
             logout: false,
             success: false,
+            manageContact: false,
+            confirmDelete: false,
             reauthenticate: false,
-            manageContact: false
         })
         set({
             errorTitle: null,
@@ -104,6 +125,8 @@ export const useModalStore = create<ModalStore>((set) => ({
             manageContactName: null,
             manageContactUser: null,
             manageContactUsername: null,
+            confirmDeleteMessage: null,
+            confirmDeleteCallback: null,
         })
     }
 }))

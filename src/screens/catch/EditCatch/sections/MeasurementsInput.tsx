@@ -2,49 +2,55 @@ import React, { useEffect, useState } from "react";
 import { StyleSheet, Text, View } from "react-native";
 import { TextInput } from "react-native-paper";
 import globalStyles from "../../../../globalStyles";
-import { useNewCatchStore } from "../../../../store/mutations/useNewCatchStore";
+import { useEditCatchStore } from "../../../../store/mutations/useEditCatchStore";
 
-const MeasurementsInput = () => {
+interface Props {
+    currentLength: number | undefined, 
+    currentWeight: number | undefined 
+}
+
+const MeasurementsInput = ({ currentLength, currentWeight }: Props) => {
 
     const [weight, setWeight] = useState('')
     const [weightError, setWeightError] = useState(false)
     const [length, setLength] = useState('')
     const [lengthError, setLengthError] = useState(false)
 
-    useEffect(() => {
-        if(!length) return store.setLength()
-        const timer = setTimeout(() => {
-            const num = parseFloat(length)
-            if(isNaN(num)){
-                setLengthError(true)
-            }else{
-                store.setLength(num)
-                setLengthError(false)
-            }
-        }, 500)
-        return () => clearTimeout(timer)
-    },[length])
-
-    useEffect(() => {
-        if(!weight) return store.setWeight()
-        const timer = setTimeout(() => {
-            const num = parseFloat(weight)
-            if(isNaN(num)){
-                setWeightError(false)
-            }else{
-                store.setWeight(num)
-                setWeightError(false)
-            }
-        }, 500)
-        return () => clearTimeout(timer)
-    },[weight])
-
-    const store = useNewCatchStore(store => ({
-        weight: store.weight,
-        length: store.length,
+    const store = useEditCatchStore(store => ({
         setWeight: store.setWeight,
         setLength: store.setLength
     }))
+
+    useEffect(() => {
+        if(length.length === 0){
+            setLengthError(false)
+            if(currentLength) return store.setLength(null)
+            return store.setLength(undefined)
+        }else{
+            const num = parseFloat(length)
+            if(isNaN(num)) return setLengthError(true)
+            setLengthError(false)
+            return store.setLength(num)
+        }
+    },[length])
+
+    useEffect(() => {
+        if(weight.length === 0){
+            setWeightError(false)
+            if(currentWeight) return store.setWeight(null);
+            return store.setWeight(undefined)
+        }else{
+            const num = parseFloat(weight);
+            if(isNaN(num)) return setWeightError(true)
+            setWeightError(false)
+            return store.setWeight(num)
+        }
+    },[weight])
+
+    useEffect(() => {
+        if(currentLength) setLength(currentLength.toString())
+        if(currentWeight) setWeight(currentWeight.toString())
+    },[currentLength, currentWeight])
 
     return (
         <View style={styles.container}>

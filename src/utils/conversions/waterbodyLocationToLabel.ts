@@ -1,6 +1,15 @@
 import { IWaterbody } from "../../types/Waterbody"
 
-export const waterbodyLocationLabel = (x: IWaterbody) => {
+type WaterbodyLocation = Pick<
+    IWaterbody, 
+    | 'admin_one' 
+    | 'admin_two' 
+    | 'ccode' 
+    | 'country' 
+    | 'subregion'
+>
+
+export const waterbodyLocationLabel = <T extends WaterbodyLocation>(x: T) => {
     return (
         x.admin_two && x.admin_two.length < 3 ?
             `${x.admin_two[0]}, ${x.admin_one[0]}` :

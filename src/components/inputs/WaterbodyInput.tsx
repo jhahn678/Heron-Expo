@@ -4,7 +4,7 @@ import { Text, TextInput, Surface, IconButton } from 'react-native-paper'
 import { theme } from "../../config/theme";
 import { useAutoCompleteWaterbodies } from "../../hooks/queries/useAutocompleteSearch";
 import { useGetNearestWaterbodies } from "../../hooks/queries/useGetNearestWaterbodies";
-import { useGetWaterbodyFragment } from "../../hooks/queries/useGetWaterbody";
+import { useGetWaterbodyLocationFragment, WaterbodyLocation } from "../../hooks/queries/useGetWaterbody";
 import { IWaterbody } from "../../types/Waterbody";
 import { waterbodyLocationLabel } from "../../utils/conversions/waterbodyLocationToLabel";
 
@@ -17,11 +17,11 @@ interface Props {
 const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title }: Props) => {
 
     const [input, setInput] = useState('')
-    const [waterbodyData, setWaterbodyData] = useState<IWaterbody | null>(null)
+    const [waterbodyData, setWaterbodyData] = useState<WaterbodyLocation | null>(null)
     const [showNearestWaterbodies, setShowNearestWaterbodies] = useState(false)
-    const getCachedWaterbody = useGetWaterbodyFragment()
+    const getCachedWaterbody = useGetWaterbodyLocationFragment()
 
-    const handleSetWaterbody = (x: IWaterbody) => () => { 
+    const handleSetWaterbody = (x: WaterbodyLocation) => () => { 
         setWaterbody(x.id); 
         setWaterbodyData(x);
         setShowNearestWaterbodies(false);

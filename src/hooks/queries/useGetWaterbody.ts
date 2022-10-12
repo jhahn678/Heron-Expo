@@ -96,3 +96,35 @@ export const useGetWaterbodyFragment = () => {
         });
     }
 }
+
+export type WaterbodyLocation = Pick<
+  IWaterbody, 
+  | 'id' 
+  | 'name'
+  | 'ccode'
+  | 'country'
+  | 'subregion'
+  | "admin_one"
+  | "admin_two"
+>
+
+export const useGetWaterbodyLocationFragment = () => {
+    const client = useApolloClient();
+    return (id: number | undefined | null) => {
+      if(!id) return null;
+      return client.readFragment<WaterbodyLocation>({
+        id: `Waterbody:${id}`,
+        fragment: gql`
+          fragment WaterbodyLocation${id} on Waterbody {
+            id
+            name
+            country
+            admin_one
+            admin_two
+            ccode
+            subregion
+          }
+        `,
+      });
+    }
+}

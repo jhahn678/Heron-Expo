@@ -7,22 +7,24 @@ import { useLocationStore } from '../../../store/location/useLocationStore'
 import { useFocusEffect } from '@react-navigation/native'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
-import { Button, FAB, IconButton, SegmentedButtons } from 'react-native-paper'
+import { FAB, IconButton, SegmentedButtons } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import { theme } from '../../../config/theme'
 import { useNewLocationStore } from '../../../store/mutations/useNewLocationStore'
 import PromptDeletePoint from '../../../components/modals/map/PromptDeletePoint'
 import { Geometry, Resource, useCreateGeometry } from '../../../hooks/utils/useCreateGeometry'
+import { useEditCatchStore } from '../../../store/mutations/useEditCatchStore'
 
 const { width, height } = Dimensions.get('screen')
 
 const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScreen'>) => {
   
-  const { params: { saveType } } = route;
+  const { params: { saveType, center } } = route;
   const map = useRef<MapView | null>(null)
   const [resource, setResource] = useState<Resource | null>(null)
   const [geometry, setGeometry] = useState<Geometry>(Geometry.Point)
   const setError = useModalStore(store => store.setError)
+  const setLocationError = () => setError(true, ErrorType.MapCurrentLocation)
 
   const {
     point,
@@ -49,23 +51,26 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     handleDeletePoint
   } = useCreateGeometry({ resource, geometry, map })
 
-  //store for NewCatch state
-  const newCatch = useNewCatchStore(store => ({
+  const newCatch = useNewCatchStore(store => ({         //store for NewCatch state
     setMapSnapshot: store.setMapSnapshot,
     setPoint: store.setPoint,
     reset: store.reset
   }))
 
-  //store for NewLocation state
-  const newLocation = useNewLocationStore(store => ({
+  const editCatch = useEditCatchStore(store => ({       //store for EditCatch state
+    setMapSnapshot: store.setMapSnapshot,
+    setPoint: store.setPoint,
+    reset: store.reset
+  }))
+
+  const newLocation = useNewLocationStore(store => ({   //store for NewLocationState 
     setMapSnapshot: store.setMapSnapshot,
     setPolygon: store.setPolygon,
     setPoint: store.setPoint,
     reset: store.reset
   }))
 
-  //store for user location
-  const location = useLocationStore(store => ({ 
+  const location = useLocationStore(store => ({         //store for users location
     coordinates: (store.longitude && store.latitude) ? ({
       latitude: store.latitude,
       longitude: store.longitude
@@ -78,16 +83,26 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     useCallback(() => {
       switch(saveType){
         case SaveType.CatchAuto:
-          if(!location.coordinates) return setError(true, ErrorType.MapCurrentLocation)
+          if(!location.coordinates) return setLocationError()
+          setPoint(location.coordinates)
+          setResource(Resource.Catch)
+          break;
+        case SaveType.CatchAutoEdit:
+          if(!location.coordinates) return setLocationError()
           setPoint(location.coordinates)
           setResource(Resource.Catch)
           break;
         case SaveType.CatchManual:
           setResource(Resource.Catch)
-          if(location.coordinates) handleCurrentLocation()
+          if(location.coordinates) handleCurrentLocation(); 
+          break;
+        case SaveType.CatchManualEdit:
+          setResource(Resource.Catch)
+          if(center) { handleCenter(); break; }
+          if(location.coordinates) handleCurrentLocation(); 
           break;
         case SaveType.LocationAuto:
-          if(!location.coordinates) return setError(true, ErrorType.MapCurrentLocation)
+          if(!location.coordinates) return setLocationError()
           setPoint(location.coordinates)
           setResource(Resource.Location)
           setGeometry(Geometry.Point)
@@ -113,6 +128,15 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     }
   }
 
+  const handleCenter = () => {
+    if(center && map.current){
+      map.current.animateCamera({
+        center,
+        zoom: 15
+      })
+    }
+  }
+
   const handleGeometryChange = (value: string) => {
     if(value === Geometry.Point) {
       setPolygon([])
@@ -130,27 +154,32 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       map.current.takeSnapshot({ height, width })
         .then(image => {
           if(!point) return;
-          newCatch.setMapSnapshot(image)
-          newCatch.setPoint(point)
+          if(saveType === SaveType.CatchAuto || saveType === SaveType.CatchManual){
+            newCatch.setMapSnapshot(image)
+            newCatch.setPoint(point)
+          }else{
+            editCatch.setMapSnapshot(image)
+            editCatch.setPoint(point)
+          }
           navigation.goBack();
         })
     }
     if(resource === Resource.Location){
       map.current.takeSnapshot({ height, width })
         .then(image => {
-        if(geometry === Geometry.Polygon) {
-            if(polygon.length < 3) return;
-            //first and last point must be the same
-            newLocation.setPolygon([
-              ...polygon.map(x => x.coordinate), 
-              polygon[0].coordinate
-            ])
-        }else if(geometry === Geometry.Point) {
-            if(!point) return
-            newLocation.setPoint(point)
-        } 
-        newLocation.setMapSnapshot(image);
-        navigation.goBack();
+          if(geometry === Geometry.Polygon) {
+              if(polygon.length < 3) return;
+              //first and last point must be the same
+              newLocation.setPolygon([
+                ...polygon.map(x => x.coordinate), 
+                polygon[0].coordinate
+              ])
+          }else if(geometry === Geometry.Point) {
+              if(!point) return
+              newLocation.setPoint(point)
+          } 
+          newLocation.setMapSnapshot(image);
+          navigation.goBack();
         })
     }
     }

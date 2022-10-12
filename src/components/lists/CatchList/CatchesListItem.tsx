@@ -36,7 +36,7 @@ const CatchesListItem = ({
                   uri={data.user.avatar}
                   onPress={navigateToUser}
                 />
-                <View style={{ paddingLeft: 12 }}>
+                <View style={{ paddingLeft: 8 }}>
                   <Text style={styles.name}>{data.user.fullname}</Text>
                   <Text style={styles.date}>
                     {dayjs(data.created_at).fromNow()}

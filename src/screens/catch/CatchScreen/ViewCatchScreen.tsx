@@ -1,6 +1,6 @@
 import React from 'react'
 import { ScrollView, StyleSheet } from 'react-native'
-import { GetCatchRes, useGetCatchQuery } from '../../../hooks/queries/useGetCatch';
+import { useGetCatchQuery } from '../../../hooks/queries/useGetCatch';
 import { RootStackScreenProps } from '../../../types/navigation'
 import BannerSection from './sections/BannerSection';
 import DetailsSection from './sections/DetailsSection';
@@ -16,7 +16,7 @@ const ViewCatchScreen = ({ navigation, route }: RootStackScreenProps<'ViewCatchS
   return (
     <ScrollView style={styles.container}>
       <BannerSection 
-        id={id} 
+        id={id} user={data?.catch.user.id}
         navigation={navigation} 
         media={data?.catch.media}
         mapImage={data?.catch.map_image}
