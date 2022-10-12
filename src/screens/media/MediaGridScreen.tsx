@@ -124,10 +124,10 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
                         />
                     }
                     renderItem={({ item }) => (
-                        <Pressable onPress={navigateImage(item.id)}>
+                        <Pressable onPress={navigateImage(item.id)} key={item.id}>
                             <Image 
-                                key={item.id}
                                 source={{ uri: item.url }}
+                                resizeMode='cover'
                                 style={[styles.image, { 
                                     width: width * .49,
                                     height: width * .49,

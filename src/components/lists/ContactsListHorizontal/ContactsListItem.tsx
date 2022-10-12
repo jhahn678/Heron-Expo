@@ -1,6 +1,7 @@
 import React from 'react'
-import { StyleSheet, Pressable, StyleProp, ViewStyle } from 'react-native'
-import { Card, Text } from 'react-native-paper'
+import { StyleSheet, Pressable, StyleProp, ViewStyle, View } from 'react-native'
+import { Button, Card, Text } from 'react-native-paper'
+import { theme } from '../../../config/theme'
 import { IContact } from '../../../types/User'
 import Avatar from '../../users/Avatar'
 
@@ -15,12 +16,19 @@ const ContactsListItem = <T extends IContact>({
 }: Props<T>) => {
 
   return (
-    <Card onPress={onPress} style={[styles.container, style]} elevation={0}>
-      <Card.Content style={{ justifyContent: 'center', alignItems: 'center', flex: 1 }}>
-        <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname} size={80}/>
-        <Text style={styles.name}>{data.fullname}</Text>
-      </Card.Content>
-    </Card>
+    <Pressable onPress={onPress} style={[styles.container, style]}>
+      <View style={{ alignItems: 'center' }}>
+        <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname} size={90}/>
+        <Text style={styles.name} numberOfLines={2}>{data.fullname}</Text>
+      </View>
+      <Button 
+        onPress={onPress} 
+        mode='contained' 
+        theme={{ roundness: 2 }}
+        labelStyle={{ marginTop: 6, fontSize: 12 }}
+        style={{ height: 34 }}
+      >View Profile</Button>
+    </Pressable>
   )
 }
 
@@ -28,13 +36,18 @@ export default ContactsListItem
 
 const styles = StyleSheet.create({
   container: {
-    height: 164,
-    width: 132,
-    borderRadius: 12
+    marginTop: 12,
+    height: 230,
+    width: 170,
+    borderRadius: 12,
+    padding: 16,
+    alignItems: 'center',
+    justifyContent: 'space-evenly',
+    backgroundColor: theme.colors.surfaceVariant
   },
   name: {
     fontWeight: '500',
-    marginTop: 8,
+    marginTop: 12,
     textAlign: 'center'
   }
 })

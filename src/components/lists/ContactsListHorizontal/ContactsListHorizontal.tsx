@@ -3,6 +3,7 @@ import { StyleSheet, View } from 'react-native'
 import { FlashList } from '@shopify/flash-list'
 import { IContact } from '../../../types/User'
 import ContactsListItem from './ContactsListItem'
+import { theme } from '../../../config/theme'
 
 interface Props<T> {
     data: T[],
@@ -15,7 +16,7 @@ const ContactsListHorizontal = <T extends IContact>({
 
 
     return (
-        <View style={{ height: 180 }}>
+        <View style={{ height: 254 }}>
             <FlashList 
                 data={data} 
                 horizontal={true}
@@ -38,6 +39,6 @@ export default ContactsListHorizontal
 
 const styles = StyleSheet.create({
     content: {
-        paddingHorizontal: 20
+        paddingHorizontal: 20,
     }
 })
