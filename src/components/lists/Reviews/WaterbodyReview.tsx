@@ -1,20 +1,47 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { View, StyleSheet, Pressable, ViewStyle, StyleProp } from 'react-native'
-import { Text } from 'react-native-paper'
+import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper'
 import Avatar from '../../users/Avatar'
 import RatingDisplay from '../../ratings/RatingDisplay'
 import dayjs from '../../../config/dayjs'
 import globalStyles from '../../../globalStyles'
 import MapMarkerIcon from '../../icons/MapMarkerIcon'
 import { WaterbodyReviews } from '../../../screens/waterbody/ReviewsScreen'
+import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useAuth } from '../../../store/auth/useAuth'
+import { useModalStore } from '../../../store/modal/useModalStore'
+import { useDeleteReview } from '../../../hooks/mutations/useDeleteReview'
 
 interface Props {
     data: WaterbodyReviews[number],
     navigateToUser: () => void
+    navigateToEdit: () => void
+    refetch?: () => void
     style?: StyleProp<ViewStyle>
 }
 
-const WaterbodyReview = ({ data, navigateToUser, style }: Props) => {
+const WaterbodyReview = ({ 
+    data, 
+    style,
+    refetch,
+    navigateToUser, 
+    navigateToEdit, 
+}: Props) => {
+
+    const [menuOpen, setMenuOpen] = useState(false)
+    const auth = useAuth(store => store.id)
+    const [deleteReview] = useDeleteReview(data.id)
+    const setConfirmDelete = useModalStore(store => store.setConfirmDelete)
+
+    const handleEdit = () => { setMenuOpen(false); navigateToEdit() }
+
+    const handleDelete = () => { 
+        setMenuOpen(false); 
+        setConfirmDelete({
+            message: 'Are you sure you want to delete this review?',
+            confirm: () => deleteReview().then(refetch)
+        })
+    }
 
     return (
         <View style={[styles.container, style]}>
@@ -30,12 +57,28 @@ const WaterbodyReview = ({ data, navigateToUser, style }: Props) => {
                         <Text style={styles.date}>{dayjs(data.created_at).fromNow()}</Text>
                     </View>
                 </Pressable>
-                <RatingDisplay
-                    hideLabel
-                    rating={data.rating} 
-                    style={styles.rating} 
-                    iconSize={20}
-                />
+                <View style={styles.headerRight}>
+                    <RatingDisplay
+                        hideLabel
+                        rating={data.rating} 
+                        style={{ marginRight: data.user.id === auth ? 8 : 16 }} 
+                        iconSize={20}
+                    />
+                    { data.user.id === auth &&
+                        <Menu 
+                            visible={menuOpen}
+                            onDismiss={() => setMenuOpen(false)}
+                            anchor={
+                                <TouchableRipple onPress={() => setMenuOpen(true)}>
+                                    <Icon name={'dots-vertical'} size={24} style={{ padding: 8 }}/>
+                                </TouchableRipple>
+                            }>
+                            <Menu.Item title={'Edit'} style={{ height: 40 }} onPress={handleEdit}/>
+                            <Divider/>
+                            <Menu.Item title={'Delete'} style={{ height: 40 }} onPress={handleDelete}/>
+                        </Menu>
+                    }
+                </View>
             </View>
             { data.text && <Text style={styles.text}>{data.text}</Text> }
             <View style={styles.waterbody}>
@@ -72,8 +115,9 @@ const styles = StyleSheet.create({
         fontWeight: '500',
         fontSize: 12
     },
-    rating: {
-        marginRight: 24
+    headerRight: {
+        flexDirection: 'row',
+        alignItems: 'center'
     },
     text: {
         marginTop: 16,

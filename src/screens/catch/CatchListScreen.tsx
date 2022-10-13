@@ -169,7 +169,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
     justifyContent: "space-between",
     backgroundColor: theme.colors.background,
-    height: 100,
+    height: 90,
   },
   empty: {
     alignSelf: 'center',

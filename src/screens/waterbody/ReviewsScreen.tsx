@@ -3,7 +3,6 @@ import { FlashList } from "@shopify/flash-list";
 import React, { useEffect, useState } from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { ReviewQuery, RootStackScreenProps } from '../../types/navigation'
-import { useModalStore } from "../../store/modal/useModalStore";
 import WaterbodyReview from "../../components/lists/Reviews/WaterbodyReview";
 import { Divider, IconButton, Menu, Surface, Title } from "react-native-paper";
 import { GetWaterbodyReview, ReviewSort, useGetWaterbodyReviews } from "../../hooks/queries/useGetWaterbodyReviews";
@@ -28,14 +27,12 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
 
   const [refetching, setRefetching] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [allowAdd, setAllowAdd] = useState(false)
   const [sort, setSort] = useState<ReviewSort | null>(null)
   const [reviews, setReviews] = useState<WaterbodyReviews>([])
   const [loading, setLoading] = useState(false)
 
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
-  const setShowReview = useModalStore(store => store.setReview)
-  const handleAddReview = () => setShowReview(id)
+  const navigateEdit = (id: number) => () => navigation.navigate('EditReviewScreen', { id })
 
   const userReviews = useGetUserReviews({ 
     id, limit, 
@@ -48,11 +45,6 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
     sort: sort ? sort : ReviewSort.CreatedAtNewest, 
     skip: type !== ReviewQuery.Waterbody
   })
-
-  useEffect(() => {
-    if(type === ReviewQuery.User) setAllowAdd(false)
-    if(type === ReviewQuery.Waterbody) setAllowAdd(false)
-  },[route.params])
 
   useEffect(() => {
     switch(type){
@@ -106,7 +98,6 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
               <IconButton icon='arrow-left' onPress={navigation.goBack}/>
               <Title style={{ fontWeight: '500'}}>{title}</Title>
           </View>
-          { allowAdd && <IconButton size={28} icon='plus' onPress={handleAddReview} />}
       </Surface>
 
       <View style={styles.main}>
@@ -151,16 +142,17 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
             }
             ListHeaderComponent={ 
               <ListHeaderFilterBar 
+                total={total}
                 setMenuOpen={setMenuOpen} 
                 sortLabel={reviewSortToLabel(sort)} 
-                total={total}
               />
             }
             renderItem={loading ? () => (
               <RectangleLoader height={150} width={width - 32} style={styles.loader}/> 
             ): ({ item }) => (
               <WaterbodyReview 
-                key={item.id} data={item} 
+                key={item.id} data={item} refetch={handleRefetch}
+                navigateToEdit={navigateEdit(item.id)}
                 navigateToUser={navigateUser(item.user.id)}
               />
             )}
@@ -179,7 +171,7 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   heading: {
-    height: 100,
+    height: 90,
     paddingTop: 24,
     paddingRight: 8,
     flexDirection: 'row',

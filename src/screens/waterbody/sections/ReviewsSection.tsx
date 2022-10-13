@@ -28,13 +28,14 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
 
   const { isAuthenticated } = useAuth()
 
-  const { data } = useGetWaterbodyReviews({ id: waterbody, limit: 3 });
+  const { data, refetch } = useGetWaterbodyReviews({ id: waterbody, limit: 3 });
 
   const [ratingCounts, setRatingCounts] = useState({ five: 0, four: 0, three: 0, two: 0, one: 0 })
   const [reviews, setReviews]= useState<Review[]>([])
 
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
-
+  const navigateEdit = (id: number) => () => navigation.navigate('EditReviewScreen', { id })
+  
   const showReviewModal = useReviewModalStore(store => store.showWaterbodyReview)
   const showAuthModal = useModalStore(store => store.setAuth)
 
@@ -113,7 +114,11 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
 
       <View style={styles.listSection}>
         { reviews.map(x => (
-          <WaterbodyReview key={x.id} data={x} navigateToUser={navigateUser(x.user.id)}/> 
+          <WaterbodyReview 
+            key={x.id} data={x} refetch={refetch}
+            navigateToEdit={navigateEdit(x.id)}
+            navigateToUser={navigateUser(x.user.id)}
+          /> 
         ))}
       </View>
 

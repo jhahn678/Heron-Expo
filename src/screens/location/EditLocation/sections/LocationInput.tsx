@@ -3,7 +3,6 @@ import { Dimensions, Pressable, StyleSheet, View, Image } from "react-native";
 import { Card, IconButton, Text } from 'react-native-paper'
 import { theme } from "../../../../config/theme";
 import globalStyles from "../../../../globalStyles";
-import { useNewLocationStore } from "../../../../store/mutations/useNewLocationStore";
 import { RootStackScreenProps, SaveType } from "../../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'

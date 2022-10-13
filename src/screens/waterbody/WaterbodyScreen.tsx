@@ -32,7 +32,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
 
     const { params: { id } } = route;
 
-    const { data } = useGetWaterbody(id)
+    const { data, refetch } = useGetWaterbody(id)
 
     const uploadVisible = useBottomSheetStore(store => store.waterbodyUpload)
     const setUploadVisible = useBottomSheetStore(store => store.setWaterbodyUpload)
@@ -68,7 +68,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
         } 
         await createReview({ 
             variables: { input },
-            onCompleted: () => { handleResetReview(); setShowSuccess(true, 'REVIEW') },
+            onCompleted: () => { handleResetReview(); setShowSuccess(true, 'REVIEW'); refetch() },
             onError: (err) => { setShowErrorModal(true, handleError(err)); handleResetReview() }
         })
         setLoading(false)

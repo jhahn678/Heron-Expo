@@ -78,7 +78,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     reset: store.reset
   }))
 
-  const location = useLocationStore(store => ({         //store for users location
+  const location = useLocationStore(store => ({          //store for users location
     coordinates: (store.longitude && store.latitude) ? ({
       latitude: store.latitude,
       longitude: store.longitude
@@ -210,7 +210,6 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
                 editLocation.setMapSnapshot(image)
               }
           } 
-
           navigation.goBack();
         })
     }

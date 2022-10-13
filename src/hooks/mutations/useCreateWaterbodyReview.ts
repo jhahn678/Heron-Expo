@@ -36,9 +36,8 @@ interface Vars {
 export const useCreateWaterbodyReview = () => {
     const result = useMutation<Res, Vars>(CREATE_REVIEW, {
         refetchQueries: ({ data }) => [
-            { query: GET_REVIEWS, variables: { id: data?.addWaterbodyReview.waterbody.id } },
-            { query: GET_WATERBODY, variables: { id: data?.addWaterbodyReview.waterbody.id } },
-            { query: GET_MY_PROFILE_TOTALS }
+            { query: GET_MY_PROFILE_TOTALS },
+            { query: GET_REVIEWS, variables: { id: data?.addWaterbodyReview.waterbody.id, limit: 3 } }
         ]
     })
     return result;

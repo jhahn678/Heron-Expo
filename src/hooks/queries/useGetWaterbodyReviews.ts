@@ -1,4 +1,4 @@
-import { gql, useQuery } from '@apollo/client'
+import { gql, useApolloClient, useQuery } from '@apollo/client'
 import { IUser } from '../../types/User'
 import { IWaterbodyReview } from '../../types/Waterbody'
 
@@ -74,3 +74,23 @@ export const useGetWaterbodyReviews = ({
 }: Args) => useQuery<GetWaterbodyReviews, Vars>(GET_REVIEWS, { 
     variables: { id, limit, sort }, skip
 })
+
+export interface ReviewFragment {
+    id: number
+    rating: number
+    text?: string | null
+}
+
+export const useGetReviewFragment = (id: number)  => {
+    const cache = useApolloClient()
+    return cache.readFragment<ReviewFragment>({
+        id: `WaterbodyReview:${id}`,
+        fragment: gql`
+            fragment WaterbodyReview${id} on WaterbodyReview{
+                id
+                rating
+                text
+            }
+        `
+    })
+} 

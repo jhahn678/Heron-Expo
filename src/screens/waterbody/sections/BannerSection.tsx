@@ -10,8 +10,6 @@ import AddLocationIcon from "../../../components/icons/AddLocationIcon";
 import { useAuth } from "../../../store/auth/useAuth";
 import { useModalStore } from "../../../store/modal/useModalStore";
 import { ExploreStackScreenProps, MediaSource } from "../../../types/navigation";
-import { useImagePicker } from "../../../hooks/utils/useImagePicker";
-import { useImageStore } from "../../../store/image/useImageStore";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import { GetWaterbodyRes } from "../../../hooks/queries/useGetWaterbody";
 import { useImagePaginationIndicator } from "../../../hooks/utils/useImagePaginationIndicator";
