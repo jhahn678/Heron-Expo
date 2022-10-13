@@ -2,17 +2,28 @@ import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import { Text, RadioButton } from 'react-native-paper'
 import BottomSheet from "@gorhom/bottom-sheet";
-import { useNewLocationStore } from "../../../../store/mutations/useNewLocationStore";
 import { Privacy } from "../../../../types/Location";
 import Backdrop from "../../../../components/modals/Backdrop";
+import { useEditLocationStore } from "../../../../store/mutations/useEditLocationStore";
 
-const SelectPrivacyBottomSheet = () => {
+interface Props {
+    currentValue: Privacy | undefined
+}
+
+const SelectPrivacyBottomSheet = ({ currentValue }: Props) => {
+
+    const [value, setValue] = useState<Privacy>(Privacy.Public)
+    const privacy = useEditLocationStore(store => store.privacy)
+
+    useEffect(() => {
+        if(privacy) return setValue(privacy)
+        if(currentValue) setValue(currentValue)
+    },[currentValue, privacy])
 
     const ref = useRef<BottomSheet | null>(null)
-    const privacy = useNewLocationStore(store => store.privacy)
-    const setPrivacy = useNewLocationStore(store => store.setPrivacy)
-    const visible = useNewLocationStore(store => store.privacyVisible)
-    const setVisible = useNewLocationStore(store => store.setPrivacyVisible)
+    const visible = useEditLocationStore(store => store.privacyVisible)
+    const setVisible = useEditLocationStore(store => store.setPrivacyVisible)
+    const setPrivacy = useEditLocationStore(store => store.setPrivacy)
 
     const handleValueChange = (value: string) => setPrivacy(value as unknown as Privacy)
 
@@ -27,8 +38,8 @@ const SelectPrivacyBottomSheet = () => {
 
     useEffect(() => {
         if(ref.current){
-            if(visible) ref.current.expand();
-            if(!visible) ref.current.close();
+            if(visible) ref.current.expand()
+            if(!visible) ref.current.close()
         }
     },[visible])
 
@@ -44,7 +55,7 @@ const SelectPrivacyBottomSheet = () => {
                 () => <Backdrop onPress={handleBackdrop} />
             ) : null}
         >
-            <RadioButton.Group value={privacy} onValueChange={handleValueChange}>
+            <RadioButton.Group value={value} onValueChange={handleValueChange}>
                 <View>
                     <RadioButton.Item 
                         label={"Public"} 
@@ -65,6 +76,7 @@ const SelectPrivacyBottomSheet = () => {
                         labelVariant={'labelLarge'}
                         labelStyle={styles.label} 
                         value={Privacy.Friends}
+                        disabled={currentValue === Privacy.Public}
                     />
                     <Text style={styles.description}>
                         This location is only visible to the people that you follow.
@@ -77,6 +89,7 @@ const SelectPrivacyBottomSheet = () => {
                         labelVariant={'labelLarge'}
                         labelStyle={styles.label} 
                         value={Privacy.Private}
+                        disabled={currentValue !== Privacy.Private}
                     />
                     <Text style={styles.description}>
                         This location is only visible to you.

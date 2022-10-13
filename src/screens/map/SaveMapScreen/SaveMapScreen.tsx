@@ -14,6 +14,7 @@ import { useNewLocationStore } from '../../../store/mutations/useNewLocationStor
 import PromptDeletePoint from '../../../components/modals/map/PromptDeletePoint'
 import { Geometry, Resource, useCreateGeometry } from '../../../hooks/utils/useCreateGeometry'
 import { useEditCatchStore } from '../../../store/mutations/useEditCatchStore'
+import { useEditLocationStore } from '../../../store/mutations/useEditLocationStore'
 
 const { width, height } = Dimensions.get('screen')
 
@@ -70,6 +71,13 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     reset: store.reset
   }))
 
+  const editLocation = useEditLocationStore(store => ({  //store for EditLocation state
+    setMapSnapshot: store.setMapSnapshot,
+    setPolygon: store.setPolygon,
+    setPoint: store.setPoint,
+    reset: store.reset
+  }))
+
   const location = useLocationStore(store => ({         //store for users location
     coordinates: (store.longitude && store.latitude) ? ({
       latitude: store.latitude,
@@ -107,9 +115,21 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
           setResource(Resource.Location)
           setGeometry(Geometry.Point)
           break;
+        case SaveType.LocationAutoEdit:
+          if(!location.coordinates) return setLocationError()
+          setPoint(location.coordinates)
+          setResource(Resource.Location)
+          setGeometry(Geometry.Point)
+          break;
         case SaveType.LocationManual:
           setResource(Resource.Location)
           setGeometry(Geometry.Point)
+          if(location.coordinates) handleCurrentLocation()
+          break;
+        case SaveType.LocationManualEdit:
+          setResource(Resource.Location)
+          setGeometry(Geometry.Point)
+          if(center) { handleCenter(); break; }
           if(location.coordinates) handleCurrentLocation()
           break;
         default:
@@ -169,16 +189,28 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
         .then(image => {
           if(geometry === Geometry.Polygon) {
               if(polygon.length < 3) return;
-              //first and last point must be the same
-              newLocation.setPolygon([
+              const coords = [
                 ...polygon.map(x => x.coordinate), 
-                polygon[0].coordinate
-              ])
+                polygon[0].coordinate 
+              ] //first and last point must be the same
+              if(saveType === SaveType.LocationAuto || saveType === SaveType.LocationManual){
+                newLocation.setPolygon(coords)
+                newLocation.setMapSnapshot(image);
+              }else{
+                editLocation.setPolygon(coords)
+                editLocation.setMapSnapshot(image)
+              }
           }else if(geometry === Geometry.Point) {
               if(!point) return
-              newLocation.setPoint(point)
+              if(saveType === SaveType.LocationAuto || saveType === SaveType.LocationManual){
+                newLocation.setPoint(point)
+                newLocation.setMapSnapshot(image);
+              }else{
+                editLocation.setPoint(point)
+                editLocation.setMapSnapshot(image)
+              }
           } 
-          newLocation.setMapSnapshot(image);
+
           navigation.goBack();
         })
     }

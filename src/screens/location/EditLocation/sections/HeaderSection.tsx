@@ -6,7 +6,7 @@ import { theme } from "../../../../config/theme";
 import { RootStackScreenProps } from "../../../../types/navigation";
 
 interface Props {
-    navigation: RootStackScreenProps<'EditCatchScreen'>['navigation']
+    navigation: RootStackScreenProps<"EditLocationScreen">['navigation']
 }
 
 const HeaderSection = ({ navigation }: Props) => {
@@ -15,7 +15,7 @@ const HeaderSection = ({ navigation }: Props) => {
         <Surface style={styles.header}>
             <View style={styles.container}>
                 <Icon name='arrow-left' size={24} onPress={navigation.goBack}/>
-                <Title style={styles.title}>Edit Catch</Title>
+                <Title style={styles.title}>Edit Location</Title>
             </View>
         </Surface>
     );  

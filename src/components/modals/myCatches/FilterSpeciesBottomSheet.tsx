@@ -9,7 +9,7 @@ import Backdrop from "../Backdrop";
 
 const FilterSpeciesBottomSheet = () => {
 
-    const { data, loading, error } = useGetMyCatchStatistics()
+    const { data } = useGetMyCatchStatistics()
     const ref = useRef<BottomSheet | null>(null)
     const setModalVisible = useMyCatchesModalStore(store => store.setSpeciesVisible)
     const handleClose = () => setModalVisible(false)

@@ -27,6 +27,7 @@ import EditProfileScreen from "../screens/profile/EditProfileScreen/EditProfileS
 import SettingsScreen from "../screens/settings/SettingsScreen/SettingsScreen";
 import ContactsListScreen from "../screens/contacts/ContactsList/ContactsListScreen";
 import EditCatchScreen from "../screens/catch/EditCatch/EditCatchScreen";
+import EditLocationScreen from "../screens/location/EditLocation/EditLocationScreen";
 
 const RootStack = (): JSX.Element => {
     
@@ -72,6 +73,7 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='SettingsScreen' component={SettingsScreen}/>
                 <Stack.Screen name='ContactsListScreen' component={ContactsListScreen}/>
                 <Stack.Screen name="EditCatchScreen" component={EditCatchScreen}/>
+                <Stack.Screen name="EditLocationScreen" component={EditLocationScreen}/>
             </Stack.Navigator>
         </NavigationContainer>
     );

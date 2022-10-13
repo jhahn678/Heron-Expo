@@ -1,6 +1,7 @@
 import React from "react";
 import { StyleSheet, View, Pressable } from "react-native";
 import { Title, Text } from "react-native-paper";
+import RectangleLoader from "../../../../components/loaders/RectangleLoader";
 import PrivacyLabel from "../../../../components/locations/PrivacyLabel";
 import Avatar from "../../../../components/users/Avatar";
 import dayjs from "../../../../config/dayjs";
@@ -33,33 +34,60 @@ const HeadingSection = ({ navigation, data }: Props) => {
   
     return (
         <View style={styles.container}>
-            <Title style={styles.title}>{data?.title || 'Untitled Location'}</Title>
-            <Pressable style={globalStyles.baseline} onPress={navigateToWaterbody}>
-                <Text style={styles.at}>at</Text>
-                <Text style={styles.place} numberOfLines={1}>
-                    {data?.waterbody.name}
-                </Text>
-            </Pressable>
-            <View style={globalStyles.baseline}>
-                <Text style={styles.at}>near</Text>
-                <Text style={styles.place} numberOfLines={1}>
-                    {data?.nearest_place}
-                </Text>
-            </View>
+            { data ? 
+                <>
+                    <Title style={styles.title}>{data.title || 'Untitled Location'}</Title>
+                    <Pressable style={globalStyles.baseline} onPress={navigateToWaterbody}>
+                        <Text style={styles.at}>at</Text>
+                        <Text style={styles.place} numberOfLines={1}>
+                            {data?.waterbody.name}
+                        </Text>
+                    </Pressable> 
+                    <View style={globalStyles.baseline}>
+                        <Text style={styles.at}>near</Text>
+                        <Text style={styles.place} numberOfLines={1}>
+                            {data?.nearest_place}
+                        </Text>
+                    </View>
+                </> :
+                <>
+                    <RectangleLoader width={300} height={34} style={{ marginLeft: 16 }}/>
+                    <View style={styles.loadingPlace}>
+                        <Text style={styles.at}>at</Text>
+                        <RectangleLoader height={24} style={{ marginLeft: 2 }}/>
+                    </View>
+                    <View style={styles.loadingPlace}>
+                        <Text style={styles.at}>near</Text>
+                        <RectangleLoader height={24} style={{ marginLeft: 2 }}/>
+                    </View>
+                </>
+            }
             <View style={styles.user}>
                 <Avatar
                     size={28}
+                    loading={!Boolean(data)}
                     fullname={data?.user.fullname}
                     uri={data?.user.avatar}
                     onPress={navigateToUser}
                 />
-                <Text style={styles.name}>{data?.user.fullname}</Text>
-                <View style={styles.divider}/>
-                <Text style={styles.created}>
-                    Added {dayjs(data?.created_at).fromNow()}
-                </Text>
-                <View style={styles.divider}/>
-                <PrivacyLabel privacy={data?.privacy}/>
+                { data ?
+                    <>
+                        <Text style={styles.name}>{data?.user.fullname}</Text>
+                        <View style={styles.divider}/>
+                        <Text style={styles.created}>
+                            Added {dayjs(data?.created_at).fromNow()}
+                        </Text>
+                        <View style={styles.divider}/>
+                        <PrivacyLabel privacy={data?.privacy}/>
+                    </> :
+                    <>
+                        <RectangleLoader width={80} style={{ marginLeft: 8 }}/>
+                        <View style={styles.divider}/>
+                        <RectangleLoader width={80}/>
+                        <View style={styles.divider}/>
+                        <RectangleLoader width={80}/>
+                    </>
+                }
             </View>
         </View>
     );
@@ -106,4 +134,9 @@ const styles = StyleSheet.create({
         fontWeight: "500",
         fontSize: 12
     },
+    loadingPlace: {
+        flexDirection: 'row',
+        alignItems: 'flex-end',
+        marginTop: 8
+    }
 });

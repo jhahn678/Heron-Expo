@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react'
 import { ScrollView, StyleSheet, View } from 'react-native'
 import { RootStackScreenProps } from '../../../types/navigation'
-import ImageInput from '../../../components/inputs/ImageInput'
 import { useImageStore } from '../../../store/image/useImageStore'
 import { Button } from 'react-native-paper'
 import { UploadResult, useUploadImages } from '../../../hooks/mutations/useUploadImages'
@@ -74,7 +73,7 @@ const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchS
         }catch(err){
             console.error(err)
             setLoading(false)
-            showErrorModal(true, ErrorType.CreateCatch)
+            showErrorModal(true, ErrorType.EditCatch)
         }
     }
 

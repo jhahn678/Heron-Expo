@@ -1,7 +1,9 @@
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import React from "react";
 import { MapResource, RootStackScreenProps } from "../../../../types/navigation";
 import MapCard from "../../../../components/cards/MapCard";
+import RectangleLoader from "../../../../components/loaders/RectangleLoader";
+const { width } = Dimensions.get('screen')
 
 interface Props {
     navigation: RootStackScreenProps<'ViewLocationScreen'>['navigation']
@@ -18,7 +20,10 @@ const MapSection = ({ navigation, id, uri }: Props) => {
     
     return (
         <View style={styles.container}>
-            <MapCard navigateToMap={navigateToMap} uri={uri}/>
+            { uri ?
+                <MapCard navigateToMap={navigateToMap} uri={uri}/> :
+                <RectangleLoader height={230} width={width * .8} borderRadius={12}/>
+            }
         </View>
     );
 };

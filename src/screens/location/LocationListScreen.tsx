@@ -24,7 +24,7 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
     const [menuOpen, setMenuOpen] = useState(false);
     const [sort, setSort] = useState(LocationSort.CreatedAtNewest);
 
-    const { data, loading, error, fetchMore, refetch } = useGetLocations({ type, id, limit, sort }) 
+    const { data, fetchMore, refetch } = useGetLocations({ type, id, limit, sort }) 
 
     const handleRefetch = () => {
       setRefreshing(true);

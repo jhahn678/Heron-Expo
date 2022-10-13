@@ -8,7 +8,7 @@ const Backdrop = ({ onPress }: Props) => {
 
     return (
         <Pressable 
-            onPress={onPress}
+            onPressOut={onPress}
             style={{ 
                 position: 'absolute',
                 zIndex: 50,

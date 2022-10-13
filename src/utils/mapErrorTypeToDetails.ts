@@ -7,9 +7,11 @@ export enum ErrorType {
     ReviewDuplicate = 'REVIEW_DUPLICATE',
     Catch = 'CATCH',
     CreateCatch = 'CREATE_CATCH',
+    EditCatch = 'EDIT_CATCH',
     MapCatch = 'MAP_CATCH',
     Location = 'LOCATION',
     CreateLocation = 'CREATE_LOCATION',
+    EditLocation = 'EDIT_LOCATION',
     MapLocation = 'MAP_LOCATION',
     MapNoCatches = 'MAP_NO_CATCHES',
     MapNoCatchesLogged = 'MAP_NO_CATCHES_LOGGED',
@@ -36,6 +38,10 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
         title: 'Something went wrong 😵‍💫',
         message: 'Could not create catch. Please try again'
     },
+    EDIT_CATCH: {
+        title: 'Something went wrong 😵‍💫',
+        message: 'Could not save catch. Please try again'
+    },
     MAP_CATCH: {
         title: 'Something went wrong 😵‍💫',
         message: 'Could not display catch on map'
@@ -43,6 +49,10 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
     LOCATION: {
         title: '',
         message: '',
+    },
+    EDIT_LOCATION: {
+        title: 'Something went wrong 😵‍💫',
+        message: 'Could not save location. Please try again'
     },
     CREATE_LOCATION: {
         title: 'Something went wrong 😵‍💫',

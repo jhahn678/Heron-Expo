@@ -1,4 +1,3 @@
-import { faker } from "@faker-js/faker";
 import { StyleSheet } from "react-native";
 import { Text } from 'react-native-paper'
 
