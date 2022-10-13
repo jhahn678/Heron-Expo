@@ -1,20 +1,35 @@
-import React from "react";
+import React, { useState } from "react";
 import { StyleSheet, Text, View, Image, Dimensions } from "react-native";
-import { Button, IconButton, Surface, Title } from "react-native-paper";
+import { Button, Divider, IconButton, Menu, Surface, Title } from "react-native-paper";
 import RectangleLoader from "../../components/loaders/RectangleLoader";
 import Avatar from "../../components/users/Avatar";
 import dayjs from "../../config/dayjs";
 import { theme } from "../../config/theme";
 import globalStyles from "../../globalStyles";
 import { useGetImageQuery } from "../../hooks/queries/useGetImage";
+import { useAuth } from "../../store/auth/useAuth";
 import { RootStackScreenProps } from "../../types/navigation";
+import * as FileSystem from 'expo-file-system'
+import * as MediaLibrary from 'expo-media-library'
+import { useSaveToGallery } from "../../hooks/utils/useSaveToGallery";
 const { width, height } = Dimensions.get('screen')
 
 const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageScreen'>) => {
 
     const { params: { id, type, title, uri } } = route;
-
     const { data, loading } = useGetImageQuery({ id, type })
+
+    const { saveToGallery } = useSaveToGallery()
+    const auth = useAuth(store => store.id)
+    const [menuOpen, setMenuOpen] = useState(false)
+
+    const handleDownload = async () => {
+        if(data) await saveToGallery(data.media.url)
+        else if(uri) await saveToGallery(uri)
+        setMenuOpen(false)
+    }
+
+    const handleDelete = () => {}
 
     const navigateProfile = () => {
         if(data) navigation.navigate('UserProfileScreen', { id: data.media.user.id })
@@ -23,10 +38,32 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
     return (
         <View style={styles.container}>
             <Surface style={[styles.header, { width }]}>
-                <View style={globalStyles.frsb}>
+                <View style={globalStyles.frac}>
                     <IconButton icon='arrow-left' onPress={navigation.goBack}/>
                     { title && <Title style={styles.title}>{title}</Title>}
                 </View>
+                <Menu
+                    visible={menuOpen}
+                    onDismiss={() => setMenuOpen(false)}
+                    anchor={<IconButton icon={'dots-horizontal'} 
+                    onPress={() => setMenuOpen(true)}/>}
+                >
+                    <Menu.Item
+                        title={'Save'}
+                        style={{ height: 40 }}
+                        trailingIcon={'download'}
+                        onPress={handleDownload}
+                    />
+                    <Divider bold/>
+                    { (data?.media.user.id === auth && type) &&
+                        <Menu.Item
+                            title={'Delete'}
+                            style={{ height: 40 }}
+                            trailingIcon={'delete'}
+                            onPress={handleDelete}
+                        />
+                    }
+                </Menu>
             </Surface>
             { (data || uri) ?
                 <Image 
@@ -71,9 +108,11 @@ const styles = StyleSheet.create({
         flex: 1
     },
     header: {
-        height: 80,
+        height: 90,
+        paddingRight: 8,
         flexDirection: 'row',
         alignItems: 'flex-end',
+        justifyContent: 'space-between',
         backgroundColor: theme.colors.background,
     },
     title: {

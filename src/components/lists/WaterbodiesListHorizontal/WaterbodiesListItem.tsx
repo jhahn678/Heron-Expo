@@ -26,7 +26,7 @@ interface Props<T> {
 const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate, containerStyle }: Props<T>) => {
   
   return (
-    <Card style={[styles.container, containerStyle]} onPress={() => navigate(data.id)} elevation={0}>
+    <Card style={[styles.container, containerStyle]} onPress={() => navigate(data.id)} elevation={1}>
       <Image source={{ uri: data.media[0]?.url }} style={styles.image} />
       <View style={styles.heading}>
         <Text style={styles.title} numberOfLines={1}>
@@ -56,7 +56,7 @@ const styles = StyleSheet.create({
     height: 320,
     width: 300,
     borderRadius: 12,
-    marginRight: 16
+    marginRight: 16,
   },
   heading: {
     flexDirection: "row",

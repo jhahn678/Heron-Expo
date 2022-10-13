@@ -36,14 +36,22 @@ export default ContactsListItem
 
 const styles = StyleSheet.create({
   container: {
-    marginTop: 12,
+    marginVertical: 12,
     height: 230,
     width: 170,
     borderRadius: 12,
     padding: 16,
     alignItems: 'center',
     justifyContent: 'space-evenly',
-    backgroundColor: theme.colors.surfaceVariant
+    backgroundColor: theme.colors.surfaceVariant,
+    shadowColor: "#000",
+    shadowOffset: {
+      width: 0,
+      height: 2,
+    },
+    shadowOpacity: 0.20,
+    shadowRadius: 1.41,
+    elevation: 2,
   },
   name: {
     fontWeight: '500',

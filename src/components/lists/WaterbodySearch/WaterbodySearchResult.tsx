@@ -21,7 +21,7 @@ const WaterbodySearchResult = ({ onPress, data }: Props) => {
           <Title style={styles.title} numberOfLines={1}>
             {data.name}
           </Title>
-          <View style={globalStyles.frac}>
+          <View style={[globalStyles.frac]}>
             <Text style={styles.rating}>{data.average_rating || 0}</Text>
             <Icon name="star" size={14} color={'#f1c40f'}/>
           </View>
@@ -59,6 +59,7 @@ const styles = StyleSheet.create({
   title: {
     fontSize: 20,
     fontWeight: "600",
+    maxWidth: '90%'
   },
   rating: {
     fontWeight: "500",
