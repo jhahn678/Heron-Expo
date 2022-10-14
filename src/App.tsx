@@ -57,7 +57,7 @@ export default function App() {
         <PaperProvider theme={theme}>
           <GestureHandlerRootView style={{ flex: 1 }}>
             <StatusBar style="auto" />
-            <RootStack />
+            <RootStack/>
             <ModalPortal />
           </GestureHandlerRootView>
         </PaperProvider>
