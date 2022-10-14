@@ -1,7 +1,10 @@
+import * as Linking from 'expo-linking';
+import { Text } from 'react-native'
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../store/auth/useAuth";
 import { RootStackParams } from "../types/navigation";
-import { NavigationContainer } from "@react-navigation/native";
+import { LinkingOptions, NavigationContainer } from "@react-navigation/native";
+import { navigationRef } from "./navigationRef";
 import MainTabs from "./BottomTabs";
 import CameraScreen from "../screens/camera/CameraScreen";
 import NewCatchScreen from "../screens/catch/NewCatch/NewCatchScreen";
@@ -17,7 +20,6 @@ import UserProfileScreen from "../screens/profile/UserProfileScreen/UserProfileS
 import SearchUsersScreen from "../screens/contacts/UserSearchScreen/UserSearchScreen";
 import ViewCatchScreen from "../screens/catch/CatchScreen/ViewCatchScreen";
 import ViewLocationScreen from "../screens/location/LocationScreen/ViewLocationScreen";
-import { navigationRef } from "./navigationRef";
 import MediaGridScreen from "../screens/media/MediaGridScreen";
 import ReviewsScreen from "../screens/waterbody/ReviewsScreen";
 import ViewImageScreen from "../screens/media/ViewImageScreen";
@@ -30,13 +32,49 @@ import EditCatchScreen from "../screens/catch/EditCatch/EditCatchScreen";
 import EditLocationScreen from "../screens/location/EditLocation/EditLocationScreen";
 import EditReviewScreen from "../screens/waterbody/EditReviewScreen/EditReviewScreen";
 
+
 const RootStack = (): JSX.Element => {
     
     const isUnauthenticated = useAuth(state => !state.isAuthenticated)
     const Stack = createNativeStackNavigator<RootStackParams>();
 
+    const prefix = Linking.createURL('/');
+
+    const linkConfig: LinkingOptions<RootStackParams> = {
+        prefixes: [prefix],
+        config: {
+            initialRouteName: 'MainTabs',
+            screens: {
+                UserProfileScreen: {
+                    path: "profile/:id",
+                    parse: { id: id => parseInt(id) } 
+                },
+                ViewCatchScreen: {
+                    path: "catch/:id",
+                    parse: { id: id => parseInt(id) } 
+                },
+                ViewLocationScreen: {
+                    path: "location/:id",
+                    parse: { id: id => parseInt(id) } 
+                },
+                MainTabs: {
+                    screens: {
+                        ExploreStack: {
+                            screens: {
+                                WaterbodyScreen: {
+                                    path: "waterbody/:id",
+                                    parse: { id: (id: string) => parseInt(id) }
+                                },
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+
     return (
-        <NavigationContainer ref={navigationRef}>
+        <NavigationContainer ref={navigationRef} linking={linkConfig}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
                 { isUnauthenticated &&
                     <Stack.Group screenOptions={{ headerBackTitle: 'Back'}}>

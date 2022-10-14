@@ -1,4 +1,5 @@
-import { Share, ShareAction } from "react-native";
+import { Share, ShareAction, Platform } from "react-native";
+import * as Linking from 'expo-linking'
 
 
 export enum ShareType {
@@ -10,34 +11,46 @@ export enum ShareType {
 }
 
 interface ShareContentArgs {
-    url: string, 
-    shareType?: ShareType
+    id: number | null | undefined
+    shareType: ShareType
 }
 
 export const useShareContent = () => {
 
-    const shareContent = async ({ 
-        url , shareType
-    }: ShareContentArgs): Promise<ShareAction | void> => {
-
+    const shareContent = async ({ shareType, id }: ShareContentArgs): Promise<ShareAction | void> => {
         let message: string;
+        let url: string;
+        if (!id) return;
         switch(shareType){
             case ShareType.Waterbody:
-                message = `Check this place to fish on the Heron App! ${url}`;
+                url = Linking.createURL(`/waterbody:${id}`)
+                message = `Check this place to fish on the Heron App!`;
+                break;
             case ShareType.Catch:
-                message = `Check out this catch on the Heron App! ${url}`;
+                url = Linking.createURL(`/catch:${id}`)
+                message = `Check out this catch on the Heron App!`;
+                break;
             case ShareType.Location:
-                message = `Check out this fishing spot on the Heron App! ${url}`;
+                url = Linking.createURL(`/location:${id}`)
+                message = `Check out this fishing spot on the Heron App!`;
+                break;
             case ShareType.MyProfile:
-                message = `Check out my profile on the Heron App! ${url}`;
+                url = Linking.createURL(`/profile:${id}`)
+                message = `Check out my profile on the Heron App!`;
+                break;
             case ShareType.Profile:
-                message = `Check out this profile on the Heron App! ${url}`;
+                url = Linking.createURL(`/profile:${id}`)
+                message = `Check out this profile on the Heron App!`;
+                break;
             default:
-                message = `Download the Heron App and check this out! ${url}`;
+                return;
         }
         try{
-            const res = await Share.share({ message })
-            return res;
+            if(Platform.OS === 'ios'){
+                await Share.share({ message, url })
+            }else{
+                await Share.share({ message: message + ` ${url}`})
+            }
         }catch(err){
             alert('Could not share content')
         }
