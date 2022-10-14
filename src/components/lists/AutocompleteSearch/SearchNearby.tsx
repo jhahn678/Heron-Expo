@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet, Pressable } from 'react-native'
+import { StyleSheet, Pressable, Dimensions } from 'react-native'
 import { Title } from 'react-native-paper'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useLocationStore } from '../../../store/location/useLocationStore'
+const { width } = Dimensions.get('screen')
 
 interface Props {
     navigation: ExploreStackScreenProps<'SearchBarScreen'>['navigation']
@@ -34,7 +35,7 @@ export default SearchNearby
 const styles = StyleSheet.create({
     container: {
         height: 70,
-        width: '95%',
+        width: width - 32,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

@@ -4,6 +4,8 @@ import { Title, Text } from "react-native-paper";
 import WaterbodyHeaderLoader from "../../../components/loaders/WaterbodyHeaderLoader";
 import RatingDisplay from "../../../components/ratings/RatingDisplay";
 import { GetWaterbody } from "../../../hooks/queries/useGetWaterbody";
+import { useAuth } from "../../../store/auth/useAuth";
+import { useModalStore } from "../../../store/modal/useModalStore";
 import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
 import { ExploreStackScreenProps, ReviewQuery } from "../../../types/navigation";
 import { waterbodyLocationLabel } from "../../../utils/conversions/waterbodyLocationToLabel";
@@ -16,10 +18,13 @@ interface Props {
 
 const HeaderSection = ({ navigation, data, id }: Props) => {
 
+    const isAuthenticated = useAuth(store => store.isAuthenticated)
+    const showAuthModal = useModalStore(store => store.setAuth)
     const showReviewModal = useReviewModalStore(store => store.showWaterbodyReview)
 
     const handleReviews = () => {
         if(data && data.total_reviews === 0) {
+            if(!isAuthenticated) return showAuthModal(true)
             showReviewModal({ waterbody: id, name: data.name })
         }else if(data){
             navigation.navigate('ReviewsScreen', { 

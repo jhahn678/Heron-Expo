@@ -23,13 +23,14 @@ const BioSection = ({ bio, createdAt, navigateToEdit }: Props) => {
                     <Icon name='pencil' color={theme.colors.primary} size={14}/>
                 </Pressable>
             </View>
-            <Text style={styles.title}>Bio</Text>
-                { bio ? 
-                    <View style={styles.box}>
-                        <Text style={styles.text}>{bio}</Text>
-                    </View> :
-                    <BioLoader/>
-                }
+            { bio !== null && <Text style={styles.title}>Bio</Text> }
+            { bio ?
+                <View style={styles.box}>
+                    <Text style={styles.text}>{bio}</Text>
+                </View> 
+                : bio === undefined && <BioLoader/>
+            }
+
             <View style={styles.divider}/>
         </View>
     );

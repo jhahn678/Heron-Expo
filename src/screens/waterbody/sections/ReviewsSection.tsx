@@ -137,7 +137,7 @@ export default ReviewsSection;
 
 const styles = StyleSheet.create({
   header: {
-    width: '100%',
+    width,
     paddingHorizontal: 16,
     paddingBottom: 16,
     paddingRight: 28,

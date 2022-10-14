@@ -19,7 +19,7 @@ const HeaderSection = ({ data, loading, navigation }: Props) => {
 
     const shareContent = useShareContent()
 
-    const handleShareContent = () => shareContent({ url: '', shareType: ShareType.Profile })
+    const handleShareContent = () => shareContent({ shareType: ShareType.Profile, id: data?.id })
 
     const navigateToImage = () => {
         if(data && data.avatar) navigation.navigate('ViewImageScreen', { uri: data.avatar })

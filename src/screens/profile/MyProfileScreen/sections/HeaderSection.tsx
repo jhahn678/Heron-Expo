@@ -6,6 +6,7 @@ import { BottomTabsScreenProps } from "../../../../types/navigation";
 import { useGetMyProfile } from "../../../../hooks/queries/useGetMyProfile";
 import { ShareType, useShareContent } from "../../../../hooks/utils/useShareContent";
 import HeaderUserLoading from "../loaders/HeaderUserLoading";
+import globalStyles from "../../../../globalStyles";
 
 const { width } = Dimensions.get('screen')
 
@@ -15,7 +16,7 @@ interface Props {
 
 const HeaderSection = ({ navigation }: Props) => {
 
-  const { data, loading, error } = useGetMyProfile()
+  const { data, loading } = useGetMyProfile()
   const shareContent = useShareContent()
   const [menuOpen, setMenuOpen] = useState(false)
   const handleMenu = () => setMenuOpen(o => !o)
@@ -27,27 +28,29 @@ const HeaderSection = ({ navigation }: Props) => {
 
   const navigateSettings = () => { setMenuOpen(false); navigation.navigate('SettingsScreen') }
   const navigateEdit = () => { setMenuOpen(false); navigation.navigate('EditProfileScreen') }
-  const handleShare = () => shareContent({ url: '', shareType: ShareType.MyProfile }).then(handleMenu)
+  const handleShare = () => shareContent({ shareType: ShareType.MyProfile, id: data?.me.id }).then(handleMenu)
 
   return (<>
     <View style={styles.container}>
       <View style={styles.user}>
-        <Avatar 
-          size={80}
-          loading={loading}
-          fullname={data?.me.fullname} 
-          uri={data?.me.avatar}
-          onPress={navigateImage}
-        />
-        { data ?
-            <View>
-              <Text style={styles.name}>{data?.me.fullname}</Text>
-              <Text style={styles.location}>{data?.me.location || 'Harrisburg, Pennsylvania'}</Text>
-            </View> :
-           <HeaderUserLoading/>
-        }
+        <View style={globalStyles.frac}>
+          <Avatar 
+            size={80}
+            loading={loading}
+            fullname={data?.me.fullname} 
+            uri={data?.me.avatar}
+            onPress={navigateImage}
+          />
+          { data ?
+              <View>
+                <Text style={styles.name}>{data.me.fullname}</Text>
+                { data.me.location && <Text style={styles.location}>{data.me.location}</Text>}
+              </View> :
+            <HeaderUserLoading/>
+          }
+        </View>
+        <IconButton onPress={handleMenu} icon={'dots-vertical'} style={styles.menu} />
       </View>
-      <IconButton onPress={handleMenu} icon={'dots-vertical'} style={styles.menu} />
     </View>
     <Menu onDismiss={handleMenu} visible={menuOpen} anchor={{ x: width, y: 40 }}>
       <Menu.Item title='Edit Profile' leadingIcon='pencil' contentStyle={styles.option} onPress={navigateEdit}/>
@@ -69,14 +72,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
   },
   user: {
+    width: width,
     marginTop: 40,
-    marginLeft: 24,
+    paddingLeft: 24,
+    paddingRight: 16,
     flexDirection: 'row',
-    alignItems: 'center'
+    alignItems: 'center',
+    justifyContent: 'space-between',
   },
   name: {
     fontWeight: '600',
-    fontSize: 24,
+    fontSize: 22,
     marginLeft: 12
   },
   location: {
@@ -85,8 +91,8 @@ const styles = StyleSheet.create({
     marginLeft: 12,
   },
   menu: {
-    marginTop: 40,
-    marginRight: 16
+    // marginTop: 40,
+    // marginRight: 16
   },
   option: {
     width: '45%',

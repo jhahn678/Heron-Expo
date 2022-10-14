@@ -18,7 +18,7 @@ import { LocationQuery } from '../../../types/Location'
 const MyProfileScreen = ({ navigation }: MyProfileTabsScreenProps<'ProfileTab'>) => {
 
   const { id } = useAuth()
-  const { data, loading, error, refetch } = useGetMyProfileTotals()
+  const { data, loading, refetch } = useGetMyProfileTotals()
   
   const [refreshing, setRefreshing] = useState(false)
   const handleRefetch = () => { setRefreshing(true); refetch().then(() => setRefreshing(false)) }

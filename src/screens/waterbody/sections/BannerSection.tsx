@@ -100,7 +100,8 @@ const styles = StyleSheet.create({
     back: {
         position: 'absolute',
         top: 36,
-        left: 16
+        left: 16,
+        zIndex: 100
     },
     save: {
         position: 'absolute',

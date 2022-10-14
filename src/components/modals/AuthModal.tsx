@@ -1,7 +1,8 @@
 import React from "react";
-import { StyleSheet, Text } from "react-native";
+import { Dimensions, StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
 import { navigationRef } from '../../navigation/navigationRef'
+const { width } = Dimensions.get('window')
 
 
 interface Props {
@@ -51,11 +52,11 @@ export default AuthModal;
 
 const styles = StyleSheet.create({
     container: {
-        height: 200,
-        width: '90%',
+        height: 220,
+        width: width * .9,
         alignSelf: 'center',
         position: 'relative',
-        bottom: '10%'
+        bottom: 72
     },
     title: {
         fontSize: 22,

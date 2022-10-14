@@ -1,11 +1,12 @@
 import React from "react";
-import { StyleSheet, View, Pressable, Image } from "react-native";
+import { StyleSheet, View, Dimensions, Image } from "react-native";
 import { Card, Text, Title } from 'react-native-paper'
 import { WaterbodyResult } from "../../../hooks/queries/useSearchWaterbodies";
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from "../../../globalStyles";
 import { truncateTotal } from "../../../utils/conversions/truncateTotal";
 import { waterbodyLocationLabel } from "../../../utils/conversions/waterbodyLocationToLabel";
+const { width } = Dimensions.get('screen')
 
 interface Props {
     onPress: () => void,
@@ -43,7 +44,8 @@ export default WaterbodySearchResult;
 const styles = StyleSheet.create({
   container: {
     height: 360,
-    width: "90%",
+    width: width - 32,
+    marginHorizontal: 16,
     alignSelf: "center",
     borderRadius: 12,
     marginBottom: 24,

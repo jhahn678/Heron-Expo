@@ -45,6 +45,6 @@ button: {
     alignSelf: 'center',
     bottom: 16,
     borderRadius: 12,
-    width: '70%'
+    width: width * .65
 }
 });
