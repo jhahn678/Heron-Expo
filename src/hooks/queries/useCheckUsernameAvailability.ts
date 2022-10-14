@@ -8,7 +8,9 @@ interface CheckUsernameAvailabilityRes {
 }
 
 export const useCheckUsernameAvailability = (value: string) => {
+
     const [isAvailable, setIsAvailable] = useState<boolean | null>(null) 
+    const [touched, setTouched] = useState(false)
     const [isLoading, setIsLoading] = useState(false) 
     const [isError, setIsError] = useState(false) 
 
@@ -20,16 +22,23 @@ export const useCheckUsernameAvailability = (value: string) => {
     useEffect(() => {
         const timer = setTimeout(async () => {
             if(value.length > 5){
+                setTouched(true)
                 setIsLoading(true)
                 try{
                     const { available } = await queryUsername(value);
                     setIsAvailable(available)
                     setIsLoading(false)
+                    setIsError(!available)
                 }catch(err){
                     setIsAvailable(null)
                     setIsLoading(false)
                     setIsError(true)
                 }
+            }else if(touched){
+                setIsAvailable(null)
+                setIsError(true)
+            }else{
+                setIsAvailable(null)
             }
         }, 500)
 

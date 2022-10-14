@@ -15,7 +15,7 @@ const ShareButton = ({ shareType, ...props }: Props): JSX.Element => {
     
     const shareContent = useShareContent()
     const theme = useTheme() as MD3Theme
-    const handleShare = () => shareContent({ url: 'heron.com', shareType })
+    const handleShare = () => shareContent({ shareType, id: props.id })
 
     if(props.mode === 'none'){
         return (

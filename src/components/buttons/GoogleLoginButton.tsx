@@ -1,4 +1,4 @@
-import { StyleSheet } from 'react-native'
+import { StyleSheet, Dimensions } from 'react-native'
 import React from 'react'
 import { Button } from 'react-native-paper'
 import * as WebBrowser from 'expo-web-browser'
@@ -9,6 +9,7 @@ import {
   GOOGLE_IOS_CLIENT_ID, 
   GOOGLE_WEB_CLIENT_ID
 } from '@env'
+const { width } = Dimensions.get('screen')
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -47,7 +48,7 @@ export default GoogleLoginButton
 const styles = StyleSheet.create({
     container: {
         marginTop: 8,
-        width: '100%',
+        width: width - 48,
         height: 48,
         display: 'flex',
         justifyContent: 'center',

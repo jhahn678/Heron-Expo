@@ -21,7 +21,8 @@ export interface AuthStore {
     username: string | null
     avatar: string | null
     isAuthenticated: boolean,
-    setUser: (data: AuthResponse) => Promise<void>,
+    setUser: (data: AuthResponse, isAuthenticated?: boolean) => Promise<void>,
+    setAuthenticated: (authenticated: boolean) => void
     signOut: () => Promise<void>,
     autoSignIn: (token: string) => Promise<void>,
     getAccessToken: () => Promise<string | null>,
@@ -36,12 +37,13 @@ export const useAuth = create<AuthStore>((set) => ({
     username: null,
     avatar: null,
     isAuthenticated: false,
-    setUser: async (data: AuthResponse) => {
+    setUser: async (data: AuthResponse, isAuthenticated=true) => {
         const { accessToken, refreshToken, ...user } = data;
         await SecureStore.setItemAsync(SecureStoreKeys.REFRESH_TOKEN, refreshToken)
         await SecureStore.setItemAsync(SecureStoreKeys.ACCESS_TOKEN, accessToken)
-        set({ isAuthenticated: true, ...user })
+        set({ isAuthenticated, ...user })
     },
+    setAuthenticated: isAuthenticated => set({ isAuthenticated }),
     setDetails: details => set({ ...details }),
     signOut: async () => {
         await SecureStore.deleteItemAsync(SecureStoreKeys.REFRESH_TOKEN)

@@ -1,6 +1,7 @@
-import { StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import React from 'react'
 import { Button } from 'react-native-paper'
+const { width } = Dimensions.get('screen')
 
 const AppleLoginButton = () => {
   return (
@@ -20,7 +21,7 @@ export default AppleLoginButton
 const styles = StyleSheet.create({
     container: {
         marginTop: 8,
-        width: '100%',
+        width: width - 48,
         height: 48,
         display: 'flex',
         justifyContent: 'center',

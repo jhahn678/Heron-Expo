@@ -1,8 +1,8 @@
 import create from 'zustand'
 
 interface RegistrationStore {
-    firstName: string,
-    lastName: string,
+    firstname: string,
+    lastname: string,
     password: string,
     email: string,
     username: string,
@@ -15,19 +15,19 @@ interface RegistrationStore {
 }
 
 export const useRegistrationStore = create<RegistrationStore>((set) => ({
-    firstName: '',
-    lastName: '',
+    firstname: '',
+    lastname: '',
     password: '',
     email: '',
     username: '',
-    setFirstName: firstName => set({ firstName }),
-    setLastName: lastName => set({ lastName }),
+    setFirstName: firstname => set({ firstname }),
+    setLastName: lastname => set({ lastname }),
     setPassword: password => set({ password }),
     setEmail: email => set({ email }),
     setUsername: username => set({ username }),
     reset: () => set({
-        firstName: '',
-        lastName: '',
+        firstname: '',
+        lastname: '',
         password: '',
         email: '',
         username: ''

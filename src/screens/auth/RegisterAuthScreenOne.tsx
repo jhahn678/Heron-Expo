@@ -1,7 +1,7 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { RootStackScreenProps } from '../../types/navigation'
-import { TextInput, Button, Text } from 'react-native-paper'
+import { TextInput, Button } from 'react-native-paper'
 import { useRegistrationStore } from '../../store/auth/useRegistrationStore'
 
 const RegisterAuthScreenOne = ({ navigation }: RootStackScreenProps<'RegisterAuthScreenOne'>): JSX.Element => {
@@ -12,8 +12,8 @@ const RegisterAuthScreenOne = ({ navigation }: RootStackScreenProps<'RegisterAut
     setFirstName, 
     setLastName 
   } = useRegistrationStore(state => ({ 
-    firstName: state.firstName, 
-    lastName: state.lastName,
+    firstName: state.firstname, 
+    lastName: state.lastname,
     setFirstName: state.setFirstName,
     setLastName: state.setLastName
   }))
@@ -52,14 +52,14 @@ export default RegisterAuthScreenOne;
 
 const styles = StyleSheet.create({
   container: {
-    height: '80%',
     display: 'flex',
     justifyContent: 'center',
-    padding: '5%',
+    paddingHorizontal: 24,
+    marginTop: 48,
     paddingBottom: 0
   },
   input: {
-    marginBottom: 8
+    marginBottom: 12
   },
   button: {
     marginVertical: 8,

@@ -1,13 +1,15 @@
-import { StyleSheet, View } from 'react-native'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import React from 'react'
 import { RootStackScreenProps } from '../../types/navigation'
 import { Button, Text } from 'react-native-paper'
 import GoogleLoginButton from '../../components/buttons/GoogleLoginButton'
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
 import AppleLoginButton from '../../components/buttons/AppleLoginButton'
+const { width } = Dimensions.get('screen')
 
 const HomeAuthScreen = ({ navigation, route }: RootStackScreenProps<'HomeAuthScreen'>): JSX.Element => {
-
+  
+  // @ts-ignore
   const handleSkipAuthentication = () => navigation.replace('MainTabs')
   const handleRegisterScreen = () => navigation.navigate('RegisterAuthScreenOne')
   const handleLoginScreen = () => navigation.navigate('LoginAuthScreen')
@@ -64,7 +66,7 @@ const styles = StyleSheet.create({
   },
   button: {
     marginTop: 8,
-    width: '100%',
+    width: width - 48,
     height: 48,
     display: 'flex',
     justifyContent: 'center',

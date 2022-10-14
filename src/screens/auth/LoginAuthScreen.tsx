@@ -1,12 +1,13 @@
-import { StyleSheet, View } from 'react-native'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import React, { useState } from 'react'
 import { RootStackScreenProps } from '../../types/navigation'
-import { TextInput, Text, Button, ActivityIndicator, IconButton } from 'react-native-paper'
+import { TextInput, Text, Button } from 'react-native-paper'
 import AppleLoginButton from '../../components/buttons/AppleLoginButton'
 import GoogleLoginButton from '../../components/buttons/GoogleLoginButton'
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useAuth } from '../../store/auth/useAuth'
+const { width } = Dimensions.get('screen')
 
 
 const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>): JSX.Element => {
@@ -16,8 +17,8 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
 
-  const { loginUser, isError, isLoading } = useLogin({
-    onSuccess: data => setUser(data).then(() => navigation.replace('MainTabs')),
+  const { loginUser, isError, isLoading } = useLogin({ // @ts-ignore
+    onSuccess: data => setUser(data).then(() => navigation.replace("MainTabs")),
     onError: () => { setIdentifier(''); setPassword('') }
   })
 
@@ -48,10 +49,19 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         theme={{ roundness: 2 }}
         loading={isLoading}
       >Sign in</Button>
-      <Text style={{ alignSelf: 'center', marginVertical: 12}}>Or</Text>
+      <Text style={{ alignSelf: 'center', marginTop: 16, marginBottom: 12}}>Or</Text>
       <GoogleLoginButton/>
       <FacebookLoginButton/>
       <AppleLoginButton/>
+      <Button 
+        onPress={() => navigation.navigate('RegisterAuthScreenOne')}
+        buttonColor='white'
+        theme={{ roundness: 2 }}
+        style={styles.button}
+        icon={'email'}
+      >
+        Sign up with email
+      </Button>
     </View>
   )
 }
@@ -67,14 +77,15 @@ const styles = StyleSheet.create({
     height: '100%',
     display: 'flex',
     justifyContent: 'center',
-    padding: '5%',
+    padding: 24,
     paddingBottom: 0
   },
   input: {
     marginBottom: 8
   },
   button: {
-    marginVertical: 8,
+    marginTop: 8,
+    width: width - 48,
     height: 48,
     display: 'flex',
     justifyContent: 'center',

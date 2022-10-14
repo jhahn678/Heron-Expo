@@ -1,9 +1,10 @@
 import React from 'react'
-import { StyleSheet } from 'react-native'
+import { Dimensions, StyleSheet } from 'react-native'
 import { Button } from 'react-native-paper'
 import * as WebBrowser from 'expo-web-browser'
 import * as Facebook from 'expo-auth-session/providers/facebook'
 import { FACEBOOK_CLIENT_ID } from '@env'
+const { width } = Dimensions.get('screen')
 
 WebBrowser.maybeCompleteAuthSession();
 
@@ -39,7 +40,7 @@ export default FacebookLoginButton
 const styles = StyleSheet.create({
     container: {
         marginTop: 8,
-        width: '100%',
+        width: width - 48,
         height: 48,
         display: 'flex',
         justifyContent: 'center',
