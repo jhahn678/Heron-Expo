@@ -22,22 +22,26 @@ const SaveIconButton = (props: Props) => {
 
     const [saved, setSaved] = useState(Boolean(props.saved))
     
-    useEffect(() => {
-        setSaved(Boolean(props.saved))
-    }, [props.saved])
-    
     const [saveWaterbody] = useSaveWaterbodyMutation({
-        id: props.waterbody,
-        onCompleted: () => setSaved(x => !x),
+        onCompleted: data => setSaved(data.toggleSaveWaterbody),
         onError: () => alert('Error completing request')
     })
+
+    useEffect(() => setSaved(Boolean(props.saved)),[props.saved])
+
+    const handlePress = () => {
+        if(!props.waterbody) return;
+        if(!isAuthenticated) return showAuthModal()
+        setSaved(x => !x)
+        saveWaterbody({ variables: { id: props.waterbody }}) 
+    }
 
     return (
         <IconButton 
             size={props.size || 24}
             mode={props.mode || 'contained'}
             style={props.style}
-            onPress={() => isAuthenticated ? saveWaterbody() : showAuthModal()} 
+            onPress={handlePress} 
             icon={ saved ? 
                 ({ size }) => <Icon name='bookmark-check' size={size} color='#316a13'/> : 
                 ({ size, color }) => <Icon name='bookmark-plus-outline' size={size} color={color}/>
@@ -47,5 +51,3 @@ const SaveIconButton = (props: Props) => {
 };
 
 export default SaveIconButton;
-
-const styles = StyleSheet.create({});

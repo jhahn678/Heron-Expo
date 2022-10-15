@@ -3,6 +3,7 @@ import { Point } from 'geojson'
 import { CatchQuery } from '../../types/Catch'
 import { getCatchesQueryName } from '../queries/useGetCatches'
 import { GET_MY_PROFILE_TOTALS } from '../queries/useGetMyProfile'
+import { GET_MY_CATCH_STATISTICS } from '../queries/useGetUserCatchStatistics'
 import { GET_WATERBODY } from '../queries/useGetWaterbody'
 
 const CREATE_CATCH = gql`
@@ -49,6 +50,7 @@ export const useCreateCatch = () => useMutation<NewCatchRes, NewCatchArgs>(CREAT
         refetchQueries: ({ data }) => [
           { query: GET_WATERBODY, variables: { id: data?.createCatch.waterbody.id } },
           { query: GET_MY_PROFILE_TOTALS },
+          { query: GET_MY_CATCH_STATISTICS },
           `${getCatchesQueryName(CatchQuery.Waterbody, data?.createCatch.waterbody.id)}`,
           'MyCatches'
         ]

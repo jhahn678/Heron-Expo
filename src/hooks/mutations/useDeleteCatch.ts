@@ -2,6 +2,7 @@ import { useMutation, gql } from "@apollo/client";
 import { CatchQuery } from "../../types/Catch";
 import { getCatchesQueryName } from "../queries/useGetCatches";
 import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
+import { GET_MY_CATCH_STATISTICS } from "../queries/useGetUserCatchStatistics";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
 
 const DELETE_CATCH = gql`
@@ -32,6 +33,7 @@ export const useDeleteCatch = (id: number) => useMutation<Res, Vars>(DELETE_CATC
     refetchQueries: ({ data }) => [
         { query: GET_WATERBODY, variables: { id: data?.deleteCatch.waterbody.id } },
         { query: GET_MY_PROFILE_TOTALS },
+        { query: GET_MY_CATCH_STATISTICS },
         `${getCatchesQueryName(CatchQuery.Waterbody, data?.deleteCatch.waterbody.id)}`,
         'MyCatches'
     ]

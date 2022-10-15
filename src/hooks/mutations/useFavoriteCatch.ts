@@ -1,4 +1,5 @@
 import { ApolloError, gql, useMutation } from '@apollo/client'
+import { makeFragmentId } from '../../utils/makeFragmentId';
 
 const FAVORITE_CATCH = gql`
   mutation ToggleSaveLocation($id: Int!) {
@@ -32,12 +33,12 @@ export const useFavoriteCatch = (args?: Args) => {
           cache.writeFragment({
             id: `Catch:${variables.id}`,
             fragment: gql`
-                fragment UpdatedCatch${variables.id} on Catch{
-                    is_favorited
-                }
+              fragment Catch${makeFragmentId()} on Catch{
+                is_favorited
+              }
             `,
             data: {
-                is_favorited: data.toggleFavoriteCatch
+              is_favorited: data.toggleFavoriteCatch
             }
           })
         }
