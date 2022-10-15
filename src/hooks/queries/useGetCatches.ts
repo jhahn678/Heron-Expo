@@ -18,7 +18,6 @@ export const GET_CATCHES = (type: CatchQuery, id?: number | undefined) => gql`
       $sort: CatchSort
       $coordinates: Coordinates
       $within: Int
-      $mediaLimit: Int
     ) {
       catches(
         id: $id
@@ -42,7 +41,7 @@ export const GET_CATCHES = (type: CatchQuery, id?: number | undefined) => gql`
           fullname
           avatar
         }
-        media(limit: $mediaLimit) {
+        media{
           id
           url
         }
@@ -81,10 +80,9 @@ export interface Vars {
         longitude: number
     },
     within?: number
-    mediaLimit?: number
 }
 
-export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
+export const useGetCatches = ({ coordinates, ...args }: Vars) => {
 
     const [skip, setSkip] = useState(true)
 
@@ -111,7 +109,6 @@ export const useGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
       skip,
       variables: {
         ...args,
-        mediaLimit: mediaLimit ? mediaLimit : 1,
         coordinates: coordinates
           ? coordinates
           : storedCoordinates
@@ -134,7 +131,7 @@ export const catchMapResource = (resource: MapResource): CatchQuery => {
     }
 } 
 
-export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) => {
+export const useLazyGetCatches = ({ coordinates, ...args }: Vars) => {
 
   const storedCoordinates = useLocationStore(({ latitude, longitude }) => {
     if(!latitude || !longitude) return null;
@@ -144,7 +141,6 @@ export const useLazyGetCatches = ({ coordinates, mediaLimit, ...args }: Vars) =>
   return useLazyQuery<GetCatchesRes, Vars>(GET_CATCHES(args.type, args.id), {
     variables: {
       ...args,
-      mediaLimit: mediaLimit ? mediaLimit : 1,
       coordinates: coordinates 
         ? coordinates 
         : storedCoordinates 

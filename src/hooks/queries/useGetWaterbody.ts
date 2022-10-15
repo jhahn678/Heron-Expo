@@ -89,6 +89,7 @@ export const useGetWaterbodyFragment = () => {
               average_rating
               is_saved
               media {
+                id
                 url
               }
             }

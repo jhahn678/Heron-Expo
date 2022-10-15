@@ -1,4 +1,4 @@
-import { useApolloClient, useQuery, gql } from "@apollo/client";
+import { useApolloClient, useQuery, gql, useLazyQuery } from "@apollo/client";
 import { ILocation } from "../../types/Location";
 import { IMedia } from "../../types/Media";
 import { IUser } from "../../types/User";
@@ -58,9 +58,7 @@ interface Vars {
 
 export const useGetLocation = (variables: Vars) => useQuery<GetLocationRes, Vars>(GET_LOCATION, { variables })
 
-export const useLazyGetLocation = (variables: Vars) => {
-    return useQuery<GetLocationRes, Vars>(GET_LOCATION, { variables })
-}
+export const useLazyGetLocation = () => useLazyQuery<GetLocationRes, Vars>(GET_LOCATION)
 
 export const useGetLocationFragment = () => {
     const client = useApolloClient()

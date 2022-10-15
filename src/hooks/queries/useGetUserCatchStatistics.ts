@@ -73,7 +73,7 @@ export const useGetUserCatchStatistics = (id: number | null | undefined) => {
     })
 }
 
-const GET_MY_CATCH_STATISTICS = gql`
+export const GET_MY_CATCH_STATISTICS = gql`
     query Me {
         me {
             id

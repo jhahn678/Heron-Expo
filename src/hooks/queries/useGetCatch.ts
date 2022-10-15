@@ -59,8 +59,8 @@ export const useGetCatchQuery = (variables: Vars) => {
     return useQuery<GetCatchRes, Vars>(GET_CATCH, { variables })
 }
 
-export const useLazyGetCatch = (variables: Vars) => {
-  return useLazyQuery<GetCatchRes, Vars>(GET_CATCH, { variables });
+export const useLazyGetCatch = () => {
+  return useLazyQuery<GetCatchRes, Vars>(GET_CATCH);
 };
 
 export const useGetCatchFragment = () => {
@@ -70,7 +70,7 @@ export const useGetCatchFragment = () => {
     return client.readFragment<GetCatchRes["catch"]>({
       id: `Catch:${id}`,
       fragment: gql`
-        fragment CachedCatch on Catch {
+        fragment CachedCatch${id} on Catch {
           id
           geom
           title
@@ -90,6 +90,14 @@ export const useGetCatchFragment = () => {
           waterbody {
             id
             name
+          }
+          media{
+            id
+            url
+          }
+          map_image {
+            id
+            url
           }
         }
       `

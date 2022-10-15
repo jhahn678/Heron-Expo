@@ -14,7 +14,6 @@ export const GET_MY_CATCHES = gql`
         $date: DateRange
         $limit: Int, 
         $offset: Int, 
-        $mediaLimit: Int
     ) {
         me {
             id
@@ -46,7 +45,8 @@ export const GET_MY_CATCHES = gql`
                 rig
                 created_at
                 total_favorites
-                media(limit: $mediaLimit){
+                is_favorited
+                media{
                     id
                     url
                 }
@@ -65,6 +65,7 @@ export interface GetMyCatchesRes {
             user: Pick<IUser, 'id' | 'fullname' | 'avatar'>
             waterbody: Pick<IWaterbody, 'id' | 'name'>
             total_favorites: number
+            is_favorited: boolean
             media: Pick<IMedia, 'id' | 'url'>[]
             map_image: Pick<IMedia, 'id' | 'url'>
         })[]
@@ -88,7 +89,6 @@ interface Vars {
     },
     offset?: number
     limit?: number
-    mediaLimit?: number
 }
 
 export interface UseGetMyCatchesArgs {
@@ -119,7 +119,6 @@ export const useGetMyCatches = ({
     return useQuery<GetMyCatchesRes, Vars>(GET_MY_CATCHES, {
         variables: {
             ...args,
-            mediaLimit: 1,
             date: {
                 min: minDate,
                 max: maxDate
