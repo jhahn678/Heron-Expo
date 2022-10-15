@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useEffect, useState } from 'react'
 import { FlashList } from '@shopify/flash-list'
 import { StyleSheet, View, Dimensions } from 'react-native'
 import { ActivityIndicator, Card, Text } from 'react-native-paper'
@@ -9,34 +9,45 @@ import { useSearchParamStore } from '../../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import WaterbodySearchResult from '../../../components/lists/WaterbodySearch/WaterbodySearchResult'
 import globalStyles from '../../../globalStyles'
-
+import NoImagesUploaded from '../../../components/lists/shared/NoImagesUploaded'
+const { height } = Dimensions.get('screen')
+const limit = 20;
 
 const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'SearchResultsScreen'>) => {
 
   const { params } = route; 
   const { latitude, longitude } = useLocationStore()
+  const [refreshing, setRefreshing] = useState(false)
   const value = useSearchParamStore(store => store.value)
   const { classifications, adminOne, geoplace, sort, resetSearchParams } = useSearchParamStore()
 
-  const { data, loading, error, fetchMore } = useSearchWaterbodiesQuery({
+  const { data, loading, error, refetch, fetchMore } = useSearchWaterbodiesQuery({
     value, classifications, adminOne, sort, 
     longitude: geoplace ? geoplace.geom.coordinates[0] : longitude, 
     latitude: geoplace ? geoplace.geom.coordinates[1] : latitude
   })
 
-  const handleBack = () => {
-    resetSearchParams()
-    navigation.goBack()
-  }
+  useEffect(() => navigation.addListener('beforeRemove', resetSearchParams),[])
+
+  const handleBack = () => navigation.goBack()
   
-  const handleFetchMore = () => fetchMore({ 
-    variables: { offset: data?.waterbodies.length }
-  })
+  const handleFetchMore = () => {
+    if(data && data.waterbodies.length && data.waterbodies.length % limit === 0){
+      fetchMore({ variables: { offset: data?.waterbodies.length } })
+    }
+  }
+
+  const handleRefetch = () => {
+    setRefreshing(true)
+    refetch().then(() => setRefreshing(false))
+  }
 
   const navigateToWaterbody = (id: number) => () => {
     resetSearchParams()
     navigation.navigate('WaterbodyScreen', { id })
   }
+
+
 
   return (
     <View style={styles.container}>
@@ -53,12 +64,19 @@ const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'Sea
       { 
         data ? 
           <FlashList
-            data={data?.waterbodies}
+            data={data.waterbodies}
             estimatedItemSize={300}
             contentContainerStyle={styles.content}
-            ListEmptyComponent={() => (
-              <Text style={styles.empty}>0 results matched</Text>
-            )}
+            refreshing={refreshing}
+            onRefresh={handleRefetch}
+            onEndReachedThreshold={.5}
+            onEndReached={handleFetchMore}
+            ListEmptyComponent={
+              <NoImagesUploaded 
+                caption='0 Results Found' 
+                style={{ marginTop: height * .15 }}
+              />
+            }
             renderItem={({ item }) => (
               <WaterbodySearchResult 
                 key={item.id}
@@ -66,8 +84,6 @@ const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'Sea
                 onPress={navigateToWaterbody(item.id)}
               />
             )}
-            onEndReachedThreshold={.5}
-            onEndReached={handleFetchMore}
           />
         : loading ? <ActivityIndicator size={48}/>
         : error && <Text style={styles.empty}>There was an error</Text>
