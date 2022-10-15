@@ -9,8 +9,6 @@ import globalStyles from "../../globalStyles";
 import { useGetImageQuery } from "../../hooks/queries/useGetImage";
 import { useAuth } from "../../store/auth/useAuth";
 import { RootStackScreenProps } from "../../types/navigation";
-import * as FileSystem from 'expo-file-system'
-import * as MediaLibrary from 'expo-media-library'
 import { useSaveToGallery } from "../../hooks/utils/useSaveToGallery";
 const { width, height } = Dimensions.get('screen')
 
@@ -30,7 +28,7 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
     }
 
     const handleDelete = () => {}
-
+    
     const navigateProfile = () => {
         if(data) navigation.navigate('UserProfileScreen', { id: data.media.user.id })
     }
