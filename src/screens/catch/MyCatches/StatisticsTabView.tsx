@@ -22,7 +22,7 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
   const setWaterbody = useMyCatchesModalStore(store => store.setWaterbody)
   const setWaterbodyTotalsVisible = useMyCatchesModalStore(store => store.setWaterbodyTotalsVisible);
   const setSpeciesTotalsVisible = useMyCatchesModalStore(store => store.setSpeciesTotalsVisible);
-  const { data, error, loading } = useGetUserCatchStatistics(id)
+  const { data } = useGetUserCatchStatistics(id)
 
   const showWaterbodyTotals = () => {
     if(data && data.user.catch_statistics.total_waterbodies > 0){

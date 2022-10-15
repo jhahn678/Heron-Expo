@@ -12,6 +12,7 @@ import BoxLoader from "../../components/loaders/BoxLoader";
 import ListHeaderFilterBar from "../../components/lists/shared/ListHeaderFilterBar";
 import LocationsListEmpty from "../../components/lists/shared/LocationsListEmpty";
 import { theme } from "../../config/theme";
+import { useMapModalStore } from "../../store/modal/useMapModalStore";
 
 const limit = 16;
 const { width, height } = Dimensions.get('screen')
@@ -43,7 +44,6 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
     const navigateUser = (id: number) => () => 
       navigation.navigate('UserProfileScreen', { id })
 
-
     const navigateMapLocations = () => {
       let resource = MapResource.WaterbodyLocations
       switch(type){
@@ -60,8 +60,9 @@ const LocationListScreen = ({ navigation, route }: RootStackScreenProps<'Locatio
       navigation.navigate('ViewMapScreen', { id, resource })
     }
 
-    const navigateMap = (id: number) => () => 
+    const navigateMap = (id: number) => () => {
       navigation.navigate('ViewMapScreen', { resource: MapResource.Location, id })
+    }
 
     const navigateWaterbody = (id: number) => () => 
       navigation.navigate('MainTabs', {

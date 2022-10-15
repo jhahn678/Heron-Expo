@@ -1,5 +1,5 @@
-import React from 'react'
-import { ScrollView, StyleSheet, View } from 'react-native'
+import React, { useState } from 'react'
+import { RefreshControl, ScrollView, StyleSheet, View } from 'react-native'
 import { RootStackScreenProps } from '../../../types/navigation'
 import HeadingSection from './sections/HeadingSection'
 import BannerSection from './sections/BannerSection'
@@ -12,10 +12,14 @@ import CatchesNearby from './sections/CatchesNearby'
 const ViewLocationScreen = ({ navigation, route }: RootStackScreenProps<'ViewLocationScreen'>) => {
     
     const { params: { id } } = route;
-    const { data } = useGetLocation({ id })
+    const { data, refetch } = useGetLocation({ id })
+    const [refetching, setRefetching] = useState(false)
+    const handleRefetch = () => { setRefetching(true); refetch().then(() => setRefetching(false)) }
 
     return (
-        <ScrollView style={styles.container}>
+        <ScrollView style={styles.container} refreshControl={
+            <RefreshControl refreshing={refetching} onRefresh={handleRefetch}/>
+        }>
             <BannerSection 
                 id={id}
                 navigation={navigation} 

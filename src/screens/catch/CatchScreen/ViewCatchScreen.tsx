@@ -1,5 +1,5 @@
-import React from 'react'
-import { ScrollView, StyleSheet } from 'react-native'
+import React, { useState } from 'react'
+import { RefreshControl, ScrollView, StyleSheet } from 'react-native'
 import { useGetCatchQuery } from '../../../hooks/queries/useGetCatch';
 import { RootStackScreenProps } from '../../../types/navigation'
 import BannerSection from './sections/BannerSection';
@@ -10,11 +10,14 @@ import MapSection from './sections/MapSection';
 const ViewCatchScreen = ({ navigation, route }: RootStackScreenProps<'ViewCatchScreen'>) => {
 
   const { params: { id }} = route;
-
-  const { data } = useGetCatchQuery({ id })
+  const { data, refetch } = useGetCatchQuery({ id })
+  const [refetching, setRefetching] = useState(false)
+  const handleRefetch = () => { setRefetching(true); refetch().then(() => setRefetching(false)) }
 
   return (
-    <ScrollView style={styles.container}>
+    <ScrollView style={styles.container} refreshControl={
+      <RefreshControl refreshing={refetching} onRefresh={handleRefetch}/>
+    }>
       <BannerSection 
         id={id} user={data?.catch.user.id}
         navigation={navigation} 

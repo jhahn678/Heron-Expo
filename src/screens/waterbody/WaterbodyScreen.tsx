@@ -1,5 +1,5 @@
 import { ExploreStackScreenProps } from '../../types/navigation';
-import { StyleSheet, ScrollView, View } from 'react-native';
+import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 import { useGetWaterbody } from '../../hooks/queries/useGetWaterbody';
 import ReviewsSection from './sections/ReviewsSection';
 import MapSection from './sections/MapSection';
@@ -14,7 +14,7 @@ import ReviewImagesBottomSheet from '../../components/modals/review/ReviewImages
 import Backdrop from '../../components/modals/Backdrop';
 import { useReviewModalStore } from '../../store/mutations/useReviewModalStore';
 import { useImageStore } from '../../store/image/useImageStore';
-import React, { useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useCreateWaterbodyReview } from '../../hooks/mutations/useCreateWaterbodyReview';
 import { useModalStore } from '../../store/modal/useModalStore';
 import { ErrorType } from '../../utils/mapErrorTypeToDetails';
@@ -31,9 +31,9 @@ const handleError = (error: ApolloError) => error.message
 const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'WaterbodyScreen'>): JSX.Element => {
 
     const { params: { id } } = route;
-
     const { data, refetch } = useGetWaterbody(id)
 
+    const [refreshing, setRefreshing] = useState(false)
     const uploadVisible = useBottomSheetStore(store => store.waterbodyUpload)
     const setUploadVisible = useBottomSheetStore(store => store.setWaterbodyUpload)
     const setLoading = useModalStore(store => store.setLoading)
@@ -46,18 +46,22 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     const images = useImageStore(store => store.images)
     const resetReview = useReviewModalStore(store => store.reset)
     const clearImages = useImageStore(store => store.clearImages)
+    const getValues = useReviewModalStore(store => store.getValues)
     const handleResetReview = () => { resetReview(); clearImages() }
+    useEffect(() => navigation.addListener('blur', handleResetReview),[])
 
     const uploadImages = useUploadImages()
     const [createReview] = useCreateWaterbodyReview()
     const [saveImages] = useAddWaterbodyMedia(id)
 
-    const getValues = useReviewModalStore(store => store.getValues)
+    const handleRefetch = () => {
+        setRefreshing(true);
+        refetch().then(() => setRefreshing(false))
+    }
 
     const handleSubmit = async () => {
         const input = getValues();
-        if(!input) return;
-        setLoading(true)
+        if(!input) return; setLoading(true)
         if(images.length > 0){
             const pending = images.map(({ uri, id }) => ({ uri, id }))
             const res = await uploadImages(pending)
@@ -73,12 +77,18 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
         })
         setLoading(false)
     }
-
-    useEffect(() => navigation.addListener('blur', handleResetReview), [])
   
     return (
          <View style={{ height: '100%' }}>
-            <ScrollView style={styles.container}>
+            <ScrollView 
+                style={styles.container} 
+                refreshControl={
+                    <RefreshControl 
+                        refreshing={refreshing} 
+                        onRefresh={handleRefetch}
+                    />
+                }
+            >
                 <BannerSection 
                     id={id} 
                     navigation={navigation} 

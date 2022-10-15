@@ -25,7 +25,7 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
     maxWeight: store.maxWeight,
   }))
 
-  const { data, loading, error, fetchMore, refetch } = useGetMyCatches({ ...filters, limit })
+  const { data, fetchMore, refetch } = useGetMyCatches({ ...filters, limit })
 
   const [refetching, setRetching] = useState(false)
   
@@ -63,7 +63,7 @@ const CatchesTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesList'
             }
             renderItem={({ item }) => (
               <CatchesListItem
-                data={{ ...item, is_favorited: false }}
+                data={item}
                 navigateToCatch={navigateToCatch(item.id)}
                 navigateToMap={navigateToMap(item.id)}
                 navigateToUser={navigateToUser(item.user.id)}
