@@ -6,7 +6,7 @@ import { theme } from "../../config/theme";
 const { height, width } = Dimensions.get('screen')
 
 interface Props {
-    loaderStyle: StyleProp<ViewStyle>
+    loaderStyle?: StyleProp<ViewStyle>
 }
 
 const LoadingBackdrop = ({ loaderStyle }: Props) => {
