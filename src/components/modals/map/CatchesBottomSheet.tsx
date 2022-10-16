@@ -5,33 +5,36 @@ import React, { useEffect, useState } from "react";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { useGetCatchFragment, GetCatchRes } from "../../../hooks/queries/useGetCatch";
 import { RootStackScreenProps } from "../../../types/navigation";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import globalStyles from "../../../globalStyles";
 import Avatar from "../../users/Avatar";
 import dayjs from "../../../config/dayjs";
 import ShareButton from "../../buttons/ShareButton";
-import RecommendLocationButton from "../../buttons/RecommendLocationButton";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
 import { theme } from "../../../config/theme";
+import { MediaType } from "../../../types/Media";
+import LikeButton, { LikeType } from "../../buttons/LikeButton";
 
 const { width } = Dimensions.get('screen')
 
 const CatchesBottomSheet = () => {
   
+  const focused = useIsFocused()
   const navigation = useNavigation<RootStackScreenProps<'ViewMapScreen'>['navigation']>();
   const [data, setData] = useState<GetCatchRes["catch"] | null>(null);
   const getFromCache = useGetCatchFragment();
   const visible = useMapModalStore((store) => store.catchVisible);
   const catchId = useMapModalStore((store) => store.catchId);
   const dismissable = useMapModalStore(store => store.catchDismissable)
-  const onClose = useMapModalStore(store => () => store.setCatch())
+  const setCatch = useMapModalStore(store => store.setCatch)
+  const onClose = () => setCatch()
 
-  const navigateToImage = (uri: string) => () =>
-    navigation.navigate("ViewImageScreen", { uri });
+  const navigateToImage = (id: number, uri: string) => () =>
+    navigation.navigate("ViewImageScreen", { id, uri, type: MediaType.Catch });
 
   const navigateToUser = () => {
-    if (data) navigation.navigate("UserProfileScreen", { id: data.user.id });
+    if(data) navigation.navigate("UserProfileScreen", { id: data.user.id });
   }
 
   const navigateToCatch = () => {
@@ -40,8 +43,7 @@ const CatchesBottomSheet = () => {
 
   const navigateToWaterbody = () => {
     if(data) navigation.navigate('MainTabs', { 
-      screen: 'ExploreStack', 
-      params: { 
+      screen: 'ExploreStack', params: { 
         screen: 'WaterbodyScreen', 
         params: { id: data.waterbody.id } 
       }
@@ -51,7 +53,7 @@ const CatchesBottomSheet = () => {
   useEffect(() => {
     if (!catchId) setData(null);
     if (catchId) setData(getFromCache(catchId));
-  }, [catchId]);
+  }, [catchId, focused]);
 
   if (!visible) return null;
 
@@ -77,9 +79,9 @@ const CatchesBottomSheet = () => {
 
       <View style={[globalStyles.frac, { marginTop: 20 }, styles.hpadding]}>
         <Avatar
+          size={24}
           fullname={data?.user.fullname}
           uri={data?.user.avatar}
-          size={24}
           onPress={navigateToUser}
         />
         <Text style={styles.name} onPress={navigateToUser}>
@@ -95,11 +97,10 @@ const CatchesBottomSheet = () => {
         {data?.media && data.media.length > 0 ? (
           data.media.slice(0, 2).map(({ id, url }) => (
             <Pressable
-              key={id}
-              style={styles.image}
-              onPress={navigateToImage(url)}
+              key={id} style={styles.image}
+              onPress={navigateToImage(id, url)}
             >
-              <Image source={{ uri: url }} />
+              <Image source={{ uri: url }} style={{ flex: 1 }}/>
             </Pressable>
           ))
         ) : (
@@ -110,14 +111,18 @@ const CatchesBottomSheet = () => {
       <View style={styles.footer}>
         <View style={styles.footerButton}>
           <ShareButton
-            shareType={ShareType.Location}
-            id={catchId}
             mode="none"
+            id={catchId}
+            shareType={ShareType.Catch}
           />
         </View>
         <View style={styles.fdivider}/>
         <View style={styles.footerButton}>
-          <RecommendLocationButton active={data?.is_favorited} id={data?.id} />
+          <LikeButton 
+            id={data?.id} 
+            type={LikeType.Catch}
+            active={data?.is_favorited}
+          />
         </View>
       </View>
     </BottomSheet>
@@ -163,6 +168,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#e0e0e0",
     width: width * 0.5 - 20,
     borderRadius: 12,
+    overflow: 'hidden'
   },
   divider: {
     width: 1,

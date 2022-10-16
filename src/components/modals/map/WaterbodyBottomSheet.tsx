@@ -10,6 +10,7 @@ import { MediaSource, RootStackScreenProps } from "../../../types/navigation";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import IceFishing from "../../svg/IceFishing";
 import FishIcon from "../../icons/FishIcon";
+import { MediaType } from "../../../types/Media";
 
 const { width } = Dimensions.get("window");
 
@@ -20,8 +21,9 @@ const WaterbodyBottomSheet = () => {
     const visible = useMapModalStore(store => store.waterbodyVisible)
     const waterbody = useMapModalStore(store => store.waterbodyId)
 
-    const navigateToImage = (uri: string) => () => navigation.navigate('ViewImageScreen', { uri })
-
+    const navigateToImage = (id: number, uri: string) => () => navigation
+      .navigate('ViewImageScreen', { id, uri, type: MediaType.Waterbody })
+    
     const navigateToMedia = () => {
       if(waterbody) navigation.navigate('MediaGridScreen', {
         source: MediaSource.Waterbody,
@@ -31,8 +33,8 @@ const WaterbodyBottomSheet = () => {
     }
 
     useEffect(() => {
-        if(!waterbody) setData(null)
-        if(waterbody) setData(getFromCache(waterbody))
+      if(!waterbody) setData(null)
+      if(waterbody) setData(getFromCache(waterbody))
     },[waterbody])
 
     if(!visible) return null;
@@ -64,8 +66,6 @@ const WaterbodyBottomSheet = () => {
           <BottomSheetFlatList
             horizontal
             data={data.media}
-            snapToInterval={width * 0.5}
-            overScrollMode="never"
             contentContainerStyle={{ marginTop: 24 }}
             ListFooterComponent={
               <Pressable style={styles.footer} onPress={navigateToMedia}>
@@ -74,11 +74,11 @@ const WaterbodyBottomSheet = () => {
               </Pressable>
             }
             showsHorizontalScrollIndicator={false}
-            renderItem={({ item, index }) => (
-              <Pressable onPress={navigateToImage(item.url)}>
+            renderItem={({ item }) => (
+              <Pressable onPress={navigateToImage(item.id, item.url)}>
                 <Image
                   source={{ uri: item.url }}
-                  style={(index + 1) % 2 === 0 ? styles.right : styles.left}
+                  style={styles.image}
                 />
               </Pressable>
             )}
@@ -118,23 +118,15 @@ const styles = StyleSheet.create({
     marginRight: 4,
     fontWeight: '500'
   },
-  left: {
+  image: {
     height: width * 0.5 - 12,
-    width: width * 0.5 - 12,
+    width: width * 0.5 - 18,
     borderRadius: 12,
-    marginLeft: 8,
-    marginRight: 4,
-  },
-  right: {
-    height: width * 0.5 - 12,
-    width: width * 0.5 - 12,
-    borderRadius: 12,
-    marginLeft: 4,
-    marginRight: 8,
+    marginLeft: 12,
   },
   footer: {
     height: width * 0.5 - 12,
-    width: width * 0.5 - 12,
+    width: width * 0.4 - 12,
     flexDirection: 'row',
     justifyContent: 'center',
     alignItems: 'center'

@@ -5,25 +5,27 @@ import React, { useEffect, useState } from "react";
 import { useMapModalStore } from "../../../store/modal/useMapModalStore";
 import { GetLocationRes, useGetLocationFragment } from "../../../hooks/queries/useGetLocation";
 import { RootStackScreenProps } from "../../../types/navigation";
-import { useNavigation } from "@react-navigation/native";
+import { useIsFocused, useNavigation } from "@react-navigation/native";
 import { useAuth } from "../../../store/auth/useAuth";
 import Avatar from "../../users/Avatar";
 import dayjs from "../../../config/dayjs";
 import globalStyles from "../../../globalStyles";
 import SaveLocationButton from "../../buttons/SaveLocationButton";
-import RecommendLocationButton from "../../buttons/RecommendLocationButton";
 import ShareButton from "../../buttons/ShareButton";
 import { ShareType } from "../../../hooks/utils/useShareContent";
 import NoImagesUploaded from "../../lists/shared/NoImagesUploaded";
 import PrivacyLabel from "../../locations/PrivacyLabel";
 import { theme } from "../../../config/theme";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import LikeButton, { LikeType } from "../../buttons/LikeButton";
+import { MediaType } from "../../../types/Media";
 
 const { width } = Dimensions.get('window')
 
 const LocationsBottomSheet = () => {
 
   const { id } = useAuth()
+  const focused = useIsFocused()
   const navigation = useNavigation<RootStackScreenProps<'ViewMapScreen'>['navigation']>();
   const [data, setData] = useState<GetLocationRes['location'] | null>(null);
   const getFromCache = useGetLocationFragment();
@@ -32,8 +34,8 @@ const LocationsBottomSheet = () => {
   const dismissable = useMapModalStore(store => store.locationDismissable)
   const onClose = useMapModalStore(store => () => store.setLocation())
 
-  const navigateToImage = (uri: string) => () =>
-    navigation.navigate("ViewImageScreen", { uri });
+  const navigateToImage = (id: number, uri: string) => () =>
+    navigation.navigate("ViewImageScreen", { id, uri, type: MediaType.Location });
 
   const navigateToLocation = () => {
     if(!location) return;
@@ -48,7 +50,7 @@ const LocationsBottomSheet = () => {
   useEffect(() => {
     if (!location) setData(null);
     if (location) setData(getFromCache(location));
-  }, [location]);
+  }, [location, focused]);
 
   if (!visible) return null;
 
@@ -93,7 +95,7 @@ const LocationsBottomSheet = () => {
             <Pressable
               key={`${id}${url}`}
               style={styles.image}
-              onPress={navigateToImage(url)}
+              onPress={navigateToImage(id, url)}
             >
               <Image source={{ uri: url }} style={{ flex: 1 }} resizeMode='cover'/>
             </Pressable>
@@ -132,7 +134,11 @@ const LocationsBottomSheet = () => {
         </View>
         <View style={styles.fdivider}/>
         <View style={styles.footerButton}>
-          <RecommendLocationButton active={data?.is_favorited} id={data?.id}/>
+          <LikeButton 
+            id={data?.id}
+            type={LikeType.Location}
+            active={data?.is_favorited}
+          />
         </View>
       </View>
     </BottomSheet>
@@ -197,7 +203,8 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 12,
     alignSelf: 'flex-end',
-    paddingVertical: 4
+    paddingVertical: 4,
+    marginRight: 8
   },
   footer: {
     flexDirection: "row",
