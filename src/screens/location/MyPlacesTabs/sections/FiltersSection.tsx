@@ -7,6 +7,7 @@ import { Privacy } from "../../../../types/Location";
 import { dateRangeToLabel } from "../../../../utils/conversions/dateRangeToLabel";
 import { locationSortToLabel } from "../../../../utils/conversions/locationSortToLabel";
 import { privacyToLabel } from "../../../../utils/conversions/privacyToLabel";
+import { makeFragmentId } from "../../../../utils/makeFragmentId";
 
 const privacyArrayToLabel = (value: Privacy[]) => {
   if(value.length === 1) return privacyToLabel(value[0]);
@@ -15,8 +16,8 @@ const privacyArrayToLabel = (value: Privacy[]) => {
 }
 
 const WATERBODY_NAME = gql`
-    fragment WaterbodyName on Waterbody{
-        name
+    fragment WaterbodyName${makeFragmentId()} on Waterbody{
+      name
     }
 `
 
@@ -33,6 +34,7 @@ const FiltersSection = () => {
   const setDateVisible = useMyLocationsModalStore(store => store.setDateVisible)
   const setWaterbodyVisible = useMyLocationsModalStore(store => store.setWaterbodyVisible)
   const setPrivacyVisible = useMyLocationsModalStore(store => store.setPrivacyVisible)
+  const reset = useMyLocationsModalStore(store => store.reset)
 
   const [dateLabel, setDateLabel] = useState('Date')
   useEffect(() => setDateLabel(dateRangeToLabel(minDate, maxDate)),[minDate, maxDate])
@@ -59,6 +61,13 @@ const FiltersSection = () => {
       contentContainerStyle={styles.container}
       showsHorizontalScrollIndicator={false}
       >
+        { (minDate || maxDate || waterbody || privacy) &&
+          <Chip 
+            onPress={reset} 
+            style={styles.chip} 
+            icon='filter-variant-remove'
+          >Clear All</Chip>
+        }
         <Chip 
           onPress={setDateVisible} 
           style={styles.chip} 

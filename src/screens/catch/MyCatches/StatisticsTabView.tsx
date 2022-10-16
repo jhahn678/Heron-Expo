@@ -1,7 +1,7 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import dayjs from "../../../config/dayjs";
 import { useAuth } from "../../../store/auth/useAuth";
-import { Pressable, StyleSheet, Text, View } from "react-native";
+import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { MyCatchesTabsScreenProps } from "../../../types/navigation";
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
@@ -17,12 +17,15 @@ import GraphIcon from "../../../components/icons/GraphIcon";
 const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesStatistics'>) => {
 
   const id = useAuth(state => state.id)
-
+  const [refreshing, setRefreshing] = useState(false)
   const setSpecies = useMyCatchesModalStore(store => store.setSpecies)
   const setWaterbody = useMyCatchesModalStore(store => store.setWaterbody)
   const setWaterbodyTotalsVisible = useMyCatchesModalStore(store => store.setWaterbodyTotalsVisible);
   const setSpeciesTotalsVisible = useMyCatchesModalStore(store => store.setSpeciesTotalsVisible);
-  const { data } = useGetUserCatchStatistics(id)
+  const hideAllModals = () => { setWaterbodyTotalsVisible(false); setSpeciesTotalsVisible(false) }
+  const { data, refetch } = useGetUserCatchStatistics(id)
+
+  const handleRefresh = () => { setRefreshing(true); refetch().then(() => setRefreshing(false)) }
 
   const showWaterbodyTotals = () => {
     if(data && data.user.catch_statistics.total_waterbodies > 0){
@@ -56,73 +59,79 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
     navigation.jumpTo('MyCatchesList')
   }
 
+  useEffect(() => navigation.addListener('blur', hideAllModals),[])
+
   return (
-    <View style={styles.container}>
-      <Pressable style={styles.row} onPress={navigateTotalCatches}>
-        <View style={globalStyles.frac}>
-          <CatchIcon size={32}/>
-          <View style={styles.text}>
-            <Text style={styles.label}>Total Catches</Text>
-            <Text style={styles.value}>{data?.user.catch_statistics.total_catches}</Text>
+    <View style={{ flex: 1 }}>
+      <ScrollView style={styles.container} refreshControl={
+        <RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>
+      }>
+        <Pressable style={styles.row} onPress={navigateTotalCatches}>
+          <View style={globalStyles.frac}>
+            <CatchIcon size={32}/>
+            <View style={styles.text}>
+              <Text style={styles.label}>Total Catches</Text>
+              <Text style={styles.value}>{data?.user.catch_statistics.total_catches}</Text>
+            </View>
           </View>
-        </View>
-        <Icon name='chevron-right' size={28}/>
-      </Pressable>
-      <Pressable onPress={navigateBiggestCatch} style={styles.row}>
-        <View style={globalStyles.frac}>
-          <TrophyIcon size={32}/>
-          <View style={styles.text}>
-            <Text style={styles.label}>Biggest Catch</Text>
-            <Text style={styles.value}>
-              {data?.user.catch_statistics.largest_catch ?
-                `${dayjs(data.user.catch_statistics.largest_catch.created_at).fromNow()}`:
-                '—'
-              }
-            </Text>
+          <Icon name='chevron-right' size={28}/>
+        </Pressable>
+        <Pressable onPress={navigateBiggestCatch} style={styles.row}>
+          <View style={globalStyles.frac}>
+            <TrophyIcon size={32}/>
+            <View style={styles.text}>
+              <Text style={styles.label}>Biggest Catch</Text>
+              <Text style={styles.value}>
+                {data?.user.catch_statistics.largest_catch ?
+                  `${dayjs(data.user.catch_statistics.largest_catch.created_at).fromNow()}`:
+                  '—'
+                }
+              </Text>
+            </View>
           </View>
-        </View>
-        <Icon name='chevron-right' size={28}/>
-      </Pressable>
-      <Pressable style={styles.row} onPress={showSpeciesTotals}>
-        <View style={globalStyles.frac}>
-          <FishAltIcon size={32}/>
-          <View style={styles.text}>
-            <Text style={styles.label}>Total Species</Text>
-            <Text style={styles.value}>{data?.user.catch_statistics.total_species}</Text>
+          <Icon name='chevron-right' size={28}/>
+        </Pressable>
+        <Pressable style={styles.row} onPress={showSpeciesTotals}>
+          <View style={globalStyles.frac}>
+            <FishAltIcon size={32}/>
+            <View style={styles.text}>
+              <Text style={styles.label}>Total Species</Text>
+              <Text style={styles.value}>{data?.user.catch_statistics.total_species}</Text>
+            </View>
           </View>
-        </View>
-        <Icon name='chevron-right' size={28}/>
-      </Pressable>
-      <Pressable style={styles.row} onPress={navigateTopSpecies}>
-        <View style={globalStyles.frac}>
-          <HoldingCatchIcon size={28}/>
-          <View style={styles.text}>
-            <Text style={styles.label}>Top Species</Text>
-            <Text style={styles.value}>{data?.user.catch_statistics.top_species || '—'}</Text>
+          <Icon name='chevron-right' size={28}/>
+        </Pressable>
+        <Pressable style={styles.row} onPress={navigateTopSpecies}>
+          <View style={globalStyles.frac}>
+            <HoldingCatchIcon size={28}/>
+            <View style={styles.text}>
+              <Text style={styles.label}>Top Species</Text>
+              <Text style={styles.value}>{data?.user.catch_statistics.top_species || '—'}</Text>
+            </View>
           </View>
-        </View>
-        <Icon name='chevron-right' size={28}/>
-      </Pressable>
-      <Pressable style={styles.row} onPress={showWaterbodyTotals}>
-        <View style={globalStyles.frac}>
-          <GraphIcon size={28}/>
-          <View style={styles.text}>
-            <Text style={styles.label}>Total Fisheries</Text>
-            <Text style={styles.value}>{data?.user.catch_statistics.total_waterbodies}</Text>
+          <Icon name='chevron-right' size={28}/>
+        </Pressable>
+        <Pressable style={styles.row} onPress={showWaterbodyTotals}>
+          <View style={globalStyles.frac}>
+            <GraphIcon size={28}/>
+            <View style={styles.text}>
+              <Text style={styles.label}>Total Fisheries</Text>
+              <Text style={styles.value}>{data?.user.catch_statistics.total_waterbodies}</Text>
+            </View>
           </View>
-        </View>
-        <Icon name='chevron-right' size={28}/>
-      </Pressable>
-      <Pressable style={styles.row} onPress={navigateTopWaterbody}>
-        <View style={globalStyles.frac}>
-          <RibbonIcon size={32}/>
-          <View style={styles.text}>
-            <Text style={styles.label}>Top Fishery</Text>
-            <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody?.name}</Text>
+          <Icon name='chevron-right' size={28}/>
+        </Pressable>
+        <Pressable style={styles.row} onPress={navigateTopWaterbody}>
+          <View style={globalStyles.frac}>
+            <RibbonIcon size={32}/>
+            <View style={styles.text}>
+              <Text style={styles.label}>Top Fishery</Text>
+              <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody?.name}</Text>
+            </View>
           </View>
-        </View>
-        <Icon name='chevron-right' size={28}/>
-      </Pressable>
+          <Icon name='chevron-right' size={28}/>
+        </Pressable>
+      </ScrollView>
     </View>
   );
 };

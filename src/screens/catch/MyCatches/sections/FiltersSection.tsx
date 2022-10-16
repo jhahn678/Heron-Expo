@@ -32,6 +32,7 @@ const FiltersSection = () => {
     const setLengthVisible = useMyCatchesModalStore(store => store.setLengthVisible)
     const setSpeciesVisible = useMyCatchesModalStore(store => store.setSpeciesVisible)
     const setWaterbodyVisible = useMyCatchesModalStore(store => store.setWaterbodyVisible)
+    const reset = useMyCatchesModalStore(store => store.reset)
 
     const [dateLabel, setDateLabel] = useState('Date')
     useEffect(() => setDateLabel(dateRangeToLabel(minDate, maxDate)),[minDate, maxDate])
@@ -60,6 +61,13 @@ const FiltersSection = () => {
         contentContainerStyle={styles.container}
         showsHorizontalScrollIndicator={false} 
         >
+            { (minLength || maxLength || minWeight || maxWeight || minDate || maxDate || waterbody || species) &&
+                <Chip 
+                    onPress={reset} 
+                    style={styles.chip} 
+                    icon='filter-variant-remove'
+                >Clear All</Chip>
+            }
             <Chip 
                 onPress={setDateVisible} 
                 style={styles.chip} 

@@ -20,14 +20,13 @@ const MyLocationsTabView = ({ navigation }: MyPlacesTabsScreenProps<'MyLocations
         privacy: store.privacy
     }))
 
-    const { data, loading, refetch, fetchMore } = useGetMyLocations({ ...filters, limit })
+    const { data, refetch, fetchMore } = useGetMyLocations({ ...filters, limit })
 
     const [refetching, setRefetching] = useState(false)
     const handleRefetch = () => { setRefetching(true); refetch().then(() => setRefetching(false)) }
 
     const handleFetchMore = () => {
-        if(!data || data.me.locations.length === 0) return;
-        if(data.me.locations.length % limit === 0){
+        if(data && data.me.locations.length && data.me.locations.length % limit === 0){
             fetchMore({ variables: { offset: data.me.locations.length } })
         }
     }
