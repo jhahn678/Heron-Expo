@@ -64,7 +64,7 @@ export const useMyLocationsModalStore = create<LocationsModalStore>((set, get) =
         dateVisible: false,
         waterbody: undefined,
         waterbodyVisible: false,
-        privacy: [Privacy.Public, Privacy.Private, Privacy.Friends],
+        privacy: undefined,
         privacyVisible: false,
         sort: LocationSort.CreatedAtNewest,
         sortVisible: false,
