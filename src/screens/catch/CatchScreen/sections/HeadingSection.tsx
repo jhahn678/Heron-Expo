@@ -44,12 +44,14 @@ const HeadingSection = ({ navigation, data, id }: Props) => {
         { data ? 
           <>
             <Title style={styles.title}>{data.title || "Untitled Catch"}</Title>
-            <Pressable style={globalStyles.baseline} onPress={navigateToWaterbody}>
-              <Text style={styles.at}>at</Text>
-              <Text style={styles.place} numberOfLines={1}>
-                {data.waterbody.name}
-              </Text>
-            </Pressable>
+            { data.waterbody &&
+              <Pressable style={globalStyles.baseline} onPress={navigateToWaterbody}>
+                <Text style={styles.at}>at</Text>
+                <Text style={styles.place} numberOfLines={1}>
+                  {data.waterbody.name}
+                </Text>
+              </Pressable>
+            }
           </> :
           <>
             <RectangleLoader height={32} width={300} style={{ marginLeft: 16 }}/>
@@ -90,8 +92,12 @@ const HeadingSection = ({ navigation, data, id }: Props) => {
         }
         <View style={styles.actionbar}>
           <LikeButton active={data?.is_favorited} id={id} type={LikeType.Catch} />
-          <View style={styles.bardivider}/>
-          <Icon name="map" size={24} color={theme.colors.primary} onPress={navigateToMap}/>
+          { data?.waterbody &&
+            <>
+              <View style={styles.bardivider}/>
+              <Icon name="map" size={24} color={theme.colors.primary} onPress={navigateToMap}/>
+            </>
+          }
           <View style={styles.bardivider} />
           <ShareButton shareType={ShareType.Catch} id={id} mode="none" />
         </View>

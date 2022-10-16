@@ -13,12 +13,14 @@ import WaterbodyTotalsBottomSheet from '../components/modals/myCatches/Waterbody
 import SpeciesTotalsBottomSheet from '../components/modals/myCatches/SpeciesTotalsBottomSheet';
 import { FAB } from 'react-native-paper';
 import FishIcon from '../components/icons/FishIcon';
+import { useMyCatchesModalStore } from '../store/modal/useMyCatchesModalStore';
 
 const Tab = createMaterialTopTabNavigator<MyCatchesTabsParams>();
 
 const MyCatchesTabs = ({ navigation }: BottomTabsScreenProps<'MyCatchesScreen'>) => {
 
   const handleNewCatch = () => navigation.navigate('NewCatchScreen')
+  const waterbodyTotalsVisible = useMyCatchesModalStore(store => store.waterbodyTotalsVisible)
 
   return (
     <View style={styles.container}>

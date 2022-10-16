@@ -45,12 +45,8 @@ const ContactsListScreen = ({ navigation, route }: RootStackScreenProps<'Contact
 
     const handleFetchMore = async () => {
         if(data.length < limit || data.length % limit !== 0 || !totals.data) return;
-        switch(type){
-            case FollowType.Followers:
-                return (await followers.fetchMore({ variables: { offset: data.length }}))
-            case FollowType.Following:
-                return (await following.fetchMore({ variables: { offset: data.length }}))
-        }
+        if(type === FollowType.Followers) await followers.fetchMore({ variables: { offset: data.length }})
+        if(type === FollowType.Following) await following.fetchMore({ variables: { offset: data.length }})
     }
 
     return (
@@ -59,14 +55,14 @@ const ContactsListScreen = ({ navigation, route }: RootStackScreenProps<'Contact
                 <View style={globalStyles.frac}>
                     <IconButton icon="arrow-left" onPress={navigation.goBack} />
                     <Title style={styles.title}>
-                        { FollowType.Followers ? "Followers" : "Following" }
+                        { type === FollowType.Followers ? "Followers" : "Following" }
                     </Title>
                 </View>
                 <Title style={styles.total}>
-                    { totals.data && FollowType.Followers ? 
+                    { totals.data && (type === FollowType.Followers ? 
                         `${totals.data?.user.total_followers} total` : 
                         `${totals.data?.user.total_following} total`
-                    }
+                    )}
                 </Title>
             </Surface>
             <FlashList
