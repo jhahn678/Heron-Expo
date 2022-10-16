@@ -23,6 +23,7 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
     const { params: { title, source, id, total } } = route;
 
     const [media, setMedia] = useState<Data>([])
+    const [refreshing, setRefreshing] = useState(false)
     const [loading, setLoading] = useState(true)
     const [allowAdd, setAllowAdd] = useState(false)
     const setUploadVisible = useBottomSheetStore(store => store.setMediaGridUpload)
@@ -33,6 +34,7 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
         data: waterbodyMedia, 
         loading: waterbodyLoading,
         fetchMore: fetchMoreWaterbodyMedia,
+        refetch: refetchWaterbodyMedia
     } = useGetWaterbodyMedia({ 
         id, limit, 
         skip: source !== MediaSource.Waterbody, 
@@ -43,6 +45,7 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
         data: userMedia, 
         loading: userLoading,
         fetchMore: fetchMoreUserMedia,
+        refetch: refetchUserMedia
     } = useGetUserMedia({ id, limit, skip: source !== MediaSource.User })
 
     useEffect(() => {
@@ -72,6 +75,13 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
             case MediaSource.Waterbody:
                 return fetchMoreWaterbodyMedia({ variables: { offset: media.length } })
         }
+    }
+
+    const handleRefresh = async () => {
+        setRefreshing(true)
+        if(source === MediaSource.User) await refetchUserMedia()
+        if(source === MediaSource.Waterbody) await refetchWaterbodyMedia()
+        setRefreshing(false)
     }
 
     const navigateImage = (id: number) => () => navigation
@@ -115,6 +125,8 @@ const MediaGridScreen = ({ navigation, route }: RootStackScreenProps<'MediaGridS
                     contentContainerStyle={{ paddingTop: width * .01 }}
                     onEndReachedThreshold={.3}
                     onEndReached={handleFetchMore}
+                    refreshing={refreshing}
+                    onRefresh={handleRefresh}
                     ListEmptyComponent={
                         <LocationsListEmpty 
                             scale={.8} 

@@ -10,13 +10,15 @@ import { useGetImageQuery } from "../../hooks/queries/useGetImage";
 import { useAuth } from "../../store/auth/useAuth";
 import { RootStackScreenProps } from "../../types/navigation";
 import { useSaveToGallery } from "../../hooks/utils/useSaveToGallery";
+import { useModalStore } from "../../store/modal/useModalStore";
+import { useDeleteImage } from "../../hooks/mutations/useDeleteImage";
 const { width, height } = Dimensions.get('screen')
 
 const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageScreen'>) => {
 
     const { params: { id, type, title, uri } } = route;
     const { data, loading } = useGetImageQuery({ id, type })
-
+    const [deleteImage] = useDeleteImage()
     const { saveToGallery } = useSaveToGallery()
     const auth = useAuth(store => store.id)
     const [menuOpen, setMenuOpen] = useState(false)
@@ -27,7 +29,17 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
         setMenuOpen(false)
     }
 
-    const handleDelete = () => {}
+    const showConfirmDelete = useModalStore(store => store.setConfirmDelete)
+
+    const handleDelete = () => { 
+        if(id && type) showConfirmDelete({ 
+            message: 'Are you sure you want to delete this image?',
+            confirm: async () => {
+                deleteImage({ variables: { id, type } })
+                    .then(() => { setMenuOpen(false); navigation.goBack() })
+            }
+        })
+    }
     
     const navigateProfile = () => {
         if(data) navigation.navigate('UserProfileScreen', { id: data.media.user.id })
