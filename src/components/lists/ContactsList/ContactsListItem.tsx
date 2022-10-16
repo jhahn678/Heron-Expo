@@ -8,6 +8,7 @@ import { useModalStore } from "../../../store/modal/useModalStore";
 import { useFollowUser } from "../../../hooks/mutations/useFollowUser";
 import Avatar from '../../users/Avatar'
 import { TouchableRipple } from "react-native-paper";
+import { useAuth } from "../../../store/auth/useAuth";
 
 interface Props {
     data: GetMyFollowing['me']['following'][number]
@@ -15,6 +16,8 @@ interface Props {
 }
 
 const ContactsListItem = ({ data, navigateUser }: Props) => {
+
+    const auth = useAuth(store => store.id)
 
     const setManageContact = useModalStore(store => store.setManageContact)
     const [followUser] = useFollowUser()
@@ -36,12 +39,14 @@ const ContactsListItem = ({ data, navigateUser }: Props) => {
                     <Text>{`@${data.username}`}</Text>
                 </View>
             </Pressable>
-            <TouchableRipple style={styles.button} onPress={data.am_following ? handleUnfollow : handleFollow}>
-                <View style={globalStyles.frac}>
-                    <Text style={styles.status}>{data.am_following ? "Following" : "Follow"}</Text>
-                    <Icon name={data.am_following ? 'check' : 'plus'} size={14} color={theme.colors.primary}/>
-                </View>
-            </TouchableRipple>
+            { (auth && auth !== data.id) && 
+                <TouchableRipple style={styles.button} onPress={data.am_following ? handleUnfollow : handleFollow}>
+                    <View style={globalStyles.frac}>
+                        <Text style={styles.status}>{data.am_following ? "Following" : "Follow"}</Text>
+                        <Icon name={data.am_following ? 'check' : 'plus'} size={14} color={theme.colors.primary}/>
+                    </View>
+                </TouchableRipple>
+            }
         </View>
     );
 };
@@ -69,7 +74,7 @@ const styles = StyleSheet.create({
     button: {
         paddingHorizontal: 12,
         paddingVertical: 6,
-        borderRadius: 10,
+        borderRadius: 8,
         borderColor: theme.colors.primary,
         borderWidth: 2
     },

@@ -9,6 +9,8 @@ import ShareButton from "../../buttons/ShareButton";
 import LikeButton, { LikeType } from "../../buttons/LikeButton";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../../config/theme";
+import { joinCatchDetails } from "../../../utils/joinCatchDetails";
+import { catchDetailsToTitle } from "../../../utils/conversions/catchDetailsToTitle";
 
 interface Props {
     data: GetCatchesRes['catches'][number]
@@ -23,7 +25,7 @@ const CatchesListItem = ({
     navigateToCatch,
     navigateToMap
 }: Props) => {
-    
+
     return (
       <View style={styles.container}>
         <Pressable onPress={navigateToCatch}>
@@ -46,20 +48,20 @@ const CatchesListItem = ({
             </TouchableRipple>
           </View>
 
-          {data.title && (
-            <Text style={styles.title} numberOfLines={1}>
-              {data.title}
-            </Text>
-          )}
-
-          <Text style={styles.details} numberOfLines={1}>
-            {data.waterbody.name}
-            {data.species && `  \u2022  ${data.species}`}
-            {data.length && `  \u2022  ${data.length} in`}
-            {data.weight && `  \u2022  ${data.weight} oz`}
+          <Text style={styles.title} numberOfLines={1}>
+            {catchDetailsToTitle(data)}
           </Text>
 
-          {data && (
+          <Text style={styles.details} numberOfLines={1}>
+            { joinCatchDetails([
+                data.waterbody?.name, data.species, 
+                data.length ? `${data.length} in` : undefined, 
+                data.weight ? `${data.weight} oz` : undefined
+              ])
+            }
+          </Text>
+
+          {Boolean(data.media.length || data.map_image) && (
             <Image
               source={{ uri:
                 data.media.length > 0 ? 
@@ -90,9 +92,9 @@ const CatchesListItem = ({
           }
           <View style={styles.footerButton}>
             <LikeButton
+              id={data.id}
               type={LikeType.Catch}
               active={data.is_favorited}
-              id={data.id}
             />
           </View>
         </View>
