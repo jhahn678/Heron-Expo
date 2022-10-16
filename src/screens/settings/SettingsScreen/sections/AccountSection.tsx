@@ -5,21 +5,30 @@ import { useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
 import { useModalStore } from "../../../../store/modal/useModalStore";
 
 const AccountSection = () => {
-
+    
+    const { data } = useGetMyAccount()
     const setLogout = useModalStore(store => store.setLogout)
     const handleLogout = () => setLogout({ visible: true, onLogoutGoBack: true })
-
-    const { data } = useGetMyAccount()
+    const handleEmail = () => {}
+    const handleDelete = () => {}
 
     return (
         <List.Section>
             <List.Subheader style={styles.title}>Account</List.Subheader>
             <List.Item title="Linked Accounts"/>
+            <Divider/>
             <List.Item 
                 title="Email"
                 description={data ? data.email : <ActivityIndicator size={'small'}/>}
+                right={() => <List.Icon icon='email-edit'/>}
             />
-            <Divider bold/>
+            <Divider/>
+            <List.Item 
+                title="Delete My Account" 
+                onPress={handleDelete}
+                right={() => <List.Icon icon='account-off'/>}
+            />
+            <Divider/>
             <List.Item title="Sign Out" onPress={handleLogout} right={() => <List.Icon icon='logout'/>}/>
         </List.Section>
     );
