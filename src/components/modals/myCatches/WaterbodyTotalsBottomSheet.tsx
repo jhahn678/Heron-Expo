@@ -1,4 +1,4 @@
-import { useState, useRef, useEffect } from "react";
+import { useRef, useEffect } from "react";
 import { StyleSheet, View } from "react-native";
 import BottomSheet, { BottomSheetFlatList } from "@gorhom/bottom-sheet";
 import { Text, Title } from 'react-native-paper'
@@ -10,15 +10,14 @@ const WaterbodyTotalsBottomSheet = () => {
 
     const { data } = useGetMyCatchStatistics()
     const ref = useRef<BottomSheet | null>(null)
-    const setModalVisible = useMyCatchesModalStore(store => store.setWaterbodyTotalsVisible)
-    const handleClose = () => setModalVisible(false)
     const modalVisible = useMyCatchesModalStore(store => store.waterbodyTotalsVisible)
-    const handleBackdrop = () => {
-        if(ref.current) ref.current.close()
-    }
+    const setModalVisible = useMyCatchesModalStore(store => store.setWaterbodyTotalsVisible)
+    const handleClose = () => { if(modalVisible) setModalVisible(false) }
+    const handleBackdrop = () => { handleClose(); if(ref.current) ref.current.close() }
 
     useEffect(() => {
         if(ref.current && modalVisible) ref.current.expand()
+        if(ref.current && !modalVisible) ref.current.close()
     },[modalVisible])
 
     return (

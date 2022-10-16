@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import BottomSheet, { BottomSheetFlatList }  from "@gorhom/bottom-sheet";
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
-import { Title } from "react-native-paper";
+import { Title, Text } from "react-native-paper";
 import SelectableItem from "../../lists/shared/SelectableItem";
 import { useGetMyCatchStatistics } from "../../../hooks/queries/useGetUserCatchStatistics";
 import Backdrop from "../Backdrop";
@@ -49,7 +49,7 @@ const FilterSpeciesBottomSheet = () => {
                         />
                     )}
                 />
-            : null}
+            : <Text style={styles.empty}>No Species Available</Text>}
 
         </BottomSheet>
     );
@@ -65,5 +65,11 @@ const styles = StyleSheet.create({
     content: {
         paddingVertical: 16,
         paddingHorizontal: 8
+    },
+    empty: {
+        fontWeight: '500',
+        fontStyle: 'italic',
+        marginLeft: 24,
+        marginTop: 16
     }
 });

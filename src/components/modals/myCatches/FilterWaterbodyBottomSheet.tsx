@@ -2,7 +2,7 @@ import React, { useEffect, useRef } from "react";
 import { StyleSheet } from "react-native";
 import BottomSheet, { BottomSheetFlatList }  from "@gorhom/bottom-sheet";
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
-import { Title } from "react-native-paper";
+import { Title, Text } from "react-native-paper";
 import SelectableItem from "../../lists/shared/SelectableItem";
 import { useGetMyCatchWaterbodies } from "../../../hooks/queries/useGetUserCatchStatistics";
 import Backdrop from "../Backdrop";
@@ -52,7 +52,8 @@ const FilterWaterbodyBottomSheet = () => {
                         />
                     )}
                 />
-            : null}
+                : <Text style={styles.empty}>No Waterbodies Available</Text>
+            }
 
         </BottomSheet>
     );
@@ -68,6 +69,12 @@ const styles = StyleSheet.create({
     content: {
         paddingVertical: 16,
         paddingHorizontal: 8
+    },
+    empty: {
+        fontWeight: '500',
+        fontStyle: 'italic',
+        marginLeft: 24,
+        marginTop: 16
     }
 });
 

@@ -9,16 +9,15 @@ import Backdrop from "../Backdrop";
 const SpeciesTotalsBottomSheet = () => {
 
     const ref = useRef<BottomSheet | null>(null)
-    const setModalVisible = useMyCatchesModalStore(store => store.setSpeciesTotalsVisible)
-    const handleClose = () => setModalVisible(false)
-    const modalVisible = useMyCatchesModalStore(store => store.speciesTotalsVisible)
     const { data } = useGetMyCatchStatistics()
-    const handleBackdrop = () => {
-        if(ref.current) ref.current.close()
-    }
+    const modalVisible = useMyCatchesModalStore(store => store.speciesTotalsVisible)
+    const setModalVisible = useMyCatchesModalStore(store => store.setSpeciesTotalsVisible)
+    const handleClose = () => { if(modalVisible) setModalVisible(false) }
+    const handleBackdrop = () => { handleClose(); if(ref.current) ref.current.close() }
 
     useEffect(() => {
         if(ref.current && modalVisible) ref.current.expand()
+        if(ref.current && !modalVisible) ref.current.close()
     },[modalVisible])
 
   return (

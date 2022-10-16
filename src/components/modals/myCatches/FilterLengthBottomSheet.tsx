@@ -24,16 +24,16 @@ const setLabel = (number: number, setter: (value: React.SetStateAction<string>) 
 const FilterLengthBottomSheet = () => {
 
     const ref = useRef<BottomSheet | null>(null)
-    const setModalVisible = useMyCatchesModalStore(store => store.setLengthVisible)
-    const handleClose = () => setModalVisible(false)
-    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
+
+    const minLength = useMyCatchesModalStore(store => store.minLength)
+    const maxLength = useMyCatchesModalStore(store => store.maxLength)
     const setMinLength = useMyCatchesModalStore(store => store.setMinLength)
     const setMaxLength = useMyCatchesModalStore(store => store.setMaxLength)
     const modalVisible = useMyCatchesModalStore(store => store.lengthVisible)
+    const setModalVisible = useMyCatchesModalStore(store => store.setLengthVisible)
 
-    useEffect(() => {
-        if(ref.current && modalVisible) ref.current.expand()
-    },[modalVisible])
+    const handleClose = () => setModalVisible(false)
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
 
     const [values, setValues] = useState<number[]>([0, 48])
     const [minLabel, setMinLabel] = useState('< 4 in')
@@ -52,6 +52,15 @@ const FilterLengthBottomSheet = () => {
         setLabel(min, setMinLabel)
         setLabel(max, setMaxLabel)
     }
+
+    useEffect(() => {
+        if(ref.current && modalVisible) {
+            setValues([(minLength || 0), (maxLength || 48)])
+            setLabel(minLength || 0, setMinLabel)
+            setLabel(maxLength || 48, setMaxLabel)
+            ref.current.expand()
+        }
+    },[modalVisible])
 
     return (
         <BottomSheet
@@ -81,6 +90,7 @@ const FilterLengthBottomSheet = () => {
                 trackStyle={styles.track}
                 selectedStyle={styles.selected}
                 markerStyle={styles.marker}
+                containerStyle={{ marginBottom: 24 }}
                 />
                 <Button 
                 mode="contained-tonal" 
@@ -128,7 +138,7 @@ const styles = StyleSheet.create({
         width: 20
     },
     button: { 
-        width: '98%', 
+        width: width - 48,
         marginTop: 24
     }
 });

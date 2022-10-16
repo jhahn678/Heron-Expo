@@ -21,16 +21,15 @@ const setLabel = (number: number, setter: (value: React.SetStateAction<string>) 
 const FilterWeightBottomSheet = () => {
 
     const ref = useRef<BottomSheet | null>(null)
-    const setModalVisible = useMyCatchesModalStore(store => store.setWeightVisible)
-    const handleClose = () => setModalVisible(false)
-    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
+    const minWeight = useMyCatchesModalStore(store => store.minWeight)
+    const maxWeight = useMyCatchesModalStore(store => store.maxWeight)
     const setMinWeight = useMyCatchesModalStore(store => store.setMinWeight)
     const setMaxWeight = useMyCatchesModalStore(store => store.setMaxWeight)
     const modalVisible = useMyCatchesModalStore(store => store.weightVisible)
+    const setModalVisible = useMyCatchesModalStore(store => store.setWeightVisible)
 
-    useEffect(() => {
-        if(ref.current && modalVisible) ref.current.expand()
-    },[modalVisible])
+    const handleClose = () => setModalVisible(false)
+    const handleBackdrop = () => { setModalVisible(false); if(ref.current) ref.current.close() }
 
     const [values, setValues] = useState<number[]>([0, 320])
     const [minLabel, setMinLabel] = useState('< 8 oz')
@@ -49,6 +48,16 @@ const FilterWeightBottomSheet = () => {
         setLabel(min, setMinLabel)
         setLabel(max, setMaxLabel)
     }
+
+    useEffect(() => {
+        if(ref.current && modalVisible) {
+            console.log(minWeight, maxWeight)
+            setValues([(minWeight || 0), (maxWeight || 320)])
+            setLabel(minWeight || 0, setMinLabel)
+            setLabel(maxWeight || 320, setMaxLabel)
+            ref.current.expand()
+        }
+    },[modalVisible])
 
     return (
         <BottomSheet
@@ -76,6 +85,7 @@ const FilterWeightBottomSheet = () => {
                     trackStyle={styles.track}
                     selectedStyle={styles.selected}
                     markerStyle={styles.marker}
+                    containerStyle={{ marginBottom: 24 }}
                 />
                 <Button 
                     mode="contained-tonal" 
@@ -123,8 +133,7 @@ const styles = StyleSheet.create({
         width: 20
     },
     button: { 
-        width: '98%', 
-        marginTop: 24
+        width: width - 48,
     }
 });
 
