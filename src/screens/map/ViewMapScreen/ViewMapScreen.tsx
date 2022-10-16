@@ -7,10 +7,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useMapModalStore } from '../../../store/modal/useMapModalStore';
-import { useGetCatchFragment } from '../../../hooks/queries/useGetCatch';
+import { useGetCatchFragment, useLazyGetCatch } from '../../../hooks/queries/useGetCatch';
 import { MapResource, RootStackScreenProps } from '../../../types/navigation'
 import MapView, { Camera, Geojson, LatLng, MapEvent } from 'react-native-maps';
-import { useGetLocationFragment } from '../../../hooks/queries/useGetLocation';
+import { useGetLocationFragment, useLazyGetLocation } from '../../../hooks/queries/useGetLocation';
 import { MapPressResponse, useGeoJson } from '../../../hooks/utils/useGeoJson';
 import CatchesBottomSheet from '../../../components/modals/map/CatchesBottomSheet';
 import LocationsBottomSheet from '../../../components/modals/map/LocationsBottomSheet';
@@ -39,6 +39,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
   const [hasMore, setHasMore] = useState(false)
   const { handleGeoJson } = useGeoJson()
   const showError = useModalStore(store => store.setError)
+  
   const modal = useMapModalStore(store => ({
     setWaterbody: store.setWaterbody,
     setLocation: store.setLocation,
@@ -46,10 +47,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
     reset: store.reset
   }))
 
-  useEffect(() => {
-    const unsubscribe = navigation.addListener("beforeRemove", modal.reset);
-    return unsubscribe;
-  }, []);
+  useEffect(() => navigation.addListener("beforeRemove", modal.reset),[]);
 
   useEffect(() => {
     if (mapCamera && mapReady) {
@@ -78,8 +76,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
       .then(({ center }) => {
         setCoordinates(center)
         if(geojsonResource === GeoJsonResource.Catch){
-          getCatches({
-            variables: {
+          getCatches({ variables: {
               id,
               limit: LIMIT,
               coordinates: center,
@@ -108,8 +105,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
           .catch((err) => console.error(err));
         }
         if(geojsonResource === GeoJsonResource.Location){
-          getLocations({
-            variables: {
+          getLocations({ variables: {
               id,
               limit: LIMIT,
               coordinates: center,
