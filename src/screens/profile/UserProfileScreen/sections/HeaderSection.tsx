@@ -1,9 +1,12 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Card, Chip, Text } from 'react-native-paper'
+import FollowButton from "../../../../components/buttons/FollowButton";
 import Avatar from "../../../../components/users/Avatar";
+import globalStyles from "../../../../globalStyles";
 import { GetUserProfileRes } from "../../../../hooks/queries/useGetUserProfile";
 import { ShareType, useShareContent } from "../../../../hooks/utils/useShareContent";
+import { useAuth } from "../../../../store/auth/useAuth";
 import { RootStackScreenProps } from "../../../../types/navigation";
 import { FollowType } from "../../../../types/User";
 import HeaderUserLoading from "../../MyProfileScreen/loaders/HeaderUserLoading";
@@ -17,8 +20,8 @@ interface Props {
 
 const HeaderSection = ({ data, loading, navigation }: Props) => {
 
+    const auth = useAuth(store => store.id)
     const shareContent = useShareContent()
-
     const handleShareContent = () => shareContent({ shareType: ShareType.Profile, id: data?.id })
 
     const navigateToImage = () => {
@@ -40,26 +43,29 @@ const HeaderSection = ({ data, loading, navigation }: Props) => {
     return (
         <Card style={styles.container}>
             <View style={styles.user}>
-                <Avatar 
-                    size={80}
-                    loading={loading}
-                    fullname={data?.fullname} 
-                    uri={data?.avatar}
-                    onPress={navigateToImage}
-                />
-                { data ?
-                    <View>
-                        <Text style={styles.name} numberOfLines={1}>
-                            {data.fullname || data.firstname || data.username}
-                        </Text>
-                        { data.location && 
-                            <Text style={styles.location} numberOfLines={1}>
-                                {data.location}
+                <View style={globalStyles.frac}>
+                    <Avatar 
+                        size={80}
+                        loading={loading}
+                        fullname={data?.fullname} 
+                        uri={data?.avatar}
+                        onPress={navigateToImage}
+                    />
+                    { data ?
+                        <View>
+                            <Text style={styles.name} numberOfLines={1}>
+                                {data.fullname || data.firstname || data.username}
                             </Text>
-                        }
-                    </View> :
-                    <HeaderUserLoading/>
-                }
+                            { data.location && 
+                                <Text style={styles.location} numberOfLines={1}>
+                                    {data.location}
+                                </Text>
+                            }
+                        </View> :
+                        <HeaderUserLoading/>
+                    }
+                </View>
+                {( auth && auth !== data?.id) && <FollowButton following={data?.am_following} id={data?.id}/> }
             </View>
             <View style={styles.chips}>
                 <Chip 
@@ -94,7 +100,8 @@ const styles = StyleSheet.create({
         marginLeft: 24,
         marginRight: 20,
         flexDirection: 'row',
-        alignItems: 'center'
+        alignItems: 'center',
+        justifyContent: 'space-between'
     },
     name: {
         fontWeight: '600',
