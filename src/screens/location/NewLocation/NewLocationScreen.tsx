@@ -84,6 +84,7 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
         <DescriptionInput/>
         <WaterbodyInput 
           title={"Select Fishery"}
+          required={true}
           setWaterbody={setWaterbody} 
           selectedWaterbody={params?.waterbody}
         />

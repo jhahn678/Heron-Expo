@@ -30,7 +30,10 @@ const LocationInput = ({ navigation }: Props) => {
 
     return (
          <View style={styles.container}>
-            <Text style={styles.title}>Add on Map</Text>
+            <View style={globalStyles.baseline}>
+                <Text style={styles.title}>Add on Map</Text>
+                <Text style={styles.required}>Required</Text>
+            </View>
             { 
                 snapshot ? 
                     <Card style={styles.selected}>
@@ -46,11 +49,11 @@ const LocationInput = ({ navigation }: Props) => {
                 :
                     <View style={globalStyles.frsb}>
                         <Pressable style={styles.pressable} onPress={navigateMapManualLocation}>
-                            <MCIcon name='map-plus' size={48} color={theme.colors.onSecondaryContainer}/>
+                            <MCIcon name='map-plus' size={48} color={theme.colors.primary}/>
                             <Text style={styles.label}>Manually</Text>
                         </Pressable>
                         <Pressable style={styles.pressable} onPress={navigateMapCurrentLocation}>
-                            <Icon name='my-location' size={48} color={theme.colors.onSecondaryContainer}/>
+                            <Icon name='my-location' size={48} color={theme.colors.primary}/>
                             <Text style={styles.label}>Current location</Text>
                         </Pressable>
                     </View>
@@ -93,12 +96,19 @@ const styles = StyleSheet.create({
         height: width * .44,
         width: width * .44,
         borderRadius: 6,
-        borderWidth: 1,
+        borderWidth: 2,
         backgroundColor: theme.colors.surfaceVariant,
-        borderColor: theme.colors.onSecondaryContainer,
+        borderColor: theme.colors.primary,
     },
     label: {
         marginTop: 4,
-        fontWeight: '500'
+        fontWeight: '500',
+        color: theme.colors.primary
+    },
+    required: {
+        fontWeight: '500',
+        fontStyle: 'italic',
+        color: theme.colors.primary,
+        marginLeft: 16
     }
 });
