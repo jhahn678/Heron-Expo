@@ -7,10 +7,10 @@ import { useFocusEffect } from '@react-navigation/native';
 import { Dimensions, StyleSheet, View } from 'react-native';
 import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useMapModalStore } from '../../../store/modal/useMapModalStore';
-import { useGetCatchFragment, useLazyGetCatch } from '../../../hooks/queries/useGetCatch';
+import { useGetCatchFragment } from '../../../hooks/queries/useGetCatch';
 import { MapResource, RootStackScreenProps } from '../../../types/navigation'
 import MapView, { Camera, Geojson, LatLng, MapEvent } from 'react-native-maps';
-import { useGetLocationFragment, useLazyGetLocation } from '../../../hooks/queries/useGetLocation';
+import { useGetLocationFragment } from '../../../hooks/queries/useGetLocation';
 import { MapPressResponse, useGeoJson } from '../../../hooks/utils/useGeoJson';
 import CatchesBottomSheet from '../../../components/modals/map/CatchesBottomSheet';
 import LocationsBottomSheet from '../../../components/modals/map/LocationsBottomSheet';
@@ -21,8 +21,6 @@ import { Feature, GeoJsonResource } from '../../../utils/conversions/geojsonToFe
 import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries/useGetLocations';
 import { useModalStore } from '../../../store/modal/useModalStore';
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails';
-
-
 const { width } = Dimensions.get('screen')
 const LIMIT = 50;
 
