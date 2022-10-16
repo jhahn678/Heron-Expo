@@ -13,7 +13,7 @@ const SpeciesInput = () => {
     const [showResults, setShowResults] = useState(false)
     const handleShowResults = (value: boolean) => () => setShowResults(value)
     const clearSelected = () => setSpecies()
-    const handleSetSpecies = (value: string) => () => { setSpecies(value); setShowResults(false) }
+    const handleSetSpecies = (value: string) => () => { setInput(''); setSpecies(value); setShowResults(false) }
 
     useEffect(() => {
         input.length > 0 ?

@@ -1,25 +1,27 @@
 import { useEffect, useState } from "react";
-import { StyleSheet, KeyboardAvoidingView, Pressable, View } from "react-native";
+import { StyleSheet, KeyboardAvoidingView, Pressable, View, TextInput as RNTextInput } from "react-native";
 import { Text, TextInput, Surface, IconButton } from 'react-native-paper'
 import { theme } from "../../config/theme";
+import globalStyles from "../../globalStyles";
 import { useAutoCompleteWaterbodies } from "../../hooks/queries/useAutocompleteSearch";
 import { useGetNearestWaterbodies } from "../../hooks/queries/useGetNearestWaterbodies";
 import { useGetWaterbodyLocationFragment, WaterbodyLocation } from "../../hooks/queries/useGetWaterbody";
-import { IWaterbody } from "../../types/Waterbody";
 import { waterbodyLocationLabel } from "../../utils/conversions/waterbodyLocationToLabel";
 
 interface Props {
     title?: string
     selectedWaterbody: number | null | undefined
+    required?: boolean
     setWaterbody: (value?: number | undefined) => void
 }
 
-const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title }: Props) => {
+const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title, required }: Props) => {
 
     const [input, setInput] = useState('')
     const [waterbodyData, setWaterbodyData] = useState<WaterbodyLocation | null>(null)
     const [showNearestWaterbodies, setShowNearestWaterbodies] = useState(false)
     const getCachedWaterbody = useGetWaterbodyLocationFragment()
+    const requiredColor = () => required ? theme.colors.primary : undefined 
 
     const handleSetWaterbody = (x: WaterbodyLocation) => () => { 
         setWaterbody(x.id); 
@@ -37,12 +39,15 @@ const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title }: Props) => {
     const handleClearWaterbody = () => { setWaterbody(); setWaterbodyData(null) }
     const handleShowNearest = (value: boolean) => () => setShowNearestWaterbodies(value)
 
-    const { data: initialResults, isLoading: initalLoading } = useGetNearestWaterbodies()
+    const { data: initialResults } = useGetNearestWaterbodies()
     const { data: results } = useAutoCompleteWaterbodies(input)
 
     return (
         <KeyboardAvoidingView style={styles.container}>
-            <Text style={styles.title}>{title || "Add a Fishery"}</Text>
+            <View style={globalStyles.baseline}>
+                <Text style={styles.title}>{title || "Add a Fishery"}</Text>
+                { required && <Text style={styles.required}>Required</Text>}
+            </View>
             { waterbodyData ? 
                 <View style={styles.selected}>
                     <View>
@@ -59,7 +64,9 @@ const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title }: Props) => {
                     onChangeText={setInput}
                     theme={{ roundness: 6 }}
                     placeholder="Select a Fishery"
-                    right={<TextInput.Icon icon='magnify'/>}
+                    placeholderTextColor={requiredColor()}
+                    outlineColor={requiredColor()}
+                    right={<TextInput.Icon icon='magnify' iconColor={requiredColor()}/>}
                 />
             }
             { showNearestWaterbodies &&
@@ -118,5 +125,11 @@ const styles = StyleSheet.create({
     },
     location: {
         fontSize: 12
-    }
+    },
+    required: {
+        fontWeight: '500',
+        fontStyle: 'italic',
+        color: theme.colors.primary,
+        marginLeft: 16
+    },
 });

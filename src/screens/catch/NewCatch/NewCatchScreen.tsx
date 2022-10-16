@@ -18,6 +18,7 @@ import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
 import WaterbodyInput from '../../../components/inputs/WaterbodyInput'
+import DateTimeInput from './sections/DateTimeInput'
 
 const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScreen'>) => {
 
@@ -37,7 +38,8 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
     point: store.point,
     length: store.length,
     weight: store.weight,
-    rig: store.rig
+    rig: store.rig,
+    created_at: store.createdAt
   }))
 
   const setWaterbody = useNewCatchStore(store => store.setWaterbody)
@@ -71,10 +73,7 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
     }
   }
 
-  useEffect(() => {
-    const listener = navigation.addListener('beforeRemove', clearState)
-    return listener;
-  },[])
+  useEffect(() => navigation.addListener('beforeRemove', clearState),[])
 
   return (
     <View style={styles.container}>
@@ -82,17 +81,32 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
       <ScrollView contentContainerStyle={styles.main} keyboardShouldPersistTaps='handled'>
         <TitleInput/>
         <DescriptionInput/>
+        <DateTimeInput/>
         <SpeciesInput/>
         <ImageInput/>
-        <WaterbodyInput selectedWaterbody={params?.waterbody} setWaterbody={setWaterbody}/>
+        <WaterbodyInput 
+          selectedWaterbody={params?.waterbody} 
+          setWaterbody={setWaterbody}
+        />
         <LocationInput navigation={navigation}/>
         <MeasurementsInput/>
         <RigInput/>
         <Button 
-          mode='contained' 
+          mode='contained'
+          onPress={handleSave} 
+          theme={{ colors: { surfaceDisabled: '#d9d9d9' }}}
           style={styles.button}
           labelStyle={styles.label}
-          onPress={handleSave}
+          disabled={
+            !newCatch.title && 
+            !newCatch.description && 
+            !newCatch.species && 
+            !newCatch.waterbody && 
+            !newCatch.point && 
+            !newCatch.length && 
+            !newCatch.weight &&
+            !newCatch.rig
+          }
         >Save</Button>
       </ScrollView>
       { loading && <LoadingBackdrop/> }
@@ -108,7 +122,7 @@ const styles = StyleSheet.create({
   },
   main: {
     paddingVertical: 16,
-    minHeight: 1500
+    minHeight: 1450
   },
   button: {
     marginTop: 36,

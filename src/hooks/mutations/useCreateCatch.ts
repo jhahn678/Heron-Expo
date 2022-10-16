@@ -1,6 +1,8 @@
-import { gql, useMutation } from '@apollo/client'
+import { gql, InternalRefetchQueriesInclude, useMutation } from '@apollo/client'
 import { Point } from 'geojson'
+import { useAuth } from '../../store/auth/useAuth'
 import { CatchQuery } from '../../types/Catch'
+import { makeFragmentId } from '../../utils/makeFragmentId'
 import { getCatchesQueryName } from '../queries/useGetCatches'
 import { GET_MY_PROFILE_TOTALS } from '../queries/useGetMyProfile'
 import { GET_MY_CATCH_STATISTICS } from '../queries/useGetUserCatchStatistics'
@@ -26,6 +28,7 @@ export interface NewCatchArgs {
       weight?: number | undefined
       length?: number | undefined
       rig?: string | undefined
+      created_at?: Date | undefined
       map_image?: {
         url: string
         key: string
@@ -46,12 +49,31 @@ export interface NewCatchRes {
   }
 }
 
-export const useCreateCatch = () => useMutation<NewCatchRes, NewCatchArgs>(CREATE_CATCH, {
-        refetchQueries: ({ data }) => [
-          { query: GET_WATERBODY, variables: { id: data?.createCatch.waterbody.id } },
-          { query: GET_MY_PROFILE_TOTALS },
-          { query: GET_MY_CATCH_STATISTICS },
-          `${getCatchesQueryName(CatchQuery.Waterbody, data?.createCatch.waterbody.id)}`,
-          'MyCatches'
-        ]
-    })
+export const useCreateCatch = () => {
+  const auth = useAuth(store => store.id)
+  return useMutation<NewCatchRes, NewCatchArgs>(CREATE_CATCH, {
+    refetchQueries: ({ data }) => {
+      const refetch: InternalRefetchQueriesInclude = [ 'MyCatches', { query: GET_MY_CATCH_STATISTICS }]
+      if(data?.createCatch.waterbody) refetch.push(
+        { query: GET_WATERBODY, variables: { id: data?.createCatch.waterbody.id } },
+        `${getCatchesQueryName(CatchQuery.Waterbody, data?.createCatch.waterbody.id)}`
+      )
+      return refetch;
+    },
+    update: (cache) => {
+      cache.updateFragment({
+        id: `User:${auth}`,
+        fragment: gql`
+          fragment User${makeFragmentId()} on User{
+            total_catches
+          }
+        `
+      }, data => {
+        if(data) return {
+          ...data,
+          total_catches: data.total_catches + 1
+        } 
+      })
+    }
+  })
+}

@@ -13,6 +13,7 @@ export interface NewCatchStore {
     length: number | undefined
     species: string | undefined
     rig: string | undefined
+    createdAt: Date | undefined
     setTitle: (value?: string) => void
     setDescription: (value?: string) => void
     setWaterbody: (value?: number) => void
@@ -22,6 +23,7 @@ export interface NewCatchStore {
     setLength: (value?: number) => void
     setSpecies: (value?: string) => void
     setRig: (value?: string) => void
+    setCreatedAt: (value?: Date) => void
     reset: () => void
 }
 
@@ -35,6 +37,7 @@ export const useNewCatchStore = create<NewCatchStore>((set) => ({
     length: undefined,
     rig: undefined,
     species: undefined,
+    createdAt: undefined,
     setTitle: title => set({ title }),
     setDescription: description => set({ description }),
     setWaterbody: waterbody => set({ waterbody }),
@@ -52,6 +55,7 @@ export const useNewCatchStore = create<NewCatchStore>((set) => ({
     setLength: length => set({ length }),
     setSpecies: species => set({ species }),
     setRig: rig => set({ rig }),
+    setCreatedAt: createdAt => set({ createdAt }),
     reset: () => set({
         title: undefined,
         description: undefined,
@@ -61,6 +65,7 @@ export const useNewCatchStore = create<NewCatchStore>((set) => ({
         weight: undefined,
         length: undefined,
         rig: undefined,
-        species: undefined
+        species: undefined,
+        createdAt: undefined
     })
 }))

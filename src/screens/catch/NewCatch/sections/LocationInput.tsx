@@ -6,7 +6,6 @@ import { RootStackParams, RootStackScreenProps, SaveType } from "../../../../typ
 import Icon from 'react-native-vector-icons/MaterialIcons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { Card, Text, IconButton } from 'react-native-paper'
-
 const { width } = Dimensions.get('screen')
 
 interface Props {
