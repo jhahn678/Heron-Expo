@@ -1,5 +1,7 @@
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql, InternalRefetchQueriesInclude } from "@apollo/client";
+import { useAuth } from "../../store/auth/useAuth";
 import { LocationQuery } from "../../types/Location";
+import { makeFragmentId } from "../../utils/makeFragmentId";
 import { getLocationsQueryName } from "../queries/useGetLocations";
 import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
@@ -27,12 +29,32 @@ interface Res {
     }
 }
 
-export const useDeleteLocation = (id: number) => useMutation<Res, Vars>(DELETE_LOCATION, {
+export const useDeleteLocation = (id: number) => {
+  const auth = useAuth(store => store.id)
+  return useMutation<Res, Vars>(DELETE_LOCATION, {
     variables: { id },
-    refetchQueries: ({ data }) => [
+    refetchQueries: ({ data }) => {
+      const queries: InternalRefetchQueriesInclude = ['MyLocations']
+      if(data?.deleteLocation.waterbody) queries.push(
         { query: GET_WATERBODY, variables: { id: data?.deleteLocation.waterbody.id } },
-        { query: GET_MY_PROFILE_TOTALS },
         `${getLocationsQueryName(LocationQuery.Waterbody, data?.deleteLocation.waterbody.id)}`,
-        'MyLocations'
-    ]
-})
+      )
+      return queries;
+    },
+    update: cache => {
+      cache.updateFragment({
+        id: `User:${auth}`,
+        fragment: gql`
+          fragment User${makeFragmentId()} on User{
+            total_locations
+          }
+        `,
+      }, data => {
+        if(data) return { 
+          ...data, 
+          total_locations: data.total_locations - 1
+        }
+      })
+  }
+  })
+}

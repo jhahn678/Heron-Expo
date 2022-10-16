@@ -1,6 +1,8 @@
 import { useMutation, gql, ApolloError } from "@apollo/client";
+import { G } from "react-native-svg";
 import { useAuth } from "../../store/auth/useAuth";
 import { LocationQuery } from "../../types/Location";
+import { makeFragmentId } from "../../utils/makeFragmentId";
 import { getLocationsQueryName } from "../queries/useGetLocations";
 import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
 
@@ -32,22 +34,32 @@ export const useSaveLocation = (args?: Args) => {
     },
     update: (cache, { data }, { variables }) => {
       if (data && variables){
-          cache.writeFragment({
-            id: `Location:${variables.id}`,
-            fragment: gql`
-              fragment updatedLocation${variables.id} on Location {
-                is_saved
-              }
-            `,
-            data: {
-              is_saved: data.toggleSaveLocation
+        cache.writeFragment({
+          id: `Location:${variables.id}`,
+          fragment: gql`
+            fragment Location${makeFragmentId()} on Location {
+              is_saved
             }
-          });
-      }
+          `,
+          data: {
+            is_saved: data.toggleSaveLocation
+          }
+        });
+        cache.updateFragment({
+          id: `User:${user}`,
+          fragment: gql`
+            fragment User${makeFragmentId()} on User{
+              total_saved_locations
+            }
+          `
+        }, res => ({
+          ...res,
+          total_saved_locations: data.toggleSaveLocation ?
+            res.total_saved_locations + 1 :
+            res.total_saved_locations - 1
+        })
+      )}
     },
-    refetchQueries: [
-      { query: GET_MY_PROFILE_TOTALS },
-      `${getLocationsQueryName(LocationQuery.UserSaved, user)}`
-    ]
+    refetchQueries: [`${getLocationsQueryName(LocationQuery.UserSaved, user)}`]
   });
 }

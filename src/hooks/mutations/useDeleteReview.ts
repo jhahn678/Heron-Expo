@@ -1,5 +1,6 @@
 import { useMutation, gql } from "@apollo/client";
-import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
+import { useAuth } from "../../store/auth/useAuth";
+import { makeFragmentId } from "../../utils/makeFragmentId";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
 
 const DELETE_REVIEW = gql`
@@ -25,10 +26,22 @@ interface Vars {
     id: number
 }
 
-export const useDeleteReview = (id: number) => useMutation<Res, Vars>(DELETE_REVIEW, {
-    variables: { id },
-    refetchQueries: ({ data }) => ([
-        { query: GET_MY_PROFILE_TOTALS },
-        { query: GET_WATERBODY, variables: { id: data?.deleteWaterbodyReview.waterbody.id } },
-    ])
-})
+export const useDeleteReview = (id: number) => {
+    const auth = useAuth(store => store.id)
+    return useMutation<Res, Vars>(DELETE_REVIEW, {
+        variables: { id },
+        refetchQueries: ({ data }) => ([
+            { query: GET_WATERBODY, variables: { id: data?.deleteWaterbodyReview.waterbody.id } },
+        ]),
+        update: (cache) => {
+            cache.updateFragment({
+                id: `User:${auth}`,
+                fragment: gql`
+                    fragment User${makeFragmentId()} on User{
+                        total_reviews
+                    }
+                `
+            }, data => ({ ...data, total_reviews: data.total_reviews - 1 }))
+        }
+    })
+}

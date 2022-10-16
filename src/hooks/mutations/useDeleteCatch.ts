@@ -1,7 +1,9 @@
-import { useMutation, gql } from "@apollo/client";
+import { useMutation, gql, InternalRefetchQueriesInclude } from "@apollo/client";
+import { useAuth } from "../../store/auth/useAuth";
 import { CatchQuery } from "../../types/Catch";
+import { makeFragmentId } from "../../utils/makeFragmentId";
 import { getCatchesQueryName } from "../queries/useGetCatches";
-import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
+
 import { GET_MY_CATCH_STATISTICS } from "../queries/useGetUserCatchStatistics";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
 
@@ -28,13 +30,32 @@ interface Res {
     }
 }
 
-export const useDeleteCatch = (id: number) => useMutation<Res, Vars>(DELETE_CATCH, {
+export const useDeleteCatch = (id: number) => {
+  const auth = useAuth(store => store.id)
+  return useMutation<Res, Vars>(DELETE_CATCH, {
     variables: { id },
-    refetchQueries: ({ data }) => [
+    refetchQueries: ({ data }) => {
+      const queries: InternalRefetchQueriesInclude = [{ query: GET_MY_CATCH_STATISTICS }, 'MyCatches'];
+      if(data?.deleteCatch.waterbody) queries.push(
         { query: GET_WATERBODY, variables: { id: data?.deleteCatch.waterbody.id } },
-        { query: GET_MY_PROFILE_TOTALS },
-        { query: GET_MY_CATCH_STATISTICS },
-        `${getCatchesQueryName(CatchQuery.Waterbody, data?.deleteCatch.waterbody.id)}`,
-        'MyCatches'
-    ]
-})
+        `${getCatchesQueryName(CatchQuery.Waterbody, data?.deleteCatch.waterbody.id)}`
+      )
+      return queries;
+    },
+    update: cache => {
+      cache.updateFragment({
+        id: `User:${auth}`,
+        fragment: gql`
+          fragment User${makeFragmentId()} on User{
+            total_catches
+          }
+        `,
+      }, data => {
+        if(data) return { 
+          ...data, 
+          total_catches: data.total_catches - 1
+        }
+      })
+    }
+  })
+}

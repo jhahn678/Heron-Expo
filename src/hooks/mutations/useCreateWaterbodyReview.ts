@@ -2,6 +2,8 @@ import { gql, useMutation } from '@apollo/client'
 import { GET_REVIEWS } from '../queries/useGetWaterbodyReviews';
 import { GET_WATERBODY } from '../queries/useGetWaterbody';
 import { GET_MY_PROFILE_TOTALS } from '../queries/useGetMyProfile';
+import { useAuth } from '../../store/auth/useAuth';
+import { makeFragmentId } from '../../utils/makeFragmentId';
 
 const CREATE_REVIEW = gql`
     mutation Mutation($input: NewReviewInput!) {
@@ -34,11 +36,21 @@ interface Vars {
 }
 
 export const useCreateWaterbodyReview = () => {
+    const auth = useAuth(store => store.id)
     const result = useMutation<Res, Vars>(CREATE_REVIEW, {
         refetchQueries: ({ data }) => [
-            { query: GET_MY_PROFILE_TOTALS },
             { query: GET_REVIEWS, variables: { id: data?.addWaterbodyReview.waterbody.id, limit: 3 } }
-        ]
+        ],
+        update: (cache) => {
+            cache.updateFragment({
+               id: `User:${auth}`,
+               fragment: gql`
+                fragment User${makeFragmentId()} on User{
+                    total_reviews
+                }
+               `,
+            }, data => ({ ...data, total_reviews: data.total_reviews + 1 }))
+        }
     })
     return result;
 }
