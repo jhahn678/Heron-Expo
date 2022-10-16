@@ -22,6 +22,7 @@ export const GET_USER_PROFILE = gql`
             total_catches
             total_reviews
             total_media
+            am_following
         }
     }
 `
@@ -47,6 +48,7 @@ export interface GetUserProfileRes {
         total_catches: number
         total_reviews: number
         total_media: number
+        am_following: boolean
     }
 }
 
