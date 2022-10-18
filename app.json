@@ -1,7 +1,9 @@
 {
   "expo": {
-    "name": "heron-expo",
-    "slug": "heron-expo",
+    "name": "Heron",
+    "slug": "heron",
+    "owner": "jhahn678",
+    "privacy": "public",
     "version": "1.0.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
@@ -23,8 +25,8 @@
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-icon.png",
-        "backgroundColor": "#FFFFFF"
+        "foregroundImage": "./assets/adaptive-foreground.png",
+        "backgroundImage": "./assets/adaptive-background.png"
       }
     },
     "web": {
