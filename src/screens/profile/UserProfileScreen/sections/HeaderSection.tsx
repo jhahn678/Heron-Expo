@@ -65,22 +65,23 @@ const HeaderSection = ({ data, loading, navigation }: Props) => {
                         <HeaderUserLoading/>
                     }
                 </View>
-                {( auth && auth !== data?.id) && <FollowButton following={data?.am_following} id={data?.id}/> }
             </View>
             <View style={styles.chips}>
-                <Chip 
-                onPress={navigateFollowing} 
-                style={styles.chip} 
-                icon='account-multiple'
-                >{`Following`}</Chip>
-                <Chip 
-                onPress={navigateFollowers} 
-                style={styles.chip} 
-                icon='account-multiple-outline'
-                >{`Followers`}</Chip>
+                <View style={globalStyles.frac}>
+                    <Chip 
+                    onPress={navigateFollowing} 
+                    style={styles.chip} 
+                    icon='account-multiple'
+                    >{`Following`}</Chip>
+                    <Chip 
+                    onPress={navigateFollowers} 
+                    style={styles.chip} 
+                    icon='account-multiple-outline'
+                    >{`Followers`}</Chip>
+                </View>
                 <Chip 
                 onPress={handleShareContent} 
-                style={styles.chip} 
+                style={{ height: 40 }} 
                 icon='share-variant'
                 >{'Share'}</Chip>
             </View>
@@ -116,9 +117,10 @@ const styles = StyleSheet.create({
     chips: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         marginHorizontal: 16,
         marginTop: 24,
-        marginBottom: 16
+        marginBottom: 12
     },
     chip: {
         height: 40,

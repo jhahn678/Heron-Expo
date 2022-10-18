@@ -1,8 +1,7 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { theme } from "../../../config/theme";
-import { Text, TouchableRipple } from 'react-native-paper'
-import { StyleSheet, View } from "react-native";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { Chip, Text } from 'react-native-paper'
+import { Dimensions, StyleSheet, View, Animated, Easing } from "react-native";
 import { MyProfileTabsScreenProps } from "../../../types/navigation";
 import { GetMyFollowing, useGetMyFollowing } from "../../../hooks/queries/useGetUserFollowing";
 import { useGetMyTotalFollows } from "../../../hooks/queries/useGetTotalFollows";
@@ -12,12 +11,30 @@ import globalStyles from "../../../globalStyles";
 import { GetMyFollowers, useGetMyFollowers } from "../../../hooks/queries/useGetUserFollowers";
 import FindUsers from "./sections/FindUsers";
 import { FollowType } from "../../../types/User";
-
+const { width } = Dimensions.get('screen')
 const limit = 20;
 
 const ContactsTabScreen = ({ navigation }: MyProfileTabsScreenProps<'FriendsTab'>) => {
 
+  const scaleFollowing = useRef(new Animated.Value(1)).current
+  const scaleFollowers = useRef(new Animated.Value(1)).current
+
   const [followType, setFollowType] = useState(FollowType.Following)
+
+  useEffect(() => {
+    Animated.timing(scaleFollowers, { 
+      useNativeDriver: true,
+      toValue: followType === FollowType.Followers ? 1.1 : 1, 
+      duration: 100,
+      easing: Easing.ease
+    }).start()
+    Animated.timing(scaleFollowing, { 
+      useNativeDriver: true,
+      toValue: followType === FollowType.Following ? 1.1 : 1, 
+      duration: 100,
+      easing: Easing.ease
+    }).start()
+  },[followType])
 
   const [data, setData] = useState<GetMyFollowing['me']['following'] | GetMyFollowers['me']['followers']>([])
 
@@ -66,26 +83,27 @@ const ContactsTabScreen = ({ navigation }: MyProfileTabsScreenProps<'FriendsTab'
     <View style={styles.container}>
       <View style={styles.top}>
         <View style={globalStyles.frac}>
-          <TouchableRipple 
-            onPress={() => setFollowType(FollowType.Following)} 
-            style={
-              followType === FollowType.Following ? 
-              [styles.active, styles.margin] : 
-              [styles.button, styles.margin]}>
-              <Text style={styles.edit}>Following</Text>
-          </TouchableRipple>
-          <TouchableRipple 
+          <Animated.View style={{ marginRight: 12, transform: [{ scale: scaleFollowing }]}}>
+            <Chip
+            icon='account-multiple'
+            onPress={() => setFollowType(FollowType.Following)}
+            selectedColor={followType === FollowType.Following ? theme.colors.primary : undefined}
+            >{`Following`}</Chip>
+          </Animated.View>
+          <Animated.View style={{ transform: [{ scale: scaleFollowers }]}}>
+            <Chip
+            icon='account-multiple-outline' 
             onPress={() => setFollowType(FollowType.Followers)} 
-            style={followType === FollowType.Followers ? styles.active : styles.button}>
-              <Text style={styles.edit}>Followers</Text>
-          </TouchableRipple>
+            selectedColor={followType === FollowType.Followers ? theme.colors.primary : undefined}
+            >{`Followers`}</Chip>
+          </Animated.View>
         </View>
-         <TouchableRipple onPress={navigateUserSearch} style={styles.button}>
-          <View style={globalStyles.frac}>
-            <Text style={styles.edit}>Search Users</Text>
-            <Icon name='magnify' color={theme.colors.primary} size={18}/>
-          </View>
-        </TouchableRipple>
+        <Chip 
+          mode='outlined'
+          style={styles.search}
+          onPress={navigateUserSearch}
+          icon='magnify'
+        >{`Search`}</Chip>
       </View>
       { data ? 
         data.length > 0 ?
@@ -118,22 +136,17 @@ const styles = StyleSheet.create({
     flex: 1
   },
   top: {
-    width: '100%',
+    width,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'space-between',
     paddingVertical: 12,
     paddingHorizontal: 16,
-    justifyContent: 'space-between',
     backgroundColor: theme.colors.secondary
   },
   date: {
     fontWeight: '500',
     color: theme.colors.onSecondary
-  },
-  edit: {
-    marginRight: 4,
-    fontWeight: '500',
-    color: theme.colors.primary
   },
   list: {
     flex: 1,
@@ -163,5 +176,10 @@ const styles = StyleSheet.create({
   },
   margin: {
     marginRight: 8 
+  },
+  search: {
+    backgroundColor: theme.colors.secondaryContainer,
+    borderColor: theme.colors.primary,
+    borderWidth: 2
   }
 });

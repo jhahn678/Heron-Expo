@@ -61,8 +61,11 @@ const UserProfileScreen = ({ navigation, route }: RootStackScreenProps<'UserProf
         showsVerticalScrollIndicator={false}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefetch}/>}
       >
-        <BioSection
-          bio={data?.user.bio} 
+        <BioSection 
+          id={data?.user.id}
+          username={data?.user.username}
+          bio={data?.user.bio}
+          following={data?.user.am_following}
         />
         <ProfileSection 
           loading={loading}

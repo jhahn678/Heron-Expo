@@ -1,27 +1,36 @@
-import dayjs from "dayjs";
 import React from "react";
-import { Pressable, StyleSheet, View } from "react-native";
-import { Text } from 'react-native-paper'
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { StyleSheet, View } from "react-native";
+import { Chip, Text } from 'react-native-paper'
+import RectangleLoader from "../../../../components/loaders/RectangleLoader";
 import { theme } from "../../../../config/theme";
 import BioLoader from "../loaders/BioLoader";
 
 interface Props {
     bio: string | null | undefined
-    createdAt: Date | undefined
+    username: string | undefined
     navigateToEdit: () => void
 }
 
-const BioSection = ({ bio, createdAt, navigateToEdit }: Props) => {
+const BioSection = ({ bio, username, navigateToEdit }: Props) => {
 
     return (
         <View>
             <View style={styles.top}>
-                <Text style={styles.date}>User since {dayjs(createdAt).format('MM/YYYY')}</Text>
-                <Pressable onPress={navigateToEdit} style={styles.button}>
-                    <Text style={styles.edit}>Edit</Text>
-                    <Icon name='pencil' color={theme.colors.primary} size={14}/>
-                </Pressable>
+                { username ? 
+                    <Chip 
+                        icon={'at'} 
+                        mode='outlined' 
+                        style={styles.chip}
+                    >{username}</Chip> :
+                    <RectangleLoader width={150} height={36} borderRadius={8}/>
+                }
+                <Chip 
+                    icon={'pencil'} 
+                    mode='outlined'
+                    onPress={navigateToEdit} 
+                    style={styles.chip}>
+                    Edit
+                </Chip>
             </View>
             { bio !== null && <Text style={styles.title}>Bio</Text> }
             { bio ?
@@ -62,11 +71,6 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         backgroundColor: theme.colors.surfaceVariant,
     },
-    edit: {
-        marginRight: 4,
-        fontWeight: '500',
-        color: theme.colors.primary
-    },
     title: {
         fontWeight: '500',
         fontSize: 18,
@@ -89,5 +93,11 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#d9d9d9',
         marginHorizontal: 16
-    }
+    },
+    chip: {
+        height: 36, 
+        backgroundColor: theme.colors.secondaryContainer,
+        borderColor: theme.colors.primary,
+        borderWidth: 2
+    },
 });

@@ -8,6 +8,7 @@ export const GET_MY_PROFILE = gql`
             firstname
             lastname
             fullname
+            username
             bio
             avatar
             city
@@ -24,6 +25,7 @@ export const GET_MY_PROFILE_TOTALS = gql`
             id
             bio
             created_at
+            username
             total_followers
             total_following
             total_locations
@@ -42,6 +44,7 @@ export interface GetMyProfileRes {
         | 'firstname' 
         | 'lastname' 
         | 'fullname' 
+        | 'username'
         | 'bio' 
         | 'avatar' 
         | 'city' 
@@ -52,7 +55,7 @@ export interface GetMyProfileRes {
 }
 
 export interface GetMyProfileTotalsRes {
-    me: Pick<IUser, 'id' | 'created_at' | 'bio'> & {
+    me: Pick<IUser, 'id' | 'created_at' | 'bio' | 'username'> & {
         total_following: number
         total_followers: number
         total_locations: number

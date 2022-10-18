@@ -57,7 +57,7 @@ const MyProfileScreen = ({ navigation }: MyProfileTabsScreenProps<'ProfileTab'>)
     >
       <BioSection 
         bio={data?.me.bio} 
-        createdAt={data?.me.created_at}
+        username={data?.me.username}
         navigateToEdit={navigateEdit}
       />
       <ProfileSection 
