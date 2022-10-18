@@ -19,16 +19,22 @@ export const waterbodyClassifications: WaterbodyClassification[] = [
 export interface IWaterbody {
     id: number,
     name: string
-    classification: WaterbodyClassification
+    classification: string
     country: string
     ccode: string
     subregion: string | null
-    admin_one: AdminOneName[]
+    admin_one: string[]
     admin_two: string[]
     weight?: number
     oid?: string
 }
 
+export interface WaterbodyDetails extends Omit<IWaterbody, 'weight' | 'oid'> {
+    media: Pick<IMedia, "url" | "id">[]
+    total_catches: number;
+    total_locations: number;
+    average_rating: number | null;
+}
 
 export interface AutocompleteWaterbody extends IWaterbody{
     rank: number
