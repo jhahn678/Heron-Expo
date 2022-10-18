@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg, { SvgProps, G, Path, Defs, ClipPath } from "react-native-svg"
+import Svg, { SvgProps, G, Path } from "react-native-svg"
 
 const FishermanDock = (props: SvgProps) => (
   <Svg
