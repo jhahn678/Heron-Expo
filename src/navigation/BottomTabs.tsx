@@ -9,6 +9,7 @@ import MyProfileTabs from "./MyProfileTabs";
 import { useAuth } from "../store/auth/useAuth";
 import PromptAuthenticationScreen from "../screens/auth/PromptAuthenticationScreen";
 import MyPlacesTabs from "./MyPlacesTabs";
+import { theme } from "../config/theme";
 
 
 const BottomTabs = (): JSX.Element => {
@@ -18,7 +19,11 @@ const BottomTabs = (): JSX.Element => {
     const Tabs = createBottomTabNavigator<BottomTabsParams>();
 
     return(
-        <Tabs.Navigator screenOptions={{ headerShown: false, tabBarHideOnKeyboard: true }}>
+        <Tabs.Navigator screenOptions={{ 
+            headerShown: false, 
+            tabBarHideOnKeyboard: true, 
+            tabBarActiveTintColor: theme.colors.primary,
+        }}>
             <Tabs.Screen 
                 name='ExploreStack' 
                 component={ExploreStack} 
