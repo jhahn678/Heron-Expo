@@ -302,7 +302,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
             <Polygon 
               strokeWidth={2}
               tappable={false}
-              fillColor={'rgba(0,0,0,.3)'} 
+              fillColor={'rgba(0,101,139,.2)'} 
               strokeColor={theme.colors.primary} 
               coordinates={polygon.map(x => x.coordinate)} 
             /> 

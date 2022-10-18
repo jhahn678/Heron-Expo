@@ -391,9 +391,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
         {geojson && (
           <Geojson
             geojson={geojson}
-            strokeColor={"rgba(255,155,50,1)"}
             strokeWidth={5}
-            fillColor={"rgba(255,155,50,.5)"}
+            strokeColor={theme.colors.primary}
+            fillColor={theme.colors.primaryContainer}
             lineJoin="bevel"
             onPress={handlePressGeoJson}
           />
