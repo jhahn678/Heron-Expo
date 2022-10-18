@@ -1,26 +1,67 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { ActivityIndicator, Divider, List } from 'react-native-paper'
 import { StyleSheet } from "react-native";
-import { useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
+import { AccountRes, useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
 import { useModalStore } from "../../../../store/modal/useModalStore";
+import { LinkedAccount } from "../../../../types/User";
+
+const mapToIcon = (data: AccountRes | undefined): string => {
+    if(data?.apple_id) return 'apple'
+    if(data?.facebook_id) return 'facebook'
+    if(data?.google_id) return 'google'
+    return 'account'
+}
+
+const mapToLabel = (data: AccountRes | undefined): string => {
+    if(data?.apple_id) return 'Apple'
+    if(data?.facebook_id) return 'Facebook'
+    if(data?.google_id) return 'Google'
+    return 'No linked accounts'
+}
 
 const AccountSection = () => {
-    
-    const { data } = useGetMyAccount()
+
+    const { data, refetch } = useGetMyAccount()
+    const setUnlink = useModalStore(store => store.setUnlinkAccount)
     const setLogout = useModalStore(store => store.setLogout)
     const handleLogout = () => setLogout({ visible: true, onLogoutGoBack: true })
-    const handleEmail = () => {}
-    const handleDelete = () => {}
+
+    const handleUnlinkAccount = () => {
+        if(data?.apple_id || data?.facebook_id || data?.google_id){
+            setUnlink({ 
+                visible: true, 
+                callback: refetch,
+                type: data?.apple_id ?
+                    LinkedAccount.Apple : 
+                    data.facebook_id ? 
+                    LinkedAccount.Facebook :
+                    LinkedAccount.Google,  
+            })
+        }
+    }
+
+    const handleEmail = () => {
+
+    }
+
+    const handleDelete = () => {
+
+    }
 
     return (
         <List.Section>
             <List.Subheader style={styles.title}>Account</List.Subheader>
-            <List.Item title="Linked Accounts"/>
+            <List.Item 
+                title={'Linked Account'} 
+                onPress={handleUnlinkAccount}
+                description={mapToLabel(data)}
+                right={() => <List.Icon icon={mapToIcon(data)}/>}
+            />
             <Divider/>
             <List.Item 
-                title="Email"
-                description={data ? data.email : <ActivityIndicator size={'small'}/>}
-                right={() => <List.Icon icon='email-edit'/>}
+                title={"Email"}
+                description={data ? data.email ? data.email : 'No email registered' : <ActivityIndicator size={'small'}/>}
+                right={() => <List.Icon icon={data?.email ? 'email-edit' : 'email-plus'}/>}
             />
             <Divider/>
             <List.Item 

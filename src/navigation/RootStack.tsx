@@ -31,6 +31,7 @@ import EditCatchScreen from "../screens/catch/EditCatch/EditCatchScreen";
 import EditLocationScreen from "../screens/location/EditLocation/EditLocationScreen";
 import EditReviewScreen from "../screens/waterbody/EditReviewScreen/EditReviewScreen";
 import UsernameAuthScreen from '../screens/auth/UsernameAuthScreen';
+import PasswordScreen from '../screens/auth/PasswordScreen';
 
 
 const RootStack = (): JSX.Element => {
@@ -117,6 +118,9 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name="EditCatchScreen" component={EditCatchScreen}/>
                 <Stack.Screen name="EditLocationScreen" component={EditLocationScreen}/>
                 <Stack.Screen name="EditReviewScreen" component={EditReviewScreen}/>
+                <Stack.Screen name='PasswordScreen' component={PasswordScreen}
+                    options={{ headerShown: true, headerTitle: 'Sign In'}}
+                />
             </Stack.Navigator>
         </NavigationContainer>
     );

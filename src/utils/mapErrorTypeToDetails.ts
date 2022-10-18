@@ -5,18 +5,17 @@ export enum ErrorType {
     Upload = 'UPLOAD',
     UploadPartial = 'UPLOAD_PARTIAL',
     ReviewDuplicate = 'REVIEW_DUPLICATE',
-    Catch = 'CATCH',
     CreateCatch = 'CREATE_CATCH',
     EditCatch = 'EDIT_CATCH',
     MapCatch = 'MAP_CATCH',
-    Location = 'LOCATION',
     CreateLocation = 'CREATE_LOCATION',
     EditLocation = 'EDIT_LOCATION',
     MapLocation = 'MAP_LOCATION',
     MapNoCatches = 'MAP_NO_CATCHES',
     MapNoCatchesLogged = 'MAP_NO_CATCHES_LOGGED',
     MapNoLocations = 'MAP_NO_LOCATIONS',
-    MapCurrentLocation = 'MAP_CURRENT_LOCATION'
+    MapCurrentLocation = 'MAP_CURRENT_LOCATION',
+    RequestError = 'REQUEST_ERROR'
 }
 
 const ErrorDetails: { [key in ErrorType]: Details } = {
@@ -30,10 +29,6 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
         message: 'Some of the images you attempted to upload could not be \
         processed. The problem may have been the image format.'
     },
-    CATCH: {
-        title: '',
-        message: '',
-    },
     CREATE_CATCH: {
         title: 'Something went wrong 😵‍💫',
         message: 'Could not create catch. Please try again'
@@ -45,10 +40,6 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
     MAP_CATCH: {
         title: 'Something went wrong 😵‍💫',
         message: 'Could not display catch on map'
-    },
-    LOCATION: {
-        title: '',
-        message: '',
     },
     EDIT_LOCATION: {
         title: 'Something went wrong 😵‍💫',
@@ -82,6 +73,10 @@ const ErrorDetails: { [key in ErrorType]: Details } = {
     MAP_NO_LOCATIONS: {
         title: 'Nothing to display 🗺',
         message: 'There are no locations available to display'
+    },
+    REQUEST_ERROR: {
+        title: 'Request Error',
+        message: 'There was a problem making a request to the server'
     },
     DEFAULT: {
         title: 'Something went wrong 😵‍💫',

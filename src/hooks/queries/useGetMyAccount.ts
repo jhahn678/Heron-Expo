@@ -2,8 +2,11 @@ import { axios } from "../../config/axios";
 import { useQuery } from '@tanstack/react-query'
 import { useAuth } from "../../store/auth/useAuth";
 
-interface Res {
-    email: string
+export interface AccountRes {
+    email: string | null
+    google_id: string | null
+    facebook_id: string | null
+    apple_id: string | null
 }
 
 export const useGetMyAccount = () => {
@@ -19,5 +22,5 @@ export const useGetMyAccount = () => {
         return res.data;
     }
 
-    return useQuery<Res>({ queryFn: fetchAccount })
+    return useQuery<AccountRes>({ queryFn: fetchAccount, refetchOnMount: true })
 }

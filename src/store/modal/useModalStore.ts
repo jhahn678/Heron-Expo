@@ -1,4 +1,5 @@
 import create from 'zustand'
+import { LinkedAccount } from '../../types/User'
 import { mapErrorTypeToDetails, ErrorType } from '../../utils/mapErrorTypeToDetails'
 import { mapSuccessTypeToDetails, SuccessType } from '../../utils/mapSuccessTypeToDetails'
 
@@ -13,6 +14,11 @@ interface ManageContactsArgs {
     username: string
 }
 
+interface UnlinkAccountArgs {
+    visible: boolean,
+    type: LinkedAccount | null, 
+    callback: (() => void) | null
+}
 
 export interface ModalStore {
     auth: boolean
@@ -44,6 +50,10 @@ export interface ModalStore {
     manageContactName: string | null,
     manageContactUsername: string | null,
     setManageContact: (args: ManageContactsArgs | false) => void
+    unlinkAccount: boolean
+    unlinkAccountType: LinkedAccount | null,
+    unlinkRefetchCallback: (() => void) | null,
+    setUnlinkAccount: (args?: UnlinkAccountArgs ) => void
     dismiss: () => void
 }
 
@@ -106,6 +116,14 @@ export const useModalStore = create<ModalStore>((set) => ({
         manageContactUser: args ? args.user : null,
         manageContactUsername: args ? args.username: null,
     }),
+    unlinkAccount: false,
+    unlinkAccountType: null,
+    unlinkRefetchCallback: null,
+    setUnlinkAccount: (args) => set({
+            unlinkAccount: args?.visible || false,
+            unlinkAccountType: args?.type || null,
+            unlinkRefetchCallback: args?.callback || null
+    }),
     dismiss: () => {
         set({
             auth: false,
@@ -115,6 +133,7 @@ export const useModalStore = create<ModalStore>((set) => ({
             manageContact: false,
             confirmDelete: false,
             reauthenticate: false,
+            unlinkAccount: false
         })
         set({
             errorTitle: null,
@@ -127,6 +146,8 @@ export const useModalStore = create<ModalStore>((set) => ({
             manageContactUsername: null,
             confirmDeleteMessage: null,
             confirmDeleteCallback: null,
+            unlinkAccountType: null,
+            unlinkRefetchCallback: null,
         })
     }
 }))

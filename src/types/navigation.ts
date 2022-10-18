@@ -38,6 +38,7 @@ export type RootStackParams = {
     EditCatchScreen: { id: number }
     EditLocationScreen: { id: number }
     EditReviewScreen: { id: number }
+    PasswordScreen: undefined
 }
 
 export enum MapResource {

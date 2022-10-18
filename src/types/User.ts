@@ -47,3 +47,9 @@ export interface SocialLoginRes {
     refreshToken: string,
     account_created: boolean
 }
+
+export enum LinkedAccount {
+    Apple = 'apple',
+    Google = 'google',
+    Facebook = 'facebook'
+}
