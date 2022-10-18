@@ -37,3 +37,13 @@ export enum FollowType {
   Following,
   Followers
 }
+
+export interface SocialLoginRes {
+    id: number,
+    avatar: string, 
+    username: string, 
+    firstname: string,
+    accessToken: string,
+    refreshToken: string,
+    account_created: boolean
+}

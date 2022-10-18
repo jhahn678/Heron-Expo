@@ -50,9 +50,9 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         loading={isLoading}
       >Sign in</Button>
       <Text style={{ alignSelf: 'center', marginTop: 16, marginBottom: 12}}>Or</Text>
-      <GoogleLoginButton/>
-      <FacebookLoginButton/>
-      <AppleLoginButton/>
+      <GoogleLoginButton navigation={navigation}/>
+      <FacebookLoginButton navigation={navigation}/>
+      <AppleLoginButton navigation={navigation}/>
       <Button 
         onPress={() => navigation.navigate('RegisterAuthScreenOne')}
         buttonColor='white'
@@ -60,7 +60,7 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         style={styles.button}
         icon={'email'}
       >
-        Sign up with email
+        Create a new account
       </Button>
     </View>
   )

@@ -1,10 +1,8 @@
-import { StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { StyleProp, StyleSheet, ViewStyle } from "react-native";
 import React, { useEffect, useState } from "react";
 import { useFollowUser, useUnfollowUser } from "../../hooks/mutations/useFollowUser";
-import { TouchableRipple } from "react-native-paper";
-import globalStyles from "../../globalStyles";
+import { Chip } from "react-native-paper"
 import { theme } from "../../config/theme";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 
 interface Props {
     id: number | undefined
@@ -30,19 +28,15 @@ const FollowButton = ({ id, ...props }: Props) => {
     },[props.following])
 
     return (
-        <TouchableRipple 
-            style={[
-                styles.button,
-                { backgroundColor: following ? theme.colors.secondaryContainer : undefined },
-                props.style
-            ]} 
-            onPress={handlePress}>
-            <Icon
-                size={20} 
-                color={theme.colors.primary}
-                name={following ? 'account-multiple-check' : 'account-multiple-plus-outline'} 
-            />
-        </TouchableRipple>
+        <Chip 
+            mode="outlined"
+            onPress={handlePress}
+            elevation={5} elevated={true}
+            style={styles.button} 
+            icon={following ? 'check' : 'plus'}
+        >
+            {following ? 'Following' : 'Follow'}
+        </Chip>
     );
 };
 
@@ -50,9 +44,8 @@ export default FollowButton;
 
 const styles = StyleSheet.create({
     button: {
-        paddingHorizontal: 8,
-        paddingVertical: 8,
-        borderRadius: 8,
+        height: 36, 
+        backgroundColor: theme.colors.secondaryContainer,
         borderColor: theme.colors.primary,
         borderWidth: 2
     },

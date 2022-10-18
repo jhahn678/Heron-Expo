@@ -1,5 +1,4 @@
 import * as Linking from 'expo-linking';
-import { Text } from 'react-native'
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../store/auth/useAuth";
 import { RootStackParams } from "../types/navigation";
@@ -31,6 +30,7 @@ import ContactsListScreen from "../screens/contacts/ContactsList/ContactsListScr
 import EditCatchScreen from "../screens/catch/EditCatch/EditCatchScreen";
 import EditLocationScreen from "../screens/location/EditLocation/EditLocationScreen";
 import EditReviewScreen from "../screens/waterbody/EditReviewScreen/EditReviewScreen";
+import UsernameAuthScreen from '../screens/auth/UsernameAuthScreen';
 
 
 const RootStack = (): JSX.Element => {
@@ -91,6 +91,9 @@ const RootStack = (): JSX.Element => {
                         <Stack.Screen name="RegisterAuthScreenThree" component={RegisterAuthScreenThree}
                              options={{ headerShown: true, headerTitle: 'Step 3 of 3' }}
                         />
+                        <Stack.Screen name='UsernameAuthScreen' component={UsernameAuthScreen} options={{ 
+                            headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username'
+                        }}/>
                     </Stack.Group>
                 }
                 <Stack.Screen name='MainTabs' component={MainTabs}/>

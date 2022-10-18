@@ -41,9 +41,7 @@ const RegisterAuthScreenTwo = ({ navigation }: RootStackScreenProps<'RegisterAut
         onChangeText={setEmail}
         style={styles.input}
         error={email.isAvailable === false || email.isError}
-        right={email.isLoading && (
-          <TextInput.Icon icon={() => <ActivityIndicator size={20}/>}/>
-        )}
+        right={<TextInput.Icon icon={() => <ActivityIndicator animating={email.isLoading}/>}/>}
       />
       {
         username.isAvailable === false ?
@@ -60,9 +58,8 @@ const RegisterAuthScreenTwo = ({ navigation }: RootStackScreenProps<'RegisterAut
         onChangeText={setUsername}
         style={styles.input}
         error={username.isAvailable === false || username.isError}
-        right={username.isLoading && (
-          <TextInput.Icon icon={() => <ActivityIndicator size={20}/>}/>
-        )}
+        left={<TextInput.Affix text="@" textStyle={{ color: theme.colors.primary }}/>}
+        right={<TextInput.Icon icon={() => <ActivityIndicator animating={username.isLoading}/>}/>}
       />
       { !passwordValid &&
         <Text style={styles.tip}>Minimum of 8 characters – One uppercase character</Text>

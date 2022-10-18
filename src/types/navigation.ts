@@ -15,6 +15,7 @@ export type RootStackParams = {
     RegisterAuthScreenOne: undefined,
     RegisterAuthScreenTwo: undefined,
     RegisterAuthScreenThree: undefined,
+    UsernameAuthScreen: undefined,
     MainTabs: NavigatorScreenParams<BottomTabsParams>,
     NewCatchScreen: { waterbody: number } | undefined
     ViewCatchScreen: { id: number }

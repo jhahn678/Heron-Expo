@@ -1,11 +1,16 @@
 import { Dimensions, StyleSheet, View } from 'react-native'
 import React from 'react'
+import { Image } from 'react-native'
 import { RootStackScreenProps } from '../../types/navigation'
 import { Button, Text } from 'react-native-paper'
 import GoogleLoginButton from '../../components/buttons/GoogleLoginButton'
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
 import AppleLoginButton from '../../components/buttons/AppleLoginButton'
-const { width } = Dimensions.get('screen')
+import GradientEllipse from '../../components/svg/GradientEllipse'
+import GradientEllipseMedium from '../../components/svg/GradientEllipseMedium'
+import GradientElippsesSmall from '../../components/svg/GradientEllipsesSmall'
+const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../assets/heron-dark.png'))
+const { width, height } = Dimensions.get('screen')
 
 const HomeAuthScreen = ({ navigation, route }: RootStackScreenProps<'HomeAuthScreen'>): JSX.Element => {
   
@@ -27,13 +32,18 @@ const HomeAuthScreen = ({ navigation, route }: RootStackScreenProps<'HomeAuthScr
             style={styles.skipButton}
           >Skip</Button>
       }
+      <Image source={DEFAULT_IMAGE} style={styles.image}/>
+      <GradientEllipse style={styles.ellipse}/>
+      <GradientEllipseMedium style={styles.ellipse2}/>
+      <GradientElippsesSmall style={styles.ellipse3}/>
       <View style={styles.buttonContainer}>
-        <GoogleLoginButton/>
-        <FacebookLoginButton/>
-        <AppleLoginButton/>
+        <GoogleLoginButton navigation={navigation}/>
+        <FacebookLoginButton navigation={navigation}/>
+        <AppleLoginButton navigation={navigation}/>
         <Button onPress={handleLoginScreen}
           theme={{ roundness: 2 }}
-          buttonColor='white' 
+          elevation={5}
+          mode='contained'
           icon='email' 
           style={styles.button} 
         >Sign in with Password</Button>
@@ -51,7 +61,7 @@ const styles = StyleSheet.create({
   container: {
     height: '100%',
     justifyContent: 'space-between',
-    padding: '5%'
+    padding: 16
   },
   skipButton: {
     marginTop: 36,
@@ -69,10 +79,31 @@ const styles = StyleSheet.create({
     width: width - 48,
     height: 48,
     display: 'flex',
-    justifyContent: 'center',
+    justifyContent: 'center'
   },
   caption: {
     marginTop: 16,
     marginBottom: 8
+  },
+  image: {
+    alignSelf: 'center',
+    height: 300, 
+    width: 300,
+    transform: [{ translateY: -30 },{ translateX: 10 }]
+  },
+  ellipse: {
+    position: 'absolute',
+    top: height * .45,
+    zIndex: -1,
+  },
+  ellipse2: {
+    position: 'absolute',
+    top: height * .45,
+    zIndex: -1
+  },
+  ellipse3: {
+     position: 'absolute',
+      top: 0,
+      zIndex: -1
   }
 })
