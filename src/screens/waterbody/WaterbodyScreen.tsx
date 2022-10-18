@@ -1,5 +1,5 @@
 import { ExploreStackScreenProps } from '../../types/navigation';
-import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, View, RefreshControl, Image } from 'react-native';
 import { useGetWaterbody } from '../../hooks/queries/useGetWaterbody';
 import ReviewsSection from './sections/ReviewsSection';
 import MapSection from './sections/MapSection';

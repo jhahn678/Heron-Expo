@@ -5,13 +5,15 @@ import { Divider, IconButton, Menu } from "react-native-paper";
 import BackButton from "../../../../components/buttons/BackButton";
 import ShareButton from "../../../../components/buttons/ShareButton";
 import ImagePagination from "../../../../components/lists/shared/ImagePagination";
+import FisherWomanFishing from "../../../../components/svg/FisherwomanFishing";
+import { theme } from "../../../../config/theme";
 import { useDeleteLocation } from "../../../../hooks/mutations/useDeleteLocation";
 import { GetLocationRes } from "../../../../hooks/queries/useGetLocation";
 import { useImagePaginationIndicator } from "../../../../hooks/utils/useImagePaginationIndicator";
 import { ShareType } from "../../../../hooks/utils/useShareContent";
 import { useAuth } from "../../../../store/auth/useAuth";
 import { useModalStore } from "../../../../store/modal/useModalStore";
-import { MediaType } from "../../../../types/Media";
+import { IMedia, MediaType } from "../../../../types/Media";
 import { RootStackScreenProps } from "../../../../types/navigation";
 
 const { height, width } = Dimensions.get('screen')
@@ -84,18 +86,21 @@ const BannerSection = ({ navigation, media=[], mapImage, id, user }: Props) => {
             { media.length > 1 &&
                 <ImagePagination currentIndex={currentIndex} media={media}/>
             }
-            <FlatList
-                data={media.length > 0 ? media : mapImage ? [mapImage] : undefined}
+            { media.length > 0 ?
+                <FlatList
+                data={media}
                 horizontal={true}
                 pagingEnabled={true}
                 onViewableItemsChanged={handleViewableItemsChanged}
                 showsHorizontalScrollIndicator={false}
                 renderItem={({ item }) => (
                     <Pressable onPress={navigateToImage(item.id)}>
-                        <Image source={{ uri: item.url }} style={styles.image}/>
+                    <Image source={{ uri: item.url }} style={styles.image}/>
                     </Pressable>
                 )}
-                />
+                /> :
+                <View style={styles.placeholder}><FisherWomanFishing/></View>
+        }
         </View>
     );
 };
@@ -122,7 +127,14 @@ const styles = StyleSheet.create({
         right: 12,
     },
     image: {
+        width,
         flex: 1,
-        width: width,
-    }
+    },
+    placeholder: {
+        width,
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: theme.colors.secondary
+    },
 });

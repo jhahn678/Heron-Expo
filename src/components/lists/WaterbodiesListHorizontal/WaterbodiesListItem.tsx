@@ -7,6 +7,8 @@ import globalStyles from '../../../globalStyles'
 import { truncateTotal } from '../../../utils/conversions/truncateTotal'
 import { IMedia } from '../../../types/Media'
 import { waterbodyLocationLabel } from '../../../utils/conversions/waterbodyLocationToLabel'
+const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../../assets/default-background.png')).uri
+
 
 export interface WaterbodyListItem extends Omit<IWaterbody, 'weight' | 'oid'> {
   media: Pick<IMedia, "url" | "id">[];
@@ -27,7 +29,7 @@ const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate, cont
   
   return (
     <Card style={[styles.container, containerStyle]} onPress={() => navigate(data.id)} elevation={1}>
-      <Image source={{ uri: data.media[0]?.url }} style={styles.image} />
+      <Image source={{ uri: data.media[0]?.url || DEFAULT_IMAGE }} style={styles.image} />
       <View style={styles.heading}>
         <Text style={styles.title} numberOfLines={1}>
           {data.name}

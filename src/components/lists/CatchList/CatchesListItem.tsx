@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
-import { Text, TouchableRipple } from 'react-native-paper'
+import { Card, Text, TouchableRipple } from 'react-native-paper'
 import { GetCatchesRes } from "../../../hooks/queries/useGetCatches";
 import Avatar from "../../users/Avatar";
 import dayjs from '../../../config/dayjs'
@@ -27,7 +27,7 @@ const CatchesListItem = ({
 }: Props) => {
 
     return (
-      <View style={styles.container}>
+      <Card style={styles.container}>
         <Pressable onPress={navigateToCatch}>
           <View style={styles.header}>
             <TouchableRipple onPress={navigateToUser}>
@@ -98,7 +98,7 @@ const CatchesListItem = ({
             />
           </View>
         </View>
-      </View>
+      </Card>
     );
 };
 

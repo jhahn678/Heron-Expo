@@ -17,7 +17,7 @@ const RecentActivityCatch = <T extends RecentActivity>({
 }: Props<T>): JSX.Element => {
 
     return (
-        <Card onPress={onNavigateToCatch} style={[styles.container, style]} elevation={0}>
+        <Card onPress={onNavigateToCatch} style={[styles.container, style]} elevation={1}>
             <View style={styles.header}>
                 <Avatar 
                     size={36}
@@ -41,13 +41,13 @@ const RecentActivityCatch = <T extends RecentActivity>({
                     : undefined
                 }} 
             />
-            <Text style={styles.caption}>
-                { 
-                    data.species ? 
+            <View style={styles.caption}>
+                <Text style={styles.captionText} numberOfLines={2}>
+                { data.species ? 
                     `Caught a ${data.species} at ${data.waterbody.name}` : 
-                    `Logged a catch at ${data.waterbody.name}`
-                }
-            </Text>
+                    `Logged a catch at ${data.waterbody.name}`}
+                </Text>
+            </View>
         </Card>
     )
 }
@@ -56,7 +56,7 @@ export default RecentActivityCatch
 
 const styles = StyleSheet.create({
     container: {
-        height: 340,
+        height: 350,
         width: 300,
         backgroundColor: 'white',
         marginRight: 16,
@@ -85,8 +85,12 @@ const styles = StyleSheet.create({
         fontSize: 12,
     },
     caption: {
+        height: 64,
+        padding: 12,
+    },
+    captionText: {
         fontSize: 14,
         fontWeight: '500',
-        padding: 12
+        justifyContent: 'center'
     }
 })

@@ -15,6 +15,7 @@ import { GetWaterbodyRes } from "../../../hooks/queries/useGetWaterbody";
 import { useImagePaginationIndicator } from "../../../hooks/utils/useImagePaginationIndicator";
 import ImagePagination from "../../../components/lists/shared/ImagePagination";
 import { useBottomSheetStore } from "../../../store/modal/useBottomSheetStore";
+const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../../assets/default-background.png')).uri
 const { width } = Dimensions.get('screen')
 
 interface Props {
@@ -26,7 +27,7 @@ interface Props {
     media: GetWaterbodyRes['waterbody']['media'] | undefined
 }
 
-const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Props) => {
+const BannerSection = ({ id, navigation, name, media=[], totalMedia, isSaved }: Props) => {
 
     const isAuthenticated = useAuth(store => store.isAuthenticated)
     const setAuthVisible = useModalStore(store => store.setAuth)
@@ -48,21 +49,22 @@ const BannerSection = ({ id, navigation, name, media, totalMedia, isSaved }: Pro
 
     return (
         <View style={styles.container}>
-            <FlatList
-                data={media || []}
-                horizontal={true}
-                pagingEnabled={true}
-                onViewableItemsChanged={handleViewableItemsChanged}
-                showsHorizontalScrollIndicator={false}
-                renderItem={({ item }) => (
-                    <Pressable onPress={navigateMediaScreen}>
-                        <Image source={{ uri: item.url }} resizeMode={'cover'} style={styles.image}/>
-                    </Pressable>
-                )}
-            />
-            {(media && media.length > 0) && 
-                <ImagePagination currentIndex={currentIndex} media={media}/>
+            { media.length ?
+                <FlatList
+                    data={media}
+                    horizontal={true}
+                    pagingEnabled={true}
+                    onViewableItemsChanged={handleViewableItemsChanged}
+                    showsHorizontalScrollIndicator={false}
+                    renderItem={({ item }) => (
+                        <Pressable onPress={navigateMediaScreen}>
+                            <Image source={{ uri: item.url }} resizeMode={'cover'} style={styles.image}/>
+                        </Pressable>
+                    )}
+                /> :
+                <Image source={{ uri: DEFAULT_IMAGE }} resizeMode={'cover'} style={styles.image}/>
             }
+            { media.length > 1 &&  <ImagePagination currentIndex={currentIndex} media={media}/> }
             <BackButton style={styles.back}/>
             <ShareButton style={styles.share} shareType={ShareType.Waterbody} id={id}/>
             <SaveIconButton style={styles.save} waterbody={id} saved={isSaved}/>

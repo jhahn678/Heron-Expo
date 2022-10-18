@@ -16,11 +16,11 @@ interface Props{
     id: number
 }
 
-const ActionBar = ({ navigation, totalFavorites, isFavorited, isSaved, id }: Props) => {
+const ActionBar = ({ totalFavorites=0, isFavorited, isSaved, id }: Props) => {
 
     return (
         <View>
-            {(totalFavorites && totalFavorites > 0) ?
+            {totalFavorites > 0 ?
                 <Text style={styles.likes}>
                 {
                     totalFavorites && totalFavorites > 1 ? 

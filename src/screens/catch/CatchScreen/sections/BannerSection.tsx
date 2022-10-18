@@ -7,11 +7,14 @@ import ShareButton from "../../../../components/buttons/ShareButton";
 import { ShareType } from "../../../../hooks/utils/useShareContent";
 import ImagePagination from "../../../../components/lists/shared/ImagePagination";
 import { useImagePaginationIndicator } from "../../../../hooks/utils/useImagePaginationIndicator";
-import { MediaType } from "../../../../types/Media";
+import { IMedia, MediaType } from "../../../../types/Media";
 import { useAuth } from "../../../../store/auth/useAuth";
 import { Divider, IconButton, Menu } from "react-native-paper";
 import { useDeleteCatch } from "../../../../hooks/mutations/useDeleteCatch";
 import { useModalStore } from "../../../../store/modal/useModalStore";
+import { theme } from "../../../../config/theme";
+import FishermanFishingCattails from "../../../../components/svg/FishermanFishingCattails";
+import FishermanHoldingFish from "../../../../components/svg/FishermanHoldingFish";
 
 interface Props {
   id: number
@@ -78,21 +81,24 @@ const BannerSection = ({ navigation, id, user, media=[], mapImage }: Props) => {
             </Menu>
           }
         </View>
-        { media.length > 1 && 
+        { media.length > 0 && 
           <ImagePagination currentIndex={currentIndex} media={media}/>
         }
-        <FlatList
-          data={media.length > 0 ? media : mapImage ? [mapImage] : undefined}
-          horizontal={true}
-          pagingEnabled={true}
-          onViewableItemsChanged={handleViewableItemsChanged}
-          showsHorizontalScrollIndicator={false}
-          renderItem={({ item }) => (
-            <Pressable onPress={navigateToImage(item.id)}>
-              <Image source={{ uri: item.url }} style={styles.image}/>
-            </Pressable>
-          )}
-        />
+        { media.length > 0 ?
+            <FlatList
+              data={media}
+              horizontal={true}
+              pagingEnabled={true}
+              onViewableItemsChanged={handleViewableItemsChanged}
+              showsHorizontalScrollIndicator={false}
+              renderItem={({ item }) => (
+                <Pressable onPress={navigateToImage(item.id)}>
+                  <Image source={{ uri: item.url }} style={styles.image}/>
+                </Pressable>
+              )}
+            /> :
+            <View style={styles.placeholder}><FishermanHoldingFish/></View>
+        }
       </View>
     );
 };
@@ -121,6 +127,14 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: width,
+    backgroundColor: theme.colors.secondary
+  },
+  placeholder: {
+    width,
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: theme.colors.secondary
   },
   indexbar: {
     position: 'absolute',

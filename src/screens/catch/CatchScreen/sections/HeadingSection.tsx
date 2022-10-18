@@ -81,7 +81,7 @@ const HeadingSection = ({ navigation, data, id }: Props) => {
             </>
           }
         </View>
-        {data && data.total_favorites > 0 &&
+        {(data && data.total_favorites > 0) && 
           <Text style={styles.likes}>
             {
               data.total_favorites > 1 ? 
@@ -92,10 +92,13 @@ const HeadingSection = ({ navigation, data, id }: Props) => {
         }
         <View style={styles.actionbar}>
           <LikeButton active={data?.is_favorited} id={id} type={LikeType.Catch} />
-          { data?.waterbody &&
+          { Boolean(data?.geom) &&
             <>
               <View style={styles.bardivider}/>
-              <Icon name="map" size={24} color={theme.colors.primary} onPress={navigateToMap}/>
+              <Icon name="map" size={24} 
+                color={theme.colors.primary} 
+                onPress={navigateToMap}
+              />
             </>
           }
           <View style={styles.bardivider} />

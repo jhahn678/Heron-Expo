@@ -4,15 +4,15 @@ import { MyPlacesTabsScreenProps } from "../../../types/navigation";
 import { useGetMySavedWaterbodies } from "../../../hooks/queries/useGetMySavedWaterbodies";
 import { FlashList } from "@shopify/flash-list";
 import { ActivityIndicator } from "react-native-paper";
-import ReviewsListEmpty from "../../../components/lists/shared/ReviewsListEmpty";
-import WaterbodiesListItem from "../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListItem";
 import CatchesListEmpty from "../../../components/lists/shared/CatchesListEmpty";
+import WaterbodiesListItem from "../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListItem";
+import WaterbodySearchResult from "../../../components/lists/WaterbodySearch/WaterbodySearchResult";
 
 const { width } = Dimensions.get('screen')
 
 const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySavedWaterbodies'>) => {
 
-    const { data, loading, refetch, fetchMore } = useGetMySavedWaterbodies()
+    const { data, refetch, fetchMore } = useGetMySavedWaterbodies()
 
     const [refetching, setRefetching] = useState(false)
     const handleRefetch = () => { setRefetching(true); refetch().then(() => setRefetching(false)) }
@@ -31,13 +31,13 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
         <View style={styles.container}>
             { data ? 
                 <FlashList
-                    estimatedItemSize={300}
-                    showsVerticalScrollIndicator={false}
                     refreshing={refetching}
+                    estimatedItemSize={300}
                     onRefresh={handleRefetch}
-                    onEndReached={handleFetchMore}
                     onEndReachedThreshold={.4}
+                    onEndReached={handleFetchMore}
                     data={data.me.saved_waterbodies}
+                    showsVerticalScrollIndicator={false}
                     contentContainerStyle={{ paddingTop: 16 }}
                     ListEmptyComponent={
                         <CatchesListEmpty
@@ -48,10 +48,10 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
                         />
                     }
                     renderItem={({ item }) => (
-                        <WaterbodiesListItem 
+                        <WaterbodySearchResult
                             data={item} 
-                            navigate={navigateWaterbody(item.id)}
                             containerStyle={styles.card}
+                            onPress={navigateWaterbody(item.id)}
                         />
                     )}
                 />
@@ -65,13 +65,12 @@ export default SavedWaterbodiesTabView;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1,
+        flex: 1
     },
     empty: {
         marginTop: 200
     },
     card: {
-        width: width - 32,
-        marginHorizontal: 16
+        height: 340,
     }
 });

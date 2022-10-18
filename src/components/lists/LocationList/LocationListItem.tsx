@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
-import { TouchableRipple, Text } from "react-native-paper";
+import { TouchableRipple, Text, Card } from "react-native-paper";
 import dayjs from "../../../config/dayjs";
 import { GetLocationsRes } from "../../../hooks/queries/useGetLocations";
 import { ShareType } from "../../../hooks/utils/useShareContent";
@@ -8,6 +8,7 @@ import Avatar from "../../users/Avatar";
 import ShareButton from "../../buttons/ShareButton";
 import SaveLocationButton from "../../buttons/SaveLocationButton";
 import LikeButton, { LikeType } from "../../buttons/LikeButton";
+import { theme } from "../../../config/theme";
 
 interface Props {
     data: GetLocationsRes['locations'][number],
@@ -19,7 +20,7 @@ interface Props {
 const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
 
     return (
-      <View style={styles.container}>
+      <Card style={styles.container}>
         <Pressable onPress={navigateToMap}>
           <View style={styles.header}>
             <TouchableRipple onPress={navigateToUser}>
@@ -52,16 +53,18 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
             {data.nearest_place}
           </Text>
 
-          <Image 
-            style={styles.image} 
-            source={{ uri: 
-              data.media.length > 0 ? 
-              data.media[0].url : 
-              data.map_image ? 
-              data.map_image.url :
-              undefined 
-            }}
-          />
+          { Boolean(data.media.length || data.map_image) &&
+            <Image 
+              style={styles.image} 
+              source={{ uri: 
+                data.media.length > 0 ? 
+                data.media[0].url : 
+                data.map_image ? 
+                data.map_image.url :
+                undefined
+              }}
+            />
+          }
 
           {data.total_favorites > 0 ? (
             data.total_favorites === 1 ? (
@@ -98,7 +101,7 @@ const LocationListItem = ({ data, navigateToUser, navigateToMap }: Props) => {
             />
           </View>
         </View>
-      </View>
+      </Card>
     );
 };
 
@@ -143,7 +146,7 @@ const styles = StyleSheet.create({
   image: {
     width: "100%",
     height: 250,
-    backgroundColor: "#e0e0e0",
+    backgroundColor: theme.colors.secondaryContainer
   },
   footer: {
     flexDirection: "row",

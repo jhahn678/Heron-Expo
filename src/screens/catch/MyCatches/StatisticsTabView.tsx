@@ -13,6 +13,7 @@ import TrophyIcon from "../../../components/icons/TrophyIcon";
 import HoldingCatchIcon from "../../../components/icons/HoldingCatchIcon";
 import RibbonIcon from "../../../components/icons/RibbonIcon";
 import GraphIcon from "../../../components/icons/GraphIcon";
+import { Card } from "react-native-paper";
 
 const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesStatistics'>) => {
 
@@ -66,7 +67,8 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
       <ScrollView style={styles.container} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>
       }>
-        <Pressable style={styles.row} onPress={navigateTotalCatches}>
+        <Card style={styles.row} onPress={navigateTotalCatches}>
+          <Card.Content style={globalStyles.frsb}>
           <View style={globalStyles.frac}>
             <CatchIcon size={32}/>
             <View style={styles.text}>
@@ -75,8 +77,10 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
             </View>
           </View>
           <Icon name='chevron-right' size={28}/>
-        </Pressable>
-        <Pressable onPress={navigateBiggestCatch} style={styles.row}>
+          </Card.Content>
+        </Card>
+        <Card onPress={navigateBiggestCatch} style={styles.row}>
+          <Card.Content style={globalStyles.frsb}>
           <View style={globalStyles.frac}>
             <TrophyIcon size={32}/>
             <View style={styles.text}>
@@ -90,8 +94,10 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
             </View>
           </View>
           <Icon name='chevron-right' size={28}/>
-        </Pressable>
-        <Pressable style={styles.row} onPress={showSpeciesTotals}>
+          </Card.Content>
+        </Card>
+        <Card style={styles.row} onPress={showSpeciesTotals}>
+          <Card.Content style={globalStyles.frsb}>
           <View style={globalStyles.frac}>
             <FishAltIcon size={32}/>
             <View style={styles.text}>
@@ -100,8 +106,10 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
             </View>
           </View>
           <Icon name='chevron-right' size={28}/>
-        </Pressable>
-        <Pressable style={styles.row} onPress={navigateTopSpecies}>
+          </Card.Content>
+        </Card>
+        <Card style={styles.row} onPress={navigateTopSpecies}>
+          <Card.Content style={globalStyles.frsb}>
           <View style={globalStyles.frac}>
             <HoldingCatchIcon size={28}/>
             <View style={styles.text}>
@@ -110,8 +118,10 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
             </View>
           </View>
           <Icon name='chevron-right' size={28}/>
-        </Pressable>
-        <Pressable style={styles.row} onPress={showWaterbodyTotals}>
+          </Card.Content>
+        </Card>
+        <Card style={styles.row} onPress={showWaterbodyTotals}>
+          <Card.Content style={globalStyles.frsb}>
           <View style={globalStyles.frac}>
             <GraphIcon size={28}/>
             <View style={styles.text}>
@@ -120,17 +130,20 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
             </View>
           </View>
           <Icon name='chevron-right' size={28}/>
-        </Pressable>
-        <Pressable style={styles.row} onPress={navigateTopWaterbody}>
+          </Card.Content>
+        </Card>
+        <Card style={styles.row} onPress={navigateTopWaterbody}>
+          <Card.Content style={globalStyles.frsb}>
           <View style={globalStyles.frac}>
             <RibbonIcon size={32}/>
             <View style={styles.text}>
               <Text style={styles.label}>Top Fishery</Text>
-              <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody?.name}</Text>
+              <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody?.name || '—'}</Text>
             </View>
           </View>
           <Icon name='chevron-right' size={28}/>
-        </Pressable>
+          </Card.Content>
+        </Card>
       </ScrollView>
     </View>
   );
@@ -140,11 +153,12 @@ export default StatisticsTabView;
 
 const styles = StyleSheet.create({
   container: {
-    padding: 16
+    marginTop: 16,
   },
   row: {
-    paddingHorizontal: 24,
-    paddingVertical: 16,
+    marginHorizontal: 16,
+    paddingHorizontal: 8,
+    paddingVertical: 4,
     marginBottom: 16,
     borderRadius: 12,
     backgroundColor: 'white',

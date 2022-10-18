@@ -35,7 +35,7 @@ export default SearchNearby
 const styles = StyleSheet.create({
     container: {
         height: 70,
-        width: width - 32,
+        width: width - 24,
         flexDirection: 'row',
         justifyContent: 'center',
         alignItems: 'center',

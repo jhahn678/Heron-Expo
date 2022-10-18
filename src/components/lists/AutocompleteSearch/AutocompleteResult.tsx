@@ -1,5 +1,5 @@
-import { StyleSheet, Text, Pressable, View } from 'react-native'
-import React, { useState } from 'react'
+import { StyleSheet, Text, Pressable, View, Dimensions } from 'react-native'
+import React from 'react'
 import { AutocompleteResult as IAutocompleteResult } from '../../../hooks/queries/useAutocompleteSearch'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import { useSearchParamStore } from '../../../store/search/useSearchParamStore'
@@ -8,7 +8,9 @@ import FAIcon from 'react-native-vector-icons/FontAwesome5'//'water'
 import MCIcon from 'react-native-vector-icons/MaterialIcons' //'park'
 import IonIcon from 'react-native-vector-icons/Ionicons' // 'flag-outline'
 import { waterbodyLocationLabel } from '../../../utils/conversions/waterbodyLocationToLabel'
-
+import { Card } from 'react-native-paper'
+import { autocompleteResultColor } from '../../../utils/conversions/autocompleteResultColor'
+const { width } = Dimensions.get('screen')
 
 interface Props {
   data: IAutocompleteResult,
@@ -18,30 +20,23 @@ interface Props {
 const AutocompleteResult = ({ data, navigation }: Props) => {
 
   const setGeoplace = useSearchParamStore(state => state.setGeoplace)
-  
-  const handleNavigateWaterbody = (id: number) => navigation.navigate('WaterbodyScreen', { id })
-  const handleNavigateToResults = (geoplace: AutocompleteGeoplace) => {
-    setGeoplace(geoplace)
-    navigation.navigate('SearchResultsScreen')
+
+  const handleNavigate = (data: IAutocompleteResult) => () => {
+    if(data.type === 'GEOPLACE'){
+      setGeoplace(data)
+      navigation.navigate('SearchResultsScreen')
+    }else{
+      navigation.navigate('WaterbodyScreen', { id: data.id })
+    }
   }
 
 
   return (
-    <Pressable 
-      style={[styles.container, { 
-        backgroundColor: 
-          data.type === 'GEOPLACE' ? 
-          data.fcode === 'PRK' ?  
-          '#D4F4D1' :
-          '#F2D1F4' : 
-          '#d1e5f4'
-      }]} 
-      onPress={
-        data.type === 'GEOPLACE' ? 
-        () => handleNavigateToResults(data) : 
-        () => handleNavigateWaterbody(data.id)
-      }
+    <Card
+      style={[styles.container, { backgroundColor: autocompleteResultColor(data) }]} 
+      onPress={handleNavigate(data)}
     >
+      <Card.Content style={styles.content}>
       { 
         data.type === 'GEOPLACE' ? 
         data.fcode === 'PRK' ?
@@ -50,7 +45,7 @@ const AutocompleteResult = ({ data, navigation }: Props) => {
           <FAIcon name='water' size={32}/>
       }
       <View style={styles.text}>
-        <Text style={styles.name}>{data.name}</Text>
+        <Text style={styles.name} numberOfLines={1}>{data.name}</Text>
         <Text style={styles.location}>
         { data.type === 'WATERBODY' ? (
             waterbodyLocationLabel(data)
@@ -62,7 +57,8 @@ const AutocompleteResult = ({ data, navigation }: Props) => {
         }
         </Text>
       </View>
-    </Pressable>
+      </Card.Content>
+    </Card>
   )
 }
 
@@ -71,14 +67,18 @@ export default AutocompleteResult
 const styles = StyleSheet.create({
   container: {
     height: 80,
-    width: '95%',
+    width: width - 24,
     flexDirection: 'row',
-    alignSelf: 'center',
     alignItems: 'center',
+    alignSelf: 'center',
     backgroundColor: 'rgba(0,0,0,.05)',
     marginBottom: 8,
-    paddingLeft: 24,
+    paddingHorizontal: 8,
     borderRadius: 12
+  },
+  content: {
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   text: {
     justifyContent: 'center',
@@ -86,6 +86,7 @@ const styles = StyleSheet.create({
   },
   name: {
     fontSize: 20,
+    maxWidth: width * .72,
     fontWeight: '500'
   },
   location: {
