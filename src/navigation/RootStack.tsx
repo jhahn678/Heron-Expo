@@ -32,6 +32,7 @@ import EditLocationScreen from "../screens/location/EditLocation/EditLocationScr
 import EditReviewScreen from "../screens/waterbody/EditReviewScreen/EditReviewScreen";
 import UsernameAuthScreen from '../screens/auth/UsernameAuthScreen';
 import PasswordScreen from '../screens/auth/PasswordScreen';
+import ReportProblemScreen from '../screens/settings/ReportProblemScreen/ReportProblemScreen';
 
 
 const RootStack = (): JSX.Element => {
@@ -118,9 +119,10 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name="EditCatchScreen" component={EditCatchScreen}/>
                 <Stack.Screen name="EditLocationScreen" component={EditLocationScreen}/>
                 <Stack.Screen name="EditReviewScreen" component={EditReviewScreen}/>
-                <Stack.Screen name='PasswordScreen' component={PasswordScreen}
-                    options={{ headerShown: true, headerTitle: 'Sign In'}}
-                />
+                <Stack.Group screenOptions={{ headerShown: true }}>
+                    <Stack.Screen name='PasswordScreen' component={PasswordScreen} options={{ headerTitle: 'Sign In'}}/>
+                    <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} options={{ headerTitle: 'Report a Problem'}}/>
+                </Stack.Group>
             </Stack.Navigator>
         </NavigationContainer>
     );

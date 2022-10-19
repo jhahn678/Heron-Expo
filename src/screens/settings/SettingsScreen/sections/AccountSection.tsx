@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import React from "react";
 import { ActivityIndicator, Divider, List } from 'react-native-paper'
 import { StyleSheet } from "react-native";
 import { AccountRes, useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
@@ -85,14 +85,5 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 22
-    },
-    row: {
-        padding: 16,
-        borderTopColor: '#d9d9d9',
-        borderTopWidth: 1
-    },
-    label: {
-        fontSize: 16,
-        fontWeight: '500'
     }
 });

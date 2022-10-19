@@ -5,6 +5,7 @@ import { useModalStore } from "../../../store/modal/useModalStore";
 import { RootStackScreenProps } from "../../../types/navigation";
 import AccountSection from "./sections/AccountSection";
 import HeaderSection from "./sections/HeaderSection";
+import HelpSection from "./sections/HelpSection";
 
 const SettingsScreen = ({ navigation }: RootStackScreenProps<'SettingsScreen'>) => {
 
@@ -14,6 +15,7 @@ const SettingsScreen = ({ navigation }: RootStackScreenProps<'SettingsScreen'>) 
         <View style={styles.container}>
             <HeaderSection navigation={navigation}/>
             <ScrollView style={styles.container}>
+                <HelpSection navigation={navigation}/>
                 <AccountSection/>
             </ScrollView>
             {unlinkAccount && <UnlinkAccountModal navigation={navigation}/>}

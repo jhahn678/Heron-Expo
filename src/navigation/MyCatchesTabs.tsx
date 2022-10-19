@@ -15,6 +15,7 @@ import { FAB } from 'react-native-paper';
 import FishIcon from '../components/icons/FishIcon';
 import { useMyCatchesModalStore } from '../store/modal/useMyCatchesModalStore';
 
+
 const Tab = createMaterialTopTabNavigator<MyCatchesTabsParams>();
 
 const MyCatchesTabs = ({ navigation }: BottomTabsScreenProps<'MyCatchesScreen'>) => {
