@@ -21,6 +21,7 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
     const [deleteImage] = useDeleteImage()
     const { saveToGallery } = useSaveToGallery()
     const auth = useAuth(store => store.id)
+    const setSnack = useModalStore(store => store.setSnack)
     const [menuOpen, setMenuOpen] = useState(false)
 
     const handleDownload = async () => {
@@ -36,7 +37,11 @@ const ViewImageScreen = ({ navigation, route }: RootStackScreenProps<'ViewImageS
             message: 'Are you sure you want to delete this image?',
             confirm: async () => {
                 deleteImage({ variables: { id, type } })
-                    .then(() => { setMenuOpen(false); navigation.goBack() })
+                    .then(() => { 
+                        setMenuOpen(false); 
+                        setSnack('Media Deleted Successfully'); 
+                        navigation.goBack() 
+                    })
             }
         })
     }

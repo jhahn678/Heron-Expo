@@ -46,6 +46,7 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
   const resetStore = useNewCatchStore(store => store.reset)
   const mapSnapshot = useNewCatchStore(store => store.mapSnapshot)
   const showErrorModal = useModalStore(store => store.setError)
+  const setSnack = useModalStore(store => store.setSnack)
   const clearState = () => { resetStore(); clearImages() }
 
   const handleSave = async () => {
@@ -66,6 +67,7 @@ const NewCatchScreen = ({ navigation, route }: RootStackScreenProps<'NewCatchScr
       }})
       setLoading(false)
       navigation.goBack()
+      setSnack('New Catch Saved')
     }catch(err){
       console.error(err)
       setLoading(false)

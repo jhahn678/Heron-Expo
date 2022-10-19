@@ -1,7 +1,6 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
-import { theme } from "../../config/theme";
 
 interface Props {
     visible: boolean

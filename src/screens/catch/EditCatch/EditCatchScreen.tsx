@@ -44,6 +44,7 @@ const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchS
     const setWaterbody = useEditCatchStore(store => store.setWaterbody)
     const resetStore = useEditCatchStore(store => store.reset)
     const showErrorModal = useModalStore(store => store.setError)
+    const setSnack = useModalStore(store => store.setSnack)
     const uploadImages = useUploadImages()
     const [loading, setLoading] = useState(false)
     const images = useImageStore(store => store.images)
@@ -70,6 +71,7 @@ const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchS
             }}})
             setLoading(false)
             navigation.goBack()
+            setSnack('Catch updated')
         }catch(err){
             console.error(err)
             setLoading(false)
@@ -77,10 +79,7 @@ const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchS
         }
     }
 
-    useEffect(() => {
-        const listener = navigation.addListener('beforeRemove', clearState)
-        return listener;
-    },[])
+    useEffect(() => navigation.addListener('beforeRemove', clearState),[])
 
     return (
         <View style={styles.container}>

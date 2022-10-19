@@ -40,6 +40,7 @@ const EditLocationScreen = ({ navigation, route }: RootStackScreenProps<'EditLoc
     const resetStore = useEditLocationStore(store => store.reset)
     const handleDeleteMedia = useEditLocationStore(store => store.addDeleteMedia)
     const showErrorModal = useModalStore(store => store.setError)
+    const setSnack = useModalStore(store => store.setSnack)
     const uploadImages = useUploadImages()
     const [loading, setLoading] = useState(false)
     const images = useImageStore(store => store.images)
@@ -64,8 +65,9 @@ const EditLocationScreen = ({ navigation, route }: RootStackScreenProps<'EditLoc
                 ...editLocation, map_image, media,
                 deleteMedia: deleteMedia.length > 0 ? deleteMedia : undefined,
             }}})
-            setLoading(false)
-            navigation.goBack()
+            setLoading(false); 
+            navigation.goBack();
+            setSnack('Location Updated'); 
         }catch(err){
             console.error(err)
             setLoading(false)
@@ -73,10 +75,7 @@ const EditLocationScreen = ({ navigation, route }: RootStackScreenProps<'EditLoc
         }
     }
 
-    useEffect(() => {
-        const listener = navigation.addListener('beforeRemove', clearState)
-        return listener;
-    },[])
+    useEffect(() => navigation.addListener('beforeRemove', clearState),[])
 
     return (
         <View style={styles.container}>

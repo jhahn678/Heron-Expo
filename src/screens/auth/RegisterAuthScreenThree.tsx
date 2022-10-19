@@ -12,6 +12,7 @@ import { useImageStore } from '../../store/image/useImageStore'
 import { useUploadImages } from '../../hooks/mutations/useUploadImages'
 import { useChangeAvatar } from '../../hooks/mutations/useChangeAvatar'
 import LoadingBackdrop from '../../components/loaders/LoadingBackdrop'
+import { useModalStore } from '../../store/modal/useModalStore'
 
 const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterAuthScreenThree'>) => {
 
@@ -38,6 +39,7 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
   const clearImages = useImageStore(store => store.clearImages)
   const [loading, setLoading] = useState(false)
   const { createAccount } = useCreateAccount();
+  const setSnack = useModalStore(store => store.setSnack)
 
   const handleCreateAccount = async () => {
     setLoading(true)
@@ -51,7 +53,9 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
       })
       clearImages();
     }
-    setAuthenticated(true); setLoading(false) //@ts-ignore
+    setAuthenticated(true); 
+    setSnack('Account created successfully')
+    setLoading(false) //@ts-ignore
     navigation.replace('MainTabs', { screen: 'ExploreStack' })
   }
   

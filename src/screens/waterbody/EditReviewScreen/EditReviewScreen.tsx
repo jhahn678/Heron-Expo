@@ -5,6 +5,7 @@ import LoadingBackdrop from "../../../components/loaders/LoadingBackdrop";
 import RatingInput from "../../../components/ratings/RatingInput";
 import { useEditReview } from "../../../hooks/mutations/useEditReview";
 import { useGetReview } from "../../../hooks/queries/useGetReview";
+import { useModalStore } from "../../../store/modal/useModalStore";
 import { RootStackScreenProps } from "../../../types/navigation";
 import HeaderSection from "./sections/HeaderSection";
 
@@ -12,6 +13,7 @@ const EditReviewScreen = ({ navigation, route }: RootStackScreenProps<'EditRevie
 
     const { params: { id } } = route;
     const { data, loading } = useGetReview(id)
+    const setSnack = useModalStore(store => store.setSnack)
     const [saveReview] = useEditReview()
     const [rating, setRating] = useState(0)
     const [text, setText] = useState<string | null>(null)
@@ -25,7 +27,7 @@ const EditReviewScreen = ({ navigation, route }: RootStackScreenProps<'EditRevie
 
     const handleSave = () => saveReview({ 
         variables: { id, input: { rating, text } } 
-    }).then(navigation.goBack)
+    }).then(() => { navigation.goBack(); setSnack('Review updated') })
 
     return (
         <View style={styles.container}>

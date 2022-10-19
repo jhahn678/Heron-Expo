@@ -29,15 +29,11 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
   const handleRefresh = () => { setRefreshing(true); refetch().then(() => setRefreshing(false)) }
 
   const showWaterbodyTotals = () => {
-    if(data && data.user.catch_statistics.total_waterbodies > 0){
-      setWaterbodyTotalsVisible(true)
-    }
+    if(data) setWaterbodyTotalsVisible(true)
   }
 
   const showSpeciesTotals = () => {
-    if(data && data.user.catch_statistics.total_species > 0){
-      setSpeciesTotalsVisible(true)
-    }
+    if(data) setSpeciesTotalsVisible(true)
   }
 
   const navigateTotalCatches = () => navigation.jumpTo('MyCatchesList')

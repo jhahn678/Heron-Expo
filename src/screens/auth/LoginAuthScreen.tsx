@@ -7,6 +7,7 @@ import GoogleLoginButton from '../../components/buttons/GoogleLoginButton'
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useAuth } from '../../store/auth/useAuth'
+import { useModalStore } from '../../store/modal/useModalStore'
 const { width } = Dimensions.get('screen')
 
 
@@ -16,9 +17,14 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
 
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
+  const setSnack = useModalStore(store => store.setSnack)
 
-  const { loginUser, isError, isLoading } = useLogin({ // @ts-ignore
-    onSuccess: data => setUser(data).then(() => navigation.replace("MainTabs")),
+  const { loginUser, isError, isLoading } = useLogin({ 
+    onSuccess: data => setUser(data).then(() => {
+      // @ts-ignore
+      navigation.replace("MainTabs")
+      setSnack('Sign in successful')
+    }),
     onError: () => { setIdentifier(''); setPassword('') }
   })
 

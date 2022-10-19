@@ -44,6 +44,7 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
   const mapSnapshot = useNewLocationStore(store => store.mapSnapshot)
   const setWaterbody = useNewLocationStore(store => store.setWaterbody)
   const showErrorModal = useModalStore(store => store.setError)
+  const setSnack = useModalStore(store => store.setSnack)
   const clearState = () => { resetStore(); clearImages() }
 
   const handleSave = async () => {
@@ -64,6 +65,7 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
       }})
       setLoading(false)
       navigation.goBack()
+      setSnack('New Location Saved')
     }catch(err){
       console.error(err)
       setLoading(false)

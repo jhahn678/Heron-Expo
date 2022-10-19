@@ -8,6 +8,7 @@ import { SecureStoreKeys } from "../../types/SecureStore";
 import { useChangeUsername } from "../../hooks/mutations/useChangeUsername";
 import { useAuth } from "../../store/auth/useAuth";
 import { theme } from "../../config/theme";
+import { useModalStore } from "../../store/modal/useModalStore";
 const { width } = Dimensions.get('screen')
 
 
@@ -17,6 +18,7 @@ const UsernameAuthScreen = (props: RootStackScreenProps<'UsernameAuthScreen'>) =
     const setUser = useAuth(store => store.setDetails)
     const setAuthenticated = useAuth(store => store.setAuthenticated)
     const { isAvailable, isLoading, isError } = useCheckUsernameAvailability(username)
+    const setSnack = useModalStore(store => store.setSnack)
     const changeUsername = useChangeUsername()
 
     const handlePress = async () => {
@@ -26,6 +28,7 @@ const UsernameAuthScreen = (props: RootStackScreenProps<'UsernameAuthScreen'>) =
         if(!res) return;
         setUser({ username: res.username })
         setAuthenticated(true)
+        setSnack('Account created successfully')
     }
 
     return (

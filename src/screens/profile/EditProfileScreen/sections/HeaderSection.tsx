@@ -19,6 +19,7 @@ interface Props {
 const HeaderSection = ({ navigation }: Props) => {
 
     const showErrorModal = useModalStore(store => store.setError)
+    const setSnack = useModalStore(store => store.setSnack)
     const clearImages = useImageStore(store => store.clearImages)
     const resetStore = useEditProfileStore(store => store.reset)
 
@@ -49,8 +50,8 @@ const HeaderSection = ({ navigation }: Props) => {
         if(city) details.city = city;
         if(bio) details.bio = bio
         if(Object.keys(details).length === 0) return;
-        const res = await updateProfile({ variables: { details } })
-        handleGoBack()
+        await updateProfile({ variables: { details } })
+        handleGoBack(); setSnack('Account updated successfully')
     }
   
     return (
