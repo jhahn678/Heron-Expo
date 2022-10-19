@@ -81,21 +81,21 @@ const FilterLengthBottomSheet = () => {
                     <Text style={styles.label}>{maxLabel}</Text>
                 </View>
                 <MultiSlider
-                min={0}
-                max={48}
-                optionsArray={OPTIONS}
-                values={values}
-                onValuesChange={handleChangeValues}
-                sliderLength={width-72}
-                trackStyle={styles.track}
-                selectedStyle={styles.selected}
-                markerStyle={styles.marker}
-                containerStyle={{ marginBottom: 24 }}
+                    min={0}
+                    max={48}
+                    optionsArray={OPTIONS}
+                    values={values}
+                    onValuesChange={handleChangeValues}
+                    sliderLength={width-72}
+                    trackStyle={styles.track}
+                    selectedStyle={styles.selected}
+                    markerStyle={styles.marker}
+                    containerStyle={{ marginBottom: 24 }}
                 />
                 <Button 
-                mode="contained-tonal" 
-                style={styles.button}
-                onPress={handleSave}
+                    mode="contained-tonal" 
+                    style={styles.button}
+                    onPress={handleSave}
                 >Save</Button>
             </View>
         </BottomSheet>
@@ -139,7 +139,6 @@ const styles = StyleSheet.create({
     },
     button: { 
         width: width - 48,
-        marginTop: 24
     }
 });
 

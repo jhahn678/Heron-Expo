@@ -33,20 +33,23 @@ const SpeciesTotalsBottomSheet = () => {
         ) : null}
     >
         <Title style={styles.title}>All Species Caught</Title>
-        <BottomSheetFlatList
-            data={data?.me.catch_statistics.species_counts}
-            renderItem={({ item }) => (
-                <View style={styles.row} key={item.species}>
-                    <Text style={styles.species}>{item.species}</Text>
-                    <View style={styles.line}/>
-                    <View style={styles.count}>
-                        <Text style={styles.number}>{item.count}</Text>
-                        <Text style={styles.label}>caught</Text>
+        { data?.me.catch_statistics.species_counts ? 
+            <BottomSheetFlatList
+                data={data.me.catch_statistics.species_counts}
+                contentContainerStyle={styles.content}
+                renderItem={({ item }) => (
+                    <View style={styles.row} key={item.species}>
+                        <Text style={styles.species}>{item.species}</Text>
+                        <View style={styles.line}/>
+                        <View style={styles.count}>
+                            <Text style={styles.number}>{item.count}</Text>
+                            <Text style={styles.label}>caught</Text>
+                        </View>
                     </View>
-                </View>
-            )}
-            contentContainerStyle={styles.content}
-        />
+                )}
+            />
+        : <Text style={styles.none}>No species logged yet</Text>
+        }
 
     </BottomSheet>
   );
@@ -58,7 +61,6 @@ const styles = StyleSheet.create({
     title: {
         fontWeight: '600',
         paddingHorizontal: 24,
-        paddingTop: 8
     },
     content: {
         paddingVertical: 24,
@@ -96,5 +98,11 @@ const styles = StyleSheet.create({
         fontWeight: '400',
         fontSize: 12,
         paddingLeft: 4
+    },
+    none: {
+        marginTop: 8,
+        paddingHorizontal: 24,
+        fontSize: 15,
+        fontStyle: 'italic'
     }
 });

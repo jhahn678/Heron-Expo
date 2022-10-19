@@ -32,6 +32,7 @@ const WaterbodyReview = ({
     const auth = useAuth(store => store.id)
     const [deleteReview] = useDeleteReview(data.id)
     const setConfirmDelete = useModalStore(store => store.setConfirmDelete)
+    const setSnack = useModalStore(store => store.setSnack)
 
     const handleEdit = () => { setMenuOpen(false); navigateToEdit() }
 
@@ -39,7 +40,10 @@ const WaterbodyReview = ({
         setMenuOpen(false); 
         setConfirmDelete({
             message: 'Are you sure you want to delete this review?',
-            confirm: () => deleteReview().then(refetch)
+            confirm: () => deleteReview().then(() => { 
+                if(refetch) refetch(); 
+                setSnack('Review deleted') 
+            })
         })
     }
 

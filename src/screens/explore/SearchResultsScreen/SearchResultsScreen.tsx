@@ -85,7 +85,7 @@ const SearchResultsScreen = ({ navigation, route }: ExploreStackScreenProps<'Sea
               />
             )}
           />
-        : loading ? <ActivityIndicator size={48}/>
+        : loading ? <ActivityIndicator size={48} style={{ marginTop: 48 }}/>
         : error && <Text style={styles.empty}>There was an error</Text>
       }
     </View>
