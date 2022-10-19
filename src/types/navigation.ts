@@ -39,6 +39,7 @@ export type RootStackParams = {
     EditLocationScreen: { id: number }
     EditReviewScreen: { id: number }
     PasswordScreen: undefined
+    ReportProblemScreen: undefined
 }
 
 export enum MapResource {
