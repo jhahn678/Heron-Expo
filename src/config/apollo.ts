@@ -75,6 +75,8 @@ const tokenLink = new RefreshTokenLink({
 
 const httpLink = createHttpLink({ uri: API_GRAPH_URL });
 
+const retryLink = new RetryLink()
+
 const errorLink = onError(({ graphQLErrors }) => {
     if(graphQLErrors){    
         graphQLErrors.forEach(x => {
@@ -84,7 +86,7 @@ const errorLink = onError(({ graphQLErrors }) => {
 })
 
 export const apolloClient = new ApolloClient({
-    link: from([errorLink, tokenLink, httpLink]),
+    link: from([errorLink, tokenLink, retryLink, httpLink]),
     cache: new InMemoryCache({
         typePolicies: {
             Query: {
