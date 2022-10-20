@@ -21,7 +21,7 @@ import { Feature, GeoJsonResource } from '../../../utils/conversions/geojsonToFe
 import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries/useGetLocations';
 import { useModalStore } from '../../../store/modal/useModalStore';
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails';
-const { width } = Dimensions.get('screen')
+const { width, height } = Dimensions.get('screen')
 const LIMIT = 50;
 
 
@@ -387,6 +387,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
         ref={map}
         style={styles.map}
         onMapReady={() => setMapReady(true)}
+        provider={'google'}
       >
         {geojson && (
           <Geojson
@@ -415,7 +416,7 @@ const styles = StyleSheet.create({
   },
   header: {
     width: width,
-    top: 36,
+    top: 40,
     alignItems: "center",
     position: "absolute",
     zIndex: 100,
@@ -427,8 +428,8 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   map: {
-    width: "100%",
-    height: "100%",
+    width,
+    height
   },
   results: {
     paddingVertical: 8,
@@ -436,6 +437,7 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     borderRadius: 12,
     alignSelf: "center",
+    overflow: 'hidden',
     backgroundColor: theme.colors.surfaceVariant,
   },
   showMore: {

@@ -289,6 +289,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       <MapView
         ref={map}
         style={styles.map}
+        provider={'google'}
         onPress={handlePress}
         onLongPress={handleLongPress}
         onPanDrag={() => setSelectedPoint(null)}
