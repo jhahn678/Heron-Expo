@@ -1,7 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
 import { GET_REVIEWS } from '../queries/useGetWaterbodyReviews';
-import { GET_WATERBODY } from '../queries/useGetWaterbody';
-import { GET_MY_PROFILE_TOTALS } from '../queries/useGetMyProfile';
 import { useAuth } from '../../store/auth/useAuth';
 import { makeFragmentId } from '../../utils/makeFragmentId';
 
@@ -49,7 +47,10 @@ export const useCreateWaterbodyReview = () => {
                     total_reviews
                 }
                `,
-            }, data => ({ ...data, total_reviews: data.total_reviews + 1 }))
+            }, data => ({ 
+                ...data, 
+                total_reviews: data ? data.total_reviews + 1 : 1 
+            }))
         }
     })
     return result;

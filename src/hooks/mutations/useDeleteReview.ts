@@ -41,7 +41,10 @@ export const useDeleteReview = (id: number) => {
                         total_reviews
                     }
                 `
-            }, data => ({ ...data, total_reviews: data.total_reviews - 1 }))
+            }, data => ({ 
+                ...data, 
+                total_reviews: data ? data.total_reviews - 1 : 0
+            }))
         }
     })
 }

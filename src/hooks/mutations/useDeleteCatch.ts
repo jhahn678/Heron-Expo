@@ -3,7 +3,6 @@ import { useAuth } from "../../store/auth/useAuth";
 import { CatchQuery } from "../../types/Catch";
 import { makeFragmentId } from "../../utils/makeFragmentId";
 import { getCatchesQueryName } from "../queries/useGetCatches";
-
 import { GET_MY_CATCH_STATISTICS } from "../queries/useGetUserCatchStatistics";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
 
@@ -50,12 +49,10 @@ export const useDeleteCatch = (id: number) => {
             total_catches
           }
         `,
-      }, data => {
-        if(data) return { 
+      }, data => ({
           ...data, 
-          total_catches: data.total_catches - 1
-        }
-      })
+          total_catches: data ? data.total_catches - 1 : 0
+      }))
     }
   })
 }

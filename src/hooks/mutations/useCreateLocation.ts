@@ -68,12 +68,10 @@ export const useCreateLocation = () => {
                         total_locations
                     }
                 `
-            }, data => {
-                if(data) return {
-                    ...data,
-                    total_catches: data.total_catches + 1
-                } 
-            })
+            }, data => ({
+                ...data,
+                total_catches: data ? data.total_catches + 1 : 1
+            }))
         }
     })
 }

@@ -36,7 +36,12 @@ export const useAddWaterbodyMediaMutation = (id: number | undefined | null) => {
                     total_media
                 }
                `,
-            }, data => ({ ...data, total_media: data.total_media + 1 }))
+            }, data => {
+                return { 
+                    ...data, 
+                    total_media: data ? data.total_media + 1 : 1
+                }
+            })
         }
     })
 }

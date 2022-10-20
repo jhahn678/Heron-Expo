@@ -3,7 +3,6 @@ import { useAuth } from "../../store/auth/useAuth";
 import { LocationQuery } from "../../types/Location";
 import { makeFragmentId } from "../../utils/makeFragmentId";
 import { getLocationsQueryName } from "../queries/useGetLocations";
-import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
 
 const DELETE_LOCATION = gql`
@@ -49,12 +48,10 @@ export const useDeleteLocation = (id: number) => {
             total_locations
           }
         `,
-      }, data => {
-        if(data) return { 
+      }, data => ({
           ...data, 
-          total_locations: data.total_locations - 1
-        }
-      })
+          total_locations: data ? data.total_locations - 1 : 0
+      }))
   }
   })
 }

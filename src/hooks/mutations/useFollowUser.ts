@@ -29,7 +29,7 @@ export const useFollowUser = () => useMutation<{ followUser: number }, { id: num
             }, data => ({ 
                 ...data, 
                 am_following: true, 
-                total_followers: data.total_followers + 1 
+                total_followers: data?.total_followers ? data.total_followers + 1 : 1
             }))
         }
     }
@@ -49,7 +49,7 @@ export const useUnfollowUser = () => useMutation<{ unfollowUser: number }, { id:
             }, data => ({ 
                 ...data, 
                 am_following: false, 
-                total_followers: data.total_followers - 1 
+                total_followers: data?.total_followers ? data.total_followers - 1 : 0
             }))
         }
     }

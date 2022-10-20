@@ -59,7 +59,10 @@ export const useDeleteImage = () => {
                     total_media
                 }
                `,
-            }, data => ({ ...data, total_media: data.total_media - 1 }))
+            }, data => ({ 
+                ...data, 
+                total_media: data ? data.total_media - 1 : 0
+            }))
         }
     })
 }
