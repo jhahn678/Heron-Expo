@@ -16,7 +16,7 @@ const BackButton = (props: Props): JSX.Element => {
         <IconButton 
             size={props.size || 24}
             mode={props.mode || 'contained'}
-            style={props.style}
+            style={[props.style, { zIndex: 100 }]}
             onPress={navigation.goBack} 
             icon='chevron-left'
         />

@@ -13,7 +13,7 @@ import { useImagePaginationIndicator } from "../../../../hooks/utils/useImagePag
 import { ShareType } from "../../../../hooks/utils/useShareContent";
 import { useAuth } from "../../../../store/auth/useAuth";
 import { useModalStore } from "../../../../store/modal/useModalStore";
-import { IMedia, MediaType } from "../../../../types/Media";
+import { MediaType } from "../../../../types/Media";
 import { RootStackScreenProps } from "../../../../types/navigation";
 
 const { height, width } = Dimensions.get('screen')
@@ -54,35 +54,6 @@ const BannerSection = ({ navigation, media=[], mapImage, id, user }: Props) => {
 
     return (
         <View style={styles.container}>
-            <BackButton style={styles.back}/>
-            <View style={styles.buttons}>
-            <ShareButton id={id} shareType={ShareType.Catch}/>
-            { user === auth &&
-                <Menu
-                anchor={
-                    <IconButton 
-                    icon={"dots-vertical"}
-                    mode='contained'
-                    onPress={() => setMenuOpen(true)}
-                    />
-                }
-                onDismiss={() => setMenuOpen(false)}
-                visible={menuOpen}
-                >
-                <Menu.Item
-                    title="Edit"
-                    style={{ height: 40 }}
-                    onPress={handleEdit}
-                />
-                <Divider bold={true}/>
-                <Menu.Item
-                    title="Delete"
-                    style={{ height: 40 }}
-                    onPress={handleDelete}
-                />
-                </Menu>
-            }
-            </View>
             { media.length > 1 &&
                 <ImagePagination currentIndex={currentIndex} media={media}/>
             }
@@ -100,7 +71,36 @@ const BannerSection = ({ navigation, media=[], mapImage, id, user }: Props) => {
                 )}
                 /> :
                 <View style={styles.placeholder}><FisherWomanFishing/></View>
-        }
+            }
+            <BackButton style={styles.back}/>
+            <View style={styles.buttons}>
+                <ShareButton id={id} shareType={ShareType.Catch}/>
+                { user === auth &&
+                    <Menu
+                    anchor={
+                        <IconButton 
+                        icon={"dots-vertical"}
+                        mode='contained'
+                        onPress={() => setMenuOpen(true)}
+                        />
+                    }
+                    onDismiss={() => setMenuOpen(false)}
+                    visible={menuOpen}
+                    >
+                    <Menu.Item
+                        title="Edit"
+                        style={{ height: 40 }}
+                        onPress={handleEdit}
+                    />
+                    <Divider bold={true}/>
+                    <Menu.Item
+                        title="Delete"
+                        style={{ height: 40 }}
+                        onPress={handleDelete}
+                    />
+                    </Menu>
+                }
+            </View>
         </View>
     );
 };
@@ -109,8 +109,8 @@ export default BannerSection;
 
 const styles = StyleSheet.create({
     container: {
+        width,
         height: height * 0.45,
-        backgroundColor: "#e0e0e0",
     },
     back: {
         position: "absolute",
@@ -121,10 +121,11 @@ const styles = StyleSheet.create({
     buttons: {
         flexDirection: 'row',
         alignItems: 'center',
+        justifyContent: 'space-between',
         position: "absolute",
         zIndex: 100,
         top: 32,
-        right: 12,
+        right: 16
     },
     image: {
         width,

@@ -1,12 +1,11 @@
 import React from "react";
 import { Dimensions, StyleSheet, View } from "react-native";
 import { Card, Chip, Text } from 'react-native-paper'
-import FollowButton from "../../../../components/buttons/FollowButton";
+import BackButton from "../../../../components/buttons/BackButton";
 import Avatar from "../../../../components/users/Avatar";
 import globalStyles from "../../../../globalStyles";
 import { GetUserProfileRes } from "../../../../hooks/queries/useGetUserProfile";
 import { ShareType, useShareContent } from "../../../../hooks/utils/useShareContent";
-import { useAuth } from "../../../../store/auth/useAuth";
 import { RootStackScreenProps } from "../../../../types/navigation";
 import { FollowType } from "../../../../types/User";
 import HeaderUserLoading from "../../MyProfileScreen/loaders/HeaderUserLoading";
@@ -20,7 +19,6 @@ interface Props {
 
 const HeaderSection = ({ data, loading, navigation }: Props) => {
 
-    const auth = useAuth(store => store.id)
     const shareContent = useShareContent()
     const handleShareContent = () => shareContent({ shareType: ShareType.Profile, id: data?.id })
 
@@ -43,10 +41,11 @@ const HeaderSection = ({ data, loading, navigation }: Props) => {
     return (
         <Card style={styles.container}>
             <View style={styles.user}>
-                <View style={globalStyles.frac}>
+                <View style={[globalStyles.frac]}>
                     <Avatar 
                         size={80}
                         loading={loading}
+                        style={styles.avatar}
                         fullname={data?.fullname} 
                         uri={data?.avatar}
                         onPress={navigateToImage}
@@ -97,12 +96,14 @@ const styles = StyleSheet.create({
         borderRadius: 0
     },
     user: {
-        marginTop: 52,
-        marginLeft: 24,
+        marginTop: 24,
+        marginLeft: 12,
         marginRight: 20,
         flexDirection: 'row',
         alignItems: 'center',
-        justifyContent: 'space-between'
+    },
+    avatar: {
+        marginLeft: 12
     },
     name: {
         fontWeight: '600',
