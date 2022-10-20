@@ -24,7 +24,7 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     const uploadImages = useUploadImages()
     const images = useImageStore(state => state.images)
     const clearImages = useImageStore(state => state.clearImages)
-    const [saveImages, { loading }] = useAddWaterbodyMediaMutation(waterbody)
+    const [saveImages] = useAddWaterbodyMediaMutation(waterbody)
 
     const modal = useModalStore(state => ({
         setError: state.setError,

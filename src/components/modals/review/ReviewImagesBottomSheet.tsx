@@ -42,7 +42,7 @@ const ReviewImagesBottomSheet = ({ onSubmit }: Props) => {
                     mode="contained" 
                     style={styles.button}
                     theme={{ roundness: 2 }}
-                >Next</Button>
+                >Submit Review</Button>
             </View>
         </BottomSheet>
     );

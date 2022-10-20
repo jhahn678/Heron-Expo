@@ -44,9 +44,13 @@ const ReviewBodyBottomSheet = () => {
                     <TextInput 
                         value={input}
                         onChangeText={setInput}
-                        placeholder={"Include details such as " + 
-                        "species observed and caught, regulations, " +
-                        "water depth, access, facilities, etc."}
+                        placeholder={
+                            "Include details such as " + 
+                            "species observed and caught, regulations, " +
+                            "water depth, access, facilities, etc." + `
+                            
+                            
+                        `}
                         multiline={true} 
                         numberOfLines={8}
                         mode='outlined'
