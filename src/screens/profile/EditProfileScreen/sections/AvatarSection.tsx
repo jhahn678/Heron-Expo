@@ -4,6 +4,7 @@ import { theme } from "../../../../config/theme";
 import Avatar from "../../../../components/users/Avatar";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useImageStore } from "../../../../store/image/useImageStore";
+import { IconButton } from "react-native-paper";
 
 interface Props {
     avatar: string | undefined | null,
@@ -26,18 +27,18 @@ const AvatarSection = ({ avatar, fullName, onAvatarPress }: Props) => {
                     uri={image ? image.uri : avatar} 
                 />
                 { image ?
-                    <Icon
+                    <IconButton
                         size={20}
-                        name='close'
-                        style={styles.remove}
-                        color={theme.colors.error} 
+                        icon='close'
                         onPress={clearImages}
+                        style={styles.remove}
+                        iconColor={theme.colors.error} 
                     /> :
-                    <Icon 
+                    <IconButton 
                         size={20} 
-                        name="camera" 
-                        style={styles.camera}
-                        color={theme.colors.secondary} 
+                        icon="camera" 
+                        mode='contained'
+                        style={styles.camera} 
                         onPress={onAvatarPress}
                     />
                 }
@@ -54,35 +55,15 @@ const styles = StyleSheet.create({
         alignItems: 'center',
     },
     camera: {
-        right: 10,
-        bottom: 8,
-        padding: 5,
-        borderRadius: 100,
+        right: 0,
+        bottom: 0,
         position: 'absolute',
         backgroundColor: theme.colors.secondaryContainer,
-        elevation: 2,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.20,
-        shadowRadius: 1.41,
     },
     remove: {
-        right: 10,
-        top: 8,
-        padding: 5,
-        borderRadius: 100,
+        right: 0,
+        top: 0,
         position: 'absolute',
         backgroundColor: theme.colors.secondaryContainer,
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 1,
-        },
-        shadowOpacity: 0.20,
-        shadowRadius: 1.41,
-        elevation: 2,
     }
 });
