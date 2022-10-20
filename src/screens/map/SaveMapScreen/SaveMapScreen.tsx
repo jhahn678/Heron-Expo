@@ -1,7 +1,7 @@
 import { Dimensions, StyleSheet, Text, View } from 'react-native'
 import React, { useCallback, useRef, useState } from 'react'
 import { RootStackScreenProps, SaveType } from '../../../types/navigation'
-import MapView, { Marker, Polygon, Polyline } from 'react-native-maps'
+import MapView, { LatLng, Marker, Polygon, Polyline } from 'react-native-maps'
 import { useNewCatchStore } from '../../../store/mutations/useNewCatchStore'
 import { useLocationStore } from '../../../store/location/useLocationStore'
 import { useFocusEffect } from '@react-navigation/native'
@@ -15,6 +15,9 @@ import PromptDeletePoint from '../../../components/modals/map/PromptDeletePoint'
 import { Geometry, Resource, useCreateGeometry } from '../../../hooks/utils/useCreateGeometry'
 import { useEditCatchStore } from '../../../store/mutations/useEditCatchStore'
 import { useEditLocationStore } from '../../../store/mutations/useEditLocationStore'
+import { getCentroid } from '../../../utils/map/getCentroid'
+import { useGeoJson } from '../../../hooks/utils/useGeoJson'
+import { createPolygonCamera } from '../../../utils/map/createPolygonCamera'
 
 const { width, height } = Dimensions.get('screen')
 
@@ -24,8 +27,10 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
   const map = useRef<MapView | null>(null)
   const [resource, setResource] = useState<Resource | null>(null)
   const [geometry, setGeometry] = useState<Geometry>(Geometry.Point)
+  const [polygonMarkersVisible, setPolygonMarkersVisible] = useState(true)
   const setError = useModalStore(store => store.setError)
   const setLocationError = () => setError(true, ErrorType.MapCurrentLocation)
+  const { handleGeoJson } = useGeoJson()
 
   const {
     point,
@@ -106,30 +111,26 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
           break;
         case SaveType.CatchManualEdit:
           setResource(Resource.Catch)
-          if(center) { handleCenter(); break; }
+          if(center) { handleCenter(center); break; }
           if(location.coordinates) handleCurrentLocation(); 
           break;
         case SaveType.LocationAuto:
           if(!location.coordinates) return setLocationError()
           setPoint(location.coordinates)
           setResource(Resource.Location)
-          setGeometry(Geometry.Point)
           break;
         case SaveType.LocationAutoEdit:
           if(!location.coordinates) return setLocationError()
           setPoint(location.coordinates)
           setResource(Resource.Location)
-          setGeometry(Geometry.Point)
           break;
         case SaveType.LocationManual:
           setResource(Resource.Location)
-          setGeometry(Geometry.Point)
           if(location.coordinates) handleCurrentLocation()
           break;
         case SaveType.LocationManualEdit:
           setResource(Resource.Location)
-          setGeometry(Geometry.Point)
-          if(center) { handleCenter(); break; }
+          if(center) { handleCenter(center); break; }
           if(location.coordinates) handleCurrentLocation()
           break;
         default:
@@ -148,11 +149,16 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
     }
   }
 
-  const handleCenter = () => {
-    if(center && map.current){
+  const handleCenter = (latlng: LatLng, animate=true) => {
+    if(map.current && animate){
       map.current.animateCamera({
-        center,
-        zoom: 15
+        center: latlng,
+        zoom: 15,
+      })
+    }else if(map.current){
+      map.current.setCamera({
+        center: latlng,
+        zoom: 15,
       })
     }
   }
@@ -170,49 +176,45 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
 
   const handleConfirm = async () => {
     if(!map.current) return;
-    if(resource === Resource.Catch){
-      map.current.takeSnapshot({ height, width })
-        .then(image => {
-          if(!point) return;
-          if(saveType === SaveType.CatchAuto || saveType === SaveType.CatchManual){
-            newCatch.setMapSnapshot(image)
-            newCatch.setPoint(point)
-          }else{
-            editCatch.setMapSnapshot(image)
-            editCatch.setPoint(point)
-          }
-          navigation.goBack();
-        })
+    setPolygonMarkersVisible(false)
+    if(geometry === Geometry.Point){
+      if(!point) return
+      handleCenter(point, false)
+      if(saveType === SaveType.LocationAuto || saveType === SaveType.LocationManual){
+        newLocation.setPoint(point);
+      }else if(saveType === SaveType.LocationAutoEdit || saveType === SaveType.LocationManualEdit){
+        editLocation.setPoint(point)
+      }else if(saveType === SaveType.CatchAuto || saveType === SaveType.CatchManual){
+        newCatch.setPoint(point);
+      }else if(saveType === SaveType.CatchAutoEdit || saveType === SaveType.CatchManualEdit){
+        editCatch.setPoint(point)
+      }
+    }else if(geometry === Geometry.Polygon){
+      if(polygon.length < 3) return;
+      const coords = [
+        ...polygon.map(x => x.coordinate), 
+        polygon[0].coordinate 
+      ] //first and last point must be the same
+      map.current.setCamera(createPolygonCamera(coords))
+      if(saveType === SaveType.LocationAuto || saveType === SaveType.LocationManual){
+        newLocation.setPolygon(coords);
+      }else if(saveType === SaveType.LocationAutoEdit || saveType === SaveType.LocationManualEdit){
+        editLocation.setPolygon(coords)
+      }
     }
-    if(resource === Resource.Location){
-      map.current.takeSnapshot({ height, width })
-        .then(image => {
-          if(geometry === Geometry.Polygon) {
-              if(polygon.length < 3) return;
-              const coords = [
-                ...polygon.map(x => x.coordinate), 
-                polygon[0].coordinate 
-              ] //first and last point must be the same
-              if(saveType === SaveType.LocationAuto || saveType === SaveType.LocationManual){
-                newLocation.setPolygon(coords)
-                newLocation.setMapSnapshot(image);
-              }else{
-                editLocation.setPolygon(coords)
-                editLocation.setMapSnapshot(image)
-              }
-          }else if(geometry === Geometry.Point) {
-              if(!point) return
-              if(saveType === SaveType.LocationAuto || saveType === SaveType.LocationManual){
-                newLocation.setPoint(point)
-                newLocation.setMapSnapshot(image);
-              }else{
-                editLocation.setPoint(point)
-                editLocation.setMapSnapshot(image)
-              }
-          } 
-          navigation.goBack();
-        })
-    }
+    map.current.takeSnapshot({ height, width })
+      .then(image => {
+        if(saveType === SaveType.LocationAuto || saveType === SaveType.LocationManual){
+          newLocation.setMapSnapshot(image);
+        }else if(saveType === SaveType.LocationAutoEdit || saveType === SaveType.LocationManualEdit){
+          editLocation.setMapSnapshot(image)
+        }else if(saveType === SaveType.CatchAuto || saveType === SaveType.CatchManual){
+          newCatch.setMapSnapshot(image);
+        }else if(saveType === SaveType.CatchAutoEdit || saveType === SaveType.CatchManualEdit){
+          editCatch.setMapSnapshot(image)
+        }
+        navigation.goBack();
+      })
     }
 
   return (
@@ -314,7 +316,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
             />
           : null
         }
-        { polygon.map(({ coordinate, id }) => (
+        { polygonMarkersVisible && polygon.map(({ coordinate, id }) => (
             <Marker 
               key={id}
               tappable={true}
@@ -332,7 +334,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
           ))
         }
 
-        { midpoints.map((x) => (
+        { polygonMarkersVisible && midpoints.map((x) => (
             <Marker 
               draggable={true}
               coordinate={x.coordinate} 
