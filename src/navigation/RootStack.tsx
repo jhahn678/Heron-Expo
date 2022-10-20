@@ -104,10 +104,14 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='CameraScreen' component={CameraScreen}/>
                 <Stack.Screen name='ViewMapScreen' component={ViewMapScreen}/>
                 <Stack.Screen name='SaveMapScreen' component={SaveMapScreen}/>
-                <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}/>
                 <Stack.Screen name='UserSearchScreen' component={SearchUsersScreen}/>
-                <Stack.Screen name='ViewCatchScreen' component={ViewCatchScreen}/>
-                <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
+                <Stack.Group screenOptions={{ animation: 'slide_from_bottom', animationDuration: 200 }}>
+                    <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}
+                        options={{ headerShown: true, headerTitle: 'Profile', headerBackTitleVisible: false }}
+                    />
+                    <Stack.Screen name='ViewCatchScreen' component={ViewCatchScreen}/>
+                    <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
+                </Stack.Group>
                 <Stack.Screen name='MediaGridScreen' component={MediaGridScreen}/>
                 <Stack.Screen name='ReviewsScreen' component={ReviewsScreen}/>
                 <Stack.Screen name='ViewImageScreen' component={ViewImageScreen}/>
