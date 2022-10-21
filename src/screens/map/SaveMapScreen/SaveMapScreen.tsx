@@ -18,6 +18,7 @@ import { useEditLocationStore } from '../../../store/mutations/useEditLocationSt
 import { getCentroid } from '../../../utils/map/getCentroid'
 import { useGeoJson } from '../../../hooks/utils/useGeoJson'
 import { createPolygonCamera } from '../../../utils/map/createPolygonCamera'
+import { mapStyle } from '../../../config/mapStyle'
 
 const { width, height } = Dimensions.get('screen')
 
@@ -235,17 +236,18 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
           )}
         />
       </View>
-
+            
       { (point || polygon.length > 2) &&
-        <FAB
-          icon={() => <Icon name='check' size={24}/>}
-          label='Save'
-          animated={false}
-          theme={{ roundness: 2 }}
-          customSize={48}
-          onPress={handleConfirm}
-          style={styles.confirm}
-        />
+        <View style={styles.saveContainer}>
+          <FAB
+              icon={() => <Icon name='check' size={24}/>}
+              label='Save'
+              animated={false}
+              theme={{ roundness: 2 }}
+              customSize={48}
+              onPress={handleConfirm}
+            />
+        </View>
       }
 
       { resource === Resource.Location && 
@@ -290,6 +292,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
         ref={map}
         style={styles.map}
         provider={'google'}
+        customMapStyle={mapStyle}
         onPress={handlePress}
         onLongPress={handleLongPress}
         onPanDrag={() => setSelectedPoint(null)}
@@ -386,12 +389,13 @@ export default SaveMapScreen
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    width: "100%",
+    height,
+    width,
+    position: 'relative',
     alignItems: 'center'
   },
   header: {
-    width: width,
+    width,
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: "center",
@@ -404,20 +408,21 @@ const styles = StyleSheet.create({
     height: '100%',
     width: '100%'
   },
-  confirm: {
+  saveContainer: {
     position: "absolute",
     bottom: 120,
-    zIndex: 100,
+    zIndex: 1000,
     width: 200,
   },
   tip: {
     position: "absolute",
-    bottom: 24,
+    bottom: 72,
     zIndex: 100,
     backgroundColor: theme.colors.surfaceVariant,
     paddingHorizontal: 16,
     paddingVertical: 12,
-    borderRadius: 24
+    borderRadius: 24,
+    overflow: 'hidden'
   },
   circle: {
     position: 'relative',

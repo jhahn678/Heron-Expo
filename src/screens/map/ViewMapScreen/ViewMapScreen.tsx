@@ -21,8 +21,12 @@ import { Feature, GeoJsonResource } from '../../../utils/conversions/geojsonToFe
 import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries/useGetLocations';
 import { useModalStore } from '../../../store/modal/useModalStore';
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails';
+import { mapStyle } from '../../../config/mapStyle';
 const { width, height } = Dimensions.get('screen')
 const LIMIT = 50;
+
+import * as MediaLibrary from 'expo-media-library'
+import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop';
 
 
 const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScreen'>) => {
@@ -30,6 +34,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
   const { params: { resource, id } } = route;
   const map = useRef<MapView | null>(null)
   const [coordinates, setCoordinates] = useState<LatLng | null>(null)
+  const [loading, setLoading] = useState(false)
   const [geojson, setGeojson] = useState<FeatureCollection | null>(null)
   const [geojsonResource, setGeojsonResource] = useState<GeoJsonResource | null>(null)
   const [mapCamera, setMapCamera] = useState<Partial<Camera> | null>(null)
@@ -48,8 +53,8 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
   useEffect(() => navigation.addListener("beforeRemove", modal.reset),[]);
 
   useEffect(() => {
-    if (mapCamera && mapReady) {
-      map.current?.animateCamera(mapCamera);
+    if(map.current && mapCamera && mapReady) {
+      map.current.animateCamera(mapCamera);
     }
   }, [mapCamera, mapReady]);
 
@@ -66,7 +71,6 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
     sort: CatchSort.CreatedAtNewest,
     type: catchMapResource(resource)
   });
-
 
   const handleShowMore = async () => {
     if(!map.current) return;
@@ -198,6 +202,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
           }
           break;
         case MapResource.Waterbody:
+          setLoading(true)
           getWaterbody().then(({ data }) => {
             if(!data) return;
             modal.setWaterbody(data.waterbody.id)
@@ -213,6 +218,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             setGeojsonResource(GeoJsonResource.Waterbody);
             setMapCamera(result.camera)
             setHasMore(false);
+            setLoading(false)
           })
           break;
         case MapResource.UserCatches:
@@ -382,12 +388,15 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
           >Show More Here</Button>
         )}
       </View>
+          
+      {loading && <LoadingBackdrop/>}
 
       <MapView
         ref={map}
         style={styles.map}
         onMapReady={() => setMapReady(true)}
         provider={'google'}
+        customMapStyle={mapStyle}
       >
         {geojson && (
           <Geojson
