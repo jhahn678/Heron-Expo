@@ -33,17 +33,17 @@ const LocationInput = ({ navigation }: Props) => {
             { 
                 store.snapshot ? 
                     <Card style={styles.selected}>
+                        <Image 
+                            source={{ uri: store.snapshot.uri }} 
+                            style={styles.snapshot} 
+                            resizeMode={'cover'}
+                        />
                         <IconButton 
                             size={16} 
                             icon='close' 
                             mode="contained" 
                             style={styles.remove} 
                             onPress={handleClearLocation}
-                        />
-                        <Image 
-                            source={{ uri: store.snapshot.uri }} 
-                            style={styles.snapshot} 
-                            resizeMode={'cover'}
                         />
                     </Card> 
                 :
@@ -77,7 +77,7 @@ const styles = StyleSheet.create({
     selected: {
         width: '85%',
         height: 200,
-        borderRadius: 12
+        borderRadius: 12,
     },
     snapshot: {
         height: '100%',

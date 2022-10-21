@@ -37,6 +37,11 @@ const LocationInput = ({ navigation }: Props) => {
             { 
                 snapshot ? 
                     <Card style={styles.selected}>
+                        <Image 
+                            source={{ uri: snapshot.uri }} 
+                            style={styles.snapshot} 
+                            resizeMode={'cover'}
+                        />
                         <IconButton 
                             size={16} 
                             icon='close' 
@@ -44,7 +49,6 @@ const LocationInput = ({ navigation }: Props) => {
                             style={styles.remove} 
                             onPress={handleClearLocation}
                         />
-                        <Image source={{ uri: snapshot.uri }} style={styles.snapshot} resizeMode={'cover'}/>
                     </Card> 
                 :
                     <View style={globalStyles.frsb}>

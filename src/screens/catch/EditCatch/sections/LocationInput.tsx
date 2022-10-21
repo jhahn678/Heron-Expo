@@ -57,17 +57,17 @@ const LocationInput = ({ navigation, mapImage, geom }: Props) => {
             { 
                 store.snapshot ? 
                     <Card style={styles.selected}>
+                        <Image 
+                            source={{ uri: store.snapshot.uri }} 
+                            style={styles.snapshot} 
+                            resizeMode={'cover'}
+                        />
                         <IconButton 
                             size={16} 
                             icon='close' 
                             mode="contained" 
                             style={styles.remove} 
                             onPress={handleClearLocation}
-                        />
-                        <Image 
-                            source={{ uri: store.snapshot.uri }} 
-                            style={styles.snapshot} 
-                            resizeMode={'cover'}
                         />
                     </Card> 
                 : (savedValue && savedValue.mapImage) ?
