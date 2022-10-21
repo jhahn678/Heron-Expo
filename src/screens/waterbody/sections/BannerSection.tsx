@@ -97,7 +97,7 @@ export default BannerSection;
 const styles = StyleSheet.create({
     container: {
         width,
-        height: 320,
+        height: 350,
     },
     back: {
         position: 'absolute',
@@ -117,7 +117,7 @@ const styles = StyleSheet.create({
     },
     image: {
         width,
-        height: 320,
+        height: 350,
         backgroundColor: '#d9d9d9'
     },
 });
