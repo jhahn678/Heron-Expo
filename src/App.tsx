@@ -13,8 +13,9 @@ import { StatusBar } from 'expo-status-bar'
 import ModalPortal from './components/modals/ModalPortal'
 import { theme } from './config/theme'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
+import registerRootComponent from 'expo/build/launch/registerRootComponent';
 
-export default function App() { 
+const App = () => { 
   const [appIsReady, setAppIsReady] = useState(false)
 
   const autoSignIn = useAuth(store => store.autoSignIn)
@@ -67,3 +68,4 @@ export default function App() {
 }
 
 
+registerRootComponent(App);

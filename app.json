@@ -27,10 +27,16 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/adaptive-foreground.png",
         "backgroundImage": "./assets/adaptive-background.png"
-      }
+      },
+      "package": "com.jhahn678.heron"
     },
     "web": {
       "favicon": "./assets/favicon.png"
+    },
+    "extra": {
+      "eas": {
+        "projectId": "6cee6866-f1c2-45df-aff5-7226724ef021"
+      }
     }
   }
 }
