@@ -124,8 +124,8 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name="EditLocationScreen" component={EditLocationScreen}/>
                 <Stack.Screen name="EditReviewScreen" component={EditReviewScreen}/>
                 <Stack.Group screenOptions={{ headerShown: true }}>
-                    <Stack.Screen name='PasswordScreen' component={PasswordScreen} options={{ headerTitle: 'Sign In'}}/>
-                    <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} options={{ headerTitle: 'Report a Problem'}}/>
+                    <Stack.Screen name='PasswordScreen' component={PasswordScreen} options={{ headerTitle: 'Sign In', headerBackTitleVisible: false }}/>
+                    <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} options={{ headerTitle: 'Report a Problem', headerBackTitleVisible: false }}/>
                 </Stack.Group>
             </Stack.Navigator>
         </NavigationContainer>

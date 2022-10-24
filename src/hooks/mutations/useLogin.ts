@@ -19,7 +19,6 @@ export const useLogin = ({ onSuccess, onError}: UseLoginArgs) => {
 
     const loginUser = async (params: LoginParams): Promise<AuthResponse | void> => {
         setIsLoading(true)
-        
         axios.post<AuthResponse>('/auth/login', params)
             .then(({ data }) => {
                 setIsLoading(false)
@@ -27,7 +26,7 @@ export const useLogin = ({ onSuccess, onError}: UseLoginArgs) => {
                 return data;
             })
             .catch(err => {
-                console.log(err)
+                console.error(err)
                 setIsLoading(false)
                 setIsError(true)
                 onError(err)

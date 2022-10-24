@@ -6,4 +6,5 @@ declare module '@env'{
     export const GOOGLE_WEB_CLIENT_ID: string
     export const FACEBOOK_CLIENT_ID: string
     export const API_GRAPH_URL: string
+    export const AWS_LAMBDA_REPORT_PROBLEM: string
 }
