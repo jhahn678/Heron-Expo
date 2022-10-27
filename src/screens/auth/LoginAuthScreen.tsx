@@ -10,7 +10,6 @@ import { useAuth } from '../../store/auth/useAuth'
 import { useModalStore } from '../../store/modal/useModalStore'
 const { width } = Dimensions.get('screen')
 
-
 const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>): JSX.Element => {
   
   const setUser = useAuth(state => state.setUser)
