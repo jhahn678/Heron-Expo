@@ -4,7 +4,7 @@
     "slug": "heron",
     "owner": "jhahn678",
     "privacy": "public",
-    "version": "1.0.0",
+    "version": "1.0.1",
     "orientation": "portrait",
     "entryPoint": "./src/App",
     "icon": "./assets/icon.png",
@@ -30,7 +30,8 @@
         "foregroundImage": "./assets/adaptive-foreground.png",
         "backgroundImage": "./assets/adaptive-background.png"
       },
-      "package": "com.jhahn678.heron"
+      "package": "com.jhahn678.heron",
+      "versionCode": 3
     },
     "web": {
       "favicon": "./assets/favicon.png"
