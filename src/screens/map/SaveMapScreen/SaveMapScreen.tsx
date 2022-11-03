@@ -15,7 +15,7 @@ import PromptDeletePoint from '../../../components/modals/map/PromptDeletePoint'
 import { Geometry, Resource, useCreateGeometry } from '../../../hooks/utils/useCreateGeometry'
 import { useEditCatchStore } from '../../../store/mutations/useEditCatchStore'
 import { useEditLocationStore } from '../../../store/mutations/useEditLocationStore'
-import { getCentroid } from '../../../utils/map/getCentroid'
+import { PROVIDER_GOOGLE } from 'react-native-maps'
 import { useGeoJson } from '../../../hooks/utils/useGeoJson'
 import { createPolygonCamera } from '../../../utils/map/createPolygonCamera'
 import { mapStyle } from '../../../config/mapStyle'
@@ -291,7 +291,7 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       <MapView
         ref={map}
         style={styles.map}
-        provider={'google'}
+        provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
         onPress={handlePress}
         onLongPress={handleLongPress}

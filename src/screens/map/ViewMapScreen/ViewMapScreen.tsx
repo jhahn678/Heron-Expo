@@ -9,7 +9,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useMapModalStore } from '../../../store/modal/useMapModalStore';
 import { useGetCatchFragment } from '../../../hooks/queries/useGetCatch';
 import { MapResource, RootStackScreenProps } from '../../../types/navigation'
-import MapView, { Camera, Geojson, LatLng, MapEvent } from 'react-native-maps';
+import MapView, { Camera, Geojson, LatLng, MapEvent, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useGetLocationFragment } from '../../../hooks/queries/useGetLocation';
 import { MapPressResponse, useGeoJson } from '../../../hooks/utils/useGeoJson';
 import CatchesBottomSheet from '../../../components/modals/map/CatchesBottomSheet';
@@ -395,7 +395,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
         ref={map}
         style={styles.map}
         onMapReady={() => setMapReady(true)}
-        provider={'google'}
+        provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
       >
         {geojson && (
