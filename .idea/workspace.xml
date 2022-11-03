@@ -8,13 +8,7 @@
     <option name="autoReloadType" value="NONE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="57c7f490-392f-41b7-b0c1-cccdb121aa66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/map/SaveMapScreen/SaveMapScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/map/SaveMapScreen/SaveMapScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/screens/map/ViewMapScreen/ViewMapScreen.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/screens/map/ViewMapScreen/ViewMapScreen.tsx" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/utils/conversions/waterbodyLocationToLabel.ts" beforeDir="false" afterPath="$PROJECT_DIR$/src/utils/conversions/waterbodyLocationToLabel.ts" afterDir="false" />
-    </list>
+    <list default="true" id="57c7f490-392f-41b7-b0c1-cccdb121aa66" name="Changes" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
