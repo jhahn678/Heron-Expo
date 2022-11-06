@@ -34,7 +34,7 @@
         "backgroundImage": "./assets/adaptive-background.png"
       },
       "package": "com.jhahn678.heron",
-      "versionCode": 4,
+      "versionCode": 5,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCvCaCmEOBnUbYgm-dt0ZeTceVI839HgFg"
