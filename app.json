@@ -29,10 +29,6 @@
       }
     },
     "android": {
-      "adaptiveIcon": {
-        "foregroundImage": "./assets/adaptive-foreground.png",
-        "backgroundImage": "./assets/adaptive-background.png"
-      },
       "package": "com.jhahn678.heron",
       "versionCode": 6,
       "config": {
