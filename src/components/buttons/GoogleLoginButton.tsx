@@ -24,26 +24,26 @@ const GoogleLoginButton = ({ navigation }: Props) => {
 
   const signInUser = useGoogleLogin()
   const setUser = useAuth(store => store.setUser)
-
+ 
   const [request, response, promptAsync] = Google.useAuthRequest({
     expoClientId: GOOGLE_EXPO_CLIENT_ID,
     iosClientId: GOOGLE_IOS_CLIENT_ID,
     androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-    webClientId: GOOGLE_WEB_CLIENT_ID,
-    responseType: ResponseType.IdToken
   });
 
   useEffect(() => {
     if (response?.type === 'success') {
-      const { id_token } = response.params;
-      if(!id_token) return;
+      console.log(response)
+      const { authentication } = response;
+      if(!authentication) return;
       (async() => {
-        const res = await signInUser({ idToken: id_token })
+        const res = await signInUser({ accessToken: authentication.accessToken })
         if(res) setUser(res, !res.account_created)
         if(res && res.account_created) navigation.navigate('UsernameAuthScreen')
       })()
     }
   }, [response]);
+  
 
   return (
     <Button 

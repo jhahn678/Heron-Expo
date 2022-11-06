@@ -10,7 +10,6 @@ type WaterbodyLocation = Pick<
 >
 
 export const waterbodyLocationLabel = <T extends WaterbodyLocation>(x: T) => {
-    console.log(x.admin_one, x.admin_two)
     return (
         Boolean(x.admin_two && x.admin_two.length && x.admin_two.length < 3) ?
             `${x.admin_two[0]}, ${x.admin_one[0]}` :

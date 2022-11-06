@@ -2,7 +2,7 @@ import { axios } from '../../config/axios'
 import { SocialLoginRes } from '../../types/User'
 
 interface GoogleLoginBody {
-    idToken: string
+    accessToken: string
 }
 
 

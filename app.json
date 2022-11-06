@@ -4,7 +4,7 @@
     "slug": "heron",
     "owner": "jhahn678",
     "privacy": "public",
-    "version": "1.0.2",
+    "version": "1.0.3",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "heron",
@@ -29,7 +29,7 @@
     },
     "android": {
       "package": "com.jhahn678.heron",
-      "versionCode": 7,
+      "versionCode": 8,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCvCaCmEOBnUbYgm-dt0ZeTceVI839HgFg"
