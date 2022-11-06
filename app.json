@@ -6,7 +6,6 @@
     "privacy": "public",
     "version": "1.0.2",
     "orientation": "portrait",
-    "entryPoint": "./src/App",
     "icon": "./assets/icon.png",
     "scheme": "heron",
     "userInterfaceStyle": "automatic",
@@ -30,7 +29,7 @@
     },
     "android": {
       "package": "com.jhahn678.heron",
-      "versionCode": 6,
+      "versionCode": 7,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCvCaCmEOBnUbYgm-dt0ZeTceVI839HgFg"
