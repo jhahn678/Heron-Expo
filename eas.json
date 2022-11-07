@@ -3,7 +3,12 @@
     "version": ">= 2.5.1"
   },
   "build": {
-    "autoIncrement": true,
+    "android": {
+      "autoIncrement": true
+    },
+    "ios": {
+      "autoIncrement": true
+    },
     "development": {
       "developmentClient": true,
       "distribution": "internal"
