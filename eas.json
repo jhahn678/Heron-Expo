@@ -3,6 +3,7 @@
     "version": ">= 2.5.1"
   },
   "build": {
+    "autoIncrement": true,
     "development": {
       "developmentClient": true,
       "distribution": "internal"
