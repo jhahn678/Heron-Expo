@@ -57,7 +57,7 @@ const LocationsBottomSheet = () => {
   return (
     <BottomSheet
       enablePanDownToClose={dismissable}
-      snapPoints={["12%", "48%"]}
+      snapPoints={[100, 400]}
       index={0}
       onClose={onClose}
     >

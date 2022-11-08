@@ -31,7 +31,7 @@ const ReviewBodyBottomSheet = () => {
         <BottomSheet 
             ref={ref}
             index={-1} 
-            snapPoints={['48%']}
+            snapPoints={[370]}
             onClose={handleOnClose}
             animateOnMount={false}
             enablePanDownToClose={true}

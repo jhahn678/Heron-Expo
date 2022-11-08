@@ -25,7 +25,7 @@ const ReviewImagesBottomSheet = ({ onSubmit }: Props) => {
         <BottomSheet
             ref={ref}
             index={-1}
-            snapPoints={['45%']}
+            snapPoints={[370]}
             onClose={handleOnClose}
             animateOnMount={false}
             enableContentPanningGesture={false}

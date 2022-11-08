@@ -24,7 +24,7 @@ const ReviewRatingBottomSheet = () => {
         <BottomSheet 
             ref={ref}
             index={-1} 
-            snapPoints={['40%']}
+            snapPoints={[300]}
             onClose={handleOnClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}

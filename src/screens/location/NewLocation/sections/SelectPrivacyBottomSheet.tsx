@@ -34,9 +34,9 @@ const SelectPrivacyBottomSheet = () => {
 
     return (
         <BottomSheet 
-            ref={ref}
+            ref={ref} 
             index={-1}
-            snapPoints={['50%']}
+            snapPoints={[430]}
             onClose={handleClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}

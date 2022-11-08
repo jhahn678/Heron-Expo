@@ -61,7 +61,7 @@ const CatchesBottomSheet = () => {
     <BottomSheet
       enablePanDownToClose={dismissable}
       onClose={onClose}
-      snapPoints={["12%", "48%"]}
+      snapPoints={[100, 400]}
       index={0}
     >
       <Pressable style={[globalStyles.frac, styles.hpadding]} onPress={navigateToCatch}>

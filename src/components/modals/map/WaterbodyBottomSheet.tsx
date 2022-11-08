@@ -42,7 +42,7 @@ const WaterbodyBottomSheet = () => {
     return (
       <BottomSheet
         enableContentPanningGesture={false}
-        snapPoints={["12%", "45%"]}
+        snapPoints={[100, 400]}
         index={0}
       >
         <Title style={styles.title}>{data?.name}</Title>
