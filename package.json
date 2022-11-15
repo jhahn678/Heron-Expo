@@ -1,6 +1,6 @@
 {
   "name": "heron-expo",
-  "version": "1.0.0",
+  "version": "1.0.3",
   "main": "./src/App",
   "scripts": {
     "start": "expo start --dev-client",
@@ -37,7 +37,7 @@
     "apollo-link-token-refresh": "^0.4.0",
     "axios": "^0.27.2",
     "dayjs": "^1.11.5",
-    "expo": "~46.0.16",
+    "expo": "~46.0.17",
     "expo-apple-authentication": "~4.3.0",
     "expo-auth-session": "~3.7.1",
     "expo-camera": "~12.3.0",
@@ -82,7 +82,8 @@
     "react-native-vector-icons": "^9.2.0",
     "react-native-web": "~0.18.7",
     "yup": "^0.32.11",
-    "zustand": "^4.1.1"
+    "zustand": "^4.1.1",
+    "expo-updates": "~0.14.7"
   },
   "devDependencies": {
     "@babel/core": "^7.12.9",

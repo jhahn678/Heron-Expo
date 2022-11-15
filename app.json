@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jhahn678.heron",
-      "buildNumber": "1.0.1",
+      "buildNumber": "1.0.3",
       "config": {
         "googleMapsApiKey": "AIzaSyAzQnJM4QagkraOAllkO7FUyEXb4xXremc"
       }
