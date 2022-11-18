@@ -24,6 +24,9 @@
       "supportsTablet": false,
       "bundleIdentifier": "com.jhahn678.heron",
       "buildNumber": "1.0.3",
+      "infoPlist": {
+        "NSLocationWhenInUseUsageDescription": "Heron uses your location to find places to fish near you"
+      },
       "config": {
         "googleMapsApiKey": "AIzaSyAzQnJM4QagkraOAllkO7FUyEXb4xXremc"
       }
@@ -44,6 +47,9 @@
       "eas": {
         "projectId": "6cee6866-f1c2-45df-aff5-7226724ef021"
       }
-    }
+    },
+    "plugins": [
+      "sentry-expo"
+    ]
   }
 }
