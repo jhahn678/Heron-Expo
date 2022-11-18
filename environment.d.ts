@@ -7,4 +7,5 @@ declare module '@env'{
     export const FACEBOOK_CLIENT_ID: string
     export const API_GRAPH_URL: string
     export const AWS_LAMBDA_REPORT_PROBLEM: string
+    export const SENTRY_AUTH_TOKEN: string
 }

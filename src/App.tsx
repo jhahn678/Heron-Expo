@@ -14,8 +14,16 @@ import ModalPortal from './components/modals/ModalPortal'
 import { theme } from './config/theme'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
 import registerRootComponent from 'expo/build/launch/registerRootComponent';
+import * as Sentry from 'sentry-expo';
 
 const App = () => { 
+
+  Sentry.init({
+    dsn: 'https://1d00243df75b49469f3e7ad895e7da28@o4504053018787840.ingest.sentry.io/4504163144695808',
+    enableInExpoDevelopment: true,
+    debug: true
+  });
+
   const [appIsReady, setAppIsReady] = useState(false)
 
   const autoSignIn = useAuth(store => store.autoSignIn)
