@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Title, Text, ActivityIndicator } from 'react-native-paper'
+import { Title, Text } from 'react-native-paper'
 import { useLocationStore } from '../../../../store/location/useLocationStore'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import EnableLocationButton from '../../../../components/buttons/EnableLocationButton'
@@ -9,6 +9,7 @@ import { useSearchParamStore } from '../../../../store/search/useSearchParamStor
 import { WaterbodyClassification } from '../../../../types/Waterbody'
 import { useGetNearbyWaterbodies } from '../../../../hooks/queries/useGetNearbyWaterbodies'
 import { classificationToCategory } from '../../../../utils/conversions/classificationToCategory'
+import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -43,26 +44,18 @@ const NearbyCategorySection = ({ navigation, classification }: Props) => {
             <Title style={styles.title}>Nearby {classificationToCategory(classification)}</Title>
             { hasCoordinates ? 
                 data ? 
-                    //data available
                     <WaterbodiesListHorizontal 
                         data={data.waterbodies}
                         navigateViewMore={navigateViewMore}
                         navigateToWaterbody={navigateToWaterbody}
                     /> 
-                    
-                    //loading state
                     : loading ? 
-                        <ActivityIndicator 
-                            style={{ marginTop: 36 }}
-                            animating 
-                            size='large'
-                        />
-                    
-                    //Error state    
+                        <ScrollViewListLoader
+                            itemSize={{ height: 320, width: 300 }}
+                            contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 24 }}
+                        />  
                     : error &&
                         <Text style={styles.error}>There was an error</Text> 
-                
-                    //Location not available
                     : 
                         <EnableLocationButton 
                             for='waterbodies' 
