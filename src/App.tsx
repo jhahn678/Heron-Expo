@@ -34,6 +34,7 @@ const App = () => {
       const token = await SecureStore.getItemAsync(SecureStoreKeys.REFRESH_TOKEN)
       if(token) await autoSignIn(token)
     }catch(err){
+      Sentry.Native.captureException(err)
       console.warn(err)
     }finally{
       setAppIsReady(true)
