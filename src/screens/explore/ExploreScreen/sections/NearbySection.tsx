@@ -18,7 +18,7 @@ const NearbySection = ({ navigation }: Props) => {
     const { setSort } = useSearchParamStore()
     const { latitude, longitude, hasPermission } = useLocationStore()
     
-    const { data, error } = useGetNearbyWaterbodies({ latitude, longitude })
+    const { data } = useGetNearbyWaterbodies({ latitude, longitude })
 
     const navigateViewMore = (): void => {
         setSort('distance')
@@ -30,7 +30,7 @@ const NearbySection = ({ navigation }: Props) => {
     }
 
     return (
-        <View style={[styles.container, { height: (hasPermission === false || error) ? 150 : 400}]}>
+        <View style={[styles.container, { height: (hasPermission === false) ? 150 : 400}]}>
             <Title style={styles.title}>What's nearby</Title>
             { 
                 hasPermission === false ? 
