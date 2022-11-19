@@ -50,6 +50,18 @@
     },
     "plugins": [
       "sentry-expo"
-    ]
+    ],
+    "hooks": {
+      "postPublish": [
+        {
+          "file": "sentry-expo/upload-sourcemaps",
+          "config": {
+            "organization": "heron-nh",
+            "project": "heron-mobile",
+            "authToken": "f1317dd07ed2431e9972bd1f252b79d661df6db721094104b184be9a7e2b3eaa"
+          }
+        }
+      ]
+    }
   }
 }
