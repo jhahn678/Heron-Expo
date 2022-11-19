@@ -1,21 +1,21 @@
+import { useEffect } from "react";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import ExploreScreen from "../screens/explore/ExploreScreen/ExploreScreen";
 import SearchBarScreen from "../screens/explore/SearchBarScreen/SearchBarScreen";
 import SearchResultsScreen from "../screens/explore/SearchResultsScreen/SearchResultsScreen";
 import { ExploreStackParams } from "../types/navigation";
 import { useCurrentLocation } from "../hooks/utils/useCurrentLocation";
-import { useEffect } from "react";
-import { useLocationStore } from "../store/location/useLocationStore";
 import WaterbodyScreen from "../screens/waterbody/WaterbodyScreen";
+import { useLocationStore } from "../store/location/useLocationStore";
 
 const ExploreStack = () => {
 
     const { getCurrentLocation } = useCurrentLocation()
-    const { hasCoordinates } = useLocationStore()
+    const hasCoordinates = useLocationStore(store => store.hasCoordinates)
 
     useEffect(() => {
         if(!hasCoordinates) getCurrentLocation()
-    },[])
+    },[hasCoordinates])
 
     const Stack = createNativeStackNavigator<ExploreStackParams>();
 
