@@ -55,7 +55,7 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         loading={isLoading}
       >Sign in</Button>
       <Text style={{ alignSelf: 'center', marginTop: 16, marginBottom: 12}}>Or</Text>
-      {/* <GoogleLoginButton navigation={navigation}/> */}
+      <GoogleLoginButton navigation={navigation}/>
       {/* <FacebookLoginButton navigation={navigation}/> */}
       <AppleLoginButton navigation={navigation}/>
       <Button 
