@@ -64,7 +64,6 @@ export class RefreshTokenLink extends ApolloLink {
         this.operationQueue.forEach(({ operation, forward, observer }) => {
             this.setAuthorization(operation, token)
             forward(operation).subscribe(observer)
-            // console.log('AUTH LINK: EXECUTING QUEUE ITEM')
         })
     }
 
@@ -76,7 +75,6 @@ export class RefreshTokenLink extends ApolloLink {
             return new Observable<FetchResult>((observer: Observer<FetchResult>) => {
                 const entry = { operation, forward, observer }
                 this.enqueue(entry)
-                // console.log(`entry queued, length ${this.operationQueue.length}`)
                 return () => this.cancelOperation(entry)
             })
         }else{
@@ -86,12 +84,10 @@ export class RefreshTokenLink extends ApolloLink {
                     .then(token => {
                         const valid = this.validateAccessToken(token)
                         if(valid) throw token;
-                        // console.log('getting refresh token')
                     })
                     .then(() => this.getRefreshToken())
                     .then(token => {
                         const valid = this.validateRefreshToken(token)
-                        //typeof satisfies ts -- should be checked in function
                         if(!valid || typeof token !== 'string') throw new Error;
                         return this.fetchNewAccessToken(token)
                     })
