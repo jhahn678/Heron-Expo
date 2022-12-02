@@ -1,7 +1,7 @@
 import axios from 'axios'
 import { useState } from 'react';
 import { useAuth } from '../../store/auth/useAuth'
-const { AWS_LAMBDA_REPORT_PROBLEM } = process.env;
+import { AWS_LAMBDA_REPORT_PROBLEM } from '@env'
 
 interface Args {
     onSuccess: () => void
