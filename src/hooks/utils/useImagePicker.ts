@@ -27,20 +27,29 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
     const [hasLibraryPermission, setHasLibraryPermission] = useState(false)
     
     useEffect(() => {
-        (async () => {
-            const library = await getMediaLibraryPermissionsAsync()
-            setHasLibraryPermission(library.granted)
-            const camera = await getCameraPermissionsAsync()
-            setHasCameraPermission(camera.granted)
-        })()
+        getMediaLibraryPermissionsAsync()
+            .then(res => setHasLibraryPermission(res.granted))
+            .catch(err => { console.error(err) })
+        getCameraPermissionsAsync()
+            .then(res => setHasCameraPermission(res.granted))
+            .catch(err => { console.error(err) })
     }, [])
 
     const openImagePickerAvatar = async (): Promise<ImageInfo | null> => {
+
+        //Prompt user for permission if disabled 
         if(!hasLibraryPermission){
-            const res = await requestMediaLibraryPermissionsAsync()
-            setHasLibraryPermission(res.granted)
-            if(!res.granted) return null;
+            try{
+                const res = await requestMediaLibraryPermissionsAsync()
+                setHasLibraryPermission(res.granted)
+                if(!res.granted) return null;
+            }catch(err){
+                console.error(err);
+                alert('Could not access permissions for device media library')
+                return null;
+            }
         }
+
         try{
             const result = await launchImageLibraryAsync({
                 mediaTypes: MediaTypeOptions.Images,
@@ -56,11 +65,20 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
     }
 
     const openImagePicker = async (): Promise<ImageInfo[] | null> => {
+
+        //Prompt user for permission if disabled 
         if(!hasLibraryPermission){
-            const res = await requestMediaLibraryPermissionsAsync()
-            setHasLibraryPermission(res.granted)
-            if(!res.granted) return null;
+            try{
+                const res = await requestMediaLibraryPermissionsAsync()
+                setHasLibraryPermission(res.granted)
+                if(!res.granted) return null;
+            }catch(err){
+                console.error(err);
+                alert('Could not access permissions for device media library')
+                return null;
+            }
         }
+
         try{
             const result = await launchImageLibraryAsync({ 
                 mediaTypes: MediaTypeOptions.Images,
@@ -78,11 +96,20 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
     }
 
     const openCamera = async (): Promise<ImageInfo | null> => {
+
+        //Prompt user for permission if disabled 
         if(!hasCameraPermission){
-            const res = await requestCameraPermissionsAsync();
-            setHasCameraPermission(res.granted)
-            if(!res.granted) return null
+            try{
+                const res = await requestCameraPermissionsAsync();
+                requestCameraPermissionsAsync();
+                if(!res.granted) return null;
+            }catch(err){
+                console.error(err);
+                alert('Could not access permissions for device camera')
+                return null;
+            }
         }
+
         try{
             const result = await launchCameraAsync({
                 mediaTypes: MediaTypeOptions.Images,

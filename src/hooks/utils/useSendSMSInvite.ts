@@ -11,15 +11,15 @@ export const useSendSMSInvite = (): UseSendSMSObj => {
 
     useEffect(() => {
         if(!isAvailable){
-            (async () => {
-                const result = await isAvailableAsync()
-                setIsAvailable(result)
-            })()
+            isAvailableAsync()
+                .then(res => setIsAvailable(res))
+                .catch(err => console.error(err))
         }
     },[])
 
     const sendSMSInvite = async (phoneNumber: number | string ) => {
-        await sendSMSAsync(phoneNumber.toString(), "Here's an invite to join me on Mayfly!")
+        sendSMSAsync(phoneNumber.toString(), "Here's an invite to join me on Heron!")
+            .catch((err) => console.error(err))
     }
 
     return {

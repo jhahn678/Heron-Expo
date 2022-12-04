@@ -16,8 +16,8 @@ export const useImagePaginationIndicator = () => {
     },[]);
 
     return {
-        currentIndex,
-        handleViewableItemsChanged
+      currentIndex,
+      handleViewableItemsChanged
     }
 
 }
