@@ -50,6 +50,12 @@ local.properties
 *.iml
 *.hprof
 
+ios/
+android/
+.idea/
+.tmp/
+- /
+
 # node.js
 #
 node_modules/
