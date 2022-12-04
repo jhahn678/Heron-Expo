@@ -6,8 +6,7 @@ import * as Google from 'expo-auth-session/providers/google'
 import { 
   GOOGLE_ANDROID_CLIENT_ID, 
   GOOGLE_EXPO_CLIENT_ID, 
-  GOOGLE_IOS_CLIENT_ID, 
-  GOOGLE_WEB_CLIENT_ID
+  GOOGLE_IOS_CLIENT_ID
 } from '@env'
 import { ResponseType } from 'expo-auth-session'
 import { useGoogleLogin } from '../../hooks/mutations/useGoogleLogin'
