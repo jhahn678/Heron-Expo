@@ -6,9 +6,6 @@ import { Button, Text } from 'react-native-paper'
 import GoogleLoginButton from '../../components/buttons/GoogleLoginButton'
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
 import AppleLoginButton from '../../components/buttons/AppleLoginButton'
-import GradientEllipse from '../../components/svg/GradientEllipse'
-import GradientEllipseMedium from '../../components/svg/GradientEllipseMedium'
-import GradientElippsesSmall from '../../components/svg/GradientEllipsesSmall'
 const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../assets/heron-dark.png'))
 const { width, height } = Dimensions.get('screen')
 
@@ -33,9 +30,6 @@ const HomeAuthScreen = ({ navigation, route }: RootStackScreenProps<'HomeAuthScr
           >Skip</Button>
       }
       <Image source={DEFAULT_IMAGE} style={styles.image}/>
-      <GradientEllipse style={styles.ellipse}/>
-      <GradientEllipseMedium style={styles.ellipse2}/>
-      <GradientElippsesSmall style={styles.ellipse3}/>
       <View style={styles.buttonContainer}>
         <GoogleLoginButton navigation={navigation}/>
         {/* <FacebookLoginButton navigation={navigation}/> */}
