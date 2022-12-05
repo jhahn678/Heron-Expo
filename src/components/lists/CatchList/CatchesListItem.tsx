@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../../config/theme";
 import { joinCatchDetails } from "../../../utils/joinCatchDetails";
 import { catchDetailsToTitle } from "../../../utils/conversions/catchDetailsToTitle";
+import { catchImageUriHandler } from "../../../utils/catchImageUriHandler";
 
 interface Props {
     data: GetCatchesRes['catches'][number]
@@ -63,13 +64,7 @@ const CatchesListItem = ({
 
           {Boolean(data.media.length || data.map_image) && (
             <Image
-              source={{ uri:
-                data.media.length > 0 ? 
-                data.media[0].url :
-                data.map_image ?
-                data.map_image.url :
-                undefined
-              }}
+              source={{ uri: catchImageUriHandler(data) }}
               style={styles.image}
               resizeMode="cover"
             />
@@ -129,7 +124,6 @@ const styles = StyleSheet.create({
   },
   title: {
     paddingHorizontal: 12,
-    paddingTop: 6,
     fontSize: 16,
     fontWeight: "600",
   },
@@ -137,7 +131,8 @@ const styles = StyleSheet.create({
     fontWeight: "500",
     fontSize: 12,
     paddingHorizontal: 12,
-    marginVertical: 8,
+    marginTop: 4,
+    marginBottom: 8,
   },
   image: {
     width: "100%",
