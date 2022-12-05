@@ -9,7 +9,10 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="57c7f490-392f-41b7-b0c1-cccdb121aa66" name="Changes" comment="">
-      <change beforePath="$PROJECT_DIR$/app.json" beforeDir="false" afterPath="$PROJECT_DIR$/app.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package-lock.json" beforeDir="false" afterPath="$PROJECT_DIR$/package-lock.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/package.json" beforeDir="false" afterPath="$PROJECT_DIR$/package.json" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/svg/FishermanDock.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/svg/FishermanDock.tsx" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/components/svg/FishermanFishingCattails.tsx" beforeDir="false" afterPath="$PROJECT_DIR$/src/components/svg/FishermanFishingCattails.tsx" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
