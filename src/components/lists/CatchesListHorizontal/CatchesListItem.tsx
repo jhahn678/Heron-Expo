@@ -4,8 +4,8 @@ import dayjs from "../../../config/dayjs";
 import { theme } from "../../../config/theme";
 import { GetWaterbodyCatch } from "../../../types/Catch";
 import { ExploreStackScreenProps } from "../../../types/navigation";
+import { catchImageUriHandler } from "../../../utils/catchImageUriHandler";
 import FishermanHoldingFish from "../../svg/FishermanHoldingFish";
-const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../../assets/default-background.png')).uri
 import Avatar from '../../users/Avatar'
 
 interface Props {
@@ -34,13 +34,7 @@ const CatchesListItem = ({ data, navigation }: Props) => {
                 { Boolean(data.media.length || data.map_image) ?
                     <Image 
                         style={styles.image} 
-                        source={{ uri: 
-                            data.media.length > 0 ? 
-                            data.media[0].url :
-                            data.map_image ?
-                            data.map_image.url :
-                            undefined
-                        }}
+                        source={{ uri: catchImageUriHandler(data) }}
                     /> :
                     <View style={styles.placeholder}>
                         <FishermanHoldingFish style={{transform: [{ scale: .8 }]}}/>
@@ -55,7 +49,7 @@ export default CatchesListItem;
 
 const styles = StyleSheet.create({
     container: {
-        height: 332,
+        height: 300,
         width: 300,
         marginRight: 16,
         overflow: 'hidden',
@@ -75,7 +69,7 @@ const styles = StyleSheet.create({
     },
     image: {
         backgroundColor: theme.colors.secondary,
-        flexGrow: 1
+        height: 240
     },
     placeholder: {
         flexGrow: 1,

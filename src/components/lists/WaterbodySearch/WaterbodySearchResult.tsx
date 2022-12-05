@@ -19,7 +19,7 @@ const WaterbodySearchResult = <T extends WaterbodyDetails>({ onPress, data, cont
   
   return (
     <Card style={[styles.container, containerStyle]} onPress={onPress}>
-      <Image source={{ uri: imageUriHandler(data) }} style={styles.image}/>
+      <Image source={{ uri: imageUriHandler(data) }} style={styles.image} resizeMode={"cover"}/>
       <View style={styles.footer}>
         <View style={[styles.heading]}>
           <Title style={styles.title} numberOfLines={1}>
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
     alignSelf: "center",
   },
   image: {
-    flex: 1,
+    height: 250,
     width: "100%",
     backgroundColor: "#e0e0e0",
     borderTopRightRadius: 12,

@@ -4,6 +4,7 @@ import { Card, Text } from 'react-native-paper'
 import { RecentActivity } from '../../../hooks/queries/useGetRecentActivity'
 import Avatar from '../../users/Avatar'
 import { dateToCalendar } from '../../../utils/conversions/dateToCalendar'
+import { catchImageUriHandler } from '../../../utils/catchImageUriHandler'
 
 interface Props<T> {
     data: T
@@ -32,14 +33,7 @@ const RecentActivityCatch = <T extends RecentActivity>({
             </View>
             <Image 
                 style={styles.image}
-                source={{ uri: 
-                    data ? data.media.length > 0 ?
-                        data.media[0].url
-                    : data.map_image ?
-                        data.map_image.url
-                    : undefined
-                    : undefined
-                }} 
+                source={{ uri: catchImageUriHandler(data) }} 
             />
             <View style={styles.caption}>
                 <Text style={styles.captionText} numberOfLines={2}>

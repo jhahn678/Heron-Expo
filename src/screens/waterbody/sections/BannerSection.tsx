@@ -29,8 +29,6 @@ interface Props {
 
 const BannerSection = ({ id, navigation, name, media=[], totalMedia, isSaved }: Props) => {
 
-    console.log(id, name, media, totalMedia, isSaved)
-
     const isAuthenticated = useAuth(store => store.isAuthenticated)
     const setAuthVisible = useModalStore(store => store.setAuth)
     const setUpload = useBottomSheetStore(store => store.setWaterbodyUpload)
