@@ -410,7 +410,6 @@ const FishingFromBoat = () => (
       />
     </G>
     <Defs>
-        {/* @ts-ignore */}
       <ClipPath id="a">
         <Path fill="#fff" d="M0 0h157.206v120H0z" />
       </ClipPath>
