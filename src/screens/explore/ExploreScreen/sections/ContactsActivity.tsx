@@ -13,7 +13,7 @@ interface Props {
 
 const ContactsActivity = ({ navigation }: Props) => {
 
-    const { data, loading, error } = useGetRecentActivityQuery()
+    const { data } = useGetRecentActivityQuery()
 
     const handleNavigateToCatch = (id: number) => navigation.navigate('ViewCatchScreen', { id })
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })

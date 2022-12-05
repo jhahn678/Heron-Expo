@@ -50,7 +50,6 @@ export default RecentActivityCatch
 
 const styles = StyleSheet.create({
     container: {
-        height: 350,
         width: 300,
         backgroundColor: 'white',
         marginRight: 16,
@@ -59,7 +58,7 @@ const styles = StyleSheet.create({
         justifyContent: 'space-evenly'
     },
     image: {
-        flex: 1,
+        height: 200,
         width: '100%',
         backgroundColor: '#e0e0e0'
     },

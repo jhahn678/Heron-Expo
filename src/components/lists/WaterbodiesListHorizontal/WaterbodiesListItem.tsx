@@ -55,17 +55,16 @@ export default WaterbodiesListItem
 
 const styles = StyleSheet.create({
   container: {
-    height: 320,
     width: 300,
     borderRadius: 12,
     marginRight: 16,
+    paddingBottom: 16
   },
   heading: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
     paddingTop: 12,
-    paddingBottom: 2,
     paddingHorizontal: 12,
   },
   title: {
@@ -79,12 +78,12 @@ const styles = StyleSheet.create({
   },
   place: {
     fontWeight: "500",
-    fontSize: 15,
+    fontSize: 14,
     paddingHorizontal: 12,
-    paddingBottom: 2,
+    paddingBottom: 8,
   },
   image: {
-    height: "68%",
+    height: 220,
     backgroundColor: "#e3e3e3",
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,
