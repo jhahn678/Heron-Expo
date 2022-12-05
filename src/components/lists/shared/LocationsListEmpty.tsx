@@ -9,11 +9,11 @@ interface Props {
   caption?: string
 }
 
-const LocationsListEmpty = ({ style, fontSize=14, scale=1, caption }: Props) => {
+const LocationsListEmpty = ({ style, fontSize=14, scale=1, caption="No locations available" }: Props) => {
   return (
     <View style={[styles.container, style, { transform: [{ scale }]}]}>
       <FishermanInRaft/>
-     <Text style={[styles.label, { fontSize }]}>{caption || "No locations available"}</Text>
+     <Text style={[styles.label, { fontSize }]}>{caption}</Text>
     </View>
   );
 };

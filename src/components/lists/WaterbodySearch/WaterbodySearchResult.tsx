@@ -26,7 +26,7 @@ const WaterbodySearchResult = <T extends WaterbodyDetails>({ onPress, data, cont
             {data.name}
           </Title>
           <View style={[globalStyles.frac]}>
-            <Text style={styles.rating}>{data.average_rating || 0}</Text>
+            <Text style={styles.rating}>{data.average_rating ? data.average_rating : 0}</Text>
             <Icon name="star" size={14} color={'#f1c40f'}/>
           </View>
         </View>

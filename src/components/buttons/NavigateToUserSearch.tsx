@@ -3,8 +3,6 @@ import { Button, Text } from 'react-native-paper'
 import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
 import { useNavigation } from '@react-navigation/native'
 import { UseNavigateParams } from '../../types/navigation'
-import Icon from 'react-native-vector-icons/MaterialIcons'
-
 
 const DEFAULT_MESSAGE = "Add other users to see where they're fishing and what they're catching 🎣"
 
@@ -19,6 +17,7 @@ const NavigateToUserSearch = ({
 
     const navigation = useNavigation<UseNavigateParams>()
 
+    // @ts-ignore
     const handlePress = () => navigation.navigate('UserSearchScreen')
 
     return (

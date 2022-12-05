@@ -62,14 +62,10 @@ const styles = StyleSheet.create({
     height: '100%'
   },
   header: {
-    alignSelf: 'center',
     paddingTop: 64,
     paddingHorizontal: 24,
     paddingBottom: 24,
-    flexDirection: 'row',
-    alignItems: 'center',
     borderRadius: 0,
-    width
   },
   content: {
     paddingTop: 16

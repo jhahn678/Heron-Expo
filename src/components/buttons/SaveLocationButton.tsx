@@ -14,7 +14,7 @@ interface Props {
     style?: StyleProp<ViewStyle>
 }
 
-const SaveLocationButton = ({ id, ...props }: Props) => {
+const SaveLocationButton = ({ id, size=28, color=theme.colors.primary, ...props }: Props) => {
 
     const authenticated = useAuth(store => store.isAuthenticated)
     const setAuthModal = useModalStore(store => store.setAuth)
@@ -32,9 +32,9 @@ const SaveLocationButton = ({ id, ...props }: Props) => {
 
     return (
         <Icon 
-            color={props.color || theme.colors.primary}
+            color={color}
             name={active ? 'bookmark-check' : 'bookmark-outline'}
-            size={props.size || 28}
+            size={size}
             onPress={handlePress}
             style={props.style}
         />

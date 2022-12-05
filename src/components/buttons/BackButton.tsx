@@ -8,14 +8,14 @@ interface Props {
     mode?: IconButtonProps['mode']
 }
 
-const BackButton = (props: Props): JSX.Element => {
+const BackButton = ({ size=24, mode='contained', ...props}: Props): JSX.Element => {
 
     const navigation = useNavigation()
 
     return (
         <IconButton 
-            size={props.size || 24}
-            mode={props.mode || 'contained'}
+            size={size}
+            mode={mode}
             style={[props.style, { zIndex: 100 }]}
             onPress={navigation.goBack} 
             icon='chevron-left'

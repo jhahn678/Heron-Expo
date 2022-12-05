@@ -9,11 +9,11 @@ interface Props {
     caption?: string
 }
 
-const CatchesListEmpty = ({ style, fontSize=14, scale=1, caption }: Props) => {
+const CatchesListEmpty = ({ style, fontSize=14, scale=1, caption="No catches logged yet" }: Props) => {
   return (
     <View style={[styles.container, style, { transform: [{ scale }]}]}>
       <FishermanInBoat />
-      <Text style={[styles.label, { fontSize }]}>{caption || "No catches logged yet"}</Text>
+      <Text style={[styles.label, { fontSize }]}>{caption}</Text>
     </View>
   );
 };

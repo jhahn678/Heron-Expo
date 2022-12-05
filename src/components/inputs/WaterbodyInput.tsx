@@ -15,7 +15,7 @@ interface Props {
     setWaterbody: (value?: number | undefined) => void
 }
 
-const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title, required }: Props) => {
+const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title="Add a Fishery", required }: Props) => {
 
     const [input, setInput] = useState('')
     const [waterbodyData, setWaterbodyData] = useState<WaterbodyLocation | null>(null)
@@ -45,7 +45,7 @@ const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title, required }: Pr
     return (
         <KeyboardAvoidingView style={styles.container}>
             <View style={globalStyles.baseline}>
-                <Text style={styles.title}>{title || "Add a Fishery"}</Text>
+                <Text style={styles.title}>{title}</Text>
                 { required && <Text style={styles.required}>Required</Text>}
             </View>
             { waterbodyData ? 
