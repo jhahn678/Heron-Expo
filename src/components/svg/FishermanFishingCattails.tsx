@@ -1,5 +1,5 @@
 import * as React from "react"
-import Svg, { SvgProps, G, Path, Defs, ClipPath } from "react-native-svg"
+import Svg, { SvgProps, G, Path } from "react-native-svg"
 
 const FishermanFishingCattails = (props: SvgProps) => (
   <Svg
@@ -8,7 +8,7 @@ const FishermanFishingCattails = (props: SvgProps) => (
     fill="none"
     {...props}
   >
-    <G clipPath="url(#a)">
+    <G>
       <Path
         d="M105.782 57.972c-2.592-1.244-4.459-3.6-5.743-6.168-2.623-5.247-9.28-7.626-15.25-8.075-10.644-.811-21.688.292-32.158 2.214-10.272 1.89-17.678 2.6-27.564 12.675-2.363 2.41-11.21 9.981-19.403 16.82-9.209 7.688-5.774 15.88.268 19.04 8.862 4.624 17.804 3.04 26.233 3.419 11.044.504 21.293 3.119 32.448 1.67a74.312 74.312 0 0 0 27.328-9.186c7.68-4.395 20.002-11.43 19.891-21.136-.086-7.523-2.048-9.358-6.05-11.273Z"
         fill="#5FC0EA"
@@ -262,12 +262,7 @@ const FishermanFishingCattails = (props: SvgProps) => (
         fill="#6E733C"
       />
     </G>
-    <Defs>
-      {/* @ts-ignore */}
-      <ClipPath id="a">
-        <Path fill="#fff" d="M0 0h111.832v100H0z" />
-      </ClipPath>
-    </Defs>
+    
   </Svg>
 )
 
