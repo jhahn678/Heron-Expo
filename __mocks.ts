@@ -7,7 +7,6 @@ import { GetWaterbodySpeciesRes } from './src/hooks/queries/useGetWaterbodySpeci
 import { GetCatchesRes } from "./src/hooks/queries/useGetCatches";
 import { GetLocationsRes } from "./src/hooks/queries/useGetLocations";
 import { Privacy } from "./src/types/Location";
-import { GetLocationRes } from "./src/hooks/queries/useGetLocation";
 
 interface Args {
   loading?: boolean, 
