@@ -20,8 +20,7 @@ const WaterbodySearchResult = <T extends WaterbodyDetails>({ onPress, data, cont
   return (
     <Card style={[styles.container, containerStyle]} onPress={onPress}>
       <Image source={{ uri: imageUriHandler(data) }} style={styles.image} resizeMode={"cover"}/>
-      <View style={styles.footer}>
-        <View style={[styles.heading]}>
+        <View style={styles.heading}>
           <Title style={styles.title} numberOfLines={1}>
             {data.name}
           </Title>
@@ -38,7 +37,6 @@ const WaterbodySearchResult = <T extends WaterbodyDetails>({ onPress, data, cont
           {"  "}&bull;{"  "}
           {truncateTotal(data.total_locations)} saved locations
         </Text>
-      </View>
     </Card>
   );
 };
@@ -47,20 +45,18 @@ export default WaterbodySearchResult;
 
 const styles = StyleSheet.create({
   container: {
-    height: 360,
     width: width - 32,
     alignSelf: "center",
     borderRadius: 12,
     marginBottom: 24,
-  },
-  footer: {
-    padding: 12, 
-    paddingBottom: 16,
+    paddingBottom: 12
   },
   heading: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
+    paddingTop: 6,
+    paddingHorizontal: 12,
   },
   title: {
     fontSize: 20,
@@ -81,12 +77,13 @@ const styles = StyleSheet.create({
   },
   place: {
     fontWeight: "500",
-    fontSize: 15,
-    paddingBottom: 2,
+    fontSize: 16,
+    paddingHorizontal: 12,
+    paddingBottom: 8,
   },
   totals: {
     marginTop: 4,
-    flexDirection: "row",
-    alignItems: "center",
-  }
+    fontSize: 14,
+    paddingHorizontal: 12
+  },
 });

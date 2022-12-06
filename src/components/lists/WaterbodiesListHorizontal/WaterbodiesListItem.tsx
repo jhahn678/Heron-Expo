@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View, Image, ViewStyle } from 'react-native'
-import { Card, Text } from 'react-native-paper'
+import { Card, Text, Title } from 'react-native-paper'
 import { IWaterbody } from '../../../types/Waterbody'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../../../globalStyles'
@@ -31,9 +31,9 @@ const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate, cont
     <Card style={[styles.container, containerStyle]} onPress={() => navigate(data.id)} elevation={1}>
       <Image source={{ uri: imageUriHandler(data) }} style={styles.image} />
       <View style={styles.heading}>
-        <Text style={styles.title} numberOfLines={1}>
+        <Title style={styles.title} numberOfLines={1}>
           {data.name}
-        </Text>
+        </Title>
         <View style={globalStyles.frac}>
           <Text style={styles.rating}>{data.average_rating ? data.average_rating : 0}</Text>
           <Icon name="star" size={14} color={'#f1c40f'}/>
@@ -58,18 +58,20 @@ const styles = StyleSheet.create({
     width: 300,
     borderRadius: 12,
     marginRight: 16,
-    paddingBottom: 16
+    paddingBottom: 12
   },
   heading: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 12,
+    paddingTop: 6,
     paddingHorizontal: 12,
   },
   title: {
     fontSize: 20,
+    marginBottom: 0,
     fontWeight: "600",
+    maxWidth: '90%'
   },
   rating: {
     fontWeight: "500",

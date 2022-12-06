@@ -7,7 +7,7 @@ interface Props {
     itemSize?: { height: number, width: number }
     numberOfItems?: number
     contentContainerStyle?: StyleProp<ViewStyle>
-    itemStyle?: StyleProp<ViewStyle>
+    itemStyle?: Omit<StyleProp<ViewStyle>, 'height' | 'width'>
 }
 
 const ScrollViewListLoader = ({
