@@ -1,34 +1,55 @@
-import { StyleProp, StyleSheet, View, ViewStyle } from "react-native";
-import React from "react";
-import SkeletonPlaceholder from 'react-native-skeleton-placeholder';
+import React, { useEffect, useRef } from 'react'
+import { StyleProp, ViewStyle, Animated, StyleSheet, Easing } from 'react-native';
 
-interface Props {
-    height?: number
-    width?: number
-    borderRadius?: number
-    style?: Omit<StyleProp<ViewStyle>, 'height' | 'width' | 'borderRadius'>
-}
+const RectangleLoader = ({
+    borderRadius=6,
+    ...props
+}: {
+  width: string | number;
+  height: string | number;
+  borderRadius?: number
+  style?: StyleProp<ViewStyle>;
+}) => {
+  const pulseAnim = useRef(new Animated.Value(0)).current;
+ 
+  useEffect(() => {
+    Animated.loop(
+      Animated.sequence([
+        Animated.timing(pulseAnim, {
+          toValue: 1,
+          duration: 1250,
+          useNativeDriver: true,
+          easing: Easing.out(Easing.ease),
+        }),
+        Animated.timing(pulseAnim, {
+          toValue: 0,
+          duration: 250,
+          useNativeDriver: true,
+          easing: Easing.in(Easing.ease),
+        })
+      ])
+    ).start();
+ 
+    return () => pulseAnim.stopAnimation();
 
-const RectangleLoader = ({ height=16, width=200, borderRadius=6, style }: Props) => {
+  }, []);
+ 
   return (
-    // <ContentLoader 
-    //     speed={1}
-    //     style={style}
-    //     width={width}
-    //     height={height}
-    //     backgroundColor="#e3e3e3"
-    //     foregroundColor="#f0f0f0"
-    //     viewBox={`0 0 ${width} ${height}`}
-    // >
-    //     <Rect x="0" y="0" rx={borderRadius} ry={borderRadius} width={width} height={height} />
-    // </ContentLoader>
-    // <SkeletonPlaceholder>
-      // {/* <SkeletonPlaceholder.Item height={height} width={width} borderRadius={borderRadius}/> */}
-      <View style={{ height, width, backgroundColor: "#e3e3e3", borderRadius, ...style }}/>
-    // </SkeletonPlaceholder>
+    <Animated.View
+      style={[
+        styles.container,
+        { width: props.width, height: props.height, borderRadius },
+        { opacity: pulseAnim },
+        props.style,
+      ]}
+    />
   );
 };
 
-export default RectangleLoader;
+export default RectangleLoader
 
-const styles = StyleSheet.create({});
+const styles = StyleSheet.create({
+    container: {
+        backgroundColor: '#e3e3e3'
+    }
+});

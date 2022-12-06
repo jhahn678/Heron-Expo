@@ -1,6 +1,7 @@
 import { ScrollView, StyleProp, StyleSheet, ViewStyle} from "react-native";
 import React from "react";
 import RectangleLoader from "./RectangleLoader";
+import LoadingRectangle from "./RectangleLoader";
 
 interface Props {
     horizontal?: boolean
@@ -24,13 +25,11 @@ const ScrollViewListLoader = ({
         showsHorizontalScrollIndicator={false}
     >
         { new Array(numberOfItems).fill(null).map((_, i) => (
-            <RectangleLoader 
-                key={`${i}${Math.random()}`}
+            <LoadingRectangle 
                 height={itemSize.height}
-                width={itemSize.width} 
-                borderRadius={12} 
-                style={itemStyle}
-            />
+                width={itemSize.width}  
+                key={`${i}${Math.random()}`}
+                style={itemStyle}/>
         ))}
     </ScrollView>
   );

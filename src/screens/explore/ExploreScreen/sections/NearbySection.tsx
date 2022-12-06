@@ -8,6 +8,8 @@ import WaterbodiesListHorizontal from '../../../../components/lists/WaterbodiesL
 import { useGetNearbyWaterbodies } from '../../../../hooks/queries/useGetNearbyWaterbodies'
 import { useSearchParamStore } from '../../../../store/search/useSearchParamStore'
 import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
+import RectangleLoader from '../../../../components/loaders/RectangleLoader'
+import LoadingRectangle from '../../../../components/loaders/RectangleLoader'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -40,7 +42,7 @@ const NearbySection = ({ navigation }: Props) => {
                     /> 
                 : data ?
                     <WaterbodiesListHorizontal 
-                        data={data.waterbodies}
+                        data={data?.waterbodies}
                         navigateViewMore={navigateViewMore}
                         navigateToWaterbody={navigateToWaterbody}
                     />

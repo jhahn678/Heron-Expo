@@ -39,7 +39,6 @@ const BioSection = ({ bio, username, navigateToEdit }: Props) => {
                 </View> 
                 : bio === undefined && <BioLoader/>
             }
-
             <View style={styles.divider}/>
         </View>
     );
