@@ -8,7 +8,7 @@ const IsometricLake = () => (
   >
     <Path
       d="M24.908 5.199.816 23.962l24.092 18.763L49 23.962 24.908 5.199Z"
-      fill="url(#a)"
+      fill="#8FDCF7"
     />
     <Path
       d="M.816 26.357v-2.395l24.092 18.763v2.395L.816 26.357Z"
@@ -30,19 +30,19 @@ const IsometricLake = () => (
     />
     <Path
       d="M12.606 14.78s2.563 5.408 6.15 8.493c3.589 3.084 10.02 2.866 12.443 5.77 2.423 2.903 3.96 5.697 3.96 5.697L49 23.961 24.853 5.155 12.606 14.78Z"
-      fill="url(#b)"
+      fill="#94C83C"
     />
     <Path
       d="M31.466 28.942c-2.445-2.938-8.976-2.788-12.597-5.909-3.393-2.925-5.732-7.821-6.03-8.435l-1.217.943s2.563 5.408 6.151 8.493c3.588 3.084 10.02 2.866 12.442 5.77 2.423 2.903 3.96 5.698 3.96 5.698l1.033-.804c-.405-.705-1.691-3.292-3.742-5.756Z"
-      fill="url(#c)"
+      fill="#DEC771"
     />
     <Path
       d="M30.528 29.565c-2.445-2.938-8.909-2.782-12.53-5.902-3.394-2.925-6.072-7.509-6.37-8.123l-.975.766s2.563 5.409 6.151 8.493c3.588 3.085 10.02 2.867 12.443 5.77 2.422 2.904 3.96 5.698 3.96 5.698l1.032-.804c-.405-.705-1.66-3.434-3.71-5.898Z"
-      fill="url(#d)"
+      fill="#EEE8B0"
     />
     <Path
       d="M29.555 30.153c-2.423-2.903-8.854-2.685-12.443-5.77-3.266-2.807-5.683-7.54-6.09-8.367l-.369.29s2.563 5.409 6.152 8.493c3.588 3.085 10.019 2.867 12.442 5.77 2.423 2.904 3.96 5.698 3.96 5.698l.33-.257c-.423-.766-1.938-3.407-3.982-5.857Z"
-      fill="url(#e)"
+      fill="#8D8F8F"
     />
     <Path
       d="m24.102 5.745-8.555 6.744s-.994 2.17.902 4.898c1.897 2.726 3.471 2.026 5.528 2.88 2.058.852 2.204 3.695 5.45 3.695 2.707 0 2.263-2.092 4.52-3.696 2.259-1.604 3.787-1.857 4.467-2.88.944-1.418.65-2.72.65-2.72l-12.962-8.92Z"
@@ -298,7 +298,7 @@ const IsometricLake = () => (
     />
     <Path
       d="m27.423 12.376.646-1.306.413.33 1.71-.132.32-.461 1.164 1.713-.67 1.449-.188.927-1.054-.4-.61.425-.99-.688-.741-1.857Z"
-      fill="url(#f)"
+      fill="#8D8F8F"
     />
     <Path
       d="m27.974 15.287.57.396-.38-1.45-.741-1.857.55 2.911Z"
@@ -1981,147 +1981,6 @@ const IsometricLake = () => (
       d="M4.617 28.978c-.002.174-.11.26-.327.258-.203-.002-.331-.07-.385-.205a.698.698 0 0 1-.029-.25c0-.07.011-.118.032-.141.041-.055.126-.094.255-.116-.047-.12-.006-.159.122-.118.135.033.206.085.213.156.02.056.046.123.08.203.026.071.04.142.039.213Z"
       fill="#745433"
     />
-    <Defs>
-      {/* @ts-ignore */}
-      <LinearGradient
-        id="a"
-        x1={19.212}
-        y1={37.306}
-        x2={24.034}
-        y2={31.097}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#5DCCF5" />
-        <Stop offset={0.05} stopColor="#63CDF5" />
-        <Stop offset={0.48} stopColor="#8FDCF7" />
-        <Stop offset={0.81} stopColor="#AAE4F9" />
-        <Stop offset={1} stopColor="#B5E8FA" />
-      </LinearGradient>
-      {/* @ts-ignore */}
-      <LinearGradient
-        id="b"
-        x1={22.799}
-        y1={28.684}
-        x2={38.705}
-        y2={18.511}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#8DC63F" />
-        <Stop offset={0.1} stopColor="#94C83C" />
-        <Stop offset={0.73} stopColor="#BDD62D" />
-      </LinearGradient>
-      {/* @ts-ignore */}
-      <LinearGradient
-        id="c"
-        x1={20.611}
-        y1={28.928}
-        x2={37.092}
-        y2={16.626}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#FFE89A" />
-        <Stop offset={0.54} stopColor="#DEC771" />
-        <Stop offset={1} stopColor="#C7B053" />
-      </LinearGradient>
-      {/* @ts-ignore */}
-      <LinearGradient
-        id="d"
-        x1={21.226}
-        y1={27.857}
-        x2={38.446}
-        y2={12.551}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#FFE89A" />
-        <Stop offset={0.54} stopColor="#DEC771" />
-        <Stop offset={1} stopColor="#C7B053" />
-      </LinearGradient>
-      {/* @ts-ignore */}
-      <LinearGradient
-        id="e"
-        x1={20.999}
-        y1={27.93}
-        x2={35.556}
-        y2={14.991}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#FFFFD7" />
-        <Stop offset={0.36} stopColor="#EEE8B0" />
-        <Stop offset={1} stopColor="#D4C271" />
-      </LinearGradient>
-      {/* @ts-ignore */}
-      <LinearGradient
-        id="f"
-        x1={27.423}
-        y1={12.864}
-        x2={31.676}
-        y2={12.864}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#B7B1B0" />
-        <Stop offset={1} stopColor="#8D8F8F" />
-      </LinearGradient>
-      {/* @ts-ignore */}
-      <LinearGradient
-        id="g"
-        x1={36.199}
-        y1={18.43}
-        x2={45.395}
-        y2={18.43}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#B8AEAD" />
-        <Stop offset={1} stopColor="#8D8F8F" />
-      </LinearGradient>
-
-      <LinearGradient
-        id="h"
-        x1={37.09}
-        y1={15.767}
-        x2={43.796}
-        y2={15.767}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#B8AEAD" />
-        <Stop offset={1} stopColor="#8D8F8F" />
-      </LinearGradient>
-
-      <LinearGradient
-        id="i"
-        x1={37.09}
-        y1={16.21}
-        x2={43.796}
-        y2={16.21}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#B8AEAD" />
-        <Stop offset={1} stopColor="#8D8F8F" />
-      </LinearGradient>
-
-      <LinearGradient
-        id="j"
-        x1={37.466}
-        y1={18.032}
-        x2={44.159}
-        y2={18.032}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#B8AEAD" />
-        <Stop offset={1} stopColor="#8D8F8F" />
-      </LinearGradient>
-
-      <LinearGradient
-        id="k"
-        x1={35.908}
-        y1={20.796}
-        x2={45.053}
-        y2={20.796}
-        gradientUnits="userSpaceOnUse"
-      >
-        <Stop stopColor="#B8AEAD" />
-        <Stop offset={1} stopColor="#8D8F8F" />
-      </LinearGradient>
-    </Defs>
   </Svg>
 )
 
