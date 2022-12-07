@@ -9,7 +9,7 @@ import React, { useCallback, useEffect, useRef, useState } from 'react';
 import { useMapModalStore } from '../../../store/modal/useMapModalStore';
 import { useGetCatchFragment } from '../../../hooks/queries/useGetCatch';
 import { MapResource, RootStackScreenProps } from '../../../types/navigation'
-import MapView, { Camera, Geojson, LatLng, MapEvent, PROVIDER_GOOGLE } from 'react-native-maps';
+import MapView, { Camera, Geojson, LatLng, PROVIDER_GOOGLE } from 'react-native-maps';
 import { useGetLocationFragment } from '../../../hooks/queries/useGetLocation';
 import { MapPressResponse, useGeoJson } from '../../../hooks/utils/useGeoJson';
 import CatchesBottomSheet from '../../../components/modals/map/CatchesBottomSheet';
@@ -22,11 +22,9 @@ import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries
 import { useModalStore } from '../../../store/modal/useModalStore';
 import { ErrorType } from '../../../utils/mapErrorTypeToDetails';
 import { mapStyle } from '../../../config/mapStyle';
+import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop';
 const { width, height } = Dimensions.get('screen')
 const LIMIT = 50;
-
-import * as MediaLibrary from 'expo-media-library'
-import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop';
 
 
 const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScreen'>) => {
@@ -138,8 +136,8 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
       .catch(err => console.error(err))
   }
 
-  const handlePressGeoJson = (e: MapEvent) => {
-    const { feature: { properties } } = e as unknown as MapPressResponse;
+  const handlePressGeoJson = (e: unknown) => {
+    const { feature: { properties } } = e as MapPressResponse;
     switch(properties.resource){
       case GeoJsonResource.Catch:
         return modal.setCatch({
