@@ -37,14 +37,13 @@ const GoogleLoginButton = ({ navigation }: Props) => {
     if (response?.type === 'success') {
       const { authentication } = response;
       if(!authentication) return;
-      (async() => {
-        const res = await signInUser({ accessToken: authentication.accessToken })
-        if(res) setUser(res, !res.account_created)
-        if(res && res.account_created) navigation.navigate('UsernameAuthScreen')
-      })()
+      signInUser({ accessToken: authentication.accessToken })
+        .then((res) => {
+          if(res) setUser(res, !res.account_created)
+          if(res && res.account_created) navigation.navigate('UsernameAuthScreen')
+        })
     }
   }, [response]);
-  
 
   return (
     <Button 
