@@ -14,7 +14,7 @@ const WaterbodiesListHorizontal = <T extends WaterbodyListItem>({
 }: Props<T>) => {
 
     return (
-        <View style={{ height: 376, paddingVertical: 24 }}>
+        <View style={{ height: 400, paddingVertical: 24 }}>
             <FlashList 
                 data={data}
                 horizontal={true}

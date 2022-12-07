@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Pressable, StyleProp, ViewStyle, View } from 'react-native'
-import { Button, Card, Text } from 'react-native-paper'
+import { Button, Card, Text, Title } from 'react-native-paper'
 import { theme } from '../../../config/theme'
 import { IContact } from '../../../types/User'
 import Avatar from '../../users/Avatar'
@@ -19,7 +19,7 @@ const ContactsListItem = <T extends IContact>({
     <Pressable onPress={onPress} style={[styles.container, style]}>
       <View style={{ alignItems: 'center' }}>
         <Avatar onPress={onPress} uri={data.avatar} fullname={data.fullname} size={90}/>
-        <Text style={styles.name} numberOfLines={2}>{data.fullname}</Text>
+        <Title style={styles.name} numberOfLines={2}>{data.fullname}</Title>
       </View>
       <Button 
         onPress={onPress} 
@@ -54,7 +54,8 @@ const styles = StyleSheet.create({
     elevation: 2,
   },
   name: {
-    fontWeight: '500',
+    fontWeight: '600',
+    fontSize: 15,
     marginTop: 12,
     textAlign: 'center'
   }

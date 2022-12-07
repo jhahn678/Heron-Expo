@@ -1,5 +1,5 @@
 import { ExploreStackScreenProps } from '../../types/navigation';
-import { StyleSheet, ScrollView, View, RefreshControl, Image } from 'react-native';
+import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
 import { useGetWaterbody } from '../../hooks/queries/useGetWaterbody';
 import ReviewsSection from './sections/ReviewsSection';
 import MapSection from './sections/MapSection';
@@ -93,8 +93,8 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                     id={id} 
                     navigation={navigation} 
                     name={data?.waterbody.name}
-                    media={data?.waterbody.media.slice(0,6)}
                     isSaved={data?.waterbody.is_saved}
+                    media={data?.waterbody.media.slice(0,6)}
                     totalMedia={data?.waterbody.total_media} 
                 />
                 <HeaderSection 
@@ -103,31 +103,33 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                     navigation={navigation}
                 />
                 <CatchesSection
-                    navigation={navigation}
                     waterbody={id}
-                    name={data?.waterbody.name}
+                    navigation={navigation}
+                    name={data?.waterbody?.name}
                     totalCatches={data?.waterbody.total_catches}
                     totalSpecies={data?.waterbody.total_species}
                 />
                 <LocationsSection 
-                    name={data?.waterbody.name} 
-                    navigation={navigation} 
-                    totalLocations={data?.waterbody.total_locations}
                     waterbody={id}
+                    navigation={navigation} 
+                    name={data?.waterbody.name} 
+                    totalLocations={data?.waterbody.total_locations}
                 />
                 <MapSection 
-                    navigation={navigation} 
                     waterbody={id} 
+                    navigation={navigation} 
                     uri={data?.waterbody.media[0]?.url}
                 />
                 <MediaSection
+                    waterbody={id} 
                     navigation={navigation} 
-                    waterbody={id} name={data?.waterbody.name}
+                    name={data?.waterbody.name}
                     totalMedia={data?.waterbody.total_media}
                 />
                 <ReviewsSection 
+                    waterbody={id} 
                     navigation={navigation} 
-                    waterbody={id} name={data?.waterbody.name}
+                    name={data?.waterbody.name}
                     totalReviews={data?.waterbody.total_reviews}
                     averageRating={data?.waterbody.average_rating}
                 />

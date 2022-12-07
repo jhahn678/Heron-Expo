@@ -21,7 +21,7 @@ interface Props {
     style?: StyleProp<ViewStyle>;
 }
 
-const LikeButton = ({ id, type, ...props }: Props) => {
+const LikeButton = ({ id, type, color=theme.colors.primary, size=24, ...props }: Props) => {
 
   const authenticated = useAuth(store => store.isAuthenticated)
   const setAuth = useModalStore(store => store.setAuth);
@@ -43,10 +43,10 @@ const LikeButton = ({ id, type, ...props }: Props) => {
 
   return (
     <Icon
-      color={props.color || theme.colors.primary}
+      color={color}
       onPress={handlePress}
       name={active ? "thumbs-up" : "thumbs-o-up"}
-      size={props.size || 24}
+      size={size}
       style={props.style}
     />
   );

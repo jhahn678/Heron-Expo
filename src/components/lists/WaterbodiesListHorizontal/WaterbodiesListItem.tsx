@@ -1,13 +1,13 @@
 import React from 'react'
 import { StyleSheet, View, Image, ViewStyle } from 'react-native'
-import { Card, Text } from 'react-native-paper'
+import { Card, Text, Title } from 'react-native-paper'
 import { IWaterbody } from '../../../types/Waterbody'
 import Icon from 'react-native-vector-icons/FontAwesome'
 import globalStyles from '../../../globalStyles'
 import { truncateTotal } from '../../../utils/conversions/truncateTotal'
 import { IMedia } from '../../../types/Media'
 import { waterbodyLocationLabel } from '../../../utils/conversions/waterbodyLocationToLabel'
-const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../../assets/default-background.png')).uri
+import { imageUriHandler } from '../../../utils/imageUriHandler'
 
 
 export interface WaterbodyListItem extends Omit<IWaterbody, 'weight' | 'oid'> {
@@ -29,13 +29,13 @@ const WaterbodiesListItem = <T extends WaterbodyListItem>({ data, navigate, cont
   
   return (
     <Card style={[styles.container, containerStyle]} onPress={() => navigate(data.id)} elevation={1}>
-      <Image source={{ uri: data.media[0]?.url || DEFAULT_IMAGE }} style={styles.image} />
+      <Image source={{ uri: imageUriHandler(data) }} style={styles.image} />
       <View style={styles.heading}>
-        <Text style={styles.title} numberOfLines={1}>
+        <Title style={styles.title} numberOfLines={1}>
           {data.name}
-        </Text>
+        </Title>
         <View style={globalStyles.frac}>
-          <Text style={styles.rating}>{data.average_rating || 0}</Text>
+          <Text style={styles.rating}>{data.average_rating ? data.average_rating : 0}</Text>
           <Icon name="star" size={14} color={'#f1c40f'}/>
         </View>
       </View>
@@ -55,22 +55,23 @@ export default WaterbodiesListItem
 
 const styles = StyleSheet.create({
   container: {
-    height: 320,
     width: 300,
     borderRadius: 12,
     marginRight: 16,
+    paddingBottom: 12
   },
   heading: {
     flexDirection: "row",
     alignItems: "center",
     justifyContent: "space-between",
-    paddingTop: 12,
-    paddingBottom: 2,
+    paddingTop: 6,
     paddingHorizontal: 12,
   },
   title: {
     fontSize: 20,
+    marginBottom: 0,
     fontWeight: "600",
+    maxWidth: '90%'
   },
   rating: {
     fontWeight: "500",
@@ -79,12 +80,12 @@ const styles = StyleSheet.create({
   },
   place: {
     fontWeight: "500",
-    fontSize: 15,
+    fontSize: 14,
     paddingHorizontal: 12,
-    paddingBottom: 2,
+    paddingBottom: 8,
   },
   image: {
-    height: "68%",
+    height: 220,
     backgroundColor: "#e3e3e3",
     borderTopRightRadius: 12,
     borderTopLeftRadius: 12,

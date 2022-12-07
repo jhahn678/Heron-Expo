@@ -1,31 +1,17 @@
 import React from "react"
-import ContentLoader, { 
-    Rect, 
-    IContentLoaderProps 
-} from "react-content-loader/native"
+import { StyleProp, View } from "react-native"
+import RectangleLoader from "./RectangleLoader"
 
-interface Props extends Omit<
-    IContentLoaderProps, 'height'| 'width' | 'speed'
->{ 
+interface Props { 
     height?: number
     width?: number
-    speed?: number
+    style?: Omit<StyleProp<View>, 'height' | 'width'>
 }
 
-const BoxLoader = ({ height=200, width=200, speed=1, ...props}: Props) => {
+const BoxLoader = ({ height=200, width=200, ...props}: Props) => {
     return (
-        <ContentLoader 
-            speed={speed}
-            width={height}
-            height={width}
-            viewBox={`0 0 ${width} ${height}`}
-            backgroundColor="#e3e3e3"
-            foregroundColor="#f0f0f0"
-            {...props}
-        >
-            <Rect x="0" y="0" rx="2" ry="2" width={width} height={height}/> 
-        </ContentLoader>
-        )
+        <RectangleLoader height={height} width={width} style={props.style}/>
+    )
 };
 
 export default BoxLoader;

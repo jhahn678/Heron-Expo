@@ -17,7 +17,7 @@ interface Props {
 
 const limit = 8;
 
-const MediaSection = ({ navigation, waterbody, name, totalMedia: total }: Props) => {
+const MediaSection = ({ navigation, waterbody, name, totalMedia: total=0 }: Props) => {
 
     const { data } = useGetWaterbodyMedia({ id: waterbody, limit })
 
@@ -31,7 +31,7 @@ const MediaSection = ({ navigation, waterbody, name, totalMedia: total }: Props)
         <View style={styles.container}>
             <View style={styles.divider}/>
             <View style={styles.header}>
-                <Title style={styles.title}>Photos {`(${total || 0})`}</Title>
+                <Title style={styles.title}>Photos {`(${total})`}</Title>
                 <Button onPress={navigateToMedia}>See all photos</Button>
             </View>
             { data ? 

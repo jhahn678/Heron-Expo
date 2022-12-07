@@ -35,7 +35,7 @@ const SearchBar = (props: Props): JSX.Element => {
                 editable={props.enabled}
                 placeholder={props.placeholder}
                 autoFocus={props.autofocus}
-                style={[styles.searchbar, props.style]}
+                style={[styles.container, props.style]}
                 outlineColor={'#d9d9d9'}
                 value={props.value || ''}
                 onChangeText={props.setValue}
@@ -69,7 +69,7 @@ const SearchBar = (props: Props): JSX.Element => {
 export default SearchBar;
 
 const styles = StyleSheet.create({
-    searchbar: {
-        width: '100%',
+    container: {
+        width: '100%'
     }
 })

@@ -15,7 +15,7 @@ interface Props {
     mode?: IconButtonProps['mode']
 }
 
-const SaveIconButton = (props: Props) => {
+const SaveIconButton = ({ size=24, mode='contained', ...props }: Props) => {
 
     const isAuthenticated = useAuth(state => state.isAuthenticated)
     const showAuthModal = useModalStore(state => state.setAuth)
@@ -38,8 +38,8 @@ const SaveIconButton = (props: Props) => {
 
     return (
         <IconButton 
-            size={props.size || 24}
-            mode={props.mode || 'contained'}
+            size={size}
+            mode={mode}
             style={props.style}
             onPress={handlePress} 
             icon={ saved ? 

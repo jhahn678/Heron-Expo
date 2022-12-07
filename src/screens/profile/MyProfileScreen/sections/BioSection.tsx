@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View } from "react-native";
-import { Chip, Text } from 'react-native-paper'
+import { Chip, Text, Title } from 'react-native-paper'
 import RectangleLoader from "../../../../components/loaders/RectangleLoader";
 import { theme } from "../../../../config/theme";
 import BioLoader from "../loaders/BioLoader";
@@ -32,14 +32,13 @@ const BioSection = ({ bio, username, navigateToEdit }: Props) => {
                     Edit
                 </Chip>
             </View>
-            { bio !== null && <Text style={styles.title}>Bio</Text> }
+            { bio !== null && <Title style={styles.title}>Bio</Title> }
             { bio ?
                 <View style={styles.box}>
                     <Text style={styles.text}>{bio}</Text>
                 </View> 
                 : bio === undefined && <BioLoader/>
             }
-
             <View style={styles.divider}/>
         </View>
     );

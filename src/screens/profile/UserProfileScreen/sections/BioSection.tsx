@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, Text, View } from "react-native";
-import { Chip } from "react-native-paper";
+import { Chip, Title } from "react-native-paper";
 import FollowButton from "../../../../components/buttons/FollowButton";
 import RectangleLoader from "../../../../components/loaders/RectangleLoader";
 import { theme } from "../../../../config/theme";
@@ -31,7 +31,7 @@ const BioSection = ({ bio, username, id, following=false }: Props) => {
                 }
                 {( auth && auth !== id) && <FollowButton following={following} id={id}/> }
             </View>
-            { bio !== null && <Text style={styles.title}>Bio</Text> }
+            { bio !== null && <Title style={styles.title}>Bio</Title> }
             { bio ? 
                 <View style={styles.box}>
                     <Text style={styles.text}>{bio}</Text>

@@ -20,7 +20,9 @@ const RecentActivityHorizontalList = <T extends RecentActivity>({
 }: Props<T>) => {
 
     return (
-        <FlashList horizontal data={data} 
+        <FlashList 
+            horizontal 
+            data={data} 
             showsHorizontalScrollIndicator={false}
             contentContainerStyle={{ paddingLeft: 20, paddingRight: 24 }}
             ListFooterComponent={() => (
@@ -31,7 +33,7 @@ const RecentActivityHorizontalList = <T extends RecentActivity>({
                     contentStyle={{ flexDirection: 'row-reverse'}}
                 >See More</Button>
             )}
-            estimatedItemSize={300}
+            estimatedItemSize={320}
             renderItem={({ item }) => (
                 <RecentActivityCatch
                     key={item.id} data={item} 

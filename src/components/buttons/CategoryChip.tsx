@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Pressable, Dimensions } from 'react-native'
-import { Text, useTheme } from 'react-native-paper'
+import { Text } from 'react-native-paper'
 import { useSearchParamStore } from '../../store/search/useSearchParamStore'
 import { ExploreStackScreenProps } from '../../types/navigation'
 import { WaterbodyClassification } from '../../types/Waterbody'

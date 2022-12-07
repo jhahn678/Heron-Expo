@@ -8,8 +8,7 @@ const FishermanFishing = (props: SvgProps) => (
     fill="none"
     {...props}
   >
-    {/* @ts-ignore */}
-    <G clipPath="url(#a)">
+    <G>
       <Path
         d="M27.299 35.917c.359.105.881.06 1.3.15.419.089.97.716.97.716l-.716.599-1.345-.389-.209-1.076Z"
         fill="#FDC6AA"

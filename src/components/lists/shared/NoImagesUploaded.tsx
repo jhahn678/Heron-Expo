@@ -8,12 +8,12 @@ interface Props {
   caption?: string
 }
 
-const NoImagesUploaded = ({ style, fontSize=14, scale=1, caption }: Props) => {
+const NoImagesUploaded = ({ style, fontSize=14, scale=1, caption="No uploaded images" }: Props) => {
   
   return (
     <View style={[styles.container, style, { transform: [{ scale }]}]}>
       <FishermanFishing/>
-      <Text style={[styles.label, { fontSize }]}>{caption || "No uploaded images"}</Text>
+      <Text style={[styles.label, { fontSize }]}>{caption}</Text>
     </View>
   );
 };

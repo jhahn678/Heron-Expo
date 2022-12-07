@@ -7,7 +7,6 @@ const FishingFromBoat = () => (
     height={120}
     fill="none"
   >
-    {/* @ts-ignore */}
     <G clipPath="url(#a)">
       <Path
         d="M74.602 109.291c18.678-.101 33.773-8.925 33.715-19.709C108.258 78.8 93.069 70.14 74.391 70.24c-18.68.101-33.774 8.925-33.716 19.709.059 10.783 15.248 19.443 33.927 19.342Z"
@@ -410,7 +409,6 @@ const FishingFromBoat = () => (
       />
     </G>
     <Defs>
-        {/* @ts-ignore */}
       <ClipPath id="a">
         <Path fill="#fff" d="M0 0h157.206v120H0z" />
       </ClipPath>

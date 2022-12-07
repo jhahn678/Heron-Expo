@@ -11,17 +11,17 @@ interface Props {
     style?: StyleProp<ViewStyle>
 }
 
-const ShareButton = ({ shareType, ...props }: Props): JSX.Element => {
+const ShareButton = ({ shareType, size=24, mode='contained', ...props }: Props): JSX.Element => {
     
     const shareContent = useShareContent()
     const theme = useTheme() as MD3Theme
     const handleShare = () => shareContent({ shareType, id: props.id })
 
-    if(props.mode === 'none'){
+    if(mode === 'none'){
         return (
           <Icon
             color={theme.colors.primary}
-            size={props.size || 24}
+            size={size}
             style={props.style}
             onPress={handleShare}
             name="share-variant-outline"
@@ -31,8 +31,8 @@ const ShareButton = ({ shareType, ...props }: Props): JSX.Element => {
     
     return (
         <IconButton
-            size={props.size || 24}
-            mode={props.mode || 'contained'}
+            size={size}
+            mode={mode}
             style={props.style}
             onPress={handleShare} 
             icon='share-variant-outline'

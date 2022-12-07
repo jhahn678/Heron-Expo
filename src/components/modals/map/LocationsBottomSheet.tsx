@@ -1,4 +1,4 @@
-import { Text } from "react-native-paper";
+import { Text, Title } from "react-native-paper";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { Dimensions, Image, Pressable, StyleSheet, View } from "react-native";
 import React, { useEffect, useState } from "react";
@@ -62,15 +62,15 @@ const LocationsBottomSheet = () => {
       onClose={onClose}
     >
       <Pressable style={[globalStyles.frsb, styles.hpadding]} onPress={navigateToLocation}>
-        <Text style={styles.title} numberOfLines={1}>
+        <Title style={styles.title} numberOfLines={1}>
           {data?.title || "Untitled Location"}
-        </Text>
+        </Title>
         <Icon name='arrow-right' size={20} color={theme.colors.primary} style={{ marginRight: 8 }}/>
       </Pressable>
 
       <View style={[globalStyles.baseline, styles.hpadding]}>
-        <Text style={styles.label}>on</Text>
-        <Text style={styles.waterbody}>{data?.waterbody.name}</Text>
+        <Text style={styles.at}>at</Text>
+        <Title style={styles.waterbody} numberOfLines={1}>{data?.waterbody.name}</Title>
       </View>
 
       <View style={[globalStyles.frac, { marginTop: 20 }, styles.hpadding]}>
@@ -156,18 +156,17 @@ const styles = StyleSheet.create({
     fontWeight: "600",
     marginTop: 4,
   },
-  waterbody: {
-    fontSize: 18,
-    fontWeight: "600",
-    marginTop: 10,
-  },
   detail: { 
     fontWeight: '500', 
     fontSize: 12 
   },
-  label: {
-    fontWeight: "400",
-    paddingRight: 4,
+  at: {
+    fontSize: 18,
+    paddingRight: 6,
+  },
+  waterbody: {
+    fontSize: 18,
+    fontWeight: "500",
   },
   user: {
     marginHorizontal: 8,

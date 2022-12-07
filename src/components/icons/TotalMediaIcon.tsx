@@ -9,12 +9,12 @@ interface Props {
     textStyle?: StyleProp<TextStyle>
 }
 
-const TotalMediaIcon = (props: Props): JSX.Element => {
+const TotalMediaIcon = ({ iconSize=16, totalMedia=0, ...props }: Props): JSX.Element => {
     
     return (
         <View style={globalStyles.frsb}>
-            <Text style={[styles.text, props.textStyle]}>{props.totalMedia}</Text>
-            <Icon name='image-multiple-outline' size={props.iconSize || 16}/>
+            <Text style={[styles.text, props.textStyle]}>{totalMedia}</Text>
+            <Icon name='image-multiple-outline' size={iconSize}/>
         </View>
     );
 };
