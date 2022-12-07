@@ -1,14 +1,11 @@
-import { Dimensions, StyleSheet, Text, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { MyPlacesTabsScreenProps } from "../../../types/navigation";
 import { useGetMySavedWaterbodies } from "../../../hooks/queries/useGetMySavedWaterbodies";
 import { FlashList } from "@shopify/flash-list";
 import { ActivityIndicator } from "react-native-paper";
 import CatchesListEmpty from "../../../components/lists/shared/CatchesListEmpty";
-import WaterbodiesListItem from "../../../components/lists/WaterbodiesListHorizontal/WaterbodiesListItem";
 import WaterbodySearchResult from "../../../components/lists/WaterbodySearch/WaterbodySearchResult";
-
-const { width } = Dimensions.get('screen')
 
 const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySavedWaterbodies'>) => {
 
@@ -50,7 +47,6 @@ const SavedWaterbodiesTabView = ({ navigation }: MyPlacesTabsScreenProps<'MySave
                     renderItem={({ item }) => (
                         <WaterbodySearchResult
                             data={item} 
-                            containerStyle={styles.card}
                             onPress={navigateWaterbody(item.id)}
                         />
                     )}
@@ -69,8 +65,5 @@ const styles = StyleSheet.create({
     },
     empty: {
         marginTop: 200
-    },
-    card: {
-        height: 340,
     }
 });
