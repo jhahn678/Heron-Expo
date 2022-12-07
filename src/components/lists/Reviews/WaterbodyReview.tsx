@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Pressable, ViewStyle, StyleProp } from 'react-native'
-import { Divider, Menu, Text, TouchableRipple } from 'react-native-paper'
+import { Divider, Menu, Text, Title, TouchableRipple } from 'react-native-paper'
 import Avatar from '../../users/Avatar'
 import RatingDisplay from '../../ratings/RatingDisplay'
 import dayjs from '../../../config/dayjs'
@@ -87,7 +87,7 @@ const WaterbodyReview = ({
             { data.text && <Text style={styles.text}>{data.text}</Text> }
             <View style={styles.waterbody}>
                 <MapMarkerIcon/>
-                <Text style={styles.waterbodyName}>{data.waterbody.name}</Text>
+                <Title style={styles.waterbodyName}>{data.waterbody.name}</Title>
             </View>
         </View>
     );
@@ -135,8 +135,8 @@ const styles = StyleSheet.create({
         marginTop: 16,
     },
     waterbodyName: {
-        fontWeight: '500',
-        fontSize: 14,
+        fontWeight: '600',
+        fontSize: 15,
         marginLeft: 6
     }
 });
