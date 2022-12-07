@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import dayjs from "../../../config/dayjs";
 import { useAuth } from "../../../store/auth/useAuth";
-import { Pressable, RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { MyCatchesTabsScreenProps } from "../../../types/navigation";
 import { useMyCatchesModalStore } from "../../../store/modal/useMyCatchesModalStore";
@@ -63,81 +63,81 @@ const StatisticsTabView = ({ navigation }: MyCatchesTabsScreenProps<'MyCatchesSt
       <ScrollView style={styles.container} refreshControl={
         <RefreshControl refreshing={refreshing} onRefresh={handleRefresh}/>
       }>
-        <Card style={styles.row} onPress={navigateTotalCatches}>
-          <Card.Content style={globalStyles.frsb}>
-          <View style={globalStyles.frac}>
-            <CatchIcon size={32}/>
-            <View style={styles.text}>
-              <Text style={styles.label}>Total Catches</Text>
-              <Text style={styles.value}>{data?.user.catch_statistics.total_catches}</Text>
+        <Card style={styles.card} onPress={navigateTotalCatches}>
+          <Card.Content style={styles.content}>
+            <View style={globalStyles.frac}>
+              <CatchIcon size={32}/>
+              <View style={styles.text}>
+                <Text style={styles.label}>Total Catches</Text>
+                <Text style={styles.value}>{data?.user.catch_statistics.total_catches}</Text>
+              </View>
             </View>
-          </View>
-          <Icon name='chevron-right' size={28}/>
+            <Icon name='chevron-right' size={28}/>
           </Card.Content>
         </Card>
-        <Card onPress={navigateBiggestCatch} style={styles.row}>
-          <Card.Content style={globalStyles.frsb}>
-          <View style={globalStyles.frac}>
-            <TrophyIcon size={32}/>
-            <View style={styles.text}>
-              <Text style={styles.label}>Biggest Catch</Text>
-              <Text style={styles.value}>
-                {data?.user.catch_statistics.largest_catch ?
-                  `${dayjs(data.user.catch_statistics.largest_catch.created_at).fromNow()}`:
-                  '—'
-                }
-              </Text>
+        <Card onPress={navigateBiggestCatch} style={styles.card}>
+          <Card.Content style={styles.content}>
+            <View style={globalStyles.frac}>
+              <TrophyIcon size={32}/>
+              <View style={styles.text}>
+                <Text style={styles.label}>Biggest Catch</Text>
+                <Text style={styles.value}>
+                  {data?.user.catch_statistics.largest_catch ?
+                    `${dayjs(data.user.catch_statistics.largest_catch.created_at).fromNow()}`:
+                    '—'
+                  }
+                </Text>
+              </View>
             </View>
-          </View>
-          <Icon name='chevron-right' size={28}/>
+            <Icon name='chevron-right' size={28}/>
           </Card.Content>
         </Card>
-        <Card style={styles.row} onPress={showSpeciesTotals}>
-          <Card.Content style={globalStyles.frsb}>
-          <View style={globalStyles.frac}>
-            <FishAltIcon size={32}/>
-            <View style={styles.text}>
-              <Text style={styles.label}>Total Species</Text>
-              <Text style={styles.value}>{data?.user.catch_statistics.total_species}</Text>
+        <Card style={styles.card} onPress={showSpeciesTotals}>
+          <Card.Content style={styles.content}>
+            <View style={globalStyles.frac}>
+              <FishAltIcon size={32}/>
+              <View style={styles.text}>
+                <Text style={styles.label}>Total Species</Text>
+                <Text style={styles.value}>{data?.user.catch_statistics.total_species}</Text>
+              </View>
             </View>
-          </View>
-          <Icon name='chevron-right' size={28}/>
+            <Icon name='chevron-right' size={28}/>
           </Card.Content>
         </Card>
-        <Card style={styles.row} onPress={navigateTopSpecies}>
-          <Card.Content style={globalStyles.frsb}>
-          <View style={globalStyles.frac}>
-            <HoldingCatchIcon size={28}/>
-            <View style={styles.text}>
-              <Text style={styles.label}>Top Species</Text>
-              <Text style={styles.value}>{data?.user.catch_statistics.top_species || '—'}</Text>
+        <Card style={styles.card} onPress={navigateTopSpecies}>
+          <Card.Content style={styles.content}>
+            <View style={globalStyles.frac}>
+              <HoldingCatchIcon size={28}/>
+              <View style={styles.text}>
+                <Text style={styles.label}>Top Species</Text>
+                <Text style={styles.value}>{data?.user.catch_statistics.top_species || '—'}</Text>
+              </View>
             </View>
-          </View>
-          <Icon name='chevron-right' size={28}/>
+            <Icon name='chevron-right' size={28}/>
           </Card.Content>
         </Card>
-        <Card style={styles.row} onPress={showWaterbodyTotals}>
-          <Card.Content style={globalStyles.frsb}>
-          <View style={globalStyles.frac}>
-            <GraphIcon size={28}/>
-            <View style={styles.text}>
-              <Text style={styles.label}>Total Fisheries</Text>
-              <Text style={styles.value}>{data?.user.catch_statistics.total_waterbodies}</Text>
+        <Card style={styles.card} onPress={showWaterbodyTotals}>
+          <Card.Content style={styles.content}>
+            <View style={globalStyles.frac}>
+              <GraphIcon size={28}/>
+              <View style={styles.text}>
+                <Text style={styles.label}>Total Fisheries</Text>
+                <Text style={styles.value}>{data?.user.catch_statistics.total_waterbodies}</Text>
+              </View>
             </View>
-          </View>
-          <Icon name='chevron-right' size={28}/>
+            <Icon name='chevron-right' size={28}/>
           </Card.Content>
         </Card>
-        <Card style={styles.row} onPress={navigateTopWaterbody}>
-          <Card.Content style={globalStyles.frsb}>
-          <View style={globalStyles.frac}>
-            <RibbonIcon size={32}/>
-            <View style={styles.text}>
-              <Text style={styles.label}>Top Fishery</Text>
-              <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody?.name || '—'}</Text>
+        <Card style={styles.card} onPress={navigateTopWaterbody}>
+          <Card.Content style={styles.content}>
+            <View style={globalStyles.frac}>
+              <RibbonIcon size={32}/>
+              <View style={styles.text}>
+                <Text style={styles.label}>Top Fishery</Text>
+                <Text style={styles.value}>{data?.user.catch_statistics.top_waterbody?.name || '—'}</Text>
+              </View>
             </View>
-          </View>
-          <Icon name='chevron-right' size={28}/>
+            <Icon name='chevron-right' size={28}/>
           </Card.Content>
         </Card>
       </ScrollView>
@@ -151,16 +151,19 @@ const styles = StyleSheet.create({
   container: {
     marginTop: 16,
   },
-  row: {
+  card: {
     marginHorizontal: 16,
     paddingHorizontal: 8,
     paddingVertical: 4,
     marginBottom: 16,
     borderRadius: 12,
-    backgroundColor: 'white',
+    backgroundColor: 'white'
+  },
+  content:{
+    display: 'flex',
     flexDirection: 'row',
-    alignItems: 'center',
     justifyContent: 'space-between',
+    alignItems: 'center'
   },
   label: {
     fontSize: 16,
