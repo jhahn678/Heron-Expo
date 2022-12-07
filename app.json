@@ -4,7 +4,7 @@
     "slug": "heron",
     "owner": "jhahn678",
     "privacy": "public",
-    "version": "1.0.6",
+    "version": "1.1.0",
     "orientation": "portrait",
     "icon": "./assets/icon.png",
     "scheme": "heron",
@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jhahn678.heron",
-      "buildNumber": "1.0.6",
+      "buildNumber": "1.1.0",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Heron uses your location to find places to fish near you"
       },
@@ -33,7 +33,7 @@
     },
     "android": {
       "package": "com.jhahn678.heron",
-      "versionCode": 12,
+      "versionCode": 13,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCvCaCmEOBnUbYgm-dt0ZeTceVI839HgFg"
