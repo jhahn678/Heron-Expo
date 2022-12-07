@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, StyleSheet, View } from "react-native";
-import { Text } from 'react-native-paper'
+import { Text, Title } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import RectangleLoader from "../../../../components/loaders/RectangleLoader";
 
@@ -18,9 +18,9 @@ const ProfileSection = ({ icon, label, value, onPress, loading }: Props) => {
         <View style={styles.left}>
             {icon}
             <View style={styles.text}>
-                <Text style={styles.label}>{label}</Text>
+                <Title style={styles.label}>{label}</Title>
                 { loading ?
-                    <RectangleLoader style={{ marginTop: 6 }} width={100}/>
+                    <RectangleLoader style={{ marginTop: 6 }} height={16} width={100}/>
                     : <Text style={styles.value}>{value || '–'}</Text>
                 }
             </View>
@@ -52,7 +52,9 @@ const styles = StyleSheet.create({
     },
     label: {
         fontSize: 16,
-        fontWeight: '500'
+        fontWeight: '500',
+        marginTop: 0,
+        lineHeight: 24
     },
     value: {
         fontSize: 16,
