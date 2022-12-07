@@ -39,14 +39,13 @@ const HeadingSection = ({ navigation, data }: Props) => {
                     <Title style={styles.title}>{data.title || 'Untitled Location'}</Title>
                     <Pressable style={globalStyles.baseline} onPress={navigateToWaterbody}>
                         <Text style={styles.at}>at</Text>
-                        <Text style={styles.place} numberOfLines={1}>
+                        <Title style={styles.waterbody} numberOfLines={1}>
                             {data?.waterbody.name}
-                        </Text>
+                        </Title>
                     </Pressable> 
                     <View style={globalStyles.baseline}>
-                        <Text style={styles.at}>near</Text>
                         <Text style={styles.place} numberOfLines={1}>
-                            {data?.nearest_place}
+                            near {data?.nearest_place}
                         </Text>
                     </View>
                 </> :
@@ -54,11 +53,11 @@ const HeadingSection = ({ navigation, data }: Props) => {
                     <RectangleLoader width={300} height={34} style={{ marginLeft: 16 }}/>
                     <View style={styles.loadingPlace}>
                         <Text style={styles.at}>at</Text>
-                        <RectangleLoader height={24} style={{ marginLeft: 2 }}/>
+                        <RectangleLoader height={24} width={272} style={{ marginLeft: 4 }}/>
                     </View>
                     <View style={styles.loadingPlace}>
                         <Text style={styles.at}>near</Text>
-                        <RectangleLoader height={24} style={{ marginLeft: 2 }}/>
+                        <RectangleLoader height={24} width={250} style={{ marginLeft: 4 }}/>
                     </View>
                 </>
             }
@@ -81,11 +80,11 @@ const HeadingSection = ({ navigation, data }: Props) => {
                         <PrivacyLabel privacy={data?.privacy}/>
                     </> :
                     <>
-                        <RectangleLoader width={80} style={{ marginLeft: 8 }}/>
+                        <RectangleLoader height={24} width={80} style={{ marginLeft: 8 }}/>
                         <View style={styles.divider}/>
-                        <RectangleLoader width={80}/>
+                        <RectangleLoader width={80} height={24}/>
                         <View style={styles.divider}/>
-                        <RectangleLoader width={80}/>
+                        <RectangleLoader width={80} height={24}/>
                     </>
                 }
             </View>
@@ -101,34 +100,39 @@ const styles = StyleSheet.create({
     },
     title: {
         paddingHorizontal: 16,
-        fontWeight: "600",
+        fontWeight: "700",
         fontSize: 24
     },
     at: {
-        paddingHorizontal: 16,
-        fontSize: 20,
+        paddingLeft: 16,
+        fontSize: 18,
         paddingRight: 6,
     },
-    place: {
-        marginTop: 8,
+    waterbody: {
         fontSize: 20,
         fontWeight: "500",
+    },
+    place: {
+        fontSize: 16,
+        fontWeight: "500",
+        marginLeft: 16,
+        marginTop: 6,
     },
     user: {
         paddingHorizontal: 16,
         flexDirection: "row",
         alignItems: "center",
-        marginTop: 20,
+        marginTop: 36,
     },
     name: {
         fontWeight: "500",
-        paddingLeft: 6,
+        paddingLeft: 12,
     },
     divider: {
         width: 1,
         height: 24,
         backgroundColor: '#e0e0e0',
-        marginHorizontal: 16,
+        marginHorizontal: 12,
     },
     created: {
         fontWeight: "500",
