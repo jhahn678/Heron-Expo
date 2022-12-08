@@ -11,7 +11,8 @@ export interface Details {
 interface ManageContactsArgs {
     user: number, 
     name: string | null, 
-    username: string
+    username: string,
+    onConfirm?: (() => void) | null
 }
 
 interface UnlinkAccountArgs {
@@ -49,6 +50,7 @@ export interface ModalStore {
     manageContactUser: number | null,
     manageContactName: string | null,
     manageContactUsername: string | null,
+    manageContactCallback: (() => void) | null,
     setManageContact: (args: ManageContactsArgs | false) => void
     unlinkAccount: boolean
     unlinkAccountType: LinkedAccount | null,
@@ -110,11 +112,13 @@ export const useModalStore = create<ModalStore>((set) => ({
     manageContactUser: null,
     manageContactName: null,
     manageContactUsername: null,
+    manageContactCallback: null,
     setManageContact: (args) => set({
         manageContact: args ? true : false,
         manageContactName: args ? args.name : null,
         manageContactUser: args ? args.user : null,
         manageContactUsername: args ? args.username: null,
+        manageContactCallback: (args && args.onConfirm) ? args.onConfirm : null
     }),
     unlinkAccount: false,
     unlinkAccountType: null,
@@ -144,6 +148,7 @@ export const useModalStore = create<ModalStore>((set) => ({
             manageContactName: null,
             manageContactUser: null,
             manageContactUsername: null,
+            manageContactCallback: null,
             confirmDeleteMessage: null,
             confirmDeleteCallback: null,
             unlinkAccountType: null,

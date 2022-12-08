@@ -17,11 +17,13 @@ const ManageContactModal = ({ visible, dismiss }: Props) => {
         id: store.manageContactUser,
         name: store.manageContactName, 
         username: store.manageContactUsername,
+        onConfirm: store.manageContactCallback
     }))
 
     const handleConfirm = async () => {
         if(!store.id) return;
         await unfollow({ variables: { id: store.id }})
+        if(store.onConfirm) store.onConfirm();
         dismiss()
     }
 

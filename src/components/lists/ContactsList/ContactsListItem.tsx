@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { Pressable, StyleSheet, Text, View } from "react-native";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../../config/theme";
@@ -20,14 +20,21 @@ const ContactsListItem = ({ data, navigateUser }: Props) => {
     const auth = useAuth(store => store.id)
 
     const setManageContact = useModalStore(store => store.setManageContact)
+
     const [followUser] = useFollowUser()
 
-    const handleFollow = () => followUser({ variables: { id: data.id } })
+    const [isFollowing, setIsFollowing] = useState(data.am_following)
+
+    const handleFollow = () => {
+        setIsFollowing(true);
+        followUser({ variables: { id: data.id } })
+    }
 
     const handleUnfollow = () => setManageContact({ 
         user: data.id,
         name: data.fullname, 
-        username: data.username
+        username: data.username,
+        onConfirm: () => setIsFollowing(false)
     })
 
     return (
@@ -40,10 +47,10 @@ const ContactsListItem = ({ data, navigateUser }: Props) => {
                 </View>
             </Pressable>
             { (auth && auth !== data.id) && 
-                <TouchableRipple style={styles.button} onPress={data.am_following ? handleUnfollow : handleFollow}>
-                    <View style={globalStyles.frac}>
-                        <Text style={styles.status}>{data.am_following ? "Following" : "Follow"}</Text>
-                        <Icon name={data.am_following ? 'check' : 'plus'} size={14} color={theme.colors.primary}/>
+                <TouchableRipple onPress={isFollowing ? handleUnfollow : handleFollow}>
+                    <View style={styles.button}>
+                        <Text style={styles.status}>{isFollowing ? "Following" : "Follow"}</Text>
+                        <Icon name={isFollowing ? 'check' : 'plus'} size={16} color={theme.colors.primary}/>
                     </View>
                 </TouchableRipple>
             }
@@ -72,15 +79,19 @@ const styles = StyleSheet.create({
         marginLeft: 12
     },
     button: {
-        paddingHorizontal: 12,
-        paddingVertical: 6,
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        paddingVertical: 8,
+        paddingHorizontal: 16,
         borderRadius: 8,
         borderColor: theme.colors.primary,
         borderWidth: 2
     },
     status: {
         fontWeight: '600',
-        marginRight: 8,
+        marginRight: 4,
         color: theme.colors.primary,
     }
 });
