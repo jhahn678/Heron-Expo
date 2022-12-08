@@ -29,8 +29,7 @@ const GoogleLoginButton = ({ navigation }: Props) => {
     expoClientId: GOOGLE_EXPO_CLIENT_ID,
     iosClientId: GOOGLE_IOS_CLIENT_ID,
     androidClientId: GOOGLE_ANDROID_CLIENT_ID,
-    webClientId: GOOGLE_WEB_CLIENT_ID,
-    responseType: ResponseType.Token
+    webClientId: GOOGLE_WEB_CLIENT_ID
   });
 
   useEffect(() => {
