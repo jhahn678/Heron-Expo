@@ -40,8 +40,8 @@ const SearchUsersScreen = ({ navigation }: RootStackScreenProps<'UserSearchScree
             </Surface>
             { data ? data.length > 0 ?
                 <FlashList 
-                    estimatedItemSize={90}
                     data={data} 
+                    estimatedItemSize={90}
                     renderItem={({ item }) => (
                         <ContactsListItem data={item} navigateUser={navigateUser(item.id)}/>
                     )} 
