@@ -33,7 +33,7 @@
     },
     "android": {
       "package": "com.jhahn678.heron",
-      "versionCode": 14,
+      "versionCode": 15,
       "config": {
         "googleMaps": {
           "apiKey": "AIzaSyCvCaCmEOBnUbYgm-dt0ZeTceVI839HgFg"
