@@ -33,6 +33,8 @@ import EditReviewScreen from "../screens/waterbody/EditReviewScreen/EditReviewSc
 import UsernameAuthScreen from '../screens/auth/UsernameAuthScreen';
 import PasswordScreen from '../screens/auth/PasswordScreen';
 import ReportProblemScreen from '../screens/settings/ReportProblemScreen/ReportProblemScreen';
+import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
+import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 
 
 const RootStack = (): JSX.Element => {
@@ -40,13 +42,20 @@ const RootStack = (): JSX.Element => {
     const isUnauthenticated = useAuth(state => !state.isAuthenticated)
     const Stack = createNativeStackNavigator<RootStackParams>();
 
-    const prefix = Linking.createURL('/');
-
     const linkConfig: LinkingOptions<RootStackParams> = {
-        prefixes: [prefix],
+        prefixes: [Linking.createURL('/'), "https://heron-mobile.com"],
         config: {
             initialRouteName: 'MainTabs',
             screens: {
+                RegisterAuthScreenOne: {
+                    path: "auth/register",
+                },
+                LoginAuthScreen: {
+                    path: "auth/login"
+                },
+                ResetPasswordScreen: {
+                    path: "auth/reset-password/:token"
+                },
                 UserProfileScreen: {
                     path: "profile/:id",
                     parse: { id: id => parseInt(id) } 
@@ -95,6 +104,12 @@ const RootStack = (): JSX.Element => {
                         />
                         <Stack.Screen name='UsernameAuthScreen' component={UsernameAuthScreen} options={{ 
                             headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username'
+                        }}/>
+                        <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{
+                            headerShown: true, headerBackVisible: true, headerTitle: 'Forgot Password'
+                        }}/>
+                        <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} options={{
+                            headerShown: true, headerBackVisible: true, headerTitle: 'Reset Password'
                         }}/>
                     </Stack.Group>
                 }
