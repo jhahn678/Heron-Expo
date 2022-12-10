@@ -25,7 +25,10 @@
       "bundleIdentifier": "com.jhahn678.heron",
       "buildNumber": "1.1.0",
       "infoPlist": {
-        "NSLocationWhenInUseUsageDescription": "Heron uses your location to find places to fish near you"
+        "NSLocationWhenInUseUsageDescription": "Heron uses your location to find places to fish near you",
+        "NsCameraUsageDescription": "Heron would like camera access so you can take pictures of catches and locations", 
+        "NSPhotoLibraryUsageDescription": "Allow Heron to access to your photo libary when uploading images",
+        "NSPhotoLibraryAddUsageDescription": "Allow Heron to save downloaded images to your photo library"        
       },
       "config": {
         "googleMapsApiKey": "AIzaSyAzQnJM4QagkraOAllkO7FUyEXb4xXremc"
