@@ -13,8 +13,8 @@ import { StatusBar } from 'expo-status-bar'
 import ModalPortal from './components/modals/ModalPortal'
 import { theme } from './config/theme'
 import { GestureHandlerRootView } from 'react-native-gesture-handler'
-import registerRootComponent from 'expo/build/launch/registerRootComponent';
 import * as Sentry from 'sentry-expo';
+import { registerRootComponent } from 'expo'
 
 const App = () => { 
 
@@ -76,5 +76,5 @@ const App = () => {
   );
 }
 
-
+export default App;
 registerRootComponent(App);
