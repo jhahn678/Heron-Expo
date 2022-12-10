@@ -1,5 +1,4 @@
-import { useEffect, useState } from 'react';
-import * as Linking from 'expo-linking'
+import { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native'
 import { TextInput, Button } from 'react-native-paper';
 import { useResetPassword } from '../../hooks/mutations/useResetPassword';
