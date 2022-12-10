@@ -8,6 +8,7 @@ import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useAuth } from '../../store/auth/useAuth'
 import { useModalStore } from '../../store/modal/useModalStore'
+import { theme } from '../../config/theme'
 const { width } = Dimensions.get('screen')
 
 const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>): JSX.Element => {
@@ -27,7 +28,20 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
     onError: () => { setIdentifier(''); setPassword('') }
   })
 
-  const handleLogin = () => loginUser({ identifier, password })
+  const handleLogin = () => {
+    if(identifier.trim().length < 5){
+      setSnack('Username/Email invalid')
+    }else if(password.length < 7){
+      setSnack('Password invalid')
+    }else{
+      loginUser({ 
+        identifier: identifier.trim(), 
+        password 
+      })
+    }
+  }
+
+  const handleForgotPassword = () => navigation.navigate("ForgotPasswordScreen")
 
   return (
     <View style={styles.container}>
@@ -48,19 +62,24 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         style={styles.input}
       />
       <Button onPress={handleLogin}
-        disabled={identifier.length === 0 || password.length < 7}
-        mode='contained-tonal' 
+        mode={'contained'}
         style={styles.button} 
         theme={{ roundness: 2 }}
         loading={isLoading}
       >Sign in</Button>
+      <Button onPress={handleForgotPassword}
+        mode={'outlined'}
+        style={[styles.button, styles.outlined]} 
+        theme={{ roundness: 2 }}
+        loading={isLoading}
+      >Forgot Password</Button>
       <Text style={{ alignSelf: 'center', marginTop: 16, marginBottom: 12}}>Or</Text>
       <GoogleLoginButton navigation={navigation}/>
       {/* <FacebookLoginButton navigation={navigation}/> */}
       <AppleLoginButton navigation={navigation}/>
       <Button 
         onPress={() => navigation.navigate('RegisterAuthScreenOne')}
-        buttonColor='white'
+        buttonColor={"white"}
         theme={{ roundness: 2 }}
         style={styles.button}
         icon={'email'}
@@ -94,5 +113,9 @@ const styles = StyleSheet.create({
     height: 48,
     display: 'flex',
     justifyContent: 'center',
+  },
+  outlined: {
+    borderColor: theme.colors.primary,
+    borderWidth: 2
   }
 })

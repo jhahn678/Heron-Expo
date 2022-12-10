@@ -16,6 +16,9 @@ export type RootStackParams = {
     RegisterAuthScreenTwo: undefined,
     RegisterAuthScreenThree: undefined,
     UsernameAuthScreen: undefined,
+    PasswordScreen: undefined,
+    ForgotPasswordScreen: undefined,
+    ResetPasswordScreen: { token: string },
     MainTabs: NavigatorScreenParams<BottomTabsParams>,
     NewCatchScreen: { waterbody: number } | undefined
     ViewCatchScreen: { id: number }
@@ -38,7 +41,6 @@ export type RootStackParams = {
     EditCatchScreen: { id: number }
     EditLocationScreen: { id: number }
     EditReviewScreen: { id: number }
-    PasswordScreen: undefined
     ReportProblemScreen: undefined
 }
 
