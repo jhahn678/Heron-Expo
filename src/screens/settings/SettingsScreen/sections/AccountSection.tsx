@@ -1,33 +1,44 @@
 import React from "react";
 import { ActivityIndicator, Divider, List } from 'react-native-paper'
-import { StyleSheet } from "react-native";
+import { StyleProp, StyleSheet, TextStyle } from "react-native";
 import { AccountRes, useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
 import { useModalStore } from "../../../../store/modal/useModalStore";
 import { LinkedAccount } from "../../../../types/User";
 import { useDeleteAccount } from "../../../../hooks/mutations/useDeleteAccount";
+import { RootStackScreenProps } from "../../../../types/navigation";
+import { color } from "react-native-reanimated";
+import { theme } from "../../../../config/theme";
 
-const mapToIcon = (data: AccountRes | undefined): string => {
-    if(data?.apple_id) return 'apple'
-    if(data?.facebook_id) return 'facebook'
-    if(data?.google_id) return 'google'
-    return 'account'
+const linkedStyle: StyleProp<TextStyle> = {
+    color: theme.colors.tertiary,
+    fontWeight: '700'
 }
 
-const mapToLabel = (data: AccountRes | undefined): string => {
-    if(data?.apple_id) return 'Apple'
-    if(data?.facebook_id) return 'Facebook'
-    if(data?.google_id) return 'Google'
-    return 'No linked accounts'
+interface Props {
+    navigation: RootStackScreenProps<'SettingsScreen'>['navigation']
 }
 
-const AccountSection = () => {
+const AccountSection = ({ navigation }: Props) => {
 
     const { data, refetch } = useGetMyAccount()
-    const setUnlink = useModalStore(store => store.setUnlinkAccount)
     const setSnack = useModalStore(store => store.setSnack)
     const setLogout = useModalStore(store => store.setLogout)
-
+    const setUnlink = useModalStore(store => store.setUnlinkAccount)
+    const handlePressEmail = () => navigation.navigate("ChangeEmailScreen")
+    const handlePressDeactivate = () => navigation.navigate("DeactivateAccountScreen")
     const handleLogout = () => setLogout({ visible: true, onLogoutGoBack: true })
+
+    const handleAuthProviderPress = (type: LinkedAccount) => () => {
+        if(!data) return setSnack("Account unavailable");
+        if(type === LinkedAccount.Apple){
+
+        }else if(type === LinkedAccount.Facebook){
+            
+        }else if(type === LinkedAccount.Google){
+
+        }
+        setUnlink({ visible: true, callback: refetch, type })
+    }
 
     const handleUnlinkAccount = () => {
         if(data?.apple_id || data?.facebook_id || data?.google_id){
@@ -43,51 +54,46 @@ const AccountSection = () => {
         }
     }
 
-    const handleEmail = () => {
-
-    }
-
-    const {} = useDeleteAccount({
-        onSuccess: () => {
-            setSnack('Account successfully deleted')
-        },
-        onError: (err) => {
-            if(err.response?.status === 401){
-                setSnack("Unable to authenticate. Please login and try again.")
-            }else{
-                setSnack("Something went wrong..")
-            }
-        }
-    })
-
-    const handleDelete = () => {
-        //Prompt with modal - this action cannot be undone
-        //Enter your username into the input and press confirm
-    }
 
     return (
         <List.Section>
             <List.Subheader style={styles.title}>Account</List.Subheader>
             <List.Item 
-                title={'Linked Account'} 
-                onPress={handleUnlinkAccount}
-                description={mapToLabel(data)}
-                right={() => <List.Icon icon={mapToIcon(data)}/>}
-            />
-            <Divider/>
-            <List.Item 
                 title={"Email"}
-                description={data ? data.email ? data.email : 'No email registered' : <ActivityIndicator size={'small'}/>}
+                description={data ? 
+                    (data.email || 'No email registered') : 
+                    <ActivityIndicator size={'small'}/>}
+                descriptionStyle={data?.email ? linkedStyle : undefined}
                 right={() => <List.Icon icon={data?.email ? 'email-edit' : 'email-plus'}/>}
-            />
+                onPress={handlePressEmail}/>
+            <List.Item 
+                title={"Google"}
+                description={data?.google_id ? "Connected" : "Connect to Google"} 
+                descriptionStyle={data?.google_id ? linkedStyle : undefined}
+                right={() => <List.Icon icon={"google"}/>}
+                onPress={handleUnlinkAccount}/>
+            <List.Item 
+                title={"Facebook"}
+                description={data?.facebook_id ? "Connected" : "Connect to Facebook"} 
+                descriptionStyle={data?.facebook_id ? linkedStyle : undefined}
+                right={() => <List.Icon icon={"facebook"}/>}
+                onPress={handleUnlinkAccount}/>
+            <List.Item 
+                title={"Apple"}
+                description={data?.apple_id ? "Connected" : "Connect to Apple"} 
+                descriptionStyle={data?.apple_id ? linkedStyle : undefined}
+                right={() => <List.Icon icon={"apple"}/>}
+                onPress={handleUnlinkAccount}/>
             <Divider/>
             <List.Item 
-                title="Delete My Account" 
-                onPress={handleDelete}
-                right={() => <List.Icon icon='account-off'/>}
-            />
+                title="Deactivate Account" 
+                onPress={handlePressDeactivate}
+                right={() => <List.Icon icon='account-off'/>}/>
             <Divider/>
-            <List.Item title="Sign Out" onPress={handleLogout} right={() => <List.Icon icon='logout'/>}/>
+            <List.Item 
+                title="Sign Out" 
+                onPress={handleLogout} 
+                right={() => <List.Icon icon='logout'/>}/>
         </List.Section>
     );
 };
@@ -104,3 +110,4 @@ const styles = StyleSheet.create({
         fontSize: 22
     }
 });
+

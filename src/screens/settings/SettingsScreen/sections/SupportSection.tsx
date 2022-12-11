@@ -1,7 +1,8 @@
-import { StyleSheet } from "react-native";
 import React from "react";
+import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
 import { RootStackScreenProps } from "../../../../types/navigation";
+import * as WebBrowser from 'expo-web-browser'
 
 interface Props {
     navigation: RootStackScreenProps<'SettingsScreen'>['navigation']
@@ -9,15 +10,21 @@ interface Props {
 
 const SupportSection = ({ navigation }: Props) => {
 
+    const handleFAQ = () => WebBrowser.openBrowserAsync("https://heron-mobile.com/faq")
     const handleReportProblem = () => navigation.navigate('ReportProblemScreen')
 
     return (
         <List.Section>
             <List.Subheader style={styles.title}>Support</List.Subheader>
             <List.Item 
+                title={'FAQs'} 
+                onPress={handleFAQ}
+                right={() => <List.Icon icon={'help-circle-outline'}/>}
+            />
+            <List.Item 
                 title={'Report a Problem'} 
                 onPress={handleReportProblem}
-                right={() => <List.Icon icon={'help-circle-outline'}/>}
+                right={() => <List.Icon icon={'alert-box-outline'}/>}
             />
         </List.Section>
     );

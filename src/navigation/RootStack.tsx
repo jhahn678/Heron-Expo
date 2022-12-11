@@ -32,10 +32,12 @@ import EditLocationScreen from "../screens/location/EditLocation/EditLocationScr
 import EditReviewScreen from "../screens/waterbody/EditReviewScreen/EditReviewScreen";
 import UsernameAuthScreen from '../screens/auth/UsernameAuthScreen';
 import PasswordScreen from '../screens/auth/PasswordScreen';
-import ReportProblemScreen from '../screens/settings/ReportProblemScreen/ReportProblemScreen';
+import ReportProblemScreen from '../screens/settings/ReportProblemScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import { useDeepLink } from '../hooks/utils/useDeepLink';
+import DeactivateAccountScreen from '../screens/settings/DeactivateAccountScreen';
+import ChangeEmailScreen from '../screens/settings/ChangeEmailScreen';
 
 
 const RootStack = (): JSX.Element => {
@@ -62,8 +64,6 @@ const RootStack = (): JSX.Element => {
                             options={{ headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username' }}/>
                         <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} 
                             options={{ headerShown: true, headerBackVisible: true, headerTitle: 'Forgot Password' }}/>
-                        <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} 
-                            options={{ headerShown: true, headerBackVisible: true, headerTitle: 'Reset Password' }}/>
                     </Stack.Group>
                 }
                 <Stack.Screen name='MainTabs' component={MainTabs}/>
@@ -73,13 +73,6 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='ViewMapScreen' component={ViewMapScreen}/>
                 <Stack.Screen name='SaveMapScreen' component={SaveMapScreen}/>
                 <Stack.Screen name='UserSearchScreen' component={SearchUsersScreen}/>
-                <Stack.Group screenOptions={{ animation: 'slide_from_bottom', animationDuration: 200 }}>
-                    <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}
-                        options={{ headerShown: true, headerTitle: 'Profile', headerBackTitleVisible: false }}
-                    />
-                    <Stack.Screen name='ViewCatchScreen' component={ViewCatchScreen}/>
-                    <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
-                </Stack.Group>
                 <Stack.Screen name='MediaGridScreen' component={MediaGridScreen}/>
                 <Stack.Screen name='ReviewsScreen' component={ReviewsScreen}/>
                 <Stack.Screen name='ViewImageScreen' component={ViewImageScreen}/>
@@ -91,11 +84,24 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name="EditCatchScreen" component={EditCatchScreen}/>
                 <Stack.Screen name="EditLocationScreen" component={EditLocationScreen}/>
                 <Stack.Screen name="EditReviewScreen" component={EditReviewScreen}/>
-                <Stack.Group screenOptions={{ headerShown: true }}>
+                <Stack.Group screenOptions={{ animation: 'slide_from_bottom', animationDuration: 200 }}>
+                    <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}
+                        options={{ headerShown: true, headerTitle: 'Profile', headerBackTitleVisible: false }}
+                    />
+                    <Stack.Screen name='ViewCatchScreen' component={ViewCatchScreen}/>
+                    <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
+                </Stack.Group>
+                <Stack.Group screenOptions={{ headerShown: true, headerBackTitleVisible: false }}>
                     <Stack.Screen name='PasswordScreen' component={PasswordScreen} 
-                        options={{ headerTitle: 'Sign In', headerBackTitleVisible: false }}/>
+                        options={{ headerTitle: 'Sign In' }}/>
                     <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} 
-                        options={{ headerTitle: 'Report a Problem', headerBackTitleVisible: false }}/>
+                        options={{ headerTitle: 'Report a Problem' }}/>
+                    <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} 
+                        options={{ headerTitle: 'Reset Password' }}/>
+                    <Stack.Screen name="DeactivateAccountScreen" component={DeactivateAccountScreen}
+                        options={{ headerTitle: 'Deactivate Account' }}/>
+                    <Stack.Screen name="ChangeEmailScreen" component={ChangeEmailScreen}
+                        options={{ headerTitle: "Account Email" }}/>
                 </Stack.Group>
             </Stack.Navigator>
         </NavigationContainer>

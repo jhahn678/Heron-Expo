@@ -10,21 +10,23 @@ import { LatLng } from "react-native-maps"
 
 
 export type RootStackParams = {
-    HomeAuthScreen: { showBack: boolean } | undefined,
-    LoginAuthScreen: undefined,
-    RegisterAuthScreenOne: undefined,
-    RegisterAuthScreenTwo: undefined,
-    RegisterAuthScreenThree: undefined,
-    UsernameAuthScreen: undefined,
-    PasswordScreen: undefined,
-    ForgotPasswordScreen: undefined,
-    ResetPasswordScreen: { token: string },
-    MainTabs: NavigatorScreenParams<BottomTabsParams>,
+    HomeAuthScreen: { showBack: boolean } | undefined
+    LoginAuthScreen: undefined
+    RegisterAuthScreenOne: undefined
+    RegisterAuthScreenTwo: undefined
+    RegisterAuthScreenThree: undefined
+    UsernameAuthScreen: undefined
+    PasswordScreen: undefined
+    ForgotPasswordScreen: undefined
+    ResetPasswordScreen: { token: string }
+    ChangeEmailScreen: undefined
+    DeactivateAccountScreen: undefined
+    MainTabs: NavigatorScreenParams<BottomTabsParams>
     NewCatchScreen: { waterbody: number } | undefined
     ViewCatchScreen: { id: number }
     NewLocationScreen: { waterbody: number } | undefined
     ViewLocationScreen: { id: number }
-    UserProfileScreen: { id: number },
+    UserProfileScreen: { id: number }
     EditProfileScreen: undefined
     UserSearchScreen: undefined
     ViewMapScreen: { resource: MapResource, id?: number, total?: number }
