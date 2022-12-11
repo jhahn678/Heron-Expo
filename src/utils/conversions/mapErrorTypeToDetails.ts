@@ -1,4 +1,4 @@
-import { Details } from '../store/modal/useModalStore'
+import { Details } from '../../store/modal/useModalStore'
 
 export enum ErrorType {
     Default = 'DEFAULT',
