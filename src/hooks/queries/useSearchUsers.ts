@@ -2,8 +2,8 @@ import { useQuery } from "@tanstack/react-query";
 import { axios } from "../../config/axios";
 import { useAuth } from "../../store/auth/useAuth";
 import { IUser } from "../../types/User";
-import { transformToFullname } from "../../utils/transforms/transformToFullname";
-import { transformToLocation } from "../../utils/transforms/transformToLocation";
+import { transformToFullname } from "../../utils/conversions/transformToFullname";
+import { transformToLocation } from "../../utils/conversions/transformToLocation";
 
 export type SearchUsersRes = Pick<
     IUser, 

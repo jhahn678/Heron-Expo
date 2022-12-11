@@ -1,7 +1,7 @@
 import create from 'zustand'
 import { LinkedAccount } from '../../types/User'
-import { mapErrorTypeToDetails, ErrorType } from '../../utils/mapErrorTypeToDetails'
-import { mapSuccessTypeToDetails, SuccessType } from '../../utils/mapSuccessTypeToDetails'
+import { mapErrorTypeToDetails, ErrorType } from '../../utils/conversions/mapErrorTypeToDetails'
+import { mapSuccessTypeToDetails, SuccessType } from '../../utils/conversions/mapSuccessTypeToDetails'
 
 export interface Details {
     message: string | null

@@ -7,7 +7,7 @@ import { Privacy } from "../../../../types/Location";
 import { dateRangeToLabel } from "../../../../utils/conversions/dateRangeToLabel";
 import { locationSortToLabel } from "../../../../utils/conversions/locationSortToLabel";
 import { privacyToLabel } from "../../../../utils/conversions/privacyToLabel";
-import { makeFragmentId } from "../../../../utils/makeFragmentId";
+import { makeFragmentId } from "../../../../utils/conversions/makeFragmentId";
 
 const privacyArrayToLabel = (value: Privacy[]) => {
   if(value.length === 1) return privacyToLabel(value[0]);

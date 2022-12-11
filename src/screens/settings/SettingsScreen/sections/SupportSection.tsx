@@ -7,13 +7,13 @@ interface Props {
     navigation: RootStackScreenProps<'SettingsScreen'>['navigation']
 }
 
-const HelpSection = ({ navigation }: Props) => {
+const SupportSection = ({ navigation }: Props) => {
 
     const handleReportProblem = () => navigation.navigate('ReportProblemScreen')
 
     return (
         <List.Section>
-            <List.Subheader style={styles.title}>Help</List.Subheader>
+            <List.Subheader style={styles.title}>Support</List.Subheader>
             <List.Item 
                 title={'Report a Problem'} 
                 onPress={handleReportProblem}
@@ -23,7 +23,7 @@ const HelpSection = ({ navigation }: Props) => {
     );
 };
 
-export default HelpSection;
+export default SupportSection;
 
 const styles = StyleSheet.create({
     container: {

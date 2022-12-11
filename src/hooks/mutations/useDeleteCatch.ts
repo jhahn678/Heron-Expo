@@ -1,7 +1,7 @@
 import { useMutation, gql, InternalRefetchQueriesInclude } from "@apollo/client";
 import { useAuth } from "../../store/auth/useAuth";
 import { CatchQuery } from "../../types/Catch";
-import { makeFragmentId } from "../../utils/makeFragmentId";
+import { makeFragmentId } from "../../utils/conversions/makeFragmentId";
 import { getCatchesQueryName } from "../queries/useGetCatches";
 import { GET_MY_CATCH_STATISTICS } from "../queries/useGetUserCatchStatistics";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";

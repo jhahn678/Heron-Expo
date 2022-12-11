@@ -2,7 +2,7 @@ import { FeatureCollection, Geometry } from "geojson";
 import { geojsonToMapBounds } from "../../utils/conversions/geojsonToMapBounds";
 import { geojsonToFeatureCollection, Properties } from "../../utils/conversions/geojsonToFeatureCollection";
 import { Camera } from "react-native-maps";
-import { greaterNum } from "../../utils/greaterNumber";
+import { greaterNum } from "../../utils/conversions/greaterNumber";
 import { Feature } from "../../utils/conversions/geojsonToFeatureCollection";
 
 export interface MapPressResponse {

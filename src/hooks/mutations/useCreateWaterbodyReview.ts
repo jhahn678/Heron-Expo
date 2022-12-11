@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import { GET_REVIEWS } from '../queries/useGetWaterbodyReviews';
 import { useAuth } from '../../store/auth/useAuth';
-import { makeFragmentId } from '../../utils/makeFragmentId';
+import { makeFragmentId } from '../../utils/conversions/makeFragmentId';
 
 const CREATE_REVIEW = gql`
     mutation Mutation($input: NewReviewInput!) {

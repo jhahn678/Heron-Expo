@@ -1,7 +1,7 @@
 import { useMutation, gql, InternalRefetchQueriesInclude } from "@apollo/client";
 import { useAuth } from "../../store/auth/useAuth";
 import { LocationQuery } from "../../types/Location";
-import { makeFragmentId } from "../../utils/makeFragmentId";
+import { makeFragmentId } from "../../utils/conversions/makeFragmentId";
 import { getLocationsQueryName } from "../queries/useGetLocations";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
 

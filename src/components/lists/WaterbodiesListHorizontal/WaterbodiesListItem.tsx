@@ -7,7 +7,7 @@ import globalStyles from '../../../globalStyles'
 import { truncateTotal } from '../../../utils/conversions/truncateTotal'
 import { IMedia } from '../../../types/Media'
 import { waterbodyLocationLabel } from '../../../utils/conversions/waterbodyLocationToLabel'
-import { imageUriHandler } from '../../../utils/imageUriHandler'
+import { imageUriHandler } from '../../../utils/conversions/imageUriHandler'
 
 
 export interface WaterbodyListItem extends Omit<IWaterbody, 'weight' | 'oid'> {

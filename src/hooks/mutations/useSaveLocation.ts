@@ -2,7 +2,7 @@ import { useMutation, gql, ApolloError } from "@apollo/client";
 import { G } from "react-native-svg";
 import { useAuth } from "../../store/auth/useAuth";
 import { LocationQuery } from "../../types/Location";
-import { makeFragmentId } from "../../utils/makeFragmentId";
+import { makeFragmentId } from "../../utils/conversions/makeFragmentId";
 import { getLocationsQueryName } from "../queries/useGetLocations";
 import { GET_MY_PROFILE_TOTALS } from "../queries/useGetMyProfile";
 

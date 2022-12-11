@@ -11,7 +11,7 @@ import { onError } from '@apollo/client/link/error'
 import { TokenResponse } from "../store/auth/useAuth";
 import { RetryLink } from "@apollo/client/link/retry";
 import { SecureStoreKeys } from "../types/SecureStore";
-import { RefreshTokenLink } from "../utils/RefreshTokenLink";
+import { RefreshTokenLink } from "../utils/auth/RefreshTokenLink";
 import jwtDecode, { JwtPayload } from "jwt-decode";
 import { WaterbodyMedia } from "../types/Media";
 

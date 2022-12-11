@@ -4,6 +4,7 @@ import { StyleSheet } from "react-native";
 import { AccountRes, useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
 import { useModalStore } from "../../../../store/modal/useModalStore";
 import { LinkedAccount } from "../../../../types/User";
+import { useDeleteAccount } from "../../../../hooks/mutations/useDeleteAccount";
 
 const mapToIcon = (data: AccountRes | undefined): string => {
     if(data?.apple_id) return 'apple'
@@ -23,7 +24,9 @@ const AccountSection = () => {
 
     const { data, refetch } = useGetMyAccount()
     const setUnlink = useModalStore(store => store.setUnlinkAccount)
+    const setSnack = useModalStore(store => store.setSnack)
     const setLogout = useModalStore(store => store.setLogout)
+
     const handleLogout = () => setLogout({ visible: true, onLogoutGoBack: true })
 
     const handleUnlinkAccount = () => {
@@ -44,8 +47,22 @@ const AccountSection = () => {
 
     }
 
-    const handleDelete = () => {
+    const {} = useDeleteAccount({
+        onSuccess: () => {
+            setSnack('Account successfully deleted')
+        },
+        onError: (err) => {
+            if(err.response?.status === 401){
+                setSnack("Unable to authenticate. Please login and try again.")
+            }else{
+                setSnack("Something went wrong..")
+            }
+        }
+    })
 
+    const handleDelete = () => {
+        //Prompt with modal - this action cannot be undone
+        //Enter your username into the input and press confirm
     }
 
     return (

@@ -1,6 +1,6 @@
 import { axios as API } from "../../config/axios";
 import { Images as PendingImage } from '../../store/image/useImageStore';
-import { validateMimeType } from '../../utils/validateUploadFiletype';
+import { validateMimeType } from '../../utils/validation/validateUploadFiletype';
 import { useAuth } from '../../store/auth/useAuth';
 import { useModalStore } from '../../store/modal/useModalStore';
 import { MediaInput } from "../../types/Media";

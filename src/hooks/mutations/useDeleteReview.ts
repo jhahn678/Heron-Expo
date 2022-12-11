@@ -1,6 +1,6 @@
 import { useMutation, gql } from "@apollo/client";
 import { useAuth } from "../../store/auth/useAuth";
-import { makeFragmentId } from "../../utils/makeFragmentId";
+import { makeFragmentId } from "../../utils/conversions/makeFragmentId";
 import { GET_WATERBODY } from "../queries/useGetWaterbody";
 
 const DELETE_REVIEW = gql`

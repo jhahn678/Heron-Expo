@@ -1,6 +1,6 @@
 import { useState, useEffect, MutableRefObject } from 'react'
 import MapView, { LatLng, MapEvent } from 'react-native-maps'
-import { createMidpoint, createMidpoints, MidPoint, PolygonPoint } from '../../utils/map/createMidpoints'
+import { createMidpoint, createMidpoints, MidPoint, PolygonPoint } from '../../utils/geospatial/createMidpoints'
 import uuid from 'react-native-uuid'
 
 export enum Resource {

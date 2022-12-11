@@ -1,5 +1,5 @@
 import { ApolloError, gql, useMutation } from '@apollo/client'
-import { makeFragmentId } from '../../utils/makeFragmentId';
+import { makeFragmentId } from '../../utils/conversions/makeFragmentId';
 
 const FAVORITE_CATCH = gql`
   mutation ToggleSaveLocation($id: Int!) {

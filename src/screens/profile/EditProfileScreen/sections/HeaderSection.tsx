@@ -10,7 +10,7 @@ import { useEditProfileStore } from "../../../../store/auth/useEditProfileStore"
 import { useImageStore } from "../../../../store/image/useImageStore";
 import { useModalStore } from "../../../../store/modal/useModalStore";
 import { RootStackScreenProps } from "../../../../types/navigation";
-import { ErrorType } from "../../../../utils/mapErrorTypeToDetails";
+import { ErrorType } from "../../../../utils/conversions/mapErrorTypeToDetails";
 
 interface Props {
     navigation: RootStackScreenProps<'EditProfileScreen'>['navigation']

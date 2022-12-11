@@ -4,7 +4,7 @@ import dayjs from "../../../config/dayjs";
 import { theme } from "../../../config/theme";
 import { GetWaterbodyCatch } from "../../../types/Catch";
 import { ExploreStackScreenProps } from "../../../types/navigation";
-import { catchImageUriHandler } from "../../../utils/catchImageUriHandler";
+import { catchImageUriHandler } from "../../../utils/conversions/catchImageUriHandler";
 import FishermanHoldingFish from "../../svg/FishermanHoldingFish";
 import Avatar from '../../users/Avatar'
 

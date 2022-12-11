@@ -6,7 +6,7 @@ import globalStyles from "../../../globalStyles";
 import { truncateTotal } from "../../../utils/conversions/truncateTotal";
 import { waterbodyLocationLabel } from "../../../utils/conversions/waterbodyLocationToLabel";
 import { WaterbodyDetails } from "../../../types/Waterbody";
-import { imageUriHandler } from "../../../utils/imageUriHandler";
+import { imageUriHandler } from "../../../utils/conversions/imageUriHandler";
 const { width } = Dimensions.get('screen')
 
 interface Props<T> {

@@ -14,7 +14,17 @@
       "distribution": "internal"
     },
     "preview": {
-      "distribution": "internal"
+      "distribution": "internal",
+      "env": {
+        "API_BASE_URL": "https://api.heron-mobile.com",
+        "API_GRAPH_URL": "https://api.heron-mobile.com/graphql",
+        "AWS_LAMBDA_REPORT_PROBLEM": "https://6y4yva46g6afz5y4nag5fmv6ym0frtxn.lambda-url.us-east-1.on.aws/",
+        "GOOGLE_EXPO_CLIENT_ID": "45477378355-if4n1fd7mt8venhp6qbr6723dinne109.apps.googleusercontent.com",
+        "GOOGLE_IOS_CLIENT_ID": "45477378355-sj9b345af8qdnd3i89uqehj96hjiq9gd.apps.googleusercontent.com",
+        "GOOGLE_ANDROID_CLIENT_ID": "45477378355-sj9b345af8qdnd3i89uqehj96hjiq9gd.apps.googleusercontent.com",
+        "FACEBOOK_CLIENT_ID": "1079506499670803",
+        "SENTRY_AUTH_TOKEN": "f1317dd07ed2431e9972bd1f252b79d661df6db721094104b184be9a7e2b3eaa"
+      }
     },
     "production": {}
   },

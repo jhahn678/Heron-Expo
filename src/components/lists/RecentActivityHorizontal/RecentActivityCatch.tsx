@@ -4,7 +4,7 @@ import { Card, Text } from 'react-native-paper'
 import { RecentActivity } from '../../../hooks/queries/useGetRecentActivity'
 import Avatar from '../../users/Avatar'
 import { dateToCalendar } from '../../../utils/conversions/dateToCalendar'
-import { catchImageUriHandler } from '../../../utils/catchImageUriHandler'
+import { catchImageUriHandler } from '../../../utils/conversions/catchImageUriHandler'
 
 interface Props<T> {
     data: T

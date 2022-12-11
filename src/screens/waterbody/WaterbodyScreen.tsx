@@ -17,7 +17,7 @@ import { useImageStore } from '../../store/image/useImageStore';
 import React, { useEffect, useState } from 'react';
 import { useCreateWaterbodyReview } from '../../hooks/mutations/useCreateWaterbodyReview';
 import { useModalStore } from '../../store/modal/useModalStore';
-import { ErrorType } from '../../utils/mapErrorTypeToDetails';
+import { ErrorType } from '../../utils/conversions/mapErrorTypeToDetails';
 import { ApolloError } from '@apollo/client';
 import { useUploadImages } from '../../hooks/mutations/useUploadImages';
 import { useAddWaterbodyMediaMutation as useAddWaterbodyMedia } from '../../hooks/mutations/useAddWaterbodyMedia';

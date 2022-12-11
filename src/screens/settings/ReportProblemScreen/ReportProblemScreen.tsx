@@ -7,7 +7,7 @@ import { useReportProblem } from "../../../hooks/mutations/useReportProblem";
 import { useGetMyAccount } from "../../../hooks/queries/useGetMyAccount";
 import { useModalStore } from "../../../store/modal/useModalStore";
 import { RootStackScreenProps } from "../../../types/navigation";
-import { ErrorType } from "../../../utils/mapErrorTypeToDetails";
+import { ErrorType } from "../../../utils/conversions/mapErrorTypeToDetails";
 const { width } = Dimensions.get('screen')
 
 const ReportProblemScreen = ({ navigation }: RootStackScreenProps<'ReportProblemScreen'>) => {

@@ -16,7 +16,7 @@ import { useCreateCatch } from '../../../hooks/mutations/useCreateCatch'
 import { UploadResult, useUploadImages } from '../../../hooks/mutations/useUploadImages'
 import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../../store/modal/useModalStore'
-import { ErrorType } from '../../../utils/mapErrorTypeToDetails'
+import { ErrorType } from '../../../utils/conversions/mapErrorTypeToDetails'
 import WaterbodyInput from '../../../components/inputs/WaterbodyInput'
 import DateTimeInput from './sections/DateTimeInput'
 

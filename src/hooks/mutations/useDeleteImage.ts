@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import { useAuth } from '../../store/auth/useAuth'
 import { MediaType } from '../../types/Media'
-import { makeFragmentId } from '../../utils/makeFragmentId'
+import { makeFragmentId } from '../../utils/conversions/makeFragmentId'
 
 const DELETE_IMAGE = gql`
 mutation DeleteMedia($id: Int!, $type: MediaType!) {

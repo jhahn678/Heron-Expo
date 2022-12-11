@@ -5,7 +5,7 @@ import { TextInput, Button, Text } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useAddAccountPassword } from "../../hooks/mutations/useAddAccountPassword";
 import { useModalStore } from "../../store/modal/useModalStore";
-import { ErrorType } from "../../utils/mapErrorTypeToDetails";
+import { ErrorType } from "../../utils/conversions/mapErrorTypeToDetails";
 import { theme } from "../../config/theme";
 const { width } = Dimensions.get('screen')
 

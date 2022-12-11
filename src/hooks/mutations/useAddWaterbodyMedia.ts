@@ -1,7 +1,7 @@
 import { gql, useMutation } from '@apollo/client'
 import { useAuth } from '../../store/auth/useAuth'
 import { MediaInput, WaterbodyMedia } from '../../types/Media'
-import { makeFragmentId } from '../../utils/makeFragmentId'
+import { makeFragmentId } from '../../utils/conversions/makeFragmentId'
 import { GET_WATERBODY, WATERBODY_MEDIA_LIMIT } from '../queries/useGetWaterbody'
 
 const ADD_WATERBODY_MEDIA = gql`

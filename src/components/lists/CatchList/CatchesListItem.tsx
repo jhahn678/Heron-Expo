@@ -9,9 +9,9 @@ import ShareButton from "../../buttons/ShareButton";
 import LikeButton, { LikeType } from "../../buttons/LikeButton";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../../config/theme";
-import { joinCatchDetails } from "../../../utils/joinCatchDetails";
+import { joinCatchDetails } from "../../../utils/conversions/joinCatchDetails";
 import { catchDetailsToTitle } from "../../../utils/conversions/catchDetailsToTitle";
-import { catchImageUriHandler } from "../../../utils/catchImageUriHandler";
+import { catchImageUriHandler } from "../../../utils/conversions/catchImageUriHandler";
 
 interface Props {
     data: GetCatchesRes['catches'][number]

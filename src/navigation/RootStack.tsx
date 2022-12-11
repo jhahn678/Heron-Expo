@@ -35,54 +35,14 @@ import PasswordScreen from '../screens/auth/PasswordScreen';
 import ReportProblemScreen from '../screens/settings/ReportProblemScreen/ReportProblemScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
+import { useDeepLink } from '../hooks/utils/useDeepLink';
 
 
 const RootStack = (): JSX.Element => {
     
-    const isUnauthenticated = useAuth(state => !state.isAuthenticated)
+    const linkConfig = useDeepLink()
     const Stack = createNativeStackNavigator<RootStackParams>();
-
-    const linkConfig: LinkingOptions<RootStackParams> = {
-        prefixes: [Linking.createURL('/'), "https://heron-mobile.com"],
-        config: {
-            initialRouteName: 'MainTabs',
-            screens: {
-                RegisterAuthScreenOne: {
-                    path: "auth/register",
-                },
-                LoginAuthScreen: {
-                    path: "auth/login"
-                },
-                ResetPasswordScreen: {
-                    path: "auth/reset-password/:token"
-                },
-                UserProfileScreen: {
-                    path: "profile/:id",
-                    parse: { id: id => parseInt(id) } 
-                },
-                ViewCatchScreen: {
-                    path: "catch/:id",
-                    parse: { id: id => parseInt(id) } 
-                },
-                ViewLocationScreen: {
-                    path: "location/:id",
-                    parse: { id: id => parseInt(id) } 
-                },
-                MainTabs: {
-                    screens: {
-                        ExploreStack: {
-                            screens: {
-                                WaterbodyScreen: {
-                                    path: "waterbody/:id",
-                                    parse: { id: (id: string) => parseInt(id) }
-                                },
-                            }
-                        }
-                    }
-                }
-            }
-        }
-    }
+    const isUnauthenticated = useAuth(state => !state.isAuthenticated)
 
     return (
         <NavigationContainer ref={navigationRef} linking={linkConfig}>
@@ -91,26 +51,19 @@ const RootStack = (): JSX.Element => {
                     <Stack.Group screenOptions={{ headerBackTitle: 'Back'}}>
                         <Stack.Screen name="HomeAuthScreen" component={HomeAuthScreen}/>
                         <Stack.Screen name="LoginAuthScreen" component={LoginAuthScreen}
-                            options={{ headerShown: true, headerTitle: 'Sign In'}}
-                        />
+                            options={{ headerShown: true, headerTitle: 'Sign In'}}/>
                         <Stack.Screen name="RegisterAuthScreenOne" component={RegisterAuthScreenOne} 
-                            options={{ headerShown: true, headerTitle: 'Step 1 of 3' }}
-                        />
+                            options={{ headerShown: true, headerTitle: 'Step 1 of 3' }}/>
                         <Stack.Screen name="RegisterAuthScreenTwo" component={RegisterAuthScreenTwo}
-                            options={{ headerShown: true, headerTitle: 'Step 2 of 3' }}
-                        />
+                            options={{ headerShown: true, headerTitle: 'Step 2 of 3' }}/>
                         <Stack.Screen name="RegisterAuthScreenThree" component={RegisterAuthScreenThree}
-                             options={{ headerShown: true, headerTitle: 'Step 3 of 3' }}
-                        />
-                        <Stack.Screen name='UsernameAuthScreen' component={UsernameAuthScreen} options={{ 
-                            headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username'
-                        }}/>
-                        <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} options={{
-                            headerShown: true, headerBackVisible: true, headerTitle: 'Forgot Password'
-                        }}/>
-                        <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} options={{
-                            headerShown: true, headerBackVisible: true, headerTitle: 'Reset Password'
-                        }}/>
+                            options={{ headerShown: true, headerTitle: 'Step 3 of 3' }}/>
+                        <Stack.Screen name='UsernameAuthScreen' component={UsernameAuthScreen} 
+                            options={{ headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username' }}/>
+                        <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} 
+                            options={{ headerShown: true, headerBackVisible: true, headerTitle: 'Forgot Password' }}/>
+                        <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} 
+                            options={{ headerShown: true, headerBackVisible: true, headerTitle: 'Reset Password' }}/>
                     </Stack.Group>
                 }
                 <Stack.Screen name='MainTabs' component={MainTabs}/>
@@ -139,8 +92,10 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name="EditLocationScreen" component={EditLocationScreen}/>
                 <Stack.Screen name="EditReviewScreen" component={EditReviewScreen}/>
                 <Stack.Group screenOptions={{ headerShown: true }}>
-                    <Stack.Screen name='PasswordScreen' component={PasswordScreen} options={{ headerTitle: 'Sign In', headerBackTitleVisible: false }}/>
-                    <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} options={{ headerTitle: 'Report a Problem', headerBackTitleVisible: false }}/>
+                    <Stack.Screen name='PasswordScreen' component={PasswordScreen} 
+                        options={{ headerTitle: 'Sign In', headerBackTitleVisible: false }}/>
+                    <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} 
+                        options={{ headerTitle: 'Report a Problem', headerBackTitleVisible: false }}/>
                 </Stack.Group>
             </Stack.Navigator>
         </NavigationContainer>

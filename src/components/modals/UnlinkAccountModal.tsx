@@ -7,7 +7,7 @@ import { useCheckAccountHasPassword } from "../../hooks/queries/useCheckAccountH
 import { useModalStore } from "../../store/modal/useModalStore";
 import { RootStackScreenProps } from "../../types/navigation";
 import { LinkedAccount } from "../../types/User";
-import { ErrorType } from "../../utils/mapErrorTypeToDetails";
+import { ErrorType } from "../../utils/conversions/mapErrorTypeToDetails";
 import LoadingBackdrop from "../loaders/LoadingBackdrop";
 const { width } = Dimensions.get('screen')
 

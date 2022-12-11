@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
-import { makeFragmentId } from '../../utils/makeFragmentId'
+import { makeFragmentId } from '../../utils/conversions/makeFragmentId'
 import { GET_MY_FOLLOWING } from '../queries/useGetUserFollowing'
 
 const FOLLOW_USER = gql`

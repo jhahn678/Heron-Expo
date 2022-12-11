@@ -1,6 +1,6 @@
 import { useMutation, gql, ApolloError, DocumentNode } from "@apollo/client";
 import uuid from 'react-native-uuid'
-import { makeFragmentId } from "../../utils/makeFragmentId";
+import { makeFragmentId } from "../../utils/conversions/makeFragmentId";
 
 const RECOMMEND_LOCATION = gql`
   mutation ToggleFavoriteLocation($id: Int!) {

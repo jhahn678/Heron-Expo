@@ -22,5 +22,9 @@ export const useGetMyAccount = () => {
         return res.data;
     }
 
-    return useQuery<AccountRes>({ queryFn: fetchAccount, refetchOnMount: true })
+    return useQuery<AccountRes>({ 
+        queryKey: ['static'],
+        queryFn: fetchAccount, 
+        refetchOnMount: true 
+    })
 }

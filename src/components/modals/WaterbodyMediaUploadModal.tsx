@@ -8,7 +8,7 @@ import Backdrop from "./Backdrop";
 import { useAddWaterbodyMediaMutation } from "../../hooks/mutations/useAddWaterbodyMedia";
 import { useImageStore } from "../../store/image/useImageStore";
 import { useUploadImages } from "../../hooks/mutations/useUploadImages";
-import { ErrorType } from "../../utils/mapErrorTypeToDetails";
+import { ErrorType } from "../../utils/conversions/mapErrorTypeToDetails";
 import { useBottomSheetStore } from "../../store/modal/useBottomSheetStore";
 
 interface Props {

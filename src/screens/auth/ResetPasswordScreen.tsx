@@ -43,7 +43,7 @@ const ResetPasswordScreen = ({ navigation, route }: RootStackScreenProps<'ResetP
         }
     })
     
-    const handleSubmit = () => { if(token) resetPassword({ token, password: password.value }) }
+    const handleSubmit = () => resetPassword({ token, password: password.value })
 
     return (
         <View style={styles.container}>

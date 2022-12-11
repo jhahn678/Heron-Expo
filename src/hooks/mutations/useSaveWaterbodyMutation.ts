@@ -1,5 +1,5 @@
 import { gql, useMutation } from '@apollo/client'
-import { makeFragmentId } from '../../utils/makeFragmentId'
+import { makeFragmentId } from '../../utils/conversions/makeFragmentId'
 
 const SAVE_WATERBODY = gql`
     mutation ToggleSaveWaterbody($id: Int!) {

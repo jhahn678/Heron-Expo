@@ -20,7 +20,7 @@ import { useLazyGetWaterbodyGeometries } from '../../../hooks/queries/useGetWate
 import { Feature, GeoJsonResource } from '../../../utils/conversions/geojsonToFeatureCollection';
 import { locationMapResource, useLazyGetLocations } from '../../../hooks/queries/useGetLocations';
 import { useModalStore } from '../../../store/modal/useModalStore';
-import { ErrorType } from '../../../utils/mapErrorTypeToDetails';
+import { ErrorType } from '../../../utils/conversions/mapErrorTypeToDetails';
 import { mapStyle } from '../../../config/mapStyle';
 import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop';
 const { width, height } = Dimensions.get('screen')
