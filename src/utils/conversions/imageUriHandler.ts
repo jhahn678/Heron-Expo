@@ -1,5 +1,5 @@
 import { Image } from 'react-native'
-const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../assets/default-background.png')).uri
+const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../assets/default-background.png')).uri
 
 interface WaterbodyData{
     media?: {
