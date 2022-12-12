@@ -1,14 +1,13 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { ActivityIndicator, Title, Text, Button } from 'react-native-paper'
-import NavigateToUserSearch from '../../../../components/buttons/NavigateToUserSearch'
+import { Title } from 'react-native-paper'
 import ContactsListHorizontal from '../../../../components/lists/ContactsListHorizontal/ContactsListHorizontal'
 import { useGetMyFollowing } from '../../../../hooks/queries/useGetUserFollowing'
 import { ExploreStackScreenProps } from '../../../../types/navigation'
 import { useAuth } from '../../../../store/auth/useAuth'
 import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
-
-const limit = 20;
+import PromptAddFriendsCard from '../../../../components/cards/PromptAddFriendsCard'
+import PromptLoginCard from '../../../../components/cards/PromptLoginCard'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
@@ -17,10 +16,9 @@ interface Props {
 const ContactsSection = ({ navigation }: Props): JSX.Element => {
 
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
-    const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen', { showBack: true })
 
     const isAuthenticated = useAuth(state => state.isAuthenticated)
-    const { data, loading, error } = useGetMyFollowing({ limit })
+    const { data } = useGetMyFollowing({ limit: 20 })
 
     return (
         <View style={styles.container}>
@@ -32,17 +30,9 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                         onNavigateToProfile={handleNavigateToProfile}
                     />
                 : 
-                    <NavigateToUserSearch/>
+                    <PromptAddFriendsCard containerStyle={styles.card}/>
                 : !isAuthenticated ?
-                    <View>
-                        <Text style={styles.message}>Login to connect with other fishermen🎣</Text>
-                        <Button 
-                            theme={{ roundness: 2 }}
-                            mode='contained-tonal' 
-                            style={styles.button} 
-                            onPress={handleNavigateToAuth}
-                        >Sign in</Button>
-                    </View>
+                    <PromptLoginCard containerStyle={styles.card}/>
                 :
                     <ScrollViewListLoader
                         itemSize={{ height: 164, width: 132 }}
@@ -65,19 +55,7 @@ const styles = StyleSheet.create({
         paddingLeft: 24,
         marginBottom: 24
     },
-    error: {
-        marginTop: 24,
-        textAlign: 'center',
-        fontWeight: '500'
-    },
-    message: {
-        marginTop: 16,
-        textAlign: 'center',
-        fontWeight: '500'
-    },
-    button: {
-        marginTop: 8,
-        width: 120,
-        alignSelf: 'center'
+    card: {
+        marginHorizontal: 16
     }
 })

@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, TextInput, Title, Text, Banner, Card } from "react-native-paper";
-import WarningBanner from "../../components/banners/WarningBanner";
+import { Button, TextInput, Text, Card } from "react-native-paper";
+import DangerBanner from "../../components/banners/DangerBanner";
 import LoadingBackdrop from "../../components/loaders/LoadingBackdrop";
 import { theme } from "../../config/theme";
 import { useDeleteAccount } from "../../hooks/mutations/useDeleteAccount";
@@ -44,7 +44,7 @@ const DeactivateAccountScreen = ({ navigation }: RootStackScreenProps<"Deactivat
     
     return (
         <View style={styles.container}>
-            <WarningBanner description="This action cannot be undone" style={styles.warning}/>
+            <DangerBanner description="This action cannot be undone" style={styles.warning}/>
             <Card style={styles.card}>
                 <Card.Content>
                     <Text variant={"titleMedium"}>

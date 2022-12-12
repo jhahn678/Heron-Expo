@@ -1,15 +1,14 @@
 import React, { useEffect, useRef } from 'react'
 import { StyleProp, ViewStyle, Animated, StyleSheet, Easing } from 'react-native';
 
-const RectangleLoader = ({
-    borderRadius=6,
-    ...props
-}: {
-  width: string | number;
-  height: string | number;
+interface Props {
+  width: number
+  height: number
   borderRadius?: number
-  style?: StyleProp<ViewStyle>;
-}) => {
+  style?: StyleProp<ViewStyle>
+}
+
+const RectangleLoader = ({ borderRadius=6, ...props }: Props) => {
   const pulseAnim = useRef(new Animated.Value(0)).current;
  
   useEffect(() => {
@@ -17,13 +16,13 @@ const RectangleLoader = ({
       Animated.sequence([
         Animated.timing(pulseAnim, {
           toValue: 1,
-          duration: 1250,
+          duration: 1200,
           useNativeDriver: true,
           easing: Easing.out(Easing.ease),
         }),
         Animated.timing(pulseAnim, {
           toValue: 0,
-          duration: 250,
+          duration: 200,
           useNativeDriver: true,
           easing: Easing.in(Easing.ease),
         })
