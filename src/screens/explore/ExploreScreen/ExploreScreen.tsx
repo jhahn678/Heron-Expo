@@ -1,5 +1,5 @@
 import React from 'react'
-import { ScrollView, View } from 'react-native'
+import { ScrollView, Dimensions } from 'react-native'
 import { ExploreStackScreenProps } from '../../../types/navigation'
 import CategorySection from './sections/CategorySection'
 import HeaderSection from './sections/HeaderSection'
@@ -9,6 +9,7 @@ import ContactsActivity from './sections/ContactsActivity'
 import { useAuth } from '../../../store/auth/useAuth'
 import NearbyCategorySection from './sections/NearbyCategorySection'
 import { useLocationStore } from '../../../store/location/useLocationStore'
+const { height } = Dimensions.get('screen')
 
 const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>) => {
 
@@ -16,7 +17,7 @@ const ExploreScreen = ({ navigation }: ExploreStackScreenProps<'ExploreScreen'>)
   const { hasCoordinates } = useLocationStore()
   
   return (
-      <ScrollView contentContainerStyle={{ paddingBottom: '10%'}}>
+      <ScrollView contentContainerStyle={{ paddingBottom: height * .05 }}>
         <HeaderSection navigation={navigation}/>
         <CategorySection navigation={navigation}/>
         <NearbySection navigation={navigation}/>

@@ -23,7 +23,10 @@ export const useDeleteAccount = ({ onError, onSuccess }: Args) => {
             onSuccess()
             return res.data;
         }catch(err){
-            if(Axios.isAxiosError(err)) onError(err)
+            if(Axios.isAxiosError(err)) {
+                console.log(err.response)
+                onError(err)
+            }
         }finally{
             setLoading(false)
         }

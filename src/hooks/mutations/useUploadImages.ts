@@ -45,7 +45,7 @@ export const useUploadImages = () => {
             }
         }catch(error){
             const err = error as AxiosError;
-            if(err.response && err.response.status && err.response.status === 401){
+            if(err?.response?.status === 401){
                 const newToken = await refreshAccessToken()
                 if(!newToken) return { attempts: 1, cause: 'AUTHENTICATION', signedUrl: null }
                 try{

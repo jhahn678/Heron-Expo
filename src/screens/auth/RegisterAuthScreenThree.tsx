@@ -32,7 +32,6 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
 
   const reset = useRegistrationStore(store => store.reset)
   const setUser = useAuth(state => state.setUser);
-  const setAuthenticated = useAuth(store => store.setAuthenticated)
   const uploadImage = useUploadImages()
   const [addAvatar] = useChangeAvatar()
   const image = useImageStore(store => store.images[0])
@@ -42,10 +41,11 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
   const setSnack = useModalStore(store => store.setSnack)
 
   const handleCreateAccount = async () => {
+
     setLoading(true)
     const res = await createAccount({ ...store, city, state, bio })
     if(!res) return alert('Account Creation Failed');
-    setUser(res, false); reset(); 
+    setUser(res)
     if(image){
       const upload = await uploadImage([image])
       if(upload) await addAvatar({ 
@@ -53,10 +53,12 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
       })
       clearImages();
     }
-    setAuthenticated(true); 
     setSnack('Account created successfully')
-    setLoading(false) //@ts-ignore
-    navigation.replace('MainTabs', { screen: 'ExploreStack' })
+    setLoading(false); reset();
+    navigation.navigate("MainTabs", { 
+      screen: "ExploreStack",
+      params: { screen: "ExploreScreen" } 
+    })
   }
   
   return (
