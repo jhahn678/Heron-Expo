@@ -7,7 +7,7 @@ interface Props {
     style?: StyleProp<ViewStyle>
 }
 
-const WarningBanner = ({ description="This action cannot be undone", ...props }: Props) => {
+const DangerBanner = ({ description="This action cannot be undone", ...props }: Props) => {
     return (
         <View style={[styles.container, props.style]}>
             <Icon name={'alert-circle-outline'} size={24} color={"#841f29"}/>
@@ -18,7 +18,7 @@ const WarningBanner = ({ description="This action cannot be undone", ...props }:
     )
 }
 
-export default WarningBanner;
+export default DangerBanner;
 
 const styles = StyleSheet.create({
     container: {
