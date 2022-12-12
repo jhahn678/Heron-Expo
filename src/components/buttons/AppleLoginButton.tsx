@@ -16,10 +16,7 @@ const AppleLoginButton = ({ navigation }:Props) => {
   const setUser = useAuth(store => store.setUser)
   const signInUser = useAppleLogin()
 
-  useEffect(() => {(async () => {
-    AppleAuthentication.isAvailableAsync()
-      .then(res => setAvailable(res))
-  })()},[])
+  useEffect(() => { AppleAuthentication.isAvailableAsync().then(res => setAvailable(res)) },[])
 
   if(!available) return null;
 
@@ -40,7 +37,6 @@ const AppleLoginButton = ({ navigation }:Props) => {
           navigation.navigate('UsernameAuthScreen')
         }
     }catch (e: any){
-      console.log(e.code)
       if(e.code !== 'ERR_CANCELED') alert('Sign in failed')
     }
   }
