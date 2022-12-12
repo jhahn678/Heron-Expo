@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, TextInput, Text, Card } from "react-native-paper";
+import { Button, TextInput, Title, Text, Banner, Card } from "react-native-paper";
 import DangerBanner from "../../components/banners/DangerBanner";
 import LoadingBackdrop from "../../components/loaders/LoadingBackdrop";
 import { theme } from "../../config/theme";

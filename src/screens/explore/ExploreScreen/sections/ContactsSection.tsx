@@ -9,6 +9,8 @@ import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListL
 import PromptAddFriendsCard from '../../../../components/cards/PromptAddFriendsCard'
 import PromptLoginCard from '../../../../components/cards/PromptLoginCard'
 
+const limit = 20;
+
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
 }
@@ -16,6 +18,7 @@ interface Props {
 const ContactsSection = ({ navigation }: Props): JSX.Element => {
 
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
+    const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen', { showBack: true })
 
     const isAuthenticated = useAuth(state => state.isAuthenticated)
     const { data } = useGetMyFollowing({ limit: 20 })
