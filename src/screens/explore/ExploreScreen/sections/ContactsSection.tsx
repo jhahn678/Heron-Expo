@@ -34,8 +34,7 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                 : 
                     <PromptAddFriendsCard containerStyle={styles.card}/>
                 : !isAuthenticated ?
-                    // <PromptLoginCard containerStyle={styles.card}/>
-                    <PromptAddFriendsCard containerStyle={styles.card}/>
+                    <PromptLoginCard containerStyle={styles.card}/>
                 :
                     <ScrollViewListLoader
                         itemSize={{ height: 164, width: 132 }}
