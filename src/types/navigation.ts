@@ -20,6 +20,7 @@ export type RootStackParams = {
     ForgotPasswordScreen: undefined
     ResetPasswordScreen: { token: string }
     ChangeEmailScreen: undefined
+    ChangePasswordScreen: undefined
     DeactivateAccountScreen: undefined
     MainTabs: NavigatorScreenParams<BottomTabsParams>
     NewCatchScreen: { waterbody: number } | undefined

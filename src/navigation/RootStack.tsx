@@ -38,6 +38,7 @@ import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
 import { useDeepLink } from '../hooks/utils/useDeepLink';
 import DeactivateAccountScreen from '../screens/settings/DeactivateAccountScreen';
 import ChangeEmailScreen from '../screens/settings/ChangeEmailScreen';
+import ChangePasswordScreen from '../screens/settings/ChangePasswordScreen';
 
 
 const RootStack = (): JSX.Element => {
@@ -64,6 +65,8 @@ const RootStack = (): JSX.Element => {
                             options={{ headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username' }}/>
                         <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} 
                             options={{ headerShown: true, headerBackVisible: true, headerTitle: 'Forgot Password' }}/>
+                        <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} 
+                            options={{ headerShown: true, headerBackVisible: true, headerTitle: 'Reset Password' }}/>
                     </Stack.Group>
                 }
                 <Stack.Screen name='MainTabs' component={MainTabs}/>
@@ -96,10 +99,10 @@ const RootStack = (): JSX.Element => {
                         options={{ headerTitle: 'Sign In' }}/>
                     <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} 
                         options={{ headerTitle: 'Report a Problem' }}/>
-                    <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} 
-                        options={{ headerTitle: 'Reset Password' }}/>
                     <Stack.Screen name="DeactivateAccountScreen" component={DeactivateAccountScreen}
                         options={{ headerTitle: 'Deactivate Account' }}/>
+                    <Stack.Screen name="ChangePasswordScreen" component={ChangePasswordScreen} 
+                        options={{ headerTitle: 'Change Password' }}/>
                     <Stack.Screen name="ChangeEmailScreen" component={ChangeEmailScreen}
                         options={{ headerTitle: "Account Email" }}/>
                 </Stack.Group>
