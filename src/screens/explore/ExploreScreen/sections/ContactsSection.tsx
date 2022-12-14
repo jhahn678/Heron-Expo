@@ -17,11 +17,9 @@ interface Props {
 
 const ContactsSection = ({ navigation }: Props): JSX.Element => {
 
-    const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
-    const handleNavigateToAuth = () => navigation.navigate('HomeAuthScreen', { showBack: true })
-
-    const isAuthenticated = useAuth(state => state.isAuthenticated)
     const { data } = useGetMyFollowing({ limit: 20 })
+    const isAuthenticated = useAuth(state => state.isAuthenticated)
+    const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
 
     return (
         <View style={styles.container}>
@@ -30,8 +28,7 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                 data.me.following.length > 0 ? 
                     <ContactsListHorizontal 
                         data={data.me.following} 
-                        onNavigateToProfile={handleNavigateToProfile}
-                    />
+                        onNavigateToProfile={handleNavigateToProfile}/>
                 : 
                     <PromptAddFriendsCard containerStyle={styles.card}/>
                 : !isAuthenticated ?
@@ -39,8 +36,7 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                 :
                     <ScrollViewListLoader
                         itemSize={{ height: 164, width: 132 }}
-                        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 8}}
-                    />
+                        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 8}}/>
             }
         </View>
     )

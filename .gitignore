@@ -14,7 +14,6 @@ __mocks.ts
 ios/
 .tmp/
 .idea/
-eas.json
 
 # macOS
 .DS_Store

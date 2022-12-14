@@ -4,25 +4,25 @@ import { axios } from '../../config/axios'
 import { SecureStoreKeys } from '../../types/SecureStore'
 import * as SecureStore from 'expo-secure-store'
 
-interface ChangeUsernameRes {
+interface ChangeEmailRes {
     id: number
-    username: string
+    email: string
 }
 
 interface Args {
-    onSuccess: (res: ChangeUsernameRes) => void
+    onSuccess: (res: ChangeEmailRes) => void
     onError: (err: AxiosError) => void
 }
 
-export const useChangeUsername = ({ onSuccess, onError }: Args) => {
+export const useChangeEmail = ({ onSuccess, onError }: Args) => {
 
     const [loading, setLoading] = useState(false)
 
-    const changeUsername = async (username: string) => {
+    const changeEmail = async (email: string) => {
         try{
             setLoading(true)
             const accessToken = await SecureStore.getItemAsync(SecureStoreKeys.ACCESS_TOKEN)
-            const res = await axios.post<ChangeUsernameRes>('/auth/change-username', { username }, {
+            const res = await axios.post<ChangeEmailRes>('/auth/change-email', { email }, {
                 headers: { "Authorization": `Bearer ${accessToken}`} 
             })
             onSuccess(res.data)
@@ -34,5 +34,5 @@ export const useChangeUsername = ({ onSuccess, onError }: Args) => {
         }
     }
 
-    return { changeUsername, loading }
+    return { changeEmail, loading }
 }

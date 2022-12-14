@@ -1,13 +1,11 @@
 import { StyleSheet } from 'react-native'
 import { List } from "react-native-paper";
-import * as WebBrowser from 'expo-web-browser'
+import { openBrowserAsync } from 'expo-web-browser'
 
 const LegalSection = () => {
 
-    const redirectTermsOfService = () => WebBrowser.openBrowserAsync(
-        "https://heron-mobile.com")
-    const redirectPrivacyPolicy = () => WebBrowser.openBrowserAsync(
-        "https://heron-mobile.com/privacy-policy.html")
+    const redirectTermsOfService = () => openBrowserAsync("https://heron-mobile.com")
+    const redirectPrivacyPolicy = () => openBrowserAsync("https://heron-mobile.com/privacy-policy.html")
 
     return (
         <List.Section>

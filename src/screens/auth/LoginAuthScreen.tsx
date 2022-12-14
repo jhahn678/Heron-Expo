@@ -21,9 +21,11 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
 
   const { loginUser, isError, isLoading } = useLogin({ 
     onSuccess: data => setUser(data).then(() => {
-      // @ts-ignore
-      navigation.replace("MainTabs")
       setSnack('Sign in successful')
+      navigation.replace("MainTabs", { 
+        screen: "ExploreStack",
+        params: { screen: "ExploreScreen" }
+      })
     }),
     onError: () => { setIdentifier(''); setPassword('') }
   })
@@ -71,7 +73,6 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         mode={'outlined'}
         style={[styles.button, styles.outlined]} 
         theme={{ roundness: 2 }}
-        loading={isLoading}
       >Forgot Password</Button>
       <Text style={{ alignSelf: 'center', marginTop: 16, marginBottom: 12}}>Or</Text>
       <GoogleLoginButton navigation={navigation}/>

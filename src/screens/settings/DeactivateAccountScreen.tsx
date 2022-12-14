@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, TextInput, Title, Text, Banner, Card } from "react-native-paper";
+import { Button, TextInput, Text, Card } from "react-native-paper";
 import DangerBanner from "../../components/banners/DangerBanner";
 import LoadingBackdrop from "../../components/loaders/LoadingBackdrop";
 import { theme } from "../../config/theme";
@@ -48,35 +48,35 @@ const DeactivateAccountScreen = ({ navigation }: RootStackScreenProps<"Deactivat
             <Card style={styles.card}>
                 <Card.Content>
                     <Text variant={"titleMedium"}>
-                Please type in your username to confirm
-            </Text>
-            <Text style={styles.text} variant={"titleMedium"}>
-                {username ? username.toUpperCase() : undefined}
-            </Text>
-            <TextInput 
-                mode={"flat"} 
-                label={"Username"}
-                style={styles.input}
-                value={input}
-                onChangeText={setInput} 
-                placeholder={username || ""}
-                theme={{ colors: {
-                    surfaceVariant: theme.colors.errorContainer, 
-                    primary: theme.colors.error 
-                }}}/>
-            <Button 
-                disabled={!valid}
-                mode={"contained-tonal"}
-                onPress={deleteAccount}
-                theme={{ 
-                    roundness: 1, 
-                    colors: {
-                        secondaryContainer: theme.colors.error,
-                        surfaceDisabled: theme.colors.errorContainer, 
-                        onSecondaryContainer: valid ? "#fff" : theme.colors.errorContainer
-                    } 
-                }}
-            >Deactivate Account</Button>
+                        Please type in your username to confirm
+                    </Text>
+                    <Text style={styles.text} variant={"titleMedium"}>
+                        {username ? username.toUpperCase() : undefined}
+                    </Text>
+                    <TextInput 
+                        mode={"flat"} 
+                        label={"Username"}
+                        style={styles.input}
+                        value={input}
+                        onChangeText={setInput} 
+                        placeholder={username || ""}
+                        theme={{ colors: {
+                            surfaceVariant: theme.colors.errorContainer, 
+                            primary: theme.colors.error 
+                        }}}/>
+                    <Button 
+                        disabled={!valid}
+                        mode={"contained-tonal"}
+                        onPress={deleteAccount}
+                        theme={{ 
+                            roundness: 1, 
+                            colors: {
+                                secondaryContainer: theme.colors.error,
+                                surfaceDisabled: theme.colors.errorContainer, 
+                                onSecondaryContainer: valid ? "#fff" : theme.colors.errorContainer
+                            } 
+                        }}
+                    >Deactivate Account</Button>
                 </Card.Content>
             </Card>
             {deleteAccountLoading && <LoadingBackdrop loaderStyle={styles.loader}/>}

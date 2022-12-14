@@ -2,7 +2,7 @@ import React from "react";
 import { StyleSheet } from "react-native";
 import { List } from "react-native-paper";
 import { RootStackScreenProps } from "../../../../types/navigation";
-import * as WebBrowser from 'expo-web-browser'
+import { openBrowserAsync } from 'expo-web-browser'
 
 interface Props {
     navigation: RootStackScreenProps<'SettingsScreen'>['navigation']
@@ -10,7 +10,7 @@ interface Props {
 
 const SupportSection = ({ navigation }: Props) => {
 
-    const handleFAQ = () => WebBrowser.openBrowserAsync("https://heron-mobile.com/faq")
+    const handleFAQ = () => openBrowserAsync("https://heron-mobile.com/faq")
     const handleReportProblem = () => navigation.navigate('ReportProblemScreen')
 
     return (

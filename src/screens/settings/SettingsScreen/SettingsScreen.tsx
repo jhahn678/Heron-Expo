@@ -14,7 +14,7 @@ const SettingsScreen = ({ navigation }: RootStackScreenProps<'SettingsScreen'>) 
             <ScrollView style={styles.container}>
                 <AccountSection navigation={navigation}/>
                 <SupportSection navigation={navigation}/>
-                <LegalSection />
+                <LegalSection/>
             </ScrollView>
         </View>
     );

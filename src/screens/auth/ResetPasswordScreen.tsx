@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { View, StyleSheet, Dimensions } from 'react-native'
-import { TextInput, Button } from 'react-native-paper';
+import { TextInput, Button, Text } from 'react-native-paper';
 import { useResetPassword } from '../../hooks/mutations/useResetPassword';
 import { useValidatePassword } from '../../hooks/utils/useValidatePassword';
 import { useModalStore } from '../../store/modal/useModalStore';
@@ -47,11 +47,14 @@ const ResetPasswordScreen = ({ navigation, route }: RootStackScreenProps<'ResetP
 
     return (
         <View style={styles.container}>
+            <Text variant={"bodyLarge"}>Enter a new password</Text>
             <TextInput 
-                value={password.value}
                 autoFocus={true}
                 mode={'outlined'}
+                label={"Password"}
                 style={styles.input}
+                value={password.value}
+                onChangeText={handleSetPassword}
                 secureTextEntry={secureTextEntry}
                 right={secureTextEntry ? 
                     <TextInput.Icon icon='eye' onPress={() => setSecureTextEntry(x => !x)}/> : 
@@ -59,14 +62,14 @@ const ResetPasswordScreen = ({ navigation, route }: RootStackScreenProps<'ResetP
                 error={error || ( 
                     password.touched && !valid
                 )}
-                onChangeText={handleSetPassword}
-                label={"Password"}
             />
             <TextInput 
-                value={confirmPassword.value}
                 mode={'outlined'}
-                secureTextEntry={secureTextEntry}
                 style={styles.input}
+                label={"Confirm Password"}
+                value={confirmPassword.value}
+                secureTextEntry={secureTextEntry}
+                onChangeText={handleSetConfirmPassword}
                 right={secureTextEntry ? 
                     <TextInput.Icon icon='eye' onPress={() => setSecureTextEntry(x => !x)}/> : 
                     <TextInput.Icon icon="eye-off" onPress={() => setSecureTextEntry(x => !x)}/>}
@@ -74,15 +77,13 @@ const ResetPasswordScreen = ({ navigation, route }: RootStackScreenProps<'ResetP
                     confirmPassword.touched && 
                     password.value !== confirmPassword.value
                 )}
-                onChangeText={handleSetConfirmPassword}
-                label={"Confirm Password"}
             />
             <Button 
                 loading={loading}
                 mode={'contained'}
                 style={styles.button} 
                 onPress={handleSubmit}
-                theme={{ roundness: 2 }}
+                theme={{ roundness: 1 }}
                 disabled={!valid && password.value !== confirmPassword.value}
             >Save Password</Button>
         </View>

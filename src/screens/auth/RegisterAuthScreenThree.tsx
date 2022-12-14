@@ -96,10 +96,10 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
         onChangeText={setBio} 
       />
       <Button 
-        mode='contained-tonal' 
+        mode='contained' 
         style={styles.button} 
-        theme={{ roundness: 2 }} 
         onPress={handleCreateAccount}
+        theme={{ roundness: 1 }}
       >Get Started</Button>
       <EditProfilePictureDialog
         style={styles.modal}

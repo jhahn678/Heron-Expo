@@ -26,6 +26,7 @@ const AccountSection = ({ navigation }: Props) => {
     const setUnlink = useModalStore(store => store.setUnlinkAccount)
     const handlePressEmail = () => navigation.navigate("ChangeEmailScreen")
     const handlePressDeactivate = () => navigation.navigate("DeactivateAccountScreen")
+    const handleChangePassword = () => navigation.navigate("ChangePasswordScreen")
     const handleLogout = () => setLogout({ visible: true, onLogoutGoBack: true })
 
     const handleAuthProviderPress = (type: LinkedAccount) => () => {
@@ -86,10 +87,13 @@ const AccountSection = ({ navigation }: Props) => {
                 onPress={handleUnlinkAccount}/>
             <Divider/>
             <List.Item 
+                title={"Change my password"}
+                right={() => <List.Icon icon={"key"}/>}
+                onPress={handleChangePassword}/>
+            <List.Item 
                 title="Deactivate Account" 
                 onPress={handlePressDeactivate}
                 right={() => <List.Icon icon='account-off'/>}/>
-            <Divider/>
             <List.Item 
                 title="Sign Out" 
                 onPress={handleLogout} 
