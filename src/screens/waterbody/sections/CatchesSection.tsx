@@ -1,6 +1,6 @@
 import React from "react";
 import { StyleSheet, View, Pressable, Dimensions } from "react-native";
-import { Button, Text, Title } from 'react-native-paper'
+import { Text, Title } from 'react-native-paper'
 import FishermanCatchingFish from "../../../components/svg/FishermanCatchingFish";
 import { ExploreStackScreenProps } from "../../../types/navigation";
 import { FlashList } from "@shopify/flash-list";
@@ -9,11 +9,10 @@ import CatchesListItem from "../../../components/lists/CatchesListHorizontal/Cat
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import { useBottomSheetStore } from '../../../store/modal/useBottomSheetStore'
 import RectangleLoader from "../../../components/loaders/RectangleLoader";
-import FishIcon from "../../../components/icons/FishIcon";
 import { useGetCatches } from "../../../hooks/queries/useGetCatches";
 import ScrollViewListLoader from "../../../components/loaders/ScrollViewListLoader";
+import PromptCreateCatchCard from "../../../components/cards/PromptCreateCatchCard";
 const { width } = Dimensions.get('screen')
-
 const limit = 3;
 
 interface Props {
@@ -91,18 +90,9 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                         />
                     </View> 
                 :
-                    <View style={styles.listempty}><View>
-                        <Text style={styles.emptytext}>Be the first to report a catch here!</Text>
-                        <Button 
-                            onPress={navigateNewCatch}
-                            mode="contained-tonal" 
-                            theme={{ roundness: 2 }}
-                            contentStyle={{ flexDirection: 'row-reverse'}}
-                            icon={({ color, size }) => (
-                            <FishIcon size={size} color={color}/>
-                            )}
-                        >New Catch</Button>
-                    </View></View>
+                    <PromptCreateCatchCard 
+                        containerStyle={styles.empty} 
+                        onPress={navigateNewCatch}/>
                 :
                     <ScrollViewListLoader/>
             }
@@ -115,7 +105,7 @@ export default CatchesSection;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%'
+        width
     },
     title: {
         fontWeight: '600',
@@ -165,17 +155,11 @@ const styles = StyleSheet.create({
         marginBottom: 24
     },
     totalLoading: {
+        top: 6,
         marginBottom: 10,
         position: 'relative',
-        top: 6
     },
-    listempty: {
-        marginTop: 16,
-        width: width,
-        alignItems: 'center'
-    },
-    emptytext: {
-        fontWeight: '500',
-        marginBottom: 12
+    empty: {
+        marginHorizontal: 16
     }
 });
