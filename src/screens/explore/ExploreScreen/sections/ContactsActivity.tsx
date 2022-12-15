@@ -1,6 +1,7 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
 import { Title, Text, ActivityIndicator } from 'react-native-paper'
+import RecentActivityEmpty from '../../../../components/lists/RecentActivityHorizontal/RecentActivityEmpty'
 import RecentActivityHorizontalList from '../../../../components/lists/RecentActivityHorizontal/RecentActivityHorizontalList'
 import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
 import { useGetRecentActivityQuery } from '../../../../hooks/queries/useGetRecentActivity'
@@ -23,22 +24,17 @@ const ContactsActivity = ({ navigation }: Props) => {
     return (
         <View style={styles.container}>
             <Title style={styles.title}>Recent activity</Title>
-            { data ? 
-                data.activityFeed.length > 0 ?
-                    <RecentActivityHorizontalList 
-                        data={data.activityFeed} 
-                        onNavigateToCatch={handleNavigateToCatch}
-                        onNavigateToProfile={handleNavigateToProfile}
-                        onNavigateSeeMore={handleNavigateSeeMore}
-                    />
-                : 
-                    <Text style={styles.message}>Your friends have not logged any catches yet 🐟</Text>
-                : 
-                    <ScrollViewListLoader 
-                        itemSize={{ height: 300, width: 300 }}
-                        contentContainerStyle={{ padding: 20 }}
-                        itemStyle={{ marginRight: 16 }}
-                    />
+            { data ? data.activityFeed.length > 0 ?
+                <RecentActivityHorizontalList 
+                    data={data.activityFeed} 
+                    onNavigateToCatch={handleNavigateToCatch}
+                    onNavigateToProfile={handleNavigateToProfile}
+                    onNavigateSeeMore={handleNavigateSeeMore}/>
+                : <RecentActivityEmpty containerStyle={styles.empty}/> 
+                : <ScrollViewListLoader 
+                    itemSize={{ height: 300, width: 300 }}
+                    contentContainerStyle={{ padding: 20 }}
+                    itemStyle={{ marginRight: 16 }}/>
             }
         </View>
     )
@@ -56,10 +52,8 @@ const styles = StyleSheet.create({
         fontWeight: '600',
         paddingHorizontal: 24,
     },
-    message: {
-        marginTop: 48,
-        marginBottom: 24,
-        fontWeight: '600',
-        alignSelf: 'center'
+    empty: {
+        marginHorizontal: 16,
+        marginTop: 16
     }
 })
