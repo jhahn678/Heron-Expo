@@ -44,23 +44,25 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
   }
 
   const handleForgotPassword = () => navigation.navigate("ForgotPasswordScreen")
+  const handleCreateAccount = () => navigation.navigate('RegisterAuthScreenOne')
 
   return (
     <View style={styles.container}>
-      <TextInput autoFocus
+      <TextInput 
+        autoFocus={true}
         error={isError}
         value={identifier}
         onChangeText={setIdentifier}
-        label='Email or Username' 
-        mode='outlined' 
+        label={'Email or Username'}
+        mode={'outlined'}
         style={styles.input}
       />
       <TextInput 
         error={isError}
         value={password}
         onChangeText={setPassword}
-        label='Password' 
-        mode='outlined' 
+        label={'Password'} 
+        mode={'outlined'} 
         style={styles.input}
       />
       <Button onPress={handleLogin}
@@ -71,22 +73,20 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
       >Sign in</Button>
       <Button onPress={handleForgotPassword}
         mode={'outlined'}
-        style={[styles.button, styles.outlined]} 
         theme={{ roundness: 2 }}
+        style={[styles.button, styles.outlined]} 
       >Forgot Password</Button>
       <Text style={{ alignSelf: 'center', marginTop: 16, marginBottom: 12}}>Or</Text>
       <GoogleLoginButton navigation={navigation}/>
       {/* <FacebookLoginButton navigation={navigation}/> */}
       <AppleLoginButton navigation={navigation}/>
       <Button 
-        onPress={() => navigation.navigate('RegisterAuthScreenOne')}
+        onPress={handleCreateAccount}
         buttonColor={"white"}
         theme={{ roundness: 2 }}
         style={styles.button}
         icon={'email'}
-      >
-        Create a new account
-      </Button>
+      >Create a new account</Button>
     </View>
   )
 }
@@ -94,14 +94,9 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
 export default LoginAuthScreen
 
 const styles = StyleSheet.create({
-  skipButton: {
-    alignSelf: 'flex-start',
-    marginBottom: 32
-  },
   container: {
     height: '100%',
     display: 'flex',
-    justifyContent: 'center',
     padding: 24,
     paddingBottom: 0
   },

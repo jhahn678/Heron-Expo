@@ -4,53 +4,72 @@ import * as yup from 'yup'
 
 interface CheckEmailAvailabilityRes {
     email: string,
-    valid: boolean,
     available: boolean
 }
 
-export const useCheckEmailAvailability = (value: string) => {
+interface EmailState {
+    /** If input has been used yet */
+    touched: boolean, 
+    /** If check email query is in progress */
+    loading: boolean, 
+    /** If check email query returns avaiable */
+    available: boolean, 
+    /** If input is valid email */
+    valid: boolean, 
+    /** If query returns error */
+    error: boolean
+}
 
-    const [isAvailable, setIsAvailable] = useState<Boolean | null>(null)
+/**
+ * @param email
+ * #### Best order to check result in
+ * - loading
+ * - touched
+ * - error
+ * - valid
+ * - available
+ */ 
+export const useCheckEmailAvailability = (value: string): EmailState => {
+
+    const [error, setError] = useState(false)
+    const [valid, setValid] = useState(false)
     const [touched, setTouched] = useState(false)
-    const [isLoading, setIsLoading] = useState(false)
-    const [isError, setIsError] = useState(false)
+    const [loading, setLoading] = useState(false)
+    const [available, setAvailable] = useState(false)
 
-    const schema = yup.string().min(8).email()
+    const schema = yup.string().trim().min(8).email()
 
     const queryEmail = async (email: string) => {
-        const res = await axios.get<CheckEmailAvailabilityRes>(`/auth/email?email=${email}`)
-        return res.data;
+        const { data } = await axios.get<CheckEmailAvailabilityRes>(
+            `/auth/email?email=${email}`);
+        return data;
     }
 
     useEffect(() => {
         const timer = setTimeout(async () => {
+            if(value.length) setTouched(true);
             if(schema.isValidSync(value)){
-                setIsLoading(true)
-                setTouched(true)
                 try{
-                    const res = await queryEmail(value)
-                    setIsLoading(false)
-                    setIsAvailable(res.available)
-                    setIsError(!res.valid)
+                    setLoading(true)
+                    const { available } = await queryEmail(value)
+                    setAvailable(available)
+                    setError(false)
                 }catch(err){
-                    setIsLoading(false)
-                    setIsAvailable(null)
-                    setIsError(true)
+                    setError(true)
+                    setAvailable(false)
+                }finally{
+                    setValid(true)
+                    setLoading(false)
                 }
-            }else if(touched){
-                setIsError(true)
-                setIsAvailable(null)
             }else{
-                setIsAvailable(null)
+                setError(false)
+                setValid(false)
+                setAvailable(false)
             }
         }, 500)
 
         return () => clearTimeout(timer)
     }, [value])
 
-    return {
-        isAvailable,
-        isLoading,
-        isError
-    }
+    return { touched, loading, valid, available, error }
 }

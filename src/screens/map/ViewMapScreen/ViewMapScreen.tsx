@@ -392,9 +392,9 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
       <MapView
         ref={map}
         style={styles.map}
-        onMapReady={() => setMapReady(true)}
-        provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
+        provider={PROVIDER_GOOGLE}
+        onMapReady={() => setMapReady(true)}
       >
         {geojson && (
           <Geojson
@@ -418,8 +418,8 @@ export default ViewMapScreen
 
 const styles = StyleSheet.create({
   container: {
-    height: "100%",
-    width: "100%",
+    height: height,
+    width: width,
   },
   header: {
     width: width,

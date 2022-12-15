@@ -1,8 +1,8 @@
-import { StyleSheet, View } from 'react-native'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import { useState } from 'react'
 import { RootStackScreenProps } from '../../types/navigation'
 import { useRegistrationStore } from '../../store/auth/useRegistrationStore'
-import { TextInput, Button } from 'react-native-paper'
+import { TextInput, Button, Card, Text } from 'react-native-paper'
 import { useAuth } from '../../store/auth/useAuth'
 import EditProfilePictureDialog from '../../components/modals/EditProfilePictureDialog'
 import AvatarSection from '../profile/EditProfileScreen/sections/AvatarSection'
@@ -13,6 +13,7 @@ import { useUploadImages } from '../../hooks/mutations/useUploadImages'
 import { useChangeAvatar } from '../../hooks/mutations/useChangeAvatar'
 import LoadingBackdrop from '../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../store/modal/useModalStore'
+const { height, width } = Dimensions.get('window')
 
 const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterAuthScreenThree'>) => {
 
@@ -41,7 +42,6 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
   const setSnack = useModalStore(store => store.setSnack)
 
   const handleCreateAccount = async () => {
-
     setLoading(true)
     const res = await createAccount({ ...store, city, state, bio })
     if(!res) return alert('Account Creation Failed');
@@ -63,44 +63,52 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
   
   return (
     <View style={styles.container}>
-      <AvatarSection 
-        avatar={undefined}
-        fullName={`${store.firstname} ${store.lastname}`} 
-        onAvatarPress={onAvatarPress}
-      />
-      <View style={styles.row}>
-        <TextInput
-          autoFocus={true} 
-          value={city} 
-          onChangeText={setCity} 
-          placeholder='City'
-          mode="outlined"
-          label={'City'}
-          style={[styles.rowItem, { marginRight: 4 }]}
-        />
-        <TextInput 
-          value={state} 
-          label={'State'}
-          mode={"outlined"}
-          placeholder={'State'}
-          onChangeText={setState} 
-          style={[styles.rowItem, { marginLeft: 4 }]}
-        />
-      </View>
-      <TextInput 
-        value={bio} 
-        label={'Bio'}
-        multiline={true}
-        mode={"outlined"}
-        placeholder={'Bio'}
-        onChangeText={setBio} 
-      />
-      <Button 
-        mode='contained' 
-        style={styles.button} 
-        onPress={handleCreateAccount}
-        theme={{ roundness: 1 }}
-      >Get Started</Button>
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text variant={"titleMedium"} style={styles.title}>
+            Complete your profile
+          </Text>
+          <AvatarSection 
+            avatar={undefined}
+            onAvatarPress={onAvatarPress}
+            fullName={`${store.firstname} ${store.lastname}`} 
+          />
+          <View style={styles.row}>
+            <TextInput
+              value={city} 
+              mode={"flat"}
+              label={'City'}
+              autoFocus={true} 
+              placeholder={'City'}
+              onChangeText={setCity} 
+              style={[styles.input, { flex: 1, marginRight: 4 }]}
+            />
+            <TextInput 
+              value={state} 
+              label={'State'}
+              mode={"flat"}
+              placeholder={'State'}
+              onChangeText={setState} 
+              style={[styles.input, { flex: 1, marginLeft: 4 }]}
+            />
+          </View>
+          <TextInput 
+            value={bio} 
+            mode={"flat"}
+            label={'Bio'}
+            multiline={true}
+            placeholder={'Bio'}
+            style={styles.input}
+            onChangeText={setBio} 
+          />
+          <Button 
+            mode={'contained'}
+            style={styles.button} 
+            onPress={handleCreateAccount}
+            theme={{ roundness: 1 }}
+          >Get Started</Button>
+        </Card.Content>
+      </Card>
       <EditProfilePictureDialog
         style={styles.modal}
         visible={showDialog} 
@@ -115,43 +123,42 @@ export default RegisterAuthScreenThree
 
 const styles = StyleSheet.create({
   container: {
-    flexGrow: 1,
-    display: 'flex',
-    padding: 24,
-    paddingBottom: 0,
+    padding: 16,
+    height
+  },
+  card: {
+    borderColor: theme.colors.primaryContainer,
+    borderWidth: 1
+  },
+  title: {
+    marginBottom: 16,
+    marginTop: 4
   },
   input: {
     marginBottom: 12,
   },
   button: {
-    marginTop: 16,
-    height: 48,
-    display: 'flex',
-    justifyContent: 'center',
-  },
-  error: {
-    marginTop: 4,
-    marginBottom: 8,
-    color: theme.colors.error
+    marginTop: 8
   },
   modal: {
-    position: 'relative',
-    bottom: 64,
+    position: 'absolute',
+    alignSelf: 'center',
+    width: width * .9,
+    top: 50,
     zIndex: 100
   },
   row: {
+    zIndex: 0,
+    position: 'relative',
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'space-between',
-    marginBottom: 8,
-    position: 'relative',
-    zIndex: 0
   },
   rowItem: {
     flex: 1
   },
   loader: {
-    position: 'relative',
-    bottom: 200
+    position: 'absolute',
+    top: 150
   }
 })

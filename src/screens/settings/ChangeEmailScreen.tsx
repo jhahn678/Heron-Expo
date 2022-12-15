@@ -12,7 +12,7 @@ const ChangeEmailScreen = ({ navigation }: RootStackScreenProps<"ChangeEmailScre
 
     const [email, setEmail] = useState({ value: "", touched: false })
     const handleEmail = (value: string) => setEmail({ value, touched: true })
-    const { isAvailable, isLoading, isError } = useCheckEmailAvailability(email.value)
+    const { available, loading: emailLoading, error: emailError } = useCheckEmailAvailability(email.value)
     const setSnack = useModalStore(store => store.setSnack)
 
     const { changeEmail, loading } = useChangeEmail({
@@ -46,21 +46,21 @@ const ChangeEmailScreen = ({ navigation }: RootStackScreenProps<"ChangeEmailScre
                         value={email.value} 
                         placeholder={"Email"}
                         onChangeText={handleEmail}
-                        error={email.touched && (!isAvailable || isError)}
+                        error={email.touched && (!available || emailError)}
                         right={<TextInput.Icon icon={
-                            () => <ActivityIndicator animating={isLoading}/>
+                            () => <ActivityIndicator animating={emailLoading}/>
                         }/>}/>
                     <Button 
                         loading={loading}
                         mode={'contained'}
                         style={styles.button} 
                         onPress={handleChangeEmail}
-                        disabled={!isAvailable}
+                        disabled={!available}
                         theme={{ 
                             roundness: 1, 
                             colors: {
                                 surfaceDisabled: theme.colors.surfaceVariant, 
-                                onPrimary: isAvailable ? "#fff" : theme.colors.surfaceVariant
+                                onPrimary: available ? "#fff" : theme.colors.surfaceVariant
                             } 
                         }}
                     >Save Email</Button>

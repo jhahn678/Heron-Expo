@@ -1,17 +1,19 @@
-import { StyleSheet, View } from 'react-native'
-import { TextInput, Button, Text, ActivityIndicator } from 'react-native-paper'
-import { RootStackScreenProps } from '../../types/navigation'
-import { useCheckEmailAvailability } from '../../hooks/queries/useCheckEmailAvailability'
-import { useRegistrationStore } from '../../store/auth/useRegistrationStore'
-import { useValidatePassword } from '../../hooks/utils/useValidatePassword'
 import { theme } from '../../config/theme'
+import { StyleSheet, View } from 'react-native'
+import { RootStackScreenProps } from '../../types/navigation'
+import { useValidatePassword } from '../../hooks/utils/useValidatePassword'
+import { useRegistrationStore } from '../../store/auth/useRegistrationStore'
+import { TextInput, Button, Text, ActivityIndicator, HelperText, Card } from 'react-native-paper'
+import { useCheckEmailAvailability } from '../../hooks/queries/useCheckEmailAvailability'
 import { useCheckUsernameAvailability } from '../../hooks/queries/useCheckUsernameAvailability'
+import { useState } from 'react'
 
 const RegisterAuthScreenTwo = ({ navigation }: RootStackScreenProps<'RegisterAuthScreenTwo'>) => {
 
   const setEmail = useRegistrationStore(state => state.setEmail)
   const setUsername = useRegistrationStore(state => state.setUsername)
   const setPassword = useRegistrationStore(state => state.setPassword)
+  const [secureText, setSecureText] = useState(true)
 
   const store = useRegistrationStore(store => ({
     email: store.email,
@@ -27,62 +29,90 @@ const RegisterAuthScreenTwo = ({ navigation }: RootStackScreenProps<'RegisterAut
   
   return (
     <View style={styles.container}>
-      {
-        email.isAvailable === false ?
-          <Text style={styles.error}>Email is already in use</Text>
-        : email.isError ?
-          <Text style={styles.error}>Email is invalid</Text>
-        : null
-      }
-      <TextInput autoFocus 
-        mode='outlined' 
-        label='Email' 
-        value={store.email} 
-        onChangeText={setEmail}
-        style={styles.input}
-        error={email.isAvailable === false || email.isError}
-        right={<TextInput.Icon icon={() => <ActivityIndicator animating={email.isLoading}/>}/>}
-      />
-      {
-        username.isAvailable === false ?
-          <Text style={styles.error}>Username is already in use</Text>
-        : store.username.length < 6 ?
-          <Text style={styles.tip}>Username must be at least 6 characters</Text>
-        : null
-      }
-      <TextInput 
-        autoFocus={true}
-        mode='outlined'
-        label='Username' 
-        value={store.username} 
-        onChangeText={setUsername}
-        style={styles.input}
-        error={username.isAvailable === false || username.isError}
-        left={<TextInput.Affix text="@" textStyle={{ color: theme.colors.primary }}/>}
-        right={<TextInput.Icon icon={() => <ActivityIndicator animating={username.isLoading}/>}/>}
-      />
-      { !passwordValid &&
-        <Text style={styles.tip}>Minimum of 8 characters – One uppercase character</Text>
-      }
-      <TextInput 
-        mode='outlined'
-        label='Password' 
-        value={store.password} 
-        onChangeText={setPassword}
-        style={styles.input}
-        error={!passwordValid && store.password.length > 0}
-      />
-      <Button 
-        disabled={
-          !username.isAvailable
-          || username.isError
-          || !passwordValid
-        }
-        mode='contained-tonal' 
-        style={styles.button} 
-        theme={{ roundness: 2 }}
-        onPress={handleNext}
-      >Next</Button>
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text variant={"titleMedium"} style={styles.title}>
+            Please setup your credentials
+          </Text>
+          <TextInput 
+            autoFocus={true}
+            mode={'flat'}
+            label={'Email'} 
+            value={store.email} 
+            onChangeText={setEmail}
+            error={!email.available || email.error || !email.valid}
+            right={<TextInput.Icon icon={() => <ActivityIndicator animating={email.loading}/>}/>}
+          />
+          <HelperText 
+            style={styles.helper}
+            type={!email.touched || (email.available && email.valid) ? "info" : "error"}>
+            { 
+              !email.touched ? "" : 
+              email.error ? "Could not verify email" : 
+              !email.valid ? "Email not valid" : 
+              !email.available ? "Email already in use" : 
+              "Email available" }
+          </HelperText>
+          <TextInput 
+            mode={"flat"}
+            label={'Username'}
+            value={store.username} 
+            onChangeText={setUsername}
+            error={!username.available || !username.valid || username.error}
+            left={<TextInput.Affix text="@" textStyle={{ 
+              color: username.available ? theme.colors.primary : theme.colors.error 
+            }}/>}
+            right={<TextInput.Icon icon={() => <ActivityIndicator animating={username.loading}/>}/>}
+          />
+          <HelperText 
+            style={styles.helper}
+            type={!username.touched || (username.available && username.valid) ? "info" : "error"}>
+            { 
+              !username.touched ? "" : 
+              username.error ? "Could not verify username" : 
+              !username.valid ? "Username not valid - Minimum 6 characters" : 
+              !username.available ? "Username already in use" : 
+              "Username available" }
+          </HelperText>
+          <TextInput 
+            mode={"flat"}
+            label={'Password'} 
+            value={store.password} 
+            onChangeText={setPassword}
+            secureTextEntry={secureText}
+            error={!passwordValid && store.password.length > 0}
+            right={secureText ? 
+              <TextInput.Icon icon="eye" onPress={() => setSecureText(false)}/> : 
+              <TextInput.Icon icon="eye-off" onPress={() => setSecureText(true)}/>
+            }/>
+          <HelperText
+            style={styles.helper}
+            type={passwordValid ? "info" : "error"}>
+            { passwordValid ? "Password valid" : "Minimum 8 characters • One uppercase • One number" }
+          </HelperText>
+          <Button 
+            disabled={
+              !username.available
+              || !email.available
+              || !passwordValid
+            }
+            mode={'contained'} 
+            style={styles.button} 
+            onPress={handleNext}
+            theme={{ 
+              roundness: 1, 
+              colors: {
+                surfaceDisabled: theme.colors.surfaceVariant, 
+                onPrimary: (
+                  !username.available
+                  || !email.available
+                  || !passwordValid
+                ) ? theme.colors.surfaceVariant : "#fff"
+              } 
+            }}
+          >Next</Button>
+        </Card.Content>
+      </Card>
     </View>
   )
 }
@@ -91,28 +121,20 @@ export default RegisterAuthScreenTwo
 
 const styles = StyleSheet.create({
   container: {
-    display: 'flex',
-    justifyContent: 'center',
-    paddingHorizontal: 24,
-    marginTop: 48,
-    paddingBottom: 0
+    padding: 16
   },
-  input: {
-    marginBottom: 12
+  card: {
+    borderColor: theme.colors.primaryContainer,
+    borderWidth: 1
   },
-  error: {
-    marginTop: 4,
-    marginBottom: 12,
-    color: theme.colors.error
+  title: {
+    marginBottom: 16,
+    marginTop: 4
   },
-  tip: {
-    marginTop: 4,
-    marginBottom: 12,
+  helper: {
+    marginBottom: 4
   },
   button: {
-    marginVertical: 12,
-    height: 48,
-    display: 'flex',
-    justifyContent: 'center',
-  },
+    marginTop: 8
+  }
 })

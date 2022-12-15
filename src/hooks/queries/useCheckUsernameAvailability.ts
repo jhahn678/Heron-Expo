@@ -1,53 +1,75 @@
 import { useState, useEffect } from "react";
 import { axios } from "../../config/axios";
+import * as yup from 'yup'
 
+interface UsernameState {
+    /** If input has been used yet */
+    touched: boolean, 
+    /** If check username query is in progress */
+    loading: boolean, 
+    /** If check username query returns avaiable */
+    available: boolean, 
+    /** If input is valid username */
+    valid: boolean, 
+    /** If query returns error */
+    error: boolean
+}
 
 interface CheckUsernameAvailabilityRes {
     username: string,
     available: boolean
 }
 
-export const useCheckUsernameAvailability = (value: string) => {
+/**
+ * @param username
+ * #### Best order to check result in
+ * - loading
+ * - touched
+ * - error
+ * - valid
+ * - available
+ */ 
+export const useCheckUsernameAvailability = (value: string): UsernameState => {
 
-    const [isAvailable, setIsAvailable] = useState<boolean | null>(null) 
+    const schema = yup.string().trim().min(6).max(36)
+ 
+    const [valid, setValid] = useState(false)
+    const [error, setError] = useState(false)
     const [touched, setTouched] = useState(false)
-    const [isLoading, setIsLoading] = useState(false) 
-    const [isError, setIsError] = useState(false) 
+    const [loading, setLoading] = useState(false)
+    const [available, setAvailable] = useState(false) 
 
     const queryUsername = async (username: string) => {
-        const result = await axios.get<CheckUsernameAvailabilityRes>(`/auth/username?username=${username}`)
-        return result.data;
+        const { data } = await axios.get<CheckUsernameAvailabilityRes>(
+            `/auth/username?username=${username}`);
+        return data;
     }
 
     useEffect(() => {
         const timer = setTimeout(async () => {
-            if(value.length > 5){
-                setTouched(true)
-                setIsLoading(true)
+            if(value.length) setTouched(true)
+            if(schema.isValidSync(value)){
                 try{
+                    setLoading(true)
                     const { available } = await queryUsername(value);
-                    setIsAvailable(available)
-                    setIsLoading(false)
-                    setIsError(!available)
+                    setAvailable(available)
+                    setError(false)
                 }catch(err){
-                    setIsAvailable(null)
-                    setIsLoading(false)
-                    setIsError(true)
+                    setError(true)
+                    setAvailable(false)
+                }finally{
+                    setValid(true)
+                    setLoading(false)
                 }
-            }else if(touched){
-                setIsAvailable(null)
-                setIsError(true)
             }else{
-                setIsAvailable(null)
+                setError(false)
+                setValid(false)
+                setAvailable(false)
             }
         }, 500)
 
         return () => clearTimeout(timer)
     },[value])
 
-    return {
-        isAvailable,
-        isLoading,
-        isError
-    }
+    return { touched, loading, available, valid, error }
 }
