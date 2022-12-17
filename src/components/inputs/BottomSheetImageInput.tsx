@@ -17,12 +17,7 @@ const BottomSheetImageInput = ({ style, contentStyle }: Props) => {
     const { openImagePicker } = useImagePicker()
     const imageStore = useImageStore()
 
-    const handleAddImage = async () => {
-        const res = await openImagePicker()
-        if(res) imageStore.appendImages(res);
-    }
-
-    const handleRemoveImage = (id: string) => () => imageStore.removeImages(id)
+    const handleRemoveImage = (id: string) => () => imageStore.removeImages([id])
 
     return (
         <View style={[styles.container, style]}>
@@ -31,7 +26,7 @@ const BottomSheetImageInput = ({ style, contentStyle }: Props) => {
                 contentContainerStyle={[styles.content, contentStyle]} 
                 showsHorizontalScrollIndicator={false}
             >
-                <Pressable style={styles.pressable} onPress={handleAddImage}>
+                <Pressable style={styles.pressable} onPress={openImagePicker}>
                     <Icon name='plus' size={32} color={theme.colors.onSecondaryContainer}/>
                 </Pressable>
                 { imageStore.images.length > 0 ?

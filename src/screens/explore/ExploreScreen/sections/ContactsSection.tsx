@@ -9,8 +9,6 @@ import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListL
 import PromptAddFriendsCard from '../../../../components/cards/PromptAddFriendsCard'
 import PromptLoginCard from '../../../../components/cards/PromptLoginCard'
 
-const limit = 20;
-
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
 }
@@ -55,6 +53,6 @@ const styles = StyleSheet.create({
         marginBottom: 24
     },
     card: {
-        marginHorizontal: 16
+        marginHorizontal: 20
     }
 })

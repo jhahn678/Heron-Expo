@@ -1,6 +1,5 @@
 import { useState, useEffect } from 'react'
 import { 
-    ImageInfo,
     MediaTypeOptions,
     launchCameraAsync,
     launchImageLibraryAsync,
@@ -9,6 +8,7 @@ import {
     getMediaLibraryPermissionsAsync,
     requestMediaLibraryPermissionsAsync,
 } from 'expo-image-picker'
+import { useImageStore } from '../../store/image/useImageStore'
 
 
 interface UseImagePickerArgs {
@@ -16,15 +16,44 @@ interface UseImagePickerArgs {
 }
 
 interface UseImagePickerRes {
-    openImagePickerAvatar: () => Promise<ImageInfo | null>,
-    openImagePicker: () => Promise<ImageInfo[] | null>,
-    openCamera: () => Promise<ImageInfo | null>
+    /**
+     * Opens device camera 
+     * - Allows up to 5 images to be selected
+     * - Sets images to imageStore
+     */
+    openCamera: () => Promise<void>
+    /**
+     * Opens gallery
+     * - Allows up to 5 images to be selected
+     * - Sets images to imageStore
+     */
+    openImagePicker: () => Promise<void>
+    /**
+     * Opens gallery
+     * - Allows one image to be selected
+     * - Sets image to imageStore
+     * - Allows editing
+     */
+    openImagePickerAvatar: () => Promise<void>
 }
 
+
+/**
+ * #### Hook for interacting with image picker API
+ * @param args *optional* object with onError callback
+ * @returns
+ * - openCamera
+ *   - Opens device camera ~ set image to image store
+ * - openImagePicker
+ *   - Opens gallery ~ allows up to 5 images to be set to image store
+ * - openImagePickerAvatar
+ *   - Opens gallery ~ adds one image to image store - allows resizing
+ */
 export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => {
 
     const [hasCameraPermission, setHasCameraPermission] = useState(false)
     const [hasLibraryPermission, setHasLibraryPermission] = useState(false)
+    const setImages = useImageStore(store => store.appendImages)
     
     useEffect(() => {
         getMediaLibraryPermissionsAsync()
@@ -35,18 +64,17 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
             .catch(err => { console.error(err) })
     }, [])
 
-    const openImagePickerAvatar = async (): Promise<ImageInfo | null> => {
+    const openImagePickerAvatar = async (): Promise<void> => {
 
         //Prompt user for permission if disabled 
         if(!hasLibraryPermission){
             try{
                 const res = await requestMediaLibraryPermissionsAsync()
                 setHasLibraryPermission(res.granted)
-                if(!res.granted) return null;
+                if(!res.granted) return;
             }catch(err){
                 console.error(err);
                 alert('Could not access permissions for device media library')
-                return null;
             }
         }
 
@@ -56,26 +84,23 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
                 allowsMultipleSelection: false,
                 allowsEditing: true
             })
-            if(result.cancelled === true) return null;
-            return result;
+            if(result.assets) setImages(result.assets);
         }catch(err){
             if(args && args.onError) args.onError()
-            return null;
         }
     }
 
-    const openImagePicker = async (): Promise<ImageInfo[] | null> => {
+    const openImagePicker = async (): Promise<void> => {
 
         //Prompt user for permission if disabled 
         if(!hasLibraryPermission){
             try{
                 const res = await requestMediaLibraryPermissionsAsync()
                 setHasLibraryPermission(res.granted)
-                if(!res.granted) return null;
+                if(!res.granted) return;
             }catch(err){
                 console.error(err);
                 alert('Could not access permissions for device media library')
-                return null;
             }
         }
 
@@ -85,28 +110,23 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
                 allowsMultipleSelection: true,
                 selectionLimit: 5
             })
-            if(result.cancelled === true) return null;
-            if(result.hasOwnProperty('selected')) return result.selected;
-            //@ts-ignore if single image is selected
-            return [result]
+            if(result.assets) setImages(result.assets);
         }catch(err){
             if(args && args.onError) args.onError()
-            return null;
         }
     }
 
-    const openCamera = async (): Promise<ImageInfo | null> => {
+    const openCamera = async (): Promise<void> => {
 
         //Prompt user for permission if disabled 
         if(!hasCameraPermission){
             try{
                 const res = await requestCameraPermissionsAsync();
                 requestCameraPermissionsAsync();
-                if(!res.granted) return null;
+                if(!res.granted) return;
             }catch(err){
                 console.error(err);
                 alert('Could not access permissions for device camera')
-                return null;
             }
         }
 
@@ -116,11 +136,9 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
                 allowsMultipleSelection: true,
                 selectionLimit: 5
             })
-            if(result.cancelled === true) return null;
-            return result;
+            if(result.assets) setImages(result.assets);
         }catch(err){
             if(args && args.onError) args.onError()
-            return null
         }
     }
 

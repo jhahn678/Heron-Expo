@@ -50,7 +50,7 @@ const UnlinkAccountModal = ({ navigation }: Props) => {
 
     return (
         <Dialog 
-            theme={{ roundness: 2 }}
+            theme={{ roundness: 1 }}
             visible={success}
             onDismiss={dismiss}
             style={styles.container}

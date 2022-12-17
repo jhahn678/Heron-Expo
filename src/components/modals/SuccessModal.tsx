@@ -17,7 +17,7 @@ const SuccessModal = (props: Props) => {
 
     return (
         <Dialog 
-            theme={{ roundness: 2 }}
+            theme={{ roundness: 1 }}
             visible={props.visible}
             onDismiss={props.dismiss}
             style={styles.container}

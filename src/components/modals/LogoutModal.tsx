@@ -28,7 +28,11 @@ const LogoutModal = ({ visible, dismiss }: Props) => {
     }
 
     return (
-        <Dialog visible={visible} onDismiss={dismiss} style={styles.dialog}>
+        <Dialog 
+            theme={{ roundness: 1 }} 
+            visible={visible} 
+            onDismiss={dismiss} 
+            style={styles.dialog}>
             <Dialog.Title style={styles.title}>
                 Are you sure you want to sign out?
             </Dialog.Title>

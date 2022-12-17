@@ -1,7 +1,7 @@
 import { ScrollView, StyleSheet, View } from 'react-native'
 import React, { useEffect, useState } from 'react'
 import { RootStackScreenProps } from '../../../types/navigation'
-import { UploadResult, useUploadImages } from '../../../hooks/mutations/useUploadImages'
+import { useUploadImages } from '../../../hooks/mutations/useUploadImages'
 import { useImageStore } from '../../../store/image/useImageStore'
 import { useCreateLocation } from '../../../hooks/mutations/useCreateLocation'
 import { useNewLocationStore } from '../../../store/mutations/useNewLocationStore'
@@ -17,6 +17,7 @@ import LocationInput from './sections/LocationInput'
 import PrivacyInput from './sections/PrivacyInput'
 import SelectPrivacyBottomSheet from './sections/SelectPrivacyBottomSheet'
 import WaterbodyInput from '../../../components/inputs/WaterbodyInput'
+import { MediaInput } from '../../../types/Media'
 
 
 const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocationScreen'>) => {
@@ -35,11 +36,11 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
     polygon: store.polygon
   }))
 
-  const uploadImages = useUploadImages()
+  const { uploadToS3 } = useUploadImages()
   const [loading, setLoading] = useState(false)
   const images = useImageStore(store => store.images)
   const clearImages = useImageStore(store => store.clearImages)
-
+  const reauthenticate = useModalStore(store => store.reauthenticate)
   const resetStore = useNewLocationStore(store => store.reset)
   const mapSnapshot = useNewLocationStore(store => store.mapSnapshot)
   const setWaterbody = useNewLocationStore(store => store.setWaterbody)
@@ -52,14 +53,19 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
     let newImages = images.map(({ uri, id }) => ({ uri, id }));
     if(mapSnapshot) newImages.push(mapSnapshot);
     try{
-      let media: UploadResult['uploads'] | undefined;
-      let map_image: UploadResult['uploads'][number] | undefined;
-      if(newImages.length > 0){
-        const res = await uploadImages(newImages)
-        if(!res) return setLoading(false)
-        if(mapSnapshot) map_image = res.uploads.pop()
-        if(res.uploads.length > 0) media = res.uploads;
+      let media: MediaInput[] | undefined;
+      let map_image: MediaInput | undefined;
+      const uploads = await uploadToS3(newImages)
+      // Handle errors
+      if(uploads.length !== newImages.length){
+          if(reauthenticate) return; //if auth fails, cancel save catch
+          if(uploads.length === 0) showErrorModal(true, ErrorType.Upload)
+          if(uploads.length > 0) showErrorModal(true, ErrorType.UploadPartial)
       }
+      //Map snapshot should be the last image in the array
+      if(uploads.length && mapSnapshot) map_image = uploads[uploads.length - 1];
+      //All images excluding the map snapshot
+      if(uploads.length > 1) media = uploads.slice(0, uploads.length - 1);
       await createLocation({ variables: {
         location: { ...location, media, map_image }
       }})
@@ -73,10 +79,7 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
     }
   }
 
-  useEffect(() => {
-    const listener = navigation.addListener('beforeRemove', clearState)
-    return listener;
-  },[])
+  useEffect(() => navigation.addListener('beforeRemove', clearState),[])
   
   return (
     <View style={styles.container}>
@@ -94,7 +97,7 @@ const NewLocationScreen = ({ navigation, route }: RootStackScreenProps<'NewLocat
         <LocationInput navigation={navigation}/>
         <ImageInput/>
         <Button 
-          mode='contained' 
+          mode={'contained'} 
           theme={{ colors: { surfaceDisabled: '#d9d9d9' }}}
           style={styles.button}
           labelStyle={styles.label}

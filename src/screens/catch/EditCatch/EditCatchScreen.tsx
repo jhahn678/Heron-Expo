@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { RootStackScreenProps } from '../../../types/navigation'
 import { useImageStore } from '../../../store/image/useImageStore'
 import { Button } from 'react-native-paper'
-import { UploadResult, useUploadImages } from '../../../hooks/mutations/useUploadImages'
+import { useUploadImages } from '../../../hooks/mutations/useUploadImages'
 import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/conversions/mapErrorTypeToDetails'
@@ -19,6 +19,7 @@ import RigInput from './sections/RigInput'
 import LocationInput from './sections/LocationInput'
 import EditImageInput from '../../../components/inputs/EditImageInput'
 import { useEditCatch } from '../../../hooks/mutations/useEditCatch'
+import { MediaInput } from '../../../types/Media'
 
 
 const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchScreen'>) => {
@@ -44,8 +45,9 @@ const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchS
     const setWaterbody = useEditCatchStore(store => store.setWaterbody)
     const resetStore = useEditCatchStore(store => store.reset)
     const showErrorModal = useModalStore(store => store.setError)
+    const reauthenticate = useModalStore(store => store.reauthenticate)
     const setSnack = useModalStore(store => store.setSnack)
-    const uploadImages = useUploadImages()
+    const { uploadToS3 } = useUploadImages()
     const [loading, setLoading] = useState(false)
     const images = useImageStore(store => store.images)
     const clearImages = useImageStore(store => store.clearImages)
@@ -57,25 +59,30 @@ const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchS
         let newImages = images.map(({ uri, id }) => ({ uri, id }));
         if(mapSnapshot) newImages.push(mapSnapshot);
         try{
-            let media: UploadResult['uploads'] | undefined;
-            let map_image: UploadResult['uploads'][number] | undefined;
-            if(newImages.length > 0){
-                const res = await uploadImages(newImages)
-                if(!res) return setLoading(false)
-                if(mapSnapshot) map_image = res.uploads.pop()
-                if(res.uploads.length > 0) media = res.uploads;
+            let media: MediaInput[] | undefined;
+            let map_image: MediaInput | undefined;
+            const uploads = await uploadToS3(newImages)
+            // Handle errors
+            if(uploads.length !== newImages.length){
+                if(reauthenticate) return; //if auth fails, cancel save catch
+                if(uploads.length === 0) showErrorModal(true, ErrorType.Upload)
+                if(uploads.length > 0) showErrorModal(true, ErrorType.UploadPartial)
             }
+            //Map snapshot should be the last image in the array
+            if(uploads.length && mapSnapshot) map_image = uploads[uploads.length - 1];
+            //All images excluding the map snapshot
+            if(uploads.length > 1) media = uploads.slice(0, uploads.length - 1);
             await saveCatch({ variables: { id, details: {
                 ...editCatch, map_image, media,
                 deleteMedia: deleteMedia.length > 0 ? deleteMedia : undefined,
             }}})
-            setLoading(false)
             navigation.goBack()
             setSnack('Catch updated')
         }catch(err){
             console.error(err)
-            setLoading(false)
             showErrorModal(true, ErrorType.EditCatch)
+        }finally{
+            setLoading(false)
         }
     }
 
@@ -104,10 +111,10 @@ const EditCatchScreen = ({ navigation, route }: RootStackScreenProps<'EditCatchS
             />
             <RigInput currentValue={data?.catch.rig}/>
             <Button 
-            mode='contained' 
-            style={styles.button}
-            labelStyle={styles.label}
-            onPress={handleSave}
+                mode={'contained'} 
+                style={styles.button}
+                labelStyle={styles.label}
+                onPress={handleSave}
             >Save</Button>
         </ScrollView>
         { (queryLoading || loading) && <LoadingBackdrop/> }

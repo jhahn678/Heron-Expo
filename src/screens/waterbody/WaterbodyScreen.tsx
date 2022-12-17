@@ -1,5 +1,5 @@
 import { ExploreStackScreenProps } from '../../types/navigation';
-import { StyleSheet, ScrollView, View, RefreshControl } from 'react-native';
+import { StyleSheet, ScrollView, View, RefreshControl, Dimensions } from 'react-native';
 import { useGetWaterbody } from '../../hooks/queries/useGetWaterbody';
 import ReviewsSection from './sections/ReviewsSection';
 import MapSection from './sections/MapSection';
@@ -24,6 +24,7 @@ import { useAddWaterbodyMediaMutation as useAddWaterbodyMedia } from '../../hook
 import WaterbodyMediaUploadModal from '../../components/modals/WaterbodyMediaUploadModal';
 import SpeciesBottomSheet from '../../components/modals/SpeciesBottomSheet';
 import { useBottomSheetStore } from '../../store/modal/useBottomSheetStore';
+const { height, width } = Dimensions.get('window')
 
 const handleError = (error: ApolloError) => error.message
     .includes('waterbody_review_one_per_user') ? ErrorType.ReviewDuplicate : ErrorType.Default
@@ -42,7 +43,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     const backdrop = useReviewModalStore(store => Boolean(
         store.ratingVisible || store.bodyVisible || store.addImagesVisible
     ))
-
+    const reauthenticate = useModalStore(store => store.reauthenticate)
     const images = useImageStore(store => store.images)
     const resetReview = useReviewModalStore(store => store.reset)
     const clearImages = useImageStore(store => store.clearImages)
@@ -50,7 +51,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     const handleResetReview = () => { resetReview(); clearImages() }
     useEffect(() => navigation.addListener('blur', handleResetReview),[])
 
-    const uploadImages = useUploadImages()
+    const { uploadToS3 } = useUploadImages()
     const [createReview] = useCreateWaterbodyReview()
     const [saveImages] = useAddWaterbodyMedia(id)
 
@@ -61,13 +62,19 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
 
     const handleSubmit = async () => {
         const input = getValues();
-        if(!input) return; setLoading(true)
+        if(!input) return; 
+        setLoading(true);
         if(images.length > 0){
             const pending = images.map(({ uri, id }) => ({ uri, id }))
-            const res = await uploadImages(pending)
-            if(res){
-                await saveImages({ variables: { id, media: res.uploads } })
-                if(res.uploads.length !== pending.length) setShowErrorModal(true, ErrorType.UploadPartial)
+            const uploads = await uploadToS3(pending);
+            if(uploads.length){
+                if(uploads.length !== pending.length){
+                    setShowErrorModal(true, ErrorType.UploadPartial)
+                }
+                await saveImages({ variables: { id, media: uploads } })
+            }else{
+                if(reauthenticate) return;
+                setShowErrorModal(true, ErrorType.Upload)
             }
         } 
         await createReview({ 
@@ -79,7 +86,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     }
   
     return (
-         <View style={{ height: '100%' }}>
+         <View style={{ height }}>
             <ScrollView 
                 style={styles.container} 
                 refreshControl={
@@ -148,8 +155,8 @@ export default WaterbodyScreen
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
-        minHeight: '100%',
+        width,
+        minHeight: height,
     },
     location: {
         fontWeight: '400',

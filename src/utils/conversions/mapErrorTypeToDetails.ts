@@ -21,8 +21,7 @@ export enum ErrorType {
 const ErrorDetails: { [key in ErrorType]: Details } = {
     UPLOAD: {
         title: 'There was an issue 🤔',
-        message: "We ran into a problem uploading your images. The problem \
-        may be the format of the images."
+        message: "We ran into a problem uploading your images."
     },
     UPLOAD_PARTIAL: {
         title: 'There was an issue 🤔',

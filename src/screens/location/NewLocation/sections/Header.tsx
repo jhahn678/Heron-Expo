@@ -5,6 +5,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { IconButton, Surface, Title } from "react-native-paper";
 import { theme } from "../../../../config/theme";
 import globalStyles from "../../../../globalStyles";
+import { useImagePicker } from "../../../../hooks/utils/useImagePicker";
 
 interface Props {
     navigation: RootStackScreenProps<'NewLocationScreen'>['navigation']
@@ -12,7 +13,7 @@ interface Props {
 
 const Header = ({ navigation }: Props) => {
 
-    const navigateCamera = () => navigation.navigate('CameraScreen')
+    const { openCamera } = useImagePicker()
     
     return (
         <Surface style={styles.header}>
@@ -21,7 +22,7 @@ const Header = ({ navigation }: Props) => {
                     <Icon name='arrow-left' size={24} onPress={navigation.goBack}/>
                     <Title style={styles.title}>New Location</Title>
                 </View>
-                <IconButton icon='camera' mode="contained" onPress={navigateCamera}/>
+                <IconButton icon='camera' mode="contained" onPress={openCamera}/>
             </View>
         </Surface>
     );  

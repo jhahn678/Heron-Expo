@@ -1,107 +1,120 @@
-import { axios as API } from "../../config/axios";
-import { Images as PendingImage } from '../../store/image/useImageStore';
+import { axios } from "../../config/axios";
 import { validateMimeType } from '../../utils/validation/validateUploadFiletype';
 import { useAuth } from '../../store/auth/useAuth';
 import { useModalStore } from '../../store/modal/useModalStore';
 import { MediaInput } from "../../types/Media";
 import { AxiosError } from "axios";
-
-export interface UploadResult {
-    uploads: { key: string, url: string }[]
-    errors: Pick<PendingImage, 'id' | 'uri'>[] | null
-}
+import * as SecureStore from 'expo-secure-store'
+import * as Sentry from 'sentry-expo'
+import { SecureStoreKeys } from "../../types/SecureStore";
 
 interface GetSignedUrlRes {
-    /** The number of attempts that were made to get url -- more than one indicated authentication failure */
-    attempts: number
-    cause: 'AUTHENTICATION' | 'UNKNOWN' | null,
     signedUrl: string | null
+    error?: ErrorCause
+    meta?: {
+        mimetype: string
+        issuedAt: Date
+    }
+}
+
+enum ErrorCause {
+    Authentication = "Authentication failed",
+    UploadFailed = "Failed to upload to S3",
+    FiletypeInvalid = "Filetype invalid",
+    FetchUrlFailed = "Failed to obtain upload URL"
 }
 
 export const useUploadImages = () => {    
 
+    const refreshAccessToken = useAuth(store => store.refreshAccessToken)
     const showReauthenticate = useModalStore(state => state.setReauthenticate)
 
-    const { getAccessToken, refreshAccessToken } = useAuth(state => ({
-        getAccessToken: state.getAccessToken,
-        refreshAccessToken: state.refreshAccessToken
-    }))
-   
     /**
-     * #### Multiple attempts and no signed url means there was an error with authentication
+     * Obtains signed upload url from API
      * @param mimetype mimetype from image
-     * @param token access token
-     * @returns Object with number of attempts and signed url if one was made
+     * @returns Object with signedUrl and meta object ~ signedUrl will be null if request fails
      */
-    const getSignedUrl = async (mimetype: string, token: string): Promise<GetSignedUrlRes> => {
+    const getSignedUrl = async (mimetype: string): Promise<GetSignedUrlRes> => {
         try{
-            const res = await API.get<string>(`/upload/signed-url?mimetype=${mimetype}`, {
-                headers: { authorization: `Bearer ${token}` }
-            })
-            return {
-                attempts: 1,
-                cause: null,
-                signedUrl: res.data
+            const accessToken = await SecureStore.getItemAsync(SecureStoreKeys.ACCESS_TOKEN)
+            const res = await axios.get<string>(
+                `/upload/signed-url?mimetype=${mimetype}`,
+                { headers: { "Authorization": `Bearer ${accessToken}` } }
+            );
+            return { 
+                signedUrl: res.data,
+                meta: {
+                    issuedAt: new Date(),
+                    mimetype
+                }
             }
         }catch(error){
             const err = error as AxiosError;
             if(err?.response?.status === 401){
-                const newToken = await refreshAccessToken()
-                if(!newToken) return { attempts: 1, cause: 'AUTHENTICATION', signedUrl: null }
+                const token = await refreshAccessToken();
+                if(!token) return { signedUrl: null, error: ErrorCause.Authentication };
                 try{
-                    const reattempt = await API.get<string>(`/upload/signed-url?mimetype=${mimetype}`, {
-                        headers: { authorization: `Bearer ${newToken}` }
-                    })
-                    return { attempts: 2, cause: null, signedUrl: reattempt.data }
+                    const retry = await axios.get<string>(
+                        `/upload/signed-url?mimetype=${mimetype}`,
+                        { headers: { "Authorization": `Bearer ${token}` } }
+                    );
+                    return { 
+                        signedUrl: retry.data,
+                        meta: {
+                            issuedAt: new Date(),
+                            mimetype
+                        }
+                    }
                 }catch(err){
-                   return { attempts: 2, cause: 'UNKNOWN', signedUrl: null }
+                    return { signedUrl: null, error: ErrorCause.Authentication }
                 }
             }
-            return { attempts: 1, cause: 'UNKNOWN', signedUrl: null }
+            Sentry.Native.captureException(error)
+            return { signedUrl: null, error: ErrorCause.FetchUrlFailed }
         }
     }
 
 
     /** 
-     * ### S3 Upload Function 
-     * #### Handles the S3 portion of image upload only
-     * If authentication is not present or is no longer valid,
-     * it will automatically display the reauthentication prompt, and returns VOID
-     * @TODO need to clean up images if uploads are aborted before completion
+     * Handles the S3 portion of image upload only. If authentication 
+     * is not present or is no longer valid, reauthentication prompt is
+     * displayed
+     * @IMPORTANT Compare return array length vs provided array length to evaluate successful uploads
      * @params Array of images from image picker
-     * @returns Object containing successful uploads and failed uploads
+     * @returns Array of successful uploads
+     * @TODO Handle notification of error types besides authentication
      * */
-    const uploadImages = async (images: Pick<PendingImage, 'id' | 'uri'>[]): Promise<UploadResult | void> => {
+    const uploadToS3 = async (images: { id: string, uri: string }[]): Promise<MediaInput[]> => {
 
-        const errors: Pick<PendingImage, 'id' | 'uri'>[] = [];
-        const uploads: MediaInput[] = [];
-
-        const token = await getAccessToken()
-        if(!token) return showReauthenticate()
+        const uploads: MediaInput[] = []
         
         for(let image of images){
             try{
+                //Get image info from uri
                 const res = await fetch(image.uri)
                 const body = await res.blob()
+                //Validate its mimetype
                 const type = validateMimeType(body.type)
-                if(!type) throw new Error('File type not accepted')
-                const { signedUrl, cause } = await getSignedUrl(type, token)
-                if(!signedUrl && cause === 'AUTHENTICATION'){
-                    showReauthenticate(); return;
-                }
-                if(!signedUrl) throw new Error('Could not obtain upload url')
-                const upload = await fetch(signedUrl, { method: 'PUT', body })
-                if(upload.status !== 200) throw new Error('Image upload failed')
+                if(!type) throw new Error(ErrorCause.FiletypeInvalid)
+                //Obtain Upload Url from server
+                const urlRes = await getSignedUrl(type)
+                if(!urlRes.signedUrl) throw new Error(urlRes.error)
+                //Upload to S3
+                const upload = await fetch(urlRes.signedUrl, { method: 'PUT', body })
+                if(upload.status !== 200) throw new Error(ErrorCause.UploadFailed)
                 const url = upload.url.split('?')[0]
                 const key = url.split('/').pop() as string
                 uploads.push({ url, key })
             }catch(err){
-                console.log(err)
-                errors.push(image)
+                const error = err as Error;
+                if(error?.message === ErrorCause.Authentication){
+                    showReauthenticate(); break;
+                }
             }
         }
-        return { uploads, errors: errors.length > 0 ? errors : null }
+
+        return uploads;
     }
 
-    return uploadImages;
+    return { uploadToS3, getSignedUrl };
 }

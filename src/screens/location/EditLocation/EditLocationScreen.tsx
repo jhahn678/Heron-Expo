@@ -3,7 +3,7 @@ import { ScrollView, StyleSheet, View } from 'react-native'
 import { RootStackScreenProps } from '../../../types/navigation'
 import { useImageStore } from '../../../store/image/useImageStore'
 import { Button, Text } from 'react-native-paper'
-import { UploadResult, useUploadImages } from '../../../hooks/mutations/useUploadImages'
+import { useUploadImages } from '../../../hooks/mutations/useUploadImages'
 import LoadingBackdrop from '../../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { ErrorType } from '../../../utils/conversions/mapErrorTypeToDetails'
@@ -19,6 +19,7 @@ import SelectPrivacyBottomSheet from './sections/SelectPrivacyBottomSheet'
 import LocationInput from './sections/LocationInput'
 import { waterbodyLocationLabel } from '../../../utils/conversions/waterbodyLocationToLabel'
 import { theme } from '../../../config/theme'
+import { MediaInput } from '../../../types/Media'
 
 
 const EditLocationScreen = ({ navigation, route }: RootStackScreenProps<'EditLocationScreen'>) => {
@@ -40,8 +41,9 @@ const EditLocationScreen = ({ navigation, route }: RootStackScreenProps<'EditLoc
     const resetStore = useEditLocationStore(store => store.reset)
     const handleDeleteMedia = useEditLocationStore(store => store.addDeleteMedia)
     const showErrorModal = useModalStore(store => store.setError)
+    const reauthenticate = useModalStore(store => store.reauthenticate)
     const setSnack = useModalStore(store => store.setSnack)
-    const uploadImages = useUploadImages()
+    const { uploadToS3 } = useUploadImages()
     const [loading, setLoading] = useState(false)
     const images = useImageStore(store => store.images)
     const clearImages = useImageStore(store => store.clearImages)
@@ -53,14 +55,19 @@ const EditLocationScreen = ({ navigation, route }: RootStackScreenProps<'EditLoc
         let newImages = images.map(({ uri, id }) => ({ uri, id }));
         if(mapSnapshot) newImages.push(mapSnapshot);
         try{
-            let media: UploadResult['uploads'] | undefined;
-            let map_image: UploadResult['uploads'][number] | undefined;
-            if(newImages.length > 0){
-                const res = await uploadImages(newImages)
-                if(!res) return setLoading(false)
-                if(mapSnapshot) map_image = res.uploads.pop()
-                if(res.uploads.length > 0) media = res.uploads;
+            let media: MediaInput[] | undefined;
+            let map_image: MediaInput | undefined;
+            const uploads = await uploadToS3(newImages)
+            // Handle errors
+            if(uploads.length !== newImages.length){
+                if(reauthenticate) return; //if auth fails, cancel save catch
+                if(uploads.length === 0) showErrorModal(true, ErrorType.Upload)
+                if(uploads.length > 0) showErrorModal(true, ErrorType.UploadPartial)
             }
+            //Map snapshot should be the last image in the array
+            if(uploads.length && mapSnapshot) map_image = uploads[uploads.length - 1];
+            //All images excluding the map snapshot
+            if(uploads.length > 1) media = uploads.slice(0, uploads.length - 1);
             await saveLocation({ variables: { id, update: {
                 ...editLocation, map_image, media,
                 deleteMedia: deleteMedia.length > 0 ? deleteMedia : undefined,
@@ -95,10 +102,10 @@ const EditLocationScreen = ({ navigation, route }: RootStackScreenProps<'EditLoc
                     geom={data?.location.geom}
                 />
                 <Button 
-                mode='contained' 
-                style={styles.button}
-                labelStyle={styles.label}
-                onPress={handleSave}
+                  mode={'contained'} 
+                  style={styles.button}
+                  labelStyle={styles.label}
+                  onPress={handleSave}
                 >Save</Button>
             </ScrollView>
             { (queryLoading || loading) && <LoadingBackdrop/> }

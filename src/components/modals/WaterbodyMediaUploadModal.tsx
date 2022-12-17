@@ -21,7 +21,7 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     const ref = useRef<BottomSheet | null>(null)
     const waterbody = useBottomSheetStore(store => store.waterbody)
 
-    const uploadImages = useUploadImages()
+    const { uploadToS3 } = useUploadImages()
     const images = useImageStore(state => state.images)
     const clearImages = useImageStore(state => state.clearImages)
     const [saveImages] = useAddWaterbodyMediaMutation(waterbody)
@@ -29,6 +29,7 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     const modal = useModalStore(state => ({
         setError: state.setError,
         setSuccess: state.setSuccess,
+        reauthenticate: state.reauthenticate
     }))
 
     useEffect(() => {
@@ -40,11 +41,14 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     
     const handleConfirmUpload = async () => {
         if(!waterbody) return alert('No waterbody selected')
-        const result = await uploadImages(images)
-        if(!result) return setVisible(false) // no result means authentication failed
-        const { uploads } = result;
+
+        const uploads = await uploadToS3(images)
+        if(modal.reauthenticate) return;
+        if(uploads.length === 0){
+            return modal.setError(true, ErrorType.Upload);
+        }
         const { data } = await saveImages({ variables: { 
-            id: waterbody, media: result.uploads 
+            id: waterbody, media: uploads 
         }})
         if(ref.current) ref.current.close()
         if(!data || data.addWaterbodyMedia.length === 0){
@@ -77,7 +81,7 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
                     mode="contained" 
                     style={styles.button} 
                     disabled={images.length === 0}
-                    theme={{ roundness: 2 }}
+                    theme={{ roundness: 1 }}
                     onPress={handleConfirmUpload}
                 >Save</Button>
             </View>

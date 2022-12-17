@@ -2,7 +2,6 @@ import React from "react";
 import { StyleProp, ViewStyle } from "react-native";
 import { Dialog, Button, Text } from "react-native-paper";
 import { useImagePicker } from "../../hooks/utils/useImagePicker";
-import { useImageStore } from "../../store/image/useImageStore";
 
 interface Props {
     visible: boolean
@@ -13,22 +12,17 @@ interface Props {
 const EditProfilePictureDialog = ({ visible, setVisible, style }: Props) => {
 
     const { openImagePickerAvatar, openCamera } = useImagePicker()
-    const setImage = useImageStore(store => store.setImages)
 
-    const handleCamera = async () => {
-        const image = await openCamera()
-        if(image) setImage(image)
-        setVisible(false);
-    }
+    const handleCamera = () => { setVisible(false); openCamera() }
 
-    const handleGallery = async () => {
-        const image = await openImagePickerAvatar()
-        if(image) setImage(image)
-        setVisible(false);
-    }
+    const handleGallery = () => { setVisible(false); openImagePickerAvatar() }
 
     return (
-        <Dialog visible={visible} onDismiss={() => setVisible(false)} style={style}>
+        <Dialog 
+            theme={{ roundness: 1 }} 
+            visible={visible} 
+            onDismiss={() => setVisible(false)} 
+            style={style}>
             <Dialog.Title>Choose Profile Picture</Dialog.Title>
             <Dialog.Content>
                 <Text>Take a picture or choose one from your photo library.</Text>

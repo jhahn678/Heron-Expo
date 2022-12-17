@@ -17,13 +17,7 @@ const ImageInput = ({ showLabel=true, contentStyle }: Props) => {
     const { openImagePicker } = useImagePicker()
     const imageStore = useImageStore()
 
-    const handleAddImage = async () => {
-        const res = await openImagePicker()
-        if(!res) return;
-        imageStore.appendImages(res);
-    }
-
-    const handleRemoveImage = (id: string) => () => imageStore.removeImages(id)
+    const handleRemoveImage = (id: string) => () => imageStore.removeImages([id])
 
     return (
         <View>
@@ -33,7 +27,7 @@ const ImageInput = ({ showLabel=true, contentStyle }: Props) => {
                 contentContainerStyle={[styles.content, contentStyle]} 
                 showsHorizontalScrollIndicator={false}
             >
-                <Pressable style={styles.pressable} onPress={handleAddImage}>
+                <Pressable style={styles.pressable} onPress={openImagePicker}>
                     <Icon name='plus' size={32} color={theme.colors.onSecondaryContainer}/>
                 </Pressable>
                 { imageStore.images.length > 0 ?
@@ -45,8 +39,7 @@ const ImageInput = ({ showLabel=true, contentStyle }: Props) => {
                                 icon='close' 
                                 mode="contained" 
                                 style={styles.remove} 
-                                onPress={handleRemoveImage(id)}
-                            />
+                                onPress={handleRemoveImage(id)}/>
                         </View>
                     )) :
                     new Array(2).fill(null).map((_,x) => <View key={x} style={styles.image}/>)

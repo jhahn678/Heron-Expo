@@ -22,12 +22,7 @@ const EditImageInput = ({ currentValues=[], onRemove }: Props) => {
     const { openImagePicker } = useImagePicker()
     const imageStore = useImageStore()
 
-    const handleAddImage = async () => {
-        const res = await openImagePicker()
-        if(res) imageStore.appendImages(res);
-    }
-
-    const handleRemovePending = (id: string) => () => imageStore.removeImages(id)
+    const handleRemovePending = (id: string) => () => imageStore.removeImages([id])
 
     const handleRemoveSaved = (id: number) => () => {
         setImages(state => state.filter(x => x.id !== id))
@@ -42,7 +37,7 @@ const EditImageInput = ({ currentValues=[], onRemove }: Props) => {
                 contentContainerStyle={[styles.content]} 
                 showsHorizontalScrollIndicator={false}
             >
-                <Pressable style={styles.pressable} onPress={handleAddImage}>
+                <Pressable style={styles.pressable} onPress={openImagePicker}>
                     <Icon name='plus' size={32} color={theme.colors.onSecondaryContainer}/>
                 </Pressable>
                 { (imageStore.images.length === 0 && images.length === 0) && 
@@ -57,8 +52,7 @@ const EditImageInput = ({ currentValues=[], onRemove }: Props) => {
                                 icon='close' 
                                 mode="contained" 
                                 style={styles.remove} 
-                                onPress={handleRemovePending(id)}
-                            />
+                                onPress={handleRemovePending(id)}/>
                         </View>
                     ))
                 }
