@@ -31,19 +31,22 @@ const HomeAuthScreen = ({ navigation, route }: RootStackScreenProps<'HomeAuthScr
       }
       <Image source={DEFAULT_IMAGE} style={styles.image}/>
       <View style={styles.buttonContainer}>
-        <GoogleLoginButton navigation={navigation}/>
+        <GoogleLoginButton navigation={navigation} style={styles.button}/>
         {/* <FacebookLoginButton navigation={navigation}/> */}
-        <AppleLoginButton navigation={navigation}/>
-        <Button onPress={handleLoginScreen}
-          theme={{ roundness: 2 }}
-          elevation={5}
-          mode='contained'
-          icon='email' 
+        <AppleLoginButton navigation={navigation} style={styles.button}/>
+        <Button 
+          icon={'email'} 
+          mode={'contained'}
           style={styles.button} 
+          theme={{ roundness: 1 }}
+          onPress={handleLoginScreen}
         >Sign in with Password</Button>
-        <Text onPress={handleRegisterScreen}
-          style={styles.caption}
-        >First time here? Create an account</Text>
+        <Text 
+          onPress={handleRegisterScreen}
+          variant={'titleSmall'} 
+          style={styles.caption}>
+          First time here? Create an account
+        </Text>
       </View>
     </View>
   )
@@ -53,7 +56,7 @@ export default HomeAuthScreen
 
 const styles = StyleSheet.create({
   container: {
-    height: '100%',
+    height,
     justifyContent: 'space-between',
     padding: 16
   },

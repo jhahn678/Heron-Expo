@@ -1,5 +1,5 @@
 import React from "react";
-import { Dimensions, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
+import { Dimensions, GestureResponderEvent, Pressable, StyleProp, StyleSheet, Text, View, ViewStyle } from "react-native";
 import { ActivityIndicator } from "react-native-paper";
 import { theme } from "../../config/theme";
 
@@ -10,15 +10,18 @@ interface Props {
 }
 
 const LoadingBackdrop = ({ loaderStyle }: Props) => {
-  return (
-    <View style={styles.backdrop}>
-        <ActivityIndicator 
-            size={64} 
-            style={[styles.loading, loaderStyle]} 
-            color={theme.colors.primaryContainer}
-        />
-    </View>
-  );
+
+    const handlePress = (event: GestureResponderEvent) => event.stopPropagation()
+
+    return (
+        <Pressable style={styles.backdrop} onPress={handlePress}>
+            <ActivityIndicator 
+                size={64} 
+                style={[styles.loading, loaderStyle]} 
+                color={theme.colors.primaryContainer}
+            />
+        </Pressable>
+    );
 };
 
 export default LoadingBackdrop;

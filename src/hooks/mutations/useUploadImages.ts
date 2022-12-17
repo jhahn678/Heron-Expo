@@ -7,6 +7,7 @@ import { AxiosError } from "axios";
 import * as SecureStore from 'expo-secure-store'
 import * as Sentry from 'sentry-expo'
 import { SecureStoreKeys } from "../../types/SecureStore";
+import { RestError } from "../../types/errors";
 
 interface GetSignedUrlRes {
     signedUrl: string | null
@@ -49,8 +50,8 @@ export const useUploadImages = () => {
                 }
             }
         }catch(error){
-            const err = error as AxiosError;
-            if(err?.response?.status === 401){
+            const err = error as AxiosError<RestError>;
+            if(err?.response?.data?.code === "ACCESS_TOKEN_EXPIRED"){
                 const token = await refreshAccessToken();
                 if(!token) return { signedUrl: null, error: ErrorCause.Authentication };
                 try{

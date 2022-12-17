@@ -11,7 +11,7 @@ import LocationsListEmpty from "../../components/lists/shared/LocationsListEmpty
 import { theme } from "../../config/theme";
 import { MediaType } from "../../types/Media";
 import { useBottomSheetStore } from "../../store/modal/useBottomSheetStore";
-import WaterbodyMediaUploadModal from "../../components/modals/WaterbodyMediaUploadModal";
+import WaterbodyMediaUploadModal from "../../components/modals/WaterbodyMediaUploadBottomSheet";
 
 const limit = 24;
 const { width } = Dimensions.get('screen')  

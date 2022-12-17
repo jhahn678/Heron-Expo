@@ -49,11 +49,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     image: {
-        flex: 1
+        flex: 2
     },
     text: {
-        flex: 2,
-        marginRight: 16
+        flex: 3,
+        marginRight: 24
     },
     button: {
         marginTop: 24,

@@ -1,16 +1,17 @@
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useEffect, useState } from 'react';
-import { Dimensions, StyleSheet } from 'react-native'
+import { Dimensions, StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import { useAppleLogin } from '../../hooks/mutations/useAppleLogin';
 import { useAuth } from '../../store/auth/useAuth';
 import { RootStackParams, RootStackScreenProps } from '../../types/navigation';
 const { width } = Dimensions.get('screen')
 
 interface Props {
+  style?: StyleProp<ViewStyle>
   navigation: RootStackScreenProps<keyof RootStackParams>['navigation']
 }
 
-const AppleLoginButton = ({ navigation }:Props) => {
+const AppleLoginButton = ({ navigation, style }:Props) => {
 
   const [available, setAvailable] = useState(false)
   const setUser = useAuth(store => store.setUser)
@@ -43,11 +44,11 @@ const AppleLoginButton = ({ navigation }:Props) => {
   
   return (
     <AppleAuthentication.AppleAuthenticationButton
-      buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
-      buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
-      cornerRadius={10}
-      style={styles.container}
+      cornerRadius={4}
       onPress={handleSignIn}
+      style={[styles.container, style]}
+      buttonStyle={AppleAuthentication.AppleAuthenticationButtonStyle.BLACK}
+      buttonType={AppleAuthentication.AppleAuthenticationButtonType.CONTINUE}
     />
   );
 }
@@ -56,8 +57,6 @@ export default AppleLoginButton
 
 const styles = StyleSheet.create({
     container: {
-        marginTop: 8,
-        width: width - 48,
-        height: 48,
+        height: 42,
     }
 })

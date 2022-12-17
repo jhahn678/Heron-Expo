@@ -5,7 +5,6 @@ interface GoogleLoginBody {
     accessToken: string
 }
 
-
 export const useGoogleLogin = () => {
     return async (args: GoogleLoginBody): Promise<SocialLoginRes | void> => {
         try{

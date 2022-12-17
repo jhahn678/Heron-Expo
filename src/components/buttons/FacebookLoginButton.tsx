@@ -1,5 +1,5 @@
 import React, { useEffect } from 'react'
-import { Dimensions, StyleSheet } from 'react-native'
+import { StyleProp, ViewStyle } from 'react-native'
 import { Button } from 'react-native-paper'
 import * as WebBrowser from 'expo-web-browser'
 import * as Facebook from 'expo-auth-session/providers/facebook'
@@ -8,15 +8,15 @@ import { RootStackParams, RootStackScreenProps } from '../../types/navigation'
 import { ResponseType } from 'expo-auth-session'
 import { useAuth } from '../../store/auth/useAuth'
 import { useFacebookLogin } from '../../hooks/mutations/useFacebookLogin'
-const { width } = Dimensions.get('screen')
 
 WebBrowser.maybeCompleteAuthSession();
 
 interface Props {
+  style?: StyleProp<ViewStyle>
   navigation: RootStackScreenProps<keyof RootStackParams>['navigation']
 }
 
-const FacebookLoginButton = ({ navigation }: Props) => {
+const FacebookLoginButton = ({ navigation, style }: Props) => {
 
   const [request, response, promptAsync] = Facebook.useAuthRequest({
     clientId: FACEBOOK_CLIENT_ID,
@@ -41,11 +41,12 @@ const FacebookLoginButton = ({ navigation }: Props) => {
 
 
   return (
-    <Button disabled={!request}
-      icon='facebook'
-      mode='contained-tonal'
-      theme={{ roundness: 2 }}
-      style={styles.container}
+    <Button 
+      disabled={!request}
+      icon={'facebook'}
+      mode={'contained-tonal'}
+      theme={{ roundness: 1 }}
+      style={style}
       onPress={() => promptAsync()}
     >
       Continue with Facebook
@@ -54,13 +55,3 @@ const FacebookLoginButton = ({ navigation }: Props) => {
 }
 
 export default FacebookLoginButton
-
-const styles = StyleSheet.create({
-  container: {
-    marginTop: 8,
-    width: width - 48,
-    height: 48,
-    display: 'flex',
-    justifyContent: 'center',
-  }
-})

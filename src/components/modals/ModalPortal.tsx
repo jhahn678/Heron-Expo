@@ -7,8 +7,10 @@ import ReauthenticateModal from "./ReauthenticateModal";
 import { useModalStore } from '../../store/modal/useModalStore'
 import LogoutModal from "./LogoutModal";
 import ManageContactModal from "./ManageContactModal";
-import { View, StyleSheet } from "react-native";
+import { View, StyleSheet, Dimensions } from "react-native";
 import ConfirmDeleteModal from "./ConfirmDeleteModal";
+import UnlinkAccountModal from "./unlink-account/UnlinkAccountModal";
+const { height, width } = Dimensions.get('window')
 
 const ModalPortal = () => {
     
@@ -42,13 +44,11 @@ const ModalPortal = () => {
                 dismiss={dismiss} 
                 onConfirm={onConfirmDelete}
                 message={confirmDeleteMessage}
-                visible={confirmDeleteVisible} 
-            />
+                visible={confirmDeleteVisible}/>
             <Snackbar 
                 visible={snack.visible} 
                 onDismiss={snack.dismiss} 
-                action={{ label: 'close', onPress: snack.dismiss }}
-            >
+                action={{ label: 'close', onPress: snack.dismiss }}>
                 {snack.text}
             </Snackbar>
             { loadingVisible && 
@@ -64,10 +64,10 @@ export default ModalPortal;
 
 const styles = StyleSheet.create({
     backdrop: {
-        position: 'absolute',
+        width,
+        height,
         zIndex: 1000,
-        height: '100%',
-        width: '100%',
+        position: 'absolute',
         alignItems: 'center',
         justifyContent: 'center',
         backgroundColor: 'rgba(0,0,0,.2)'

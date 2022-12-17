@@ -16,7 +16,7 @@ export type RootStackParams = {
     RegisterAuthScreenTwo: undefined
     RegisterAuthScreenThree: undefined
     UsernameAuthScreen: undefined
-    PasswordScreen: undefined
+    SavePasswordScreen: undefined
     ForgotPasswordScreen: undefined
     ResetPasswordScreen: { token: string }
     ChangeEmailScreen: undefined

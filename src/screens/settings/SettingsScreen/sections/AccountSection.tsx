@@ -1,18 +1,17 @@
-import React from "react";
-import { ActivityIndicator, Divider, List } from 'react-native-paper'
-import { StyleProp, StyleSheet, TextStyle } from "react-native";
-import { AccountRes, useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
+import React, { useReducer } from "react";
+import { ActivityIndicator, List } from 'react-native-paper'
+import { StyleSheet, Platform } from "react-native";
+import { useGetMyAccount } from "../../../../hooks/queries/useGetMyAccount";
 import { useModalStore } from "../../../../store/modal/useModalStore";
 import { LinkedAccount } from "../../../../types/User";
-import { useDeleteAccount } from "../../../../hooks/mutations/useDeleteAccount";
 import { RootStackScreenProps } from "../../../../types/navigation";
-import { color } from "react-native-reanimated";
 import { theme } from "../../../../config/theme";
-
-const linkedStyle: StyleProp<TextStyle> = {
-    color: theme.colors.tertiary,
-    fontWeight: '700'
-}
+import LoadingBackdrop from "../../../../components/loaders/LoadingBackdrop";
+import UnlinkAccountModal from "../../../../components/modals/unlink-account/UnlinkAccountModal";
+import { reducer as unlinkAccountReducer, initialState } from "../../../../components/modals/unlink-account/UnlinkAccountModal.reducer";
+import { useLinkGoogleAccount } from "../../../../hooks/mutations/useLinkGoogleAccount";
+import { useLinkFacebookAccount } from "../../../../hooks/mutations/useLinkFacebookAccount";
+import { useLinkAppleAccount } from "../../../../hooks/mutations/useLinkAppleAccount";
 
 interface Props {
     navigation: RootStackScreenProps<'SettingsScreen'>['navigation']
@@ -20,43 +19,45 @@ interface Props {
 
 const AccountSection = ({ navigation }: Props) => {
 
-    const { data, refetch } = useGetMyAccount()
-    const setSnack = useModalStore(store => store.setSnack)
+    const { data, isLoading, refetch } = useGetMyAccount()
     const setLogout = useModalStore(store => store.setLogout)
-    const setUnlink = useModalStore(store => store.setUnlinkAccount)
     const handlePressEmail = () => navigation.navigate("ChangeEmailScreen")
     const handlePressDeactivate = () => navigation.navigate("DeactivateAccountScreen")
     const handleChangePassword = () => navigation.navigate("ChangePasswordScreen")
     const handleLogout = () => setLogout({ visible: true, onLogoutGoBack: true })
 
-    const handleAuthProviderPress = (type: LinkedAccount) => () => {
-        if(!data) return setSnack("Account unavailable");
-        if(type === LinkedAccount.Apple){
+    const { promptGoogleLogin } = useLinkGoogleAccount({ onSuccess: refetch })
+    const { promptFacebookLogin } = useLinkFacebookAccount({ onSuccess: refetch })
+    const { promptAppleLogin } = useLinkAppleAccount({ onSuccess: refetch })
+    const [unlinkAccountState, unlinkAccountDispatch] = useReducer(unlinkAccountReducer, initialState)
 
-        }else if(type === LinkedAccount.Facebook){
-            
-        }else if(type === LinkedAccount.Google){
-
-        }
-        setUnlink({ visible: true, callback: refetch, type })
+    const handleUnlinkAccount = (accountType: LinkedAccount) => {
+        unlinkAccountDispatch({ 
+            type: "SHOW", 
+            values: { 
+                accountType, 
+                refetchCallback: refetch 
+            }
+        })
     }
 
-    const handleUnlinkAccount = () => {
-        if(data?.apple_id || data?.facebook_id || data?.google_id){
-            setUnlink({ 
-                visible: true, 
-                callback: refetch,
-                type: data?.apple_id ?
-                    LinkedAccount.Apple : 
-                    data.facebook_id ? 
-                    LinkedAccount.Facebook :
-                    LinkedAccount.Google,  
-            })
-        }
-    }
+    //Test create account then remove -- should prompt for password and save properly
+    //Test flow with apple
+    //Test flow with facebook
 
+    const handleLinkedAccount = (accountType: LinkedAccount) => () => {
+        if(accountType === LinkedAccount.Apple){
+            if(!data?.apple_id) return promptAppleLogin();
+        }else if(accountType === LinkedAccount.Facebook){
+            if(!data?.facebook_id) return promptFacebookLogin();
+        }else if(accountType === LinkedAccount.Google){
+            if(!data?.google_id) return promptGoogleLogin();
+        }
+        handleUnlinkAccount(accountType)
+    }
 
     return (
+        <>
         <List.Section>
             <List.Subheader style={styles.title}>Account</List.Subheader>
             <List.Item 
@@ -64,28 +65,28 @@ const AccountSection = ({ navigation }: Props) => {
                 description={data ? 
                     (data.email || 'No email registered') : 
                     <ActivityIndicator size={'small'}/>}
-                descriptionStyle={data?.email ? linkedStyle : undefined}
+                descriptionStyle={data?.email ? styles.linked : undefined}
                 right={() => <List.Icon icon={data?.email ? 'email-edit' : 'email-plus'}/>}
                 onPress={handlePressEmail}/>
             <List.Item 
                 title={"Google"}
                 description={data?.google_id ? "Connected" : "Connect to Google"} 
-                descriptionStyle={data?.google_id ? linkedStyle : undefined}
+                descriptionStyle={data?.google_id ? styles.linked : undefined}
                 right={() => <List.Icon icon={"google"}/>}
-                onPress={handleUnlinkAccount}/>
+                onPress={handleLinkedAccount(LinkedAccount.Google)}/>
             <List.Item 
                 title={"Facebook"}
                 description={data?.facebook_id ? "Connected" : "Connect to Facebook"} 
-                descriptionStyle={data?.facebook_id ? linkedStyle : undefined}
+                descriptionStyle={data?.facebook_id ? styles.linked : undefined}
                 right={() => <List.Icon icon={"facebook"}/>}
-                onPress={handleUnlinkAccount}/>
-            <List.Item 
-                title={"Apple"}
-                description={data?.apple_id ? "Connected" : "Connect to Apple"} 
-                descriptionStyle={data?.apple_id ? linkedStyle : undefined}
-                right={() => <List.Icon icon={"apple"}/>}
-                onPress={handleUnlinkAccount}/>
-            <Divider/>
+                onPress={handleLinkedAccount(LinkedAccount.Facebook)}/>
+            { Platform.OS === "ios" && 
+                <List.Item 
+                    title={"Apple"}
+                    description={data?.apple_id ? "Connected" : "Connect to Apple"} 
+                    descriptionStyle={data?.apple_id ? styles.linked : undefined}
+                    right={() => <List.Icon icon={"apple"}/>}
+                    onPress={handleLinkedAccount(LinkedAccount.Apple)}/> }
             <List.Item 
                 title={"Change my password"}
                 right={() => <List.Icon icon={"key"}/>}
@@ -99,6 +100,13 @@ const AccountSection = ({ navigation }: Props) => {
                 onPress={handleLogout} 
                 right={() => <List.Icon icon='logout'/>}/>
         </List.Section>
+        { isLoading && <LoadingBackdrop loaderStyle={styles.loader}/>}
+        { unlinkAccountState.visible && 
+            <UnlinkAccountModal 
+                navigation={navigation} 
+                state={unlinkAccountState} 
+                dispatch={unlinkAccountDispatch}/>}
+        </>
     );
 };
 
@@ -112,6 +120,14 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 22
+    },
+    loader: {
+        position: 'absolute',
+        top: 150
+    },
+    linked: {
+        color: theme.colors.tertiary,
+        fontWeight: '700'
     }
 });
 

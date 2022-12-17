@@ -1,8 +1,7 @@
-import * as Linking from 'expo-linking';
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import { useAuth } from "../store/auth/useAuth";
 import { RootStackParams } from "../types/navigation";
-import { LinkingOptions, NavigationContainer } from "@react-navigation/native";
+import { NavigationContainer } from "@react-navigation/native";
 import { navigationRef } from "./navigationRef";
 import MainTabs from "./BottomTabs";
 import CameraScreen from "../screens/camera/CameraScreen";
@@ -31,7 +30,6 @@ import EditCatchScreen from "../screens/catch/EditCatch/EditCatchScreen";
 import EditLocationScreen from "../screens/location/EditLocation/EditLocationScreen";
 import EditReviewScreen from "../screens/waterbody/EditReviewScreen/EditReviewScreen";
 import UsernameAuthScreen from '../screens/auth/UsernameAuthScreen';
-import PasswordScreen from '../screens/auth/PasswordScreen';
 import ReportProblemScreen from '../screens/settings/ReportProblemScreen';
 import ForgotPasswordScreen from '../screens/auth/ForgotPasswordScreen';
 import ResetPasswordScreen from '../screens/auth/ResetPasswordScreen';
@@ -39,6 +37,7 @@ import { useDeepLink } from '../hooks/utils/useDeepLink';
 import DeactivateAccountScreen from '../screens/settings/DeactivateAccountScreen';
 import ChangeEmailScreen from '../screens/settings/ChangeEmailScreen';
 import ChangePasswordScreen from '../screens/settings/ChangePasswordScreen';
+import SavePasswordScreen from '../screens/auth/SavePasswordScreen';
 
 
 const RootStack = (): JSX.Element => {
@@ -95,8 +94,8 @@ const RootStack = (): JSX.Element => {
                     <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
                 </Stack.Group>
                 <Stack.Group screenOptions={{ headerShown: true, headerBackTitleVisible: false }}>
-                    <Stack.Screen name='PasswordScreen' component={PasswordScreen} 
-                        options={{ headerTitle: 'Sign In' }}/>
+                    <Stack.Screen name='SavePasswordScreen' component={SavePasswordScreen} 
+                        options={{ headerTitle: 'Create Password' }}/>
                     <Stack.Screen name='ReportProblemScreen' component={ReportProblemScreen} 
                         options={{ headerTitle: 'Report a Problem' }}/>
                     <Stack.Screen name="DeactivateAccountScreen" component={DeactivateAccountScreen}

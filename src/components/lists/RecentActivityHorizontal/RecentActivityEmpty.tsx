@@ -13,7 +13,7 @@ const RecentActivityEmpty = (props: Props) => {
         <Card style={[styles.card, props.containerStyle]}>
             <Card.Content style={styles.content}>
                 <Text style={styles.text} variant={"titleMedium"}>
-                    It looks like your friends have not logged any catches yet..
+                    It looks like your friends haven't logged any catches yet..
                 </Text>
                 <View style={styles.image}>
                     <FishermanFishingFromChair/>
@@ -42,11 +42,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     image: {
-        flex: 1
+        flex: 2
     },
     text: {
-        flex: 2,
-        marginRight: 16
+        flex: 3,
+        marginRight: 24
     },
     button: {
         marginTop: 24,

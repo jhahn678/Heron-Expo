@@ -53,7 +53,8 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
 
     const [hasCameraPermission, setHasCameraPermission] = useState(false)
     const [hasLibraryPermission, setHasLibraryPermission] = useState(false)
-    const setImages = useImageStore(store => store.appendImages)
+    const appendImages = useImageStore(store => store.appendImages)
+    const setImageAvatar = useImageStore(store => store.setImages)
     
     useEffect(() => {
         getMediaLibraryPermissionsAsync()
@@ -84,7 +85,7 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
                 allowsMultipleSelection: false,
                 allowsEditing: true
             })
-            if(result.assets) setImages(result.assets);
+            if(result.assets) setImageAvatar(result.assets);
         }catch(err){
             if(args && args.onError) args.onError()
         }
@@ -110,8 +111,9 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
                 allowsMultipleSelection: true,
                 selectionLimit: 5
             })
-            if(result.assets) setImages(result.assets);
+            if(result.assets) appendImages(result.assets);
         }catch(err){
+            console.log(err)
             if(args && args.onError) args.onError()
         }
     }
@@ -136,7 +138,7 @@ export const useImagePicker = (args?: UseImagePickerArgs): UseImagePickerRes => 
                 allowsMultipleSelection: true,
                 selectionLimit: 5
             })
-            if(result.assets) setImages(result.assets);
+            if(result.assets) appendImages(result.assets);
         }catch(err){
             if(args && args.onError) args.onError()
         }

@@ -23,7 +23,7 @@
     "ios": {
       "supportsTablet": false,
       "bundleIdentifier": "com.jhahn678.heron",
-      "buildNumber": "1.1.0",
+      "buildNumber": "1.1.1",
       "infoPlist": {
         "NSLocationWhenInUseUsageDescription": "Heron uses your location to find places to fish near you",
         "NsCameraUsageDescription": "Heron would like camera access so you can take pictures of catches and locations", 

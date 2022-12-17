@@ -1,8 +1,9 @@
 import React from "react";
-import { StyleSheet, View } from "react-native";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { IconButton, Text } from 'react-native-paper'
 import globalStyles from "../../../../globalStyles";
 import { RootStackScreenProps } from "../../../../types/navigation";
+const { width } = Dimensions.get('screen')
 
 interface Props {
     navigation: RootStackScreenProps<'SettingsScreen'>['navigation']
@@ -24,7 +25,7 @@ export default HeaderSection;
 
 const styles = StyleSheet.create({
     container: {
-        width: '100%',
+        width,
         height: 90,
         justifyContent: 'flex-end'
     },

@@ -1,6 +1,6 @@
 import React from "react";
 import { Pressable, StyleSheet, View, Image, ViewStyle, StyleProp } from "react-native";
-import { IconButton, Text } from 'react-native-paper'
+import { IconButton } from 'react-native-paper'
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { theme } from "../../config/theme";
 import { useImagePicker } from "../../hooks/utils/useImagePicker";
@@ -29,20 +29,22 @@ const BottomSheetImageInput = ({ style, contentStyle }: Props) => {
                 <Pressable style={styles.pressable} onPress={openImagePicker}>
                     <Icon name='plus' size={32} color={theme.colors.onSecondaryContainer}/>
                 </Pressable>
-                { imageStore.images.length > 0 ?
-                    imageStore.images.map(({ id, uri }) => (
-                        <View key={id}>
-                            <Image source={{ uri }} style={styles.image}/>
-                            <IconButton 
-                                size={12} 
-                                icon='close' 
-                                mode="contained" 
-                                style={styles.remove} 
-                                onPress={handleRemoveImage(id)}
-                            />
-                        </View>
-                    )) :
-                    new Array(2).fill(null).map((_,x) => <View key={x} style={styles.image}/>)
+                { imageStore.images.map(({ id, uri }) => (
+                    <View key={id}>
+                        <Image source={{ uri }} style={styles.image}/>
+                        <IconButton 
+                            size={12} 
+                            icon={'close'} 
+                            mode={"contained"} 
+                            style={styles.remove} 
+                            onPress={handleRemoveImage(id)}
+                        />
+                    </View>
+                ))}
+                { imageStore.images.length < 3 && 
+                    new Array(3 - imageStore.images.length)
+                        .fill(null)
+                        .map((_,x) => <View key={x} style={styles.image}/>)
                 }
             </BottomSheetScrollView>
         </View>
@@ -85,12 +87,6 @@ const styles = StyleSheet.create({
         borderRadius: 6,
         borderWidth: 1,
         borderColor: theme.colors.onSecondaryContainer,
-    },
-    button: {
-        position: 'absolute',
-        right: 12,
-        bottom: -12,
-        zIndex: 100
     },
     remove: {
         position: 'absolute',

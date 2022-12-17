@@ -1,26 +1,26 @@
-import { StyleSheet, Dimensions } from 'react-native'
+import { StyleProp, ViewStyle } from 'react-native'
 import React, { useEffect } from 'react'
 import { Button } from 'react-native-paper'
 import * as WebBrowser from 'expo-web-browser'
 import * as Google from 'expo-auth-session/providers/google'
+import { useGoogleLogin } from '../../hooks/mutations/useGoogleLogin'
+import { useAuth } from '../../store/auth/useAuth'
+import { RootStackParams, RootStackScreenProps } from '../../types/navigation'
 import { 
   GOOGLE_ANDROID_CLIENT_ID, 
   GOOGLE_EXPO_CLIENT_ID, 
   GOOGLE_IOS_CLIENT_ID, 
   GOOGLE_WEB_CLIENT_ID
-} from '@env'
-import { ResponseType } from 'expo-auth-session'
-import { useGoogleLogin } from '../../hooks/mutations/useGoogleLogin'
-import { useAuth } from '../../store/auth/useAuth'
-import { RootStackParams, RootStackScreenProps } from '../../types/navigation'
-const { width } = Dimensions.get('screen')
+} from "@env"
+
 WebBrowser.maybeCompleteAuthSession();
 
 interface Props {
+  style?: StyleProp<ViewStyle>
   navigation: RootStackScreenProps<keyof RootStackParams>['navigation']
 }
 
-const GoogleLoginButton = ({ navigation }: Props) => {
+const GoogleLoginButton = ({ navigation, style }: Props) => {
 
   const signInUser = useGoogleLogin()
   const setUser = useAuth(store => store.setUser)
@@ -46,27 +46,16 @@ const GoogleLoginButton = ({ navigation }: Props) => {
 
   return (
     <Button 
-      icon='google'
+      icon={'google'}
       disabled={!request}
       onPress={() => promptAsync()}
-      theme={{ roundness: 2 }}
-      style={styles.container}
-      mode="contained-tonal"
-      elevation={0}
+      theme={{ roundness: 1 }}
+      style={style}
+      mode={"contained-tonal"}
     >
-        Continue with Google
+      Continue with Google
     </Button>
   )
 }
 
 export default GoogleLoginButton
-
-const styles = StyleSheet.create({
-    container: {
-        marginTop: 8,
-        width: width - 48,
-        height: 48,
-        display: 'flex',
-        justifyContent: 'center',
-    }
-})

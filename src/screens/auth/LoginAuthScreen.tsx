@@ -1,15 +1,15 @@
 import { Dimensions, StyleSheet, View } from 'react-native'
-import React, { useState } from 'react'
+import { useState } from 'react'
 import { RootStackScreenProps } from '../../types/navigation'
-import { TextInput, Text, Button } from 'react-native-paper'
+import { TextInput, Text, Button, Card } from 'react-native-paper'
 import AppleLoginButton from '../../components/buttons/AppleLoginButton'
 import GoogleLoginButton from '../../components/buttons/GoogleLoginButton'
 import FacebookLoginButton from '../../components/buttons/FacebookLoginButton'
+import LoadingBackdrop from '../../components/loaders/LoadingBackdrop'
 import { useLogin } from '../../hooks/mutations/useLogin'
 import { useAuth } from '../../store/auth/useAuth'
 import { useModalStore } from '../../store/modal/useModalStore'
 import { theme } from '../../config/theme'
-const { width } = Dimensions.get('screen')
 
 const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>): JSX.Element => {
   
@@ -17,6 +17,8 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
 
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
+  const [secureTextEntry, setSecureTextEntry] = useState(false)
+  const handleSecureText = () => setSecureTextEntry(x => !x)
   const setSnack = useModalStore(store => store.setSnack)
 
   const { loginUser, isError, isLoading } = useLogin({ 
@@ -27,7 +29,11 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
         params: { screen: "ExploreScreen" }
       })
     }),
-    onError: () => { setIdentifier(''); setPassword('') }
+    onError: () => { 
+      setIdentifier(''); 
+      setPassword(''); 
+      setSnack('Sign in failed') 
+    }
   })
 
   const handleLogin = () => {
@@ -48,45 +54,57 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
 
   return (
     <View style={styles.container}>
-      <TextInput 
-        autoFocus={true}
-        error={isError}
-        value={identifier}
-        onChangeText={setIdentifier}
-        label={'Email or Username'}
-        mode={'outlined'}
-        style={styles.input}
-      />
-      <TextInput 
-        error={isError}
-        value={password}
-        onChangeText={setPassword}
-        label={'Password'} 
-        mode={'outlined'} 
-        style={styles.input}
-      />
-      <Button onPress={handleLogin}
-        mode={'contained'}
-        style={styles.button} 
-        theme={{ roundness: 2 }}
-        loading={isLoading}
-      >Sign in</Button>
-      <Button onPress={handleForgotPassword}
-        mode={'outlined'}
-        theme={{ roundness: 2 }}
-        style={[styles.button, styles.outlined]} 
-      >Forgot Password</Button>
-      <Text style={{ alignSelf: 'center', marginTop: 16, marginBottom: 12}}>Or</Text>
-      <GoogleLoginButton navigation={navigation}/>
-      {/* <FacebookLoginButton navigation={navigation}/> */}
-      <AppleLoginButton navigation={navigation}/>
-      <Button 
-        onPress={handleCreateAccount}
-        buttonColor={"white"}
-        theme={{ roundness: 2 }}
-        style={styles.button}
-        icon={'email'}
-      >Create a new account</Button>
+      <Card style={styles.card}>
+        <Card.Content>
+          <Text variant={"titleMedium"} style={styles.title}>
+            Sign in with credentials
+          </Text>
+          <TextInput 
+            autoFocus={true}
+            error={isError}
+            value={identifier}
+            style={styles.input}
+            onChangeText={setIdentifier}
+            label={"Email or Username"}
+            placeholder={"Email or Username"}
+          />
+          <TextInput 
+            error={isError}
+            value={password}
+            label={'Password'} 
+            style={styles.input}
+            placeholder={"Password"}
+            onChangeText={setPassword}
+            secureTextEntry={secureTextEntry}
+            right={<TextInput.Icon 
+              icon={secureTextEntry ? 'eye' : 'eye-off'}
+              onPress={handleSecureText}/>}/>
+          <Button 
+            onPress={handleLogin}
+            mode={'contained'}
+            style={styles.button} 
+            theme={{ roundness: 1 }}
+          >Sign in</Button>
+          <Button 
+            mode={'outlined'}
+            theme={{ roundness: 1 }}
+            onPress={handleForgotPassword}
+            style={[styles.button, styles.outlined]} 
+          >Forgot Password</Button>
+          <Text style={styles.or}variant={"titleSmall"}>Or</Text>
+          <GoogleLoginButton navigation={navigation} style={styles.button}/>
+          {/* <FacebookLoginButton navigation={navigation} style={styles.button}/> */}
+          <AppleLoginButton navigation={navigation} style={styles.button}/>
+          <Button 
+            icon={'email'}
+            style={styles.button}
+            mode={'contained-tonal'}
+            theme={{ roundness: 1 }}
+            onPress={handleCreateAccount}
+          >Create a new account</Button>
+        </Card.Content>
+      </Card>
+      {isLoading && <LoadingBackdrop loaderStyle={styles.loader}/>}
     </View>
   )
 }
@@ -94,24 +112,34 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
 export default LoginAuthScreen
 
 const styles = StyleSheet.create({
-  container: {
-    height: '100%',
-    display: 'flex',
-    padding: 24,
-    paddingBottom: 0
-  },
   input: {
     marginBottom: 8
-  },
-  button: {
-    marginTop: 8,
-    width: width - 48,
-    height: 48,
-    display: 'flex',
-    justifyContent: 'center',
   },
   outlined: {
     borderColor: theme.colors.primary,
     borderWidth: 2
+  },
+  or: { 
+    alignSelf: 'center', 
+    marginTop: 16, 
+    marginBottom: 24
+  },
+  container: {
+    padding: 16
+  },
+  card: {
+    borderColor: theme.colors.primaryContainer,
+    borderWidth: 1
+  },
+  title: {
+    marginBottom: 24,
+    marginTop: 4
+  },
+  button: {
+    marginBottom: 8
+  },
+  loader: {
+    position: 'absolute',
+    top: 150
   }
 })

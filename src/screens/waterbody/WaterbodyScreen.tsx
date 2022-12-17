@@ -21,7 +21,7 @@ import { ErrorType } from '../../utils/conversions/mapErrorTypeToDetails';
 import { ApolloError } from '@apollo/client';
 import { useUploadImages } from '../../hooks/mutations/useUploadImages';
 import { useAddWaterbodyMediaMutation as useAddWaterbodyMedia } from '../../hooks/mutations/useAddWaterbodyMedia';
-import WaterbodyMediaUploadModal from '../../components/modals/WaterbodyMediaUploadModal';
+import WaterbodyMediaUploadModal from '../../components/modals/WaterbodyMediaUploadBottomSheet';
 import SpeciesBottomSheet from '../../components/modals/SpeciesBottomSheet';
 import { useBottomSheetStore } from '../../store/modal/useBottomSheetStore';
 const { height, width } = Dimensions.get('window')

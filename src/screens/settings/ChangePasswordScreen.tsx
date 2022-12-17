@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { StyleSheet, View } from "react-native";
-import { Button, TextInput, Text, Card } from "react-native-paper";
+import { Button, TextInput, Text, Card, HelperText } from "react-native-paper";
 import LoadingBackdrop from "../../components/loaders/LoadingBackdrop";
 import { theme } from "../../config/theme";
 import { useChangePassword } from "../../hooks/mutations/useChangePassword";
@@ -38,42 +38,39 @@ const ChangePasswordScreen = ({ navigation }: RootStackScreenProps<"ChangePasswo
 
     return (
         <View style={styles.container}>
-            {loading && <LoadingBackdrop loaderStyle={styles.loader}/>}
             <Card style={styles.card}>
                 <Card.Content>
                     <Text variant={"titleMedium"} style={styles.title}>Enter a new password</Text>
                     <TextInput
                         mode={"flat"}
                         label={"Password"}
-                        style={styles.input}
                         value={password.value} 
                         placeholder={"Password"}
                         onChangeText={handlePassword}
                         secureTextEntry={secureTextEntry}
                         error={error || (password.touched && !valid)}
-                        right={secureTextEntry ? 
-                            <TextInput.Icon 
-                                icon='eye' 
-                                onPress={() => setSecureTextEntry(x => !x)}/> : 
-                            <TextInput.Icon 
-                                icon="eye-off" 
-                                onPress={() => setSecureTextEntry(x => !x)}/>}/>
+                        right={<TextInput.Icon 
+                            icon={secureTextEntry ? 'eye' : 'eye-off'}
+                            onPress={() => setSecureTextEntry(x => !x)}/>}/>
+                    <HelperText
+                        type={valid ? "info" : "error"}>
+                        { valid ? "Password valid" : "Minimum 8 characters • One uppercase • One number" }
+                    </HelperText>
                     <TextInput 
                         mode={"flat"}
-                        style={styles.input}
                         label={"Confirm Password"}
                         value={confirmPassword.value} 
                         placeholder={'Confirm Password'}
                         onChangeText={handleConfirmPassword}
                         secureTextEntry={secureTextEntry}
                         error={error || (password.value !== confirmPassword.value)}
-                        right={secureTextEntry ? 
-                            <TextInput.Icon 
-                                icon='eye' 
-                                onPress={() => setSecureTextEntry(x => !x)}/> : 
-                            <TextInput.Icon 
-                                icon="eye-off" 
-                                onPress={() => setSecureTextEntry(x => !x)}/>}/>
+                        right={<TextInput.Icon 
+                            icon={secureTextEntry ? 'eye' : 'eye-off'}
+                            onPress={() => setSecureTextEntry(x => !x)}/>}/>
+                    <HelperText
+                        type={password.value === confirmPassword.value ? "info" : "error"}>
+                        { password.value === confirmPassword.value ? "Password's match" : "Password's must match" }
+                    </HelperText>
                     <Button 
                         loading={loading}
                         mode='contained' 
@@ -104,9 +101,6 @@ const styles = StyleSheet.create({
     card: {
         borderColor: theme.colors.primaryContainer,
         borderWidth: 1
-    },
-    input: {
-        marginBottom: 16,
     },
     title: {
         marginBottom: 24,
