@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { View, StyleSheet, Pressable, ViewStyle, StyleProp } from 'react-native'
-import { Divider, Menu, Text, Title, TouchableRipple } from 'react-native-paper'
+import { Card, Divider, Menu, Text, Title, TouchableRipple } from 'react-native-paper'
 import Avatar from '../../users/Avatar'
 import RatingDisplay from '../../ratings/RatingDisplay'
 import dayjs from '../../../config/dayjs'
@@ -11,6 +11,7 @@ import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useAuth } from '../../../store/auth/useAuth'
 import { useModalStore } from '../../../store/modal/useModalStore'
 import { useDeleteReview } from '../../../hooks/mutations/useDeleteReview'
+import { theme } from '../../../config/theme'
 
 interface Props {
     data: WaterbodyReviews[number],
@@ -48,10 +49,11 @@ const WaterbodyReview = ({
     }
 
     return (
-        <View style={[styles.container, style]}>
+        <Card style={[styles.container, style]}>
             <View style={styles.header}>
                 <Pressable onPress={navigateToUser} style={globalStyles.frsb}>
-                    <Avatar size={50}
+                    <Avatar 
+                        size={50}
                         fullname={data.user.fullname}
                         uri={data.user.avatar}
                         onPress={navigateToUser}
@@ -64,9 +66,10 @@ const WaterbodyReview = ({
                 <View style={styles.headerRight}>
                     <RatingDisplay
                         hideLabel
-                        rating={data.rating} 
-                        style={{ marginRight: data.user.id === auth ? 8 : 16 }} 
                         iconSize={20}
+                        rating={data.rating} 
+                        backgroundColor={theme.colors.background}
+                        style={{ marginRight: data.user.id === auth ? 8 : 16 }} 
                     />
                     { data.user.id === auth &&
                         <Menu 
@@ -89,7 +92,7 @@ const WaterbodyReview = ({
                 <MapMarkerIcon/>
                 <Title style={styles.waterbodyName}>{data.waterbody.name}</Title>
             </View>
-        </View>
+        </Card>
     );
 };
 
@@ -97,11 +100,9 @@ export default WaterbodyReview;
 
 const styles = StyleSheet.create({
     container: {
-        borderColor: '#d9d9d9',
-        borderBottomWidth: 1,
-        paddingTop: 16,
-        paddingBottom: 24,
-        marginHorizontal: 8
+        padding: 16,
+        marginHorizontal: 12,
+        marginBottom: 4
     },
     header: {
         width: '100%',

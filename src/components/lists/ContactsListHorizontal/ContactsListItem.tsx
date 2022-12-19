@@ -37,6 +37,7 @@ export default ContactsListItem
 const styles = StyleSheet.create({
   container: {
     marginVertical: 12,
+    marginRight: 12,
     height: 230,
     width: 170,
     borderRadius: 12,

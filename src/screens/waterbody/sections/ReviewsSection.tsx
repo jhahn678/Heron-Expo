@@ -71,7 +71,7 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
   },[data, totalReviews])
 
   return (
-    <View>
+    <View style={styles.container}>
 
       <View style={styles.header}>
         <Title style={styles.title}>
@@ -136,6 +136,9 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
 export default ReviewsSection;
 
 const styles = StyleSheet.create({
+  container: {
+    paddingBottom: 40
+  },
   header: {
     width,
     paddingHorizontal: 16,

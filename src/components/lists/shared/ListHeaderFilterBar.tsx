@@ -17,18 +17,15 @@ const ListHeaderFilterBar = ({ total, sortLabel, setMenuOpen, style }: Props) =>
 
   return (
     <View style={[styles.chips, style]}>
-      <View style={globalStyles.frac}>
-        {total ? <Text style={styles.total}>{total} results</Text> : null}
-        <Chip style={styles.chip}>
-          {sortLabel}
-        </Chip>
-      </View>
+      <Text variant={"titleMedium"} style={styles.total}>
+        {total ? total === 1 ? `1 result` : `${total} results` : "0 results"}
+      </Text>
       <Chip 
         style={styles.chip} 
-        icon='chevron-down' 
-        onPress={handleOpenMenu} mode='outlined'>
-        Sort By
-      </Chip>
+        icon={'chevron-down'} 
+        onPress={handleOpenMenu} 
+        mode={'outlined'}
+      >{sortLabel}</Chip>
     </View>
   )
 };
@@ -37,8 +34,6 @@ export default ListHeaderFilterBar;
 
 const styles = StyleSheet.create({
   total: {
-    fontWeight: "500",
-    fontSize: 16,
     color: theme.colors.onSecondaryContainer,
     marginRight: 16
   },

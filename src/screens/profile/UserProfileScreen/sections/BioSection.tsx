@@ -35,8 +35,8 @@ const BioSection = ({ bio, username, id, following=false }: Props) => {
             { bio ? 
                 <View style={styles.box}>
                     <Text style={styles.text}>{bio}</Text>
-                </View> :
-                <BioLoader/>
+                </View>
+                : bio !== null && <BioLoader/>
             }
             <View style={styles.divider}/>
         </View>

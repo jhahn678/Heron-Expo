@@ -96,7 +96,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
       <Surface style={styles.heading}>
           <View style={globalStyles.frsb}>
               <IconButton icon='arrow-left' onPress={navigation.goBack}/>
-              <Title style={{ fontWeight: '500'}}>{title}</Title>
+              <Title style={{ fontWeight: '500' }}>{title}</Title>
           </View>
       </Surface>
 
@@ -104,8 +104,7 @@ const ReviewsScreen = ({ navigation, route }: RootStackScreenProps<'ReviewsScree
         <Menu 
           anchor={{ x: width, y: 100 }} 
           onDismiss={() => setMenuOpen(false)} 
-          visible={menuOpen} 
-        >
+          visible={menuOpen}>
           <Menu.Item 
             title='Most Recent' 
             style={{ height: 40 }} 

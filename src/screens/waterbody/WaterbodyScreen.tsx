@@ -156,7 +156,7 @@ export default WaterbodyScreen
 const styles = StyleSheet.create({
     container: {
         width,
-        minHeight: height,
+        minHeight: height
     },
     location: {
         fontWeight: '400',

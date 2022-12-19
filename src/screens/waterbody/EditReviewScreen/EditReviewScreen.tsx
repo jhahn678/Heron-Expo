@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { ScrollView, StyleSheet, View } from "react-native";
-import { Button, Text, TextInput } from "react-native-paper";
+import { Button, Card, Text, TextInput } from "react-native-paper";
 import LoadingBackdrop from "../../../components/loaders/LoadingBackdrop";
 import RatingInput from "../../../components/ratings/RatingInput";
 import { useEditReview } from "../../../hooks/mutations/useEditReview";
@@ -30,35 +30,38 @@ const EditReviewScreen = ({ navigation, route }: RootStackScreenProps<'EditRevie
     }).then(() => { navigation.goBack(); setSnack('Review updated') })
 
     return (
-        <View style={styles.container}>
+        <View>
             <HeaderSection navigation={navigation}/>
-            <ScrollView contentContainerStyle={styles.content}>
-                <RatingInput 
-                    iconSize={48} 
-                    setValue={setRating} 
-                    style={styles.rating}
-                    value={rating}
-                />
-                <Text style={styles.caption}>
-                    How was your experience at {data?.waterbodyReview.waterbody.name}?
-                </Text>
-                <TextInput
-                    value={text || ""} 
-                    mode='outlined'
-                    multiline={true} 
-                    numberOfLines={12}
-                    onChangeText={setText}
-                    placeholder={
-                        "Include details such as " + 
-                        "species observed and caught, regulations, " +
-                        "water depth, access, facilities, etc."
-                    }
-                />
-                <Button 
-                    mode='contained' 
-                    style={styles.button}
-                    onPress={handleSave} 
-                >Save</Button>
+            <ScrollView contentContainerStyle={styles.container}>
+                <Card style={styles.card}>
+                    <RatingInput 
+                        iconSize={48} 
+                        setValue={setRating} 
+                        style={styles.rating}
+                        value={rating}
+                    />
+                    <Text style={styles.caption} variant={"titleMedium"}>
+                        How was your fishing experience?
+                    </Text>
+                    <TextInput
+                        value={text || ""} 
+                        mode={'outlined'}
+                        multiline={true} 
+                        numberOfLines={12}
+                        onChangeText={setText}
+                        placeholder={
+                            "Include details such as " + 
+                            "species observed and caught, regulations, " +
+                            "water depth, access, facilities, etc."
+                        }
+                    />
+                    <Button 
+                        mode={'contained'}
+                        style={styles.button}
+                        onPress={handleSave}
+                        theme={{ roundness: 1 }}
+                    >Save</Button>
+                </Card>
             </ScrollView>
             { loading && <LoadingBackdrop/>}
         </View>
@@ -69,25 +72,22 @@ export default EditReviewScreen;
 
 const styles = StyleSheet.create({
     container: {
-        flex: 1
+        padding: 16
     },
-    content: {
+    card: {
         paddingHorizontal: 24,
-        paddingVertical: 48,
+        paddingVertical: 24,
+        paddingTop: 48
     },
     rating: {
         marginLeft: 16,
         alignSelf: 'center'
     },
     caption: {
-        fontSize: 16,
-        fontWeight: '500',
-        marginTop: 16,
-        marginBottom: 32,
+        marginVertical: 24,
         alignSelf: 'center'
     },
     button: {
-        marginTop: 24,
-        borderRadius: 6
+        marginTop: 16,
     }
 });
