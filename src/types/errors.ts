@@ -15,15 +15,10 @@ export type ErrorCode =
 | 'REQUEST_FAILED' 
 | 'INVALID_REFERENCE' 
 | 'COORDS_INVALID'
-| 'NAME_REQUIRED' 
-| 'ID_REQUIRED'
-| 'FILE_TYPE_REQUIRED' 
 | 'INVALID_FILE_TYPE' 
 | 'INVALID_URL'
 | "AUTOCOMPLETE_ERROR"
-| 'VALUE_REQUIRED'
 | 'COORDINATES_NOT_WITHIN_BOUNDARY'
-| 'LATLNG_NOT_PROVIDED'
 | 'INVALID_COORDINATES'
 | 'INVALID_LONGITUDE'
 | 'INVALID_LATITUDE' 
@@ -51,18 +46,6 @@ export enum AuthErrorType {
      * @Status 400 @Message The username provided is already in user
     */
    'USERNAME_IN_USE',
-    /** 
-     * @Status 400 @Message Username not provided
-    */
-   'EMAIL_REQUIRED',
-    /** 
-     * @Status 400 @Message Email not provided
-    */
-    'USERNAME_REQUIRED',
-    /** 
-     * @Status 400 @Message Password not provided
-    */
-    'PASSWORD_REQUIRED',
     /** 
      * @Status 400 @Message Could not authenticate request
     */
@@ -103,10 +86,6 @@ export enum AuthErrorType {
      * @Status 400 @Message Could not send password reset email
     */
     'PASSWORD_RESET_EMAIL_FAILED',
-    /** 
-     * @Status 401 @Message Access token not provided in request body
-    */
-    'ACCESS_TOKEN_REQUIRED',
     /**
      * @Status 400 @Message Facebook account already in use
     */
