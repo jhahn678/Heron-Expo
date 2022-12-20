@@ -51,7 +51,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
   useEffect(() => navigation.addListener("beforeRemove", modal.reset),[]);
 
   useEffect(() => {
-    if(map.current && mapCamera && mapReady) {
+    if(map.current && mapCamera && mapReady){
       map.current.animateCamera(mapCamera);
     }
   }, [mapCamera, mapReady]);
@@ -393,7 +393,6 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
         ref={map}
         style={styles.map}
         customMapStyle={mapStyle}
-        provider={PROVIDER_GOOGLE}
         onMapReady={() => setMapReady(true)}
       >
         {geojson && (
@@ -402,7 +401,7 @@ const ViewMapScreen = ({ navigation, route }: RootStackScreenProps<'ViewMapScree
             strokeWidth={5}
             strokeColor={theme.colors.primary}
             fillColor={theme.colors.primaryContainer}
-            lineJoin="bevel"
+            lineJoin={"bevel"}
             onPress={handlePressGeoJson}
           />
         )}
@@ -418,11 +417,11 @@ export default ViewMapScreen
 
 const styles = StyleSheet.create({
   container: {
-    height: height,
-    width: width,
+    height: '100%',
+    width: "100%",
   },
   header: {
-    width: width,
+    width: '100%',
     top: 40,
     alignItems: "center",
     position: "absolute",
@@ -435,8 +434,8 @@ const styles = StyleSheet.create({
     zIndex: 100,
   },
   map: {
-    width,
-    height
+    width: '100%',
+    height: '100%'
   },
   results: {
     paddingVertical: 8,

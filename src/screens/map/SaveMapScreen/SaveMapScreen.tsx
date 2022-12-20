@@ -31,7 +31,6 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
   const [polygonMarkersVisible, setPolygonMarkersVisible] = useState(true)
   const setError = useModalStore(store => store.setError)
   const setLocationError = () => setError(true, ErrorType.MapCurrentLocation)
-  const { handleGeoJson } = useGeoJson()
 
   const {
     point,
@@ -291,7 +290,6 @@ const SaveMapScreen = ({ navigation, route }: RootStackScreenProps<'SaveMapScree
       <MapView
         ref={map}
         style={styles.map}
-        provider={PROVIDER_GOOGLE}
         customMapStyle={mapStyle}
         onPress={handlePress}
         onLongPress={handleLongPress}
@@ -389,13 +387,13 @@ export default SaveMapScreen
 
 const styles = StyleSheet.create({
   container: {
-    height,
-    width,
+    height: '100%',
+    width: '100%',
     position: 'relative',
     alignItems: 'center'
   },
   header: {
-    width,
+    width: '100%',
     paddingHorizontal: 12,
     flexDirection: 'row',
     alignItems: "center",

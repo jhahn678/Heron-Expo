@@ -21,7 +21,7 @@ export interface MapPressResponse {
 export const useGeoJson = () => {
 
     const makeFeatureCollection = (features: Feature | Feature[]) => {
-        return geojsonToFeatureCollection(features);
+      return geojsonToFeatureCollection(features);
     }
 
     const makeBoundingBox = (geojson: Geometry | FeatureCollection) => {
@@ -35,12 +35,14 @@ export const useGeoJson = () => {
       const lngDelta = max.longitude - min.longitude;
       const latDelta = max.latitude - min.latitude;
       const delta = greaterNum(lngDelta, latDelta);
+      const zoom = delta ? Math.log(360 / delta) / Math.LN2 : 16
       const camera: Partial<Camera> = {
         center: {
           latitude: (max.latitude + min.latitude) / 2,
           longitude: (max.longitude + min.longitude) / 2,
         },
-        zoom: delta ? Math.log(360 / delta) / Math.LN2 : 16,
+        altitude: 204800000 * Math.pow(.5, zoom),
+        zoom,
       };
       return { camera, featureCollection };
     };

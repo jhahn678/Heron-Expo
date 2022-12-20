@@ -52,7 +52,6 @@ export default AuthModal;
 
 const styles = StyleSheet.create({
     container: {
-        height: 220,
         width: width * .9,
         alignSelf: 'center',
         position: 'relative',
@@ -64,6 +63,6 @@ const styles = StyleSheet.create({
     },
     text: {
         fontWeight: '500',
-        lineHeight: 20
+        lineHeight: 22
     }
 });

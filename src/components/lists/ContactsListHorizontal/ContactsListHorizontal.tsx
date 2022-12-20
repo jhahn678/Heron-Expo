@@ -18,7 +18,7 @@ const ContactsListHorizontal = <T extends IContact>({
     return (
         <View style={{ height: 254 }}>
             <FlashList 
-                data={data} 
+                data={data}
                 horizontal={true}
                 showsHorizontalScrollIndicator={false}
                 contentContainerStyle={styles.content}

@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, Pressable, StyleProp, ViewStyle, View } from 'react-native'
-import { Button, Card, Text, Title } from 'react-native-paper'
+import { Button, Title } from 'react-native-paper'
 import { theme } from '../../../config/theme'
 import { IContact } from '../../../types/User'
 import Avatar from '../../users/Avatar'
