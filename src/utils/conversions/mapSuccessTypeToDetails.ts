@@ -1,13 +1,22 @@
 import { Details } from '../../store/modal/useModalStore'
 
-export type SuccessType = 
+type Success = 
 | 'UPLOAD'
 | 'REVIEW'
 | 'CATCH'
 | 'LOCATION'
 | 'DEFAULT'
 
-const SuccessDetails: { [index in SuccessType]: Details } = {
+export enum SuccessType {
+    Upload = 'UPLOAD',
+    Review = 'REVIEW',
+    Catch = 'CATCH',
+    Location = 'LOCATION',
+    Default = 'DEFAULT'
+}
+
+
+const SuccessDetails: { [key in SuccessType | Success]: Details } = {
     UPLOAD: {
         title: 'Thank you for contributing! 😄',
         message: 'Your images have been successfully saved. \

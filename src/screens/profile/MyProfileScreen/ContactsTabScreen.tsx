@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { theme } from "../../../config/theme";
 import { Chip, Text } from 'react-native-paper'
 import { Dimensions, StyleSheet, View, Animated, Easing } from "react-native";
@@ -9,8 +9,8 @@ import { FlashList } from "@shopify/flash-list";
 import ContactsListItem from "../../../components/lists/ContactsList/ContactsListItem";
 import globalStyles from "../../../globalStyles";
 import { GetMyFollowers, useGetMyFollowers } from "../../../hooks/queries/useGetUserFollowers";
-import FindUsers from "./sections/FindUsers";
 import { FollowType } from "../../../types/User";
+import PromptAddFriendsCard from "../../../components/cards/PromptAddFriendsCard";
 const { width } = Dimensions.get('screen')
 const limit = 20;
 
@@ -118,7 +118,7 @@ const ContactsTabScreen = ({ navigation }: MyProfileTabsScreenProps<'FriendsTab'
               <ContactsListItem data={item} navigateUser={navigateToUser(item.id)}/>
             )}
           /> 
-        : <FindUsers navigateUserSearch={navigateUserSearch}/>
+        : <PromptAddFriendsCard containerStyle={styles.prompt}/>
         : (following.loading || followers.loading) ?
           <Text>Failed to load users</Text>
         : (following.error || followers.error) ?
@@ -181,5 +181,8 @@ const styles = StyleSheet.create({
     backgroundColor: theme.colors.secondaryContainer,
     borderColor: theme.colors.primary,
     borderWidth: 2
+  },
+  prompt: {
+    margin: 12
   }
 });

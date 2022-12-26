@@ -21,7 +21,7 @@ const EditProfileScreen = ({ navigation }: RootStackScreenProps<'EditProfileScre
             <ScrollView>
                 <AvatarSection 
                     avatar={avatar} 
-                    fullName={data?.me.fullname} 
+                    fullName={data?.me?.fullname} 
                     onAvatarPress={onAvatarPress}
                 />
                 <DetailsInputs data={data?.me}/>

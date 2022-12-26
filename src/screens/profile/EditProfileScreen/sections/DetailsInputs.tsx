@@ -11,11 +11,11 @@ interface Props {
 const DetailsInputs = ({ data }: Props) => {
 
     const store = useEditProfileStore(store => ({
-        setFirstName: store.setFirstName,
-        setLastName: store.setLastName,
-        setState: store.setState,
-        setCity: store.setCity,
         setBio: store.setBio,
+        setCity: store.setCity,
+        setState: store.setState,
+        setLastName: store.setLastName,
+        setFirstName: store.setFirstName,
     }))
 
     const [bio, setBio] = useState('')
@@ -42,27 +42,27 @@ const DetailsInputs = ({ data }: Props) => {
         <View style={styles.container}>
             <TextInput 
                 value={firstName} 
-                onChangeText={setFirstName} 
-                placeholder='First Name'
-                mode="outlined"
+                mode={"outlined"}
                 label={'First Name'}
                 style={[styles.margin]}
+                placeholder={'First Name'}
+                onChangeText={setFirstName} 
             />
             <TextInput 
                 value={lastName} 
-                onChangeText={setLastName} 
-                placeholder='Last Name'
-                mode="outlined"
+                mode={"outlined"}
                 label={'Last Name'}
                 style={[styles.margin]}
+                placeholder={'Last Name'}
+                onChangeText={setLastName} 
             />
             <View style={[styles.row, styles.margin]}>
                 <TextInput 
                     value={city} 
-                    onChangeText={setCity} 
-                    placeholder='City'
-                    mode="outlined"
                     label={'City'}
+                    mode={"outlined"}
+                    placeholder={'City'}
+                    onChangeText={setCity} 
                     style={[styles.rowItem, { marginRight: 4 }]}
                 />
                 <TextInput 

@@ -29,7 +29,7 @@ const PromptAddFriendsCard = (props: Props): JSX.Element => {
                 </View>
             </View>
             <Button 
-                theme={{ roundness: 2 }}
+                theme={{ roundness: 1 }}
                 mode={"contained-tonal"} 
                 style={styles.button}
                 onPress={handleNavigateUserSearch}

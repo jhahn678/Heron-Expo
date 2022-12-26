@@ -1,11 +1,10 @@
-import { Dimensions, StyleSheet } from "react-native";
 import React from "react";
+import { StyleSheet } from "react-native";
 import { Button, Dialog } from "react-native-paper";
 import { useAuth } from "../../store/auth/useAuth";
 import { useModalStore } from "../../store/modal/useModalStore";
 import { useApolloClient } from "@apollo/client";
 import { navigationRef } from "../../navigation/navigationRef";
-const { width } = Dimensions.get('screen')
 
 interface Props {
     visible: boolean

@@ -33,7 +33,7 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
 
   const reset = useRegistrationStore(store => store.reset)
   const setUser = useAuth(state => state.setUser);
-  const uploadImage = useUploadImages()
+  const { uploadToS3 } = useUploadImages()
   const [addAvatar] = useChangeAvatar()
   const image = useImageStore(store => store.images[0])
   const clearImages = useImageStore(store => store.clearImages)
@@ -47,10 +47,8 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
     if(!res) return alert('Account Creation Failed');
     setUser(res)
     if(image){
-      const upload = await uploadImage([image])
-      if(upload) await addAvatar({ 
-        variables: { avatar: upload.uploads[0] } 
-      })
+      const [upload] = await uploadToS3([image])
+      if(upload) await addAvatar({ variables: { avatar: upload } })
       clearImages();
     }
     setSnack('Account created successfully')

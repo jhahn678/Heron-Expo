@@ -11,6 +11,7 @@ import { useUploadImages } from "../../hooks/mutations/useUploadImages";
 import { ErrorType } from "../../utils/conversions/mapErrorTypeToDetails";
 import { useBottomSheetStore } from "../../store/modal/useBottomSheetStore";
 import { theme } from "../../config/theme";
+import { SuccessType } from "../../utils/conversions/mapSuccessTypeToDetails";
 
 interface Props {
     visible: boolean
@@ -42,23 +43,13 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     
     const handleConfirmUpload = async () => {
         if(!waterbody) return alert('No waterbody selected')
-
         const uploads = await uploadToS3(images)
         if(modal.reauthenticate) return;
-        if(uploads.length === 0){
-            return modal.setError(true, ErrorType.Upload);
-        }
-        const { data } = await saveImages({ variables: { 
-            id: waterbody, media: uploads 
-        }})
+        if(uploads.length === 0) modal.setError(true, ErrorType.Upload)
+        if(uploads.length !== images.length) modal.setError(true, ErrorType.UploadPartial)
+        await saveImages({ variables: { id: waterbody, media: uploads }})
         if(ref.current) ref.current.close()
-        if(!data || data.addWaterbodyMedia.length === 0){
-            modal.setError(true, ErrorType.Upload)
-        }else if(data.addWaterbodyMedia.length !== uploads.length){
-            modal.setError(true, ErrorType.UploadPartial)
-        }else{
-            modal.setSuccess(true, 'UPLOAD')
-        }
+        modal.setSuccess(true, SuccessType.Upload)
         return clearImages()
     }
 

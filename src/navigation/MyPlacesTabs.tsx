@@ -6,10 +6,10 @@ import HeadingSection from '../screens/location/MyPlacesTabs/sections/HeadingSec
 import AddLocationIcon from '../components/icons/AddLocationIcon';
 import SavedPlacesTabView from '../screens/location/MyPlacesTabs/SavedLocationsTabView';
 import MyLocationsTabView from '../screens/location/MyPlacesTabs/MyLocationsTabView';
-import FilterWaterbodyBottomSheet from '../components/modals/myPlaces/FilterWaterbodyBottomSheet';
-import FilterDateBottomSheet from '../components/modals/myPlaces/FilterDateBottomSheet';
-import FilterPrivacyBottomSheet from '../components/modals/myPlaces/FilterPrivacyBottomSheet';
-import FilterSortBottomSheet from '../components/modals/myPlaces/FilterSortBottomSheet';
+import FilterWaterbodyBottomSheet from '../components/modals/my-places/FilterWaterbodyBottomSheet';
+import FilterDateBottomSheet from '../components/modals/my-places/FilterDateBottomSheet';
+import FilterPrivacyBottomSheet from '../components/modals/my-places/FilterPrivacyBottomSheet';
+import FilterSortBottomSheet from '../components/modals/my-places/FilterSortBottomSheet';
 import SavedWaterbodiesTabView from '../screens/location/MyPlacesTabs/SavedWaterbodiesTabView';
 
 const Tab = createMaterialTopTabNavigator<MyPlacesTabsParams>();

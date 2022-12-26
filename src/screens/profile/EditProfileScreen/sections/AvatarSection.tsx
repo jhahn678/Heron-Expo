@@ -2,7 +2,6 @@ import React from "react";
 import { StyleSheet, View } from "react-native";
 import { theme } from "../../../../config/theme";
 import Avatar from "../../../../components/users/Avatar";
-import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
 import { useImageStore } from "../../../../store/image/useImageStore";
 import { IconButton } from "react-native-paper";
 
@@ -29,15 +28,15 @@ const AvatarSection = ({ avatar, fullName, onAvatarPress }: Props) => {
                 { image ?
                     <IconButton
                         size={20}
-                        icon='close'
+                        icon={'close'}
                         onPress={clearImages}
                         style={styles.remove}
                         iconColor={theme.colors.error} 
                     /> :
                     <IconButton 
                         size={20} 
-                        icon="camera" 
-                        mode='contained'
+                        icon={"camera"}
+                        mode={'contained'}
                         style={styles.camera} 
                         onPress={onAvatarPress}
                     />

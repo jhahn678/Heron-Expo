@@ -24,6 +24,7 @@ import { useAddWaterbodyMediaMutation as useAddWaterbodyMedia } from '../../hook
 import WaterbodyMediaUploadModal from '../../components/modals/WaterbodyMediaUploadBottomSheet';
 import SpeciesBottomSheet from '../../components/modals/SpeciesBottomSheet';
 import { useBottomSheetStore } from '../../store/modal/useBottomSheetStore';
+import { SuccessType } from '../../utils/conversions/mapSuccessTypeToDetails';
 const { height, width } = Dimensions.get('window')
 
 const handleError = (error: ApolloError) => error.message
@@ -79,7 +80,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
         } 
         await createReview({ 
             variables: { input },
-            onCompleted: () => { handleResetReview(); setShowSuccess(true, 'REVIEW'); refetch() },
+            onCompleted: () => { handleResetReview(); setShowSuccess(true, SuccessType.Review); refetch() },
             onError: (err) => { setShowErrorModal(true, handleError(err)); handleResetReview() }
         })
         setLoading(false)

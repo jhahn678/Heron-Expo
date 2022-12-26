@@ -8,8 +8,9 @@ import Backdrop from "./Backdrop";
 import { useAddWaterbodyMediaMutation } from "../../hooks/mutations/useAddWaterbodyMedia";
 import { useImageStore } from "../../store/image/useImageStore";
 import { useUploadImages } from "../../hooks/mutations/useUploadImages";
-import { ErrorType } from "../../utils/mapErrorTypeToDetails";
 import { useBottomSheetStore } from "../../store/modal/useBottomSheetStore";
+import { ErrorType } from "../../utils/conversions/mapErrorTypeToDetails";
+import { SuccessType } from "../../utils/conversions/mapSuccessTypeToDetails";
 
 interface Props {
     visible: boolean
@@ -21,7 +22,7 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     const ref = useRef<BottomSheet | null>(null)
     const waterbody = useBottomSheetStore(store => store.waterbody)
 
-    const uploadImages = useUploadImages()
+    const { uploadToS3 } = useUploadImages()
     const images = useImageStore(state => state.images)
     const clearImages = useImageStore(state => state.clearImages)
     const [saveImages] = useAddWaterbodyMediaMutation(waterbody)
@@ -29,6 +30,7 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     const modal = useModalStore(state => ({
         setError: state.setError,
         setSuccess: state.setSuccess,
+        reauthenticate: state.reauthenticate
     }))
 
     useEffect(() => {
@@ -40,20 +42,13 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     
     const handleConfirmUpload = async () => {
         if(!waterbody) return alert('No waterbody selected')
-        const result = await uploadImages(images)
-        if(!result) return setVisible(false) // no result means authentication failed
-        const { uploads } = result;
-        const { data } = await saveImages({ variables: { 
-            id: waterbody, media: result.uploads 
-        }})
+        const uploads = await uploadToS3(images)
+        if(modal.reauthenticate) return;
+        if(uploads.length === 0) modal.setError(true, ErrorType.Upload)
+        if(uploads.length !== images.length) modal.setError(true, ErrorType.UploadPartial)
+        await saveImages({ variables: { id: waterbody, media: uploads }})
         if(ref.current) ref.current.close()
-        if(!data || data.addWaterbodyMedia.length === 0){
-            modal.setError(true, ErrorType.Upload)
-        }else if(data.addWaterbodyMedia.length !== uploads.length){
-            modal.setError(true, ErrorType.UploadPartial)
-        }else{
-            modal.setSuccess(true, 'UPLOAD')
-        }
+        modal.setSuccess(true, SuccessType.Upload)
         return clearImages()
     }
 

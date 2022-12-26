@@ -1,6 +1,6 @@
 import React from 'react'
 import { StyleSheet, View } from 'react-native'
-import { Title, Text, ActivityIndicator } from 'react-native-paper'
+import { Title } from 'react-native-paper'
 import RecentActivityEmpty from '../../../../components/lists/RecentActivityHorizontal/RecentActivityEmpty'
 import RecentActivityHorizontalList from '../../../../components/lists/RecentActivityHorizontal/RecentActivityHorizontalList'
 import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
