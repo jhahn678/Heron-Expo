@@ -8,14 +8,12 @@ import WaterbodiesListHorizontal from '../../../../components/lists/WaterbodiesL
 import { useGetNearbyWaterbodies } from '../../../../hooks/queries/useGetNearbyWaterbodies'
 import { useSearchParamStore } from '../../../../store/search/useSearchParamStore'
 import ScrollViewListLoader from '../../../../components/loaders/ScrollViewListLoader'
-import RectangleLoader from '../../../../components/loaders/RectangleLoader'
-import LoadingRectangle from '../../../../components/loaders/RectangleLoader'
 
 interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
 }
 
-const NearbySection = ({ navigation }: Props) => {
+const NearbyWaterbodiesSection = ({ navigation }: Props) => {
 
     const { setSort } = useSearchParamStore()
     const { latitude, longitude, hasPermission } = useLocationStore()
@@ -56,7 +54,7 @@ const NearbySection = ({ navigation }: Props) => {
     )
 }
 
-export default NearbySection
+export default NearbyWaterbodiesSection;
 
 const styles = StyleSheet.create({
     container: {
@@ -65,7 +63,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: '600',
-        paddingHorizontal: '6%'
+        paddingHorizontal: 24
     },
     nearby: {
         width: '90%'
@@ -75,7 +73,7 @@ const styles = StyleSheet.create({
         marginTop: 48,
         fontWeight: '600',
         alignSelf: 'center',
-        paddingHorizontal: '6%',
+        paddingHorizontal: 24,
         textAlign: 'center'
     }
 })

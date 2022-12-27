@@ -29,17 +29,25 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
     const handleOpenSpecies = () => openSpecies(waterbody)
 
     const { data } = useGetCatches({ 
-        limit,
-        id: waterbody, 
+        limit, id: waterbody, 
         type: CatchQuery.Waterbody, 
         sort: CatchSort.CreatedAtNewest,
     })
 
-    const navigateNewCatch = () => navigation.navigate('NewCatchScreen', { waterbody })
+    const handleSeeMoreCatches = () => navigation
+        .navigate('CatchListScreen', { 
+            title: name, total: totalCatches,
+            type: CatchQuery.Waterbody, id: waterbody, 
+        })
 
-    const navigateCatches = () => navigation.navigate('CatchListScreen', { 
-        type: CatchQuery.Waterbody, id: waterbody, title: name, total: totalCatches 
-    })
+    const handleNavigateNewCatch = () => navigation
+        .navigate('NewCatchScreen', { waterbody })
+
+    const handleNavigateToCatch = (id: number) => () => navigation
+        .navigate('ViewCatchScreen', { id });
+        
+    const handleNavigateToUser = (id: number) => () => navigation
+        .navigate('UserProfileScreen', { id });
 
     return (
         <View style={styles.container}>
@@ -47,7 +55,7 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
             <View style={styles.summary}>
                 <FishermanCatchingFish/>
                 <View style={styles.divider}/>
-                <Pressable style={styles.text} onPress={navigateCatches}>
+                <Pressable style={styles.text} onPress={handleSeeMoreCatches}>
                     { totalCatches !== undefined ? 
                         <Text style={styles.number}>{totalCatches}</Text> : 
                         <RectangleLoader height={28} width={28} style={styles.totalLoading}/>
@@ -75,15 +83,14 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                         contentContainerStyle={{ paddingLeft: 16, paddingRight: 32 }}
                         renderItem={({ item }) => (
                             <CatchesListItem
-                                key={item.id}
                                 data={item}
-                                navigation={navigation}
-                                waterbody={waterbody}
+                                onNavigateToCatch={handleNavigateToCatch(item.id)}
+                                onNavigateToUser={handleNavigateToUser(item.user.id)}
                             />
                         )} 
                         ListFooterComponent={data.catches.length === limit ? () => (
                             <ListFooterSeeMore
-                                onPress={navigateCatches} 
+                                onPress={handleSeeMoreCatches} 
                                 style={styles.seemore}
                             />
                         ): null}
@@ -92,7 +99,7 @@ const CatchesSection = ({ navigation, name, waterbody, totalCatches, totalSpecie
                 :
                     <PromptCreateCatchCard 
                         containerStyle={styles.empty} 
-                        onPress={navigateNewCatch}/>
+                        onPress={handleNavigateNewCatch}/>
                 :
                     <ScrollViewListLoader/>
             }

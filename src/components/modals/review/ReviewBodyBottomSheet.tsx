@@ -9,14 +9,12 @@ const ReviewBodyBottomSheet = () => {
     const ref = useRef<BottomSheet | null>(null)
     const [input, setInput] = useState('')
     const visible = useReviewModalStore(store => store.bodyVisible)
-    const setVisible= useReviewModalStore(store => store.setBodyVisible)
+    const closeModal = useReviewModalStore(store => store.reset)
     const setBody = useReviewModalStore(store => store.setBody)
+    const setVisible = useReviewModalStore(store => store.setBodyVisible)
     const setNextVisible = useReviewModalStore(store => store.setAddImagesVisible)
 
-    const handleOnClose = () => { 
-        if(visible) setVisible(false);
-        setInput('') 
-    }
+    const handleOnClose = () => { if(visible) setVisible(false); setInput('') }
 
     const handleNext = () => { 
         if(ref.current) ref.current.close(); 
@@ -30,8 +28,8 @@ const ReviewBodyBottomSheet = () => {
     return (
         <BottomSheet 
             ref={ref}
-            index={-1} 
-            snapPoints={[370]}
+            index={visible ? 0 : -1} 
+            snapPoints={[400]}
             onClose={handleOnClose}
             animateOnMount={false}
             enablePanDownToClose={true}
@@ -40,7 +38,7 @@ const ReviewBodyBottomSheet = () => {
             <View style={styles.container}>
                 <ProgressBar progress={.6} style={styles.progress}/>
                 <View>
-                    <Text style={styles.title}>Tell us a little about it</Text>
+                    <Text style={styles.title} variant={"titleSmall"}>Tell us a little about it</Text>
                     <TextInput 
                         value={input}
                         onChangeText={setInput}
@@ -61,7 +59,7 @@ const ReviewBodyBottomSheet = () => {
                     onPress={handleNext}
                     mode="contained" 
                     disabled={input.length < 10}
-                    theme={{ roundness: 2 }}
+                    theme={{ roundness: 1 }}
                 >Next</Button>
             </View>
             
@@ -76,7 +74,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flex: 1,
         marginTop: 32,
-        marginBottom: 24,
+        marginBottom: 40,
         paddingHorizontal: 24,
         justifyContent: 'space-between'
     },
@@ -88,8 +86,7 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        fontWeight: '500',
-        marginVertical: 12,
+        marginBottom: 12,
         alignSelf: 'center'
     }
 })

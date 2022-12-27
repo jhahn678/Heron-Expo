@@ -1,22 +1,20 @@
-import React from 'react'
-import { Button, Card, Text } from 'react-native-paper'
-import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
+import { StyleProp, ViewStyle, View, StyleSheet } from "react-native";
+import { Card, Text, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import FishermenWithCastingNet from '../svg/FishermenWithCastingNet'
+import FishermanFishingCattails from "../svg/FishermanFishingCattails";
 
 interface Props {
-    onPress: () => void
     caption?: string
     buttonLabel?: string
     containerStyle?: StyleProp<ViewStyle>
+    onPress: () => void
 }
 
-const PromptAddFriendsCard = ({
-    caption="Add other users to see where they're fishing and what they're catching 🎣",
-    buttonLabel="Search for users",
+const PromptAddImages = ({ 
+    caption="It looks like no images have been uploaded yet..",
+    buttonLabel="Upload an image",
     ...props
-}: Props): JSX.Element => {
-
+}: Props) => {
     return (
         <Card style={[styles.card, props.containerStyle]}>
             <Card.Content style={styles.content}>
@@ -24,28 +22,25 @@ const PromptAddFriendsCard = ({
                     {caption}
                 </Text>
                 <View style={styles.image}>
-                    <FishermenWithCastingNet style={styles.graphic}/>
+                    <FishermanFishingCattails style={{ transform: [{ scale: .85 }]}}/>
                 </View>
             </Card.Content>
             <Button 
-                theme={{ roundness: 1 }}
-                mode={"contained-tonal"} 
                 style={styles.button}
                 onPress={props.onPress}
+                mode={"contained-tonal"}
                 contentStyle={{ flexDirection: 'row-reverse' }}
-                icon={({ size, color }) => (
-                    <Icon name={"magnify"} size={size} color={color}/>
-                )}
-            >Search for users</Button>
+                icon={({ color, size }) => <Icon name={"camera-outline"} color={color} size={size}/>}
+                theme={{ roundness: 1 }}>{buttonLabel}</Button>
         </Card>
-    )
-}
+    );
+};
 
-export default PromptAddFriendsCard
+export default PromptAddImages;
 
 const styles = StyleSheet.create({
     card: {
-        paddingTop: 8,
+        paddingTop: 6,
         paddingBottom: 12
     },
     content: {
@@ -55,14 +50,11 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     image: {
-        flex: 1
-    },
-    graphic: { 
-        transform: [{ scale: .9 }]
+        flex: 2
     },
     text: {
-        flex: 2,
-        marginRight: 16
+        flex: 3,
+        marginRight: 24
     },
     button: {
         marginTop: 24,

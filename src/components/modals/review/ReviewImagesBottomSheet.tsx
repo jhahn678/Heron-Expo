@@ -1,10 +1,9 @@
 import { useEffect, useRef } from "react";
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import { Text, Button, ProgressBar } from 'react-native-paper'
 import BottomSheet from '@gorhom/bottom-sheet'
 import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
 import BottomSheetImageInput from "../../inputs/BottomSheetImageInput";
-const { width } = Dimensions.get('screen')
 
 interface Props {
     onSubmit: () => Promise<void>
@@ -24,24 +23,27 @@ const ReviewImagesBottomSheet = ({ onSubmit }: Props) => {
     return (
         <BottomSheet
             ref={ref}
-            index={-1}
-            snapPoints={[370]}
+            index={visible ? 0 : -1} 
+            snapPoints={[380]}
             onClose={handleOnClose}
             animateOnMount={false}
-            enableContentPanningGesture={false}
+            enableContentPanningGesture={true}
             containerStyle={{ zIndex: 100 }}
         >
             <View style={styles.container}>
-                <ProgressBar progress={.75} style={styles.progress}/>
+                <ProgressBar progress={.70} style={styles.progress}/>
                 <View>
-                    <Text style={styles.title}>Have any pictures to share?</Text>
+                    <Text 
+                        style={styles.title} 
+                        variant={"titleSmall"}
+                    >Have any pictures to share?</Text>
                     <BottomSheetImageInput/>
                 </View>
                 <Button 
                     onPress={handleSubmit}
-                    mode="contained" 
+                    mode={"contained"} 
                     style={styles.button}
-                    theme={{ roundness: 2 }}
+                    theme={{ roundness: 1 }}
                 >Submit Review</Button>
             </View>
         </BottomSheet>
@@ -55,7 +57,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flex: 1,
         marginTop: 32,
-        marginBottom: 24,
+        marginBottom: 40,
         justifyContent: 'space-between'
     },
     progress: {
@@ -67,7 +69,6 @@ const styles = StyleSheet.create({
     },
     title: {
         fontSize: 18,
-        fontWeight: '500',
         marginVertical: 12,
         alignSelf: 'center'
     },
