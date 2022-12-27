@@ -13,6 +13,7 @@ import { MediaSource, ReviewQuery, RootStackScreenProps } from '../../../types/n
 import BioSection from './sections/BioSection'
 import ProfileSection from '../MyProfileScreen/sections/ProfileSection'
 import HeaderSection from './sections/HeaderSection'
+import { nameOrUsername } from '../../../utils/conversions/nameOrUsername'
 
 const UserProfileScreen = ({ navigation, route }: RootStackScreenProps<'UserProfileScreen'>) => {
 
@@ -25,29 +26,33 @@ const UserProfileScreen = ({ navigation, route }: RootStackScreenProps<'UserProf
 
   const navigateCatches = () => {
     if(id) navigation.navigate("CatchListScreen", { 
-      type: CatchQuery.User, title: 'Your Catches', id 
+      id, type: CatchQuery.User, 
+      title: `${nameOrUsername(data?.user)}'s Catches`
   })}
 
   const navigateLocations = () => {
     if(id) navigation.navigate('LocationListScreen', {
-      type: LocationQuery.User, title: 'Your Locations', id
+      id, type: LocationQuery.User, 
+      title: `${nameOrUsername(data?.user)}'s Locations`
   })}
 
   const navigateSavedLocations = () => {
     if(id) navigation.navigate('LocationListScreen', {
-      type: LocationQuery.UserSaved, title: 'Saved Locations', id
+      id, type: LocationQuery.UserSaved, 
+      title: `${nameOrUsername(data?.user)}'s Saved Locations`
   })}
 
   const navigateReviews = () => {
     if(id) navigation.navigate('ReviewsScreen', { 
       id, type: ReviewQuery.User, 
-      title: 'Your Reviews', 
-      total: data?.user.total_reviews
+      total: data?.user.total_reviews, 
+      title: `${nameOrUsername(data?.user)}'s Reviews`,
   })}
 
   const navigateMedia = () => {
     if(id) navigation.navigate('MediaGridScreen', { 
-      source: MediaSource.User, id, title: 'Your Media'
+      source: MediaSource.User, id, 
+      title: `${nameOrUsername(data?.user)}'s Media`,
   })}
 
   return (
