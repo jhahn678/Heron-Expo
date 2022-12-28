@@ -18,6 +18,7 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
     const { data } = useGetMyFollowing({ limit: 20 })
     const isAuthenticated = useAuth(state => state.isAuthenticated)
     const handleNavigateToProfile = (id: number) => navigation.navigate('UserProfileScreen', { id })
+    const handleAddFriendsPress = () => navigation.navigate('UserSearchScreen')
 
     return (
         <View style={styles.container}>
@@ -28,7 +29,9 @@ const ContactsSection = ({ navigation }: Props): JSX.Element => {
                         data={data.me.following} 
                         onNavigateToProfile={handleNavigateToProfile}/>
                 : 
-                    <PromptAddFriendsCard containerStyle={styles.card}/>
+                    <PromptAddFriendsCard 
+                        containerStyle={styles.card} 
+                        onPress={handleAddFriendsPress}/>
                 : !isAuthenticated ?
                     <PromptLoginCard containerStyle={styles.card}/>
                 :
@@ -47,9 +50,10 @@ const styles = StyleSheet.create({
         width: '100%',
         marginTop: 32,
     },
-    title: {
+   title: {
+        fontSize: 24,
         fontWeight: '600',
-        paddingLeft: 24,
+        paddingHorizontal: 24,
         marginBottom: 24
     },
     card: {

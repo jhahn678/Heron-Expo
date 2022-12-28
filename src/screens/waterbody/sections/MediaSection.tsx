@@ -2,6 +2,7 @@ import { FlashList } from "@shopify/flash-list";
 import React from "react";
 import { StyleSheet, View, Image, Pressable } from "react-native";
 import { Button, Title } from "react-native-paper";
+import PromptAddImages from "../../../components/cards/PromptAddImages";
 import ListFooterSeeMore from "../../../components/lists/shared/ListFooterSeeMore";
 import ScrollViewListLoader from "../../../components/loaders/ScrollViewListLoader";
 import { useGetWaterbodyMedia } from "../../../hooks/queries/useGetWaterbodyMedia";
@@ -13,11 +14,12 @@ interface Props {
     waterbody: number
     totalMedia: number | undefined
     name: string | undefined
+    onShowUploadModal: () => void
 }
 
 const limit = 8;
 
-const MediaSection = ({ navigation, waterbody, name, totalMedia: total=0 }: Props) => {
+const MediaSection = ({ navigation, waterbody, name, onShowUploadModal, totalMedia: total=0 }: Props) => {
 
     const { data } = useGetWaterbodyMedia({ id: waterbody, limit })
 
@@ -38,7 +40,7 @@ const MediaSection = ({ navigation, waterbody, name, totalMedia: total=0 }: Prop
                 data.waterbody.media.length > 0 ?
                     <View style={styles.flashlist}>
                         <FlashList 
-                            horizontal
+                            horizontal={true}
                             estimatedItemSize={200}
                             data={data.waterbody.media.slice(0,limit)} 
                             showsHorizontalScrollIndicator={false}
@@ -51,11 +53,14 @@ const MediaSection = ({ navigation, waterbody, name, totalMedia: total=0 }: Prop
                             )}
                         />
                     </View>
-                : null :  
+                : 
+                    <PromptAddImages 
+                        containerStyle={styles.empty}
+                        onPress={onShowUploadModal}/>
+                :  
                     <ScrollViewListLoader 
                         itemSize={{ height: 200, width: 200 }} 
-                        contentContainerStyle={{ padding: 16 }}
-                    />
+                        contentContainerStyle={{ padding: 16 }}/>
             }
             <View style={styles.divider}/>
         </View>
@@ -98,5 +103,8 @@ const styles = StyleSheet.create({
         height: 1,
         backgroundColor: '#d9d9d9',
         marginVertical: 24
+    },
+    empty: {
+        margin: 16
     }
 });

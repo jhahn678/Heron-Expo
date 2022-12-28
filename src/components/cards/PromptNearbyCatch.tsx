@@ -1,51 +1,47 @@
-import React from 'react'
-import { Button, Card, Text } from 'react-native-paper'
-import { StyleSheet, View, StyleProp, ViewStyle } from 'react-native'
+import { StyleProp, ViewStyle, View, StyleSheet } from "react-native";
+import { Card, Text, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
-import FishermenWithCastingNet from '../svg/FishermenWithCastingNet'
+import FisherWomanFishing from "../svg/FisherwomanFishing";
 
 interface Props {
-    onPress: () => void
     caption?: string
     buttonLabel?: string
     containerStyle?: StyleProp<ViewStyle>
+    onPress: () => void
 }
 
-const PromptAddFriendsCard = ({
-    caption="Add other users to see where they're fishing and what they're catching 🎣",
-    buttonLabel="Search for users",
+const PromptNearbyCatch = ({ 
+    caption="It looks like no catches have been logged in your area yet..",
+    buttonLabel="Log a local catch",
     ...props
-}: Props): JSX.Element => {
-
+}: Props) => {
     return (
         <Card style={[styles.card, props.containerStyle]}>
             <Card.Content style={styles.content}>
+                <View style={styles.image}>
+                    <FisherWomanFishing style={styles.graphic}/>
+                </View>
                 <Text style={styles.text} variant={"titleMedium"}>
                     {caption}
                 </Text>
-                <View style={styles.image}>
-                    <FishermenWithCastingNet style={styles.graphic}/>
-                </View>
             </Card.Content>
             <Button 
-                theme={{ roundness: 1 }}
-                mode={"contained-tonal"} 
                 style={styles.button}
                 onPress={props.onPress}
+                mode={"contained-tonal"}
                 contentStyle={{ flexDirection: 'row-reverse' }}
-                icon={({ size, color }) => (
-                    <Icon name={"magnify"} size={size} color={color}/>
-                )}
-            >Search for users</Button>
+                theme={{ roundness: 1 }}
+                icon={({ color, size }) => (
+                    <Icon name={"map-outline"} size={size} color={color}/>
+                )}>{buttonLabel}</Button>
         </Card>
-    )
-}
+    );
+};
 
-export default PromptAddFriendsCard
+export default PromptNearbyCatch;
 
 const styles = StyleSheet.create({
     card: {
-        paddingTop: 8,
         paddingBottom: 12
     },
     content: {
@@ -55,14 +51,17 @@ const styles = StyleSheet.create({
         justifyContent: 'space-between'
     },
     image: {
-        flex: 1
+        flex: 2
     },
     graphic: { 
-        transform: [{ scale: .9 }]
+        transform: [
+            { scale: .8 }, 
+            { translateY: 8 }
+        ]
     },
     text: {
-        flex: 2,
-        marginRight: 16
+        flex: 3,
+        marginLeft: 20
     },
     button: {
         marginTop: 24,

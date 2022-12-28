@@ -3,25 +3,21 @@ import { Card, Text, TouchableRipple } from 'react-native-paper'
 import dayjs from "../../../config/dayjs";
 import { theme } from "../../../config/theme";
 import { GetWaterbodyCatch } from "../../../types/Catch";
-import { ExploreStackScreenProps } from "../../../types/navigation";
 import { catchImageUriHandler } from "../../../utils/conversions/catchImageUriHandler";
 import FishermanHoldingFish from "../../svg/FishermanHoldingFish";
 import Avatar from '../../users/Avatar'
 
 interface Props {
-    navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
     data: GetWaterbodyCatch
-    waterbody: number
+    onNavigateToUser: () => void
+    onNavigateToCatch: () => void
 }
 
-const CatchesListItem = ({ data, navigation }: Props) => {
-
-    const navigateUser = () => navigation.navigate('UserProfileScreen', { id: data.user.id })
-    const navigateCatch = () => navigation.navigate('ViewCatchScreen', { id: data.id })
+const CatchesListItem = ({ data, onNavigateToUser, onNavigateToCatch }: Props) => {
 
     return (
         <Card style={styles.container}>
-            <TouchableRipple onPress={navigateUser}>
+            <TouchableRipple onPress={onNavigateToUser}>
                 <View style={styles.header}>
                     <Avatar fullname={data.user.fullname} uri={data.user.avatar} size={40}/>
                     <View style={{ paddingLeft: 12 }}>
@@ -30,7 +26,7 @@ const CatchesListItem = ({ data, navigation }: Props) => {
                     </View>
                 </View>
             </TouchableRipple>
-            <Pressable onPress={navigateCatch} style={styles.image}>
+            <Pressable onPress={onNavigateToCatch} style={styles.image}>
                 { Boolean(data.media.length || data.map_image) ?
                     <Image 
                         style={styles.image} 
@@ -49,9 +45,7 @@ export default CatchesListItem;
 
 const styles = StyleSheet.create({
     container: {
-        height: 300,
         width: 300,
-        marginRight: 16,
         overflow: 'hidden',
         borderRadius: 12,
         backgroundColor: 'white'

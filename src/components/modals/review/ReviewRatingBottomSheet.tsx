@@ -1,4 +1,4 @@
-import React, { useEffect, useRef } from "react";
+import React, { useEffect, useRef, useState } from "react";
 import { StyleSheet, View } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
@@ -17,14 +17,14 @@ const ReviewRatingBottomSheet = () => {
     const setNextVisible = useReviewModalStore(store => store.setBodyVisible)
 
     const handleOnClose = () => { if(visible) setVisible(false) };
-    const handleNext = () => { if(ref.current) ref.current.close(); setNextVisible(true); }
+    const handleNext = () => { if(ref.current) ref.current.close(); setNextVisible(true); };
     useEffect(() => { if(ref.current) visible ? ref.current.expand(): ref.current.close() },[visible])
     
     return (
         <BottomSheet 
             ref={ref}
-            index={-1} 
-            snapPoints={[300]}
+            index={visible ? 0 : -1} 
+            snapPoints={[320]}
             onClose={handleOnClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}
@@ -33,10 +33,10 @@ const ReviewRatingBottomSheet = () => {
                 <ProgressBar progress={.3} style={styles.progress}/>
                 <View>
                     <RatingInput 
+                        iconSize={48}
                         value={rating || 0}
                         setValue={setRating}
                         style={styles.rating}
-                        iconSize={48}
                     />
                     <Text style={styles.caption}>
                         How was your experience at {name}?
@@ -45,9 +45,9 @@ const ReviewRatingBottomSheet = () => {
                 <Button 
                     style={styles.button}
                     onPress={handleNext}
-                    mode="contained" 
+                    mode={"contained"} 
                     disabled={rating === null}
-                    theme={{ roundness: 2 }}
+                    theme={{ roundness: 1 }}
                 >Next</Button>
             </View>
         </BottomSheet>
@@ -61,7 +61,7 @@ const styles = StyleSheet.create({
         width: '100%',
         flex: 1,
         marginTop: 32,
-        marginBottom: 24,
+        marginBottom: 40,
         paddingHorizontal: 24,
         justifyContent: 'space-between'
     },

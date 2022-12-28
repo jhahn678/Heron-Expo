@@ -23,7 +23,7 @@ const WaterbodiesListHorizontal = <T extends WaterbodyListItem>({
                 contentContainerStyle={{ paddingLeft: 20 }}
                 renderItem={({ item }) => (
                     <WaterbodiesListItem 
-                        data={item} key={item.id}
+                        data={item}
                         navigate={() => navigateToWaterbody(item.id)}
                     />
                 )} 

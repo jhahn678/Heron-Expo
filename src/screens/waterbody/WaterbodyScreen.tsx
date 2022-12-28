@@ -38,6 +38,7 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
     const [refreshing, setRefreshing] = useState(false)
     const uploadVisible = useBottomSheetStore(store => store.waterbodyUpload)
     const setUploadVisible = useBottomSheetStore(store => store.setWaterbodyUpload)
+    const handleShowUploadModal = () => setUploadVisible(id)
     const setLoading = useModalStore(store => store.setLoading)
     const setShowSuccess = useModalStore(store => store.setSuccess)
     const setShowErrorModal = useModalStore(store => store.setError)
@@ -103,44 +104,38 @@ const WaterbodyScreen = ({ navigation, route }: ExploreStackScreenProps<'Waterbo
                     name={data?.waterbody.name}
                     isSaved={data?.waterbody.is_saved}
                     media={data?.waterbody.media.slice(0,6)}
-                    totalMedia={data?.waterbody.total_media} 
-                />
+                    totalMedia={data?.waterbody.total_media}/>
                 <HeaderSection 
                     id={id}
                     data={data?.waterbody}
-                    navigation={navigation}
-                />
+                    navigation={navigation}/>
                 <CatchesSection
                     waterbody={id}
                     navigation={navigation}
                     name={data?.waterbody?.name}
                     totalCatches={data?.waterbody.total_catches}
-                    totalSpecies={data?.waterbody.total_species}
-                />
+                    totalSpecies={data?.waterbody.total_species}/>
                 <LocationsSection 
                     waterbody={id}
                     navigation={navigation} 
                     name={data?.waterbody.name} 
-                    totalLocations={data?.waterbody.total_locations}
-                />
+                    totalLocations={data?.waterbody.total_locations}/>
                 <MapSection 
                     waterbody={id} 
                     navigation={navigation} 
-                    uri={data?.waterbody.media[0]?.url}
-                />
+                    uri={data?.waterbody.media[0]?.url}/>
                 <MediaSection
                     waterbody={id} 
                     navigation={navigation} 
                     name={data?.waterbody.name}
-                    totalMedia={data?.waterbody.total_media}
-                />
+                    onShowUploadModal={handleShowUploadModal}
+                    totalMedia={data?.waterbody.total_media}/>
                 <ReviewsSection 
                     waterbody={id} 
                     navigation={navigation} 
                     name={data?.waterbody.name}
                     totalReviews={data?.waterbody.total_reviews}
-                    averageRating={data?.waterbody.average_rating}
-                />
+                    averageRating={data?.waterbody.average_rating}/>
             </ScrollView>
             <SpeciesBottomSheet/>
             <ReviewRatingBottomSheet/>

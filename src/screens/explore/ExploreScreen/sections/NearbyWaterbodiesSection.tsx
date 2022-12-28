@@ -13,12 +13,12 @@ interface Props {
     navigation: ExploreStackScreenProps<'ExploreScreen'>['navigation']
 }
 
-const NearbySection = ({ navigation }: Props) => {
+const NearbyWaterbodiesSection = ({ navigation }: Props) => {
 
     const { setSort } = useSearchParamStore()
     const { latitude, longitude, hasPermission } = useLocationStore()
     
-    const { data, error } = useGetNearbyWaterbodies({ latitude, longitude })
+    const { data } = useGetNearbyWaterbodies({ latitude, longitude })
 
     const navigateViewMore = (): void => {
         setSort('distance')
@@ -30,7 +30,7 @@ const NearbySection = ({ navigation }: Props) => {
     }
 
     return (
-        <View style={[styles.container, { height: (hasPermission === false || error) ? 150 : 400}]}>
+        <View style={[styles.container, { height: (hasPermission === false) ? 150 : 400}]}>
             <Title style={styles.title}>What's nearby</Title>
             { 
                 hasPermission === false ? 
@@ -40,21 +40,21 @@ const NearbySection = ({ navigation }: Props) => {
                     /> 
                 : data ?
                     <WaterbodiesListHorizontal 
-                        data={data.waterbodies}
+                        data={data?.waterbodies}
                         navigateViewMore={navigateViewMore}
                         navigateToWaterbody={navigateToWaterbody}
                     />
                 :
                     <ScrollViewListLoader 
-                        itemSize={{ height: 300, width: 300 }}
-                        contentContainerStyle={{ padding: 20 }}
+                        itemSize={{ height: 320, width: 300 }}
+                        contentContainerStyle={{ paddingHorizontal: 20, paddingVertical: 24 }}
                     />
             }
         </View>
     )
 }
 
-export default NearbySection
+export default NearbyWaterbodiesSection;
 
 const styles = StyleSheet.create({
     container: {
@@ -63,7 +63,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: '600',
-        paddingHorizontal: '6%'
+        paddingHorizontal: 24
     },
     nearby: {
         width: '90%'
@@ -73,7 +73,7 @@ const styles = StyleSheet.create({
         marginTop: 48,
         fontWeight: '600',
         alignSelf: 'center',
-        paddingHorizontal: '6%',
+        paddingHorizontal: 24,
         textAlign: 'center'
     }
 })

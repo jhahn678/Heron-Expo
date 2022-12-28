@@ -1,30 +1,44 @@
 import create from 'zustand'
 
 interface  ReviewModalStore {
-    waterbody: number | null
+    /** Name of waterbody */
     name: string | null
+    /** ID of waterbody */
+    waterbody: number | null
+    /** Initiates review bottomsheet UI  */
     showWaterbodyReview: (args: { waterbody: number, name: string }) => void
+    /** Is first sheet visible */
     ratingVisible: boolean
+    /** Set first sheet visible */
     setRatingVisible: (value: boolean) => void
+    /** Rating value from user */
     rating: number | null
+    /** Set value of rating */
     setRating: (value?: number | null) => void
+    /** Is second sheet visible */
     bodyVisible: boolean
+    /** Set second sheet visible */
     setBodyVisible: (value: boolean) => void
+    /** Body text value */
     body: string | null
+    /** Set text value */
     setBody: (value?: string) => void
+    /** Is third sheet visible */
     addImagesVisible: boolean
+    /** Set third sheet visible */
     setAddImagesVisible: (value: boolean) => void
     conditionsVisible: boolean
     setConditionsVisible: (value: boolean) => void
     conditions: string | null
     setConditions: (value: string | null) => void
+    /** Get current input values */
     getValues: () => { waterbody: number, rating: number, text: string } | null
     reset: () => void
 }
 
 export const useReviewModalStore = create<ReviewModalStore>((set, get) => ({
-    waterbody: null,
     name: null,
+    waterbody: null,
     showWaterbodyReview: ({ waterbody, name }) => set({ 
         name, 
         waterbody, 

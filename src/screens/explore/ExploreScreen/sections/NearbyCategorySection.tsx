@@ -41,7 +41,7 @@ const NearbyCategorySection = ({ navigation, classification }: Props) => {
 
     return (
         <View style={[styles.container, { height: (!hasCoordinates || error) ? 130 : 400}]}>
-            <Title style={styles.title}>Nearby {classificationToCategory(classification)}</Title>
+            <Title style={styles.title}>Local {classificationToCategory(classification)}</Title>
             { hasCoordinates ? 
                 data ? 
                     <WaterbodiesListHorizontal 
@@ -75,7 +75,7 @@ const styles = StyleSheet.create({
     title: {
         fontSize: 24,
         fontWeight: '600',
-        paddingHorizontal: '6%'
+        paddingHorizontal: 24
     },
     nearby: {
         marginTop: 24, 

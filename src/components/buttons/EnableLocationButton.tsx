@@ -4,7 +4,7 @@ import { useCurrentLocation } from '../../hooks/utils/useCurrentLocation'
 import { Text, Button, useTheme } from 'react-native-paper'
 
 interface Props {
-    for: 'waterbodies',
+    for: 'waterbodies' | 'catches',
     style?: StyleProp<ViewStyle>
 }
 
@@ -16,9 +16,12 @@ const EnableLocationButton = (props: Props) => {
     return (
         <View style={[styles.container, { shadowColor: colors.backdrop, }, props.style]}>
             <Text style={styles.caption}>
-                { props.for === 'waterbodies' ?
-                    'Turn on location to see nearby waterbodies':
-                    'Turn on location to use this feature'
+                { 
+                    props.for === 'waterbodies' ?
+                        'Turn on location to see nearby waterbodies':
+                    props.for === 'catches' ?
+                        'Turn on location to see nearby catches':
+                        'Turn on location to use this feature'
                 } 
             </Text>
             <Button icon='navigation-variant'
