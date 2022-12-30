@@ -12,17 +12,15 @@ const ADD_WATERBODY_MEDIA = gql`
         }
     }
 `
-
 interface Variables {
     id: number,
     media: MediaInput[]
 }
-
 interface Response {
     addWaterbodyMedia: Pick<WaterbodyMedia, 'id' | 'url'>[]
 }
 
-export const useAddWaterbodyMediaMutation = (id: number | undefined | null) => {
+export const useAddWaterbodyMedia = (id: number | undefined | null) => {
     const auth = useAuth(store => store.id)
     return useMutation<Response, Variables>(ADD_WATERBODY_MEDIA, {
         refetchQueries: [

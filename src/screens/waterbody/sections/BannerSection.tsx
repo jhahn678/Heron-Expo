@@ -19,28 +19,28 @@ const DEFAULT_IMAGE = Image.resolveAssetSource(require('../../../../assets/defau
 const { width } = Dimensions.get('screen')
 
 interface Props {
-    navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation'] 
     id: number
     name: string | undefined
-    totalMedia: number | undefined
     isSaved: boolean | undefined
+    totalMedia: number | undefined
     media: GetWaterbodyRes['waterbody']['media'] | undefined
+    navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation'] 
 }
 
 const BannerSection = ({ id, navigation, name, media=[], totalMedia, isSaved }: Props) => {
 
-    const isAuthenticated = useAuth(store => store.isAuthenticated)
-    const setAuthVisible = useModalStore(store => store.setAuth)
-    const setUpload = useBottomSheetStore(store => store.setWaterbodyUpload)
-    const showAuthModal = () => setAuthVisible(true)
     const [fabOpen, setFabOpen] = useState(false);
+    const setAuthVisible = useModalStore(store => store.setAuth)
+    const showAuthModal = () => setAuthVisible(true)
+    const isAuthenticated = useAuth(store => store.isAuthenticated)
+    const setUpload = useBottomSheetStore(store => store.setWaterbodyUpload)
     const { currentIndex, handleViewableItemsChanged } = useImagePaginationIndicator()
 
     const handleAddImage = () => setUpload(id)
 
-    const handleAddCatch = () => navigation.navigate('NewCatchScreen', { waterbody: id })
+    const navigateNewCatch = () => navigation.navigate('NewCatchScreen', { waterbody: id })
 
-    const handleAddLocation = () => navigation.navigate('NewLocationScreen', { waterbody: id })
+    const navigateNewLocation = () => navigation.navigate('NewLocationScreen', { waterbody: id })
 
     const navigateMediaScreen = () => navigation.navigate('MediaGridScreen', { 
         source: MediaSource.Waterbody, id, total: totalMedia, title: name
@@ -80,11 +80,11 @@ const BannerSection = ({ id, navigation, name, media=[], totalMedia, isSaved }: 
                     },
                     {
                         icon: ({ color }) => <FishIcon color={color}/>,
-                        onPress: isAuthenticated ? handleAddCatch : showAuthModal
+                        onPress: isAuthenticated ? navigateNewCatch : showAuthModal
                     },
                     {
                         icon: ({ color }) => <AddLocationIcon color={color}/>,
-                        onPress: isAuthenticated ? handleAddLocation : showAuthModal
+                        onPress: isAuthenticated ? navigateNewLocation : showAuthModal
                     }
                 ]}
             />

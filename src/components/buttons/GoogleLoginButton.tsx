@@ -38,8 +38,13 @@ const GoogleLoginButton = ({ navigation, style }: Props) => {
       if(!authentication) return;
       signInUser({ accessToken: authentication.accessToken })
         .then((res) => {
-          if(res) setUser(res, !res.account_created)
-          if(res && res.account_created) navigation.navigate('UsernameAuthScreen')
+          if(!res) return;
+          if(res.account_created || res.username.startsWith('u-')){
+            setUser(res, false);
+            navigation.navigate('UsernameAuthScreen');
+          }else{
+            setUser(res, true)
+          }
         })
     }
   }, [response]);

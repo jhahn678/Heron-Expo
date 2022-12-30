@@ -40,10 +40,8 @@ export interface UserFollowsVars {
 }
 
 export const useGetUserFollowing = ({ id, limit=20, skip=false }: { id: number, limit?: number, skip?: boolean }) => {
-    const notAuthenticated = useAuth(store => !store.isAuthenticated) 
     return useQuery<GetUserFollowing, UserFollowsVars>(GET_USER_FOLLOWING, { 
-        variables: { id, limit }, 
-        skip: notAuthenticated ? true : skip ? true : false
+        skip, variables: { id, limit }
     })
 }
 

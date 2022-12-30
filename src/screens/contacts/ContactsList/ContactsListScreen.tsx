@@ -10,6 +10,7 @@ import { useGetUserTotalFollows } from "../../../hooks/queries/useGetTotalFollow
 import { IconButton, Surface, Title } from "react-native-paper";
 import { theme } from "../../../config/theme";
 import globalStyles from "../../../globalStyles";
+import LoadingBackdrop from "../../../components/loaders/LoadingBackdrop";
 
 const limit = 20;
 
@@ -21,14 +22,17 @@ const ContactsListScreen = ({ navigation, route }: RootStackScreenProps<'Contact
 
     const totals = useGetUserTotalFollows({ id })
     const [data, setData] = useState<Data>([])
+    const [loading, setLoading] = useState(true)
     const followers = useGetUserFollowers({ id, limit, skip: type !== FollowType.Followers })
     const following = useGetUserFollowing({ id, limit, skip: type !== FollowType.Following })
 
     useEffect(() => {
         if(type === FollowType.Following && following.data){
-            return setData(following.data.user.following);
-        }if(type === FollowType.Followers && followers.data){
-            return setData(followers.data.user.followers);
+            setData(following.data.user.following);
+            setLoading(false)
+        }else if(type === FollowType.Followers && followers.data){
+            setData(followers.data.user.followers);
+            setLoading(false)
         }
     }, [followers.data, following.data])
 
@@ -56,15 +60,15 @@ const ContactsListScreen = ({ navigation, route }: RootStackScreenProps<'Contact
                     <IconButton icon="arrow-left" onPress={navigation.goBack} />
                     <Title style={styles.title}>
                         { type === FollowType.Followers ? "Followers" : "Following" }
+                        { totals.data && (
+                            type === FollowType.Followers ? 
+                            ` (${totals.data.user.total_followers})` : 
+                            ` (${totals.data.user.total_following})`
+                        )}
                     </Title>
                 </View>
-                <Title style={styles.total}>
-                    { totals.data && (type === FollowType.Followers ? 
-                        `${totals.data?.user.total_followers} total` : 
-                        `${totals.data?.user.total_following} total`
-                    )}
-                </Title>
             </Surface>
+            {loading && <LoadingBackdrop/>}
             <FlashList
                 data={data}
                 estimatedItemSize={80}

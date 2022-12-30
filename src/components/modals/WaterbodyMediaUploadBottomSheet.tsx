@@ -1,11 +1,11 @@
 import React, { useEffect, useRef } from "react";
 import { StyleSheet, View } from "react-native";
-import { Text, Button, Title } from 'react-native-paper'
+import { Button, Title } from 'react-native-paper'
 import BottomSheet from '@gorhom/bottom-sheet'
 import BottomSheetImageInput from "../inputs/BottomSheetImageInput";
 import { useModalStore } from "../../store/modal/useModalStore";
 import Backdrop from "./Backdrop";
-import { useAddWaterbodyMediaMutation } from "../../hooks/mutations/useAddWaterbodyMedia";
+import { useAddWaterbodyMedia } from "../../hooks/mutations/useAddWaterbodyMedia";
 import { useImageStore } from "../../store/image/useImageStore";
 import { useUploadImages } from "../../hooks/mutations/useUploadImages";
 import { ErrorType } from "../../utils/conversions/mapErrorTypeToDetails";
@@ -13,20 +13,17 @@ import { useBottomSheetStore } from "../../store/modal/useBottomSheetStore";
 import { theme } from "../../config/theme";
 import { SuccessType } from "../../utils/conversions/mapSuccessTypeToDetails";
 
-interface Props {
-    visible: boolean
-    setVisible: (waterbody?: number | false) => void
-}
-
-const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
+const WaterbodyMediaUploadModal = () => {
 
     const ref = useRef<BottomSheet | null>(null)
     const waterbody = useBottomSheetStore(store => store.waterbody)
+    const visible = useBottomSheetStore(store => store.waterbodyUpload)
+    const setVisible = useBottomSheetStore(store => store.setWaterbodyUpload)
 
     const { uploadToS3 } = useUploadImages()
     const images = useImageStore(state => state.images)
     const clearImages = useImageStore(state => state.clearImages)
-    const [saveImages] = useAddWaterbodyMediaMutation(waterbody)
+    const [saveImages] = useAddWaterbodyMedia(waterbody)
 
     const modal = useModalStore(state => ({
         setError: state.setError,
@@ -53,15 +50,15 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
         return clearImages()
     }
 
+    if(!visible) return null;
+
     return (
         <BottomSheet
-            ref={ref} 
-            index={-1}
+            ref={ref}
             snapPoints={[350]}
             onClose={handleClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}
-            enableContentPanningGesture={false}
             backdropComponent={visible ? () => 
                 <Backdrop onPress={handleBackdrop}/> 
             : null}

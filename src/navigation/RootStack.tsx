@@ -38,18 +38,19 @@ import DeactivateAccountScreen from '../screens/settings/DeactivateAccountScreen
 import ChangeEmailScreen from '../screens/settings/ChangeEmailScreen';
 import ChangePasswordScreen from '../screens/settings/ChangePasswordScreen';
 import SavePasswordScreen from '../screens/auth/SavePasswordScreen';
+import UserDetailsAuthScreen from "../screens/auth/UserDetailsAuthScreen";
 
 
 const RootStack = (): JSX.Element => {
     
     const linkConfig = useDeepLink()
     const Stack = createNativeStackNavigator<RootStackParams>();
-    const isUnauthenticated = useAuth(state => !state.isAuthenticated)
+    const unauthenticated = useAuth(state => !state.isAuthenticated)
 
     return (
         <NavigationContainer ref={navigationRef} linking={linkConfig}>
             <Stack.Navigator screenOptions={{ headerShown: false }}>
-                { isUnauthenticated &&
+                { unauthenticated &&
                     <Stack.Group screenOptions={{ headerBackTitle: 'Back'}}>
                         <Stack.Screen name="HomeAuthScreen" component={HomeAuthScreen}/>
                         <Stack.Screen name="LoginAuthScreen" component={LoginAuthScreen}
@@ -62,6 +63,8 @@ const RootStack = (): JSX.Element => {
                             options={{ headerShown: true, headerTitle: 'Step 3 of 3' }}/>
                         <Stack.Screen name='UsernameAuthScreen' component={UsernameAuthScreen} 
                             options={{ headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username' }}/>
+                        <Stack.Screen name='UserDetailsAuthScreen' component={UserDetailsAuthScreen} 
+                            options={{ headerShown: true, headerBackVisible: false, headerTitle: 'Complete your profile' }}/>
                         <Stack.Screen name="ForgotPasswordScreen" component={ForgotPasswordScreen} 
                             options={{ headerShown: true, headerBackVisible: true, headerTitle: 'Forgot Password' }}/>
                         <Stack.Screen name="ResetPasswordScreen" component={ResetPasswordScreen} 
@@ -87,9 +90,7 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name="EditLocationScreen" component={EditLocationScreen}/>
                 <Stack.Screen name="EditReviewScreen" component={EditReviewScreen}/>
                 <Stack.Group screenOptions={{ animation: 'slide_from_bottom', animationDuration: 200 }}>
-                    <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}
-                        options={{ headerShown: true, headerTitle: 'Profile', headerBackTitleVisible: false }}
-                    />
+                    <Stack.Screen name='UserProfileScreen' component={UserProfileScreen}/>
                     <Stack.Screen name='ViewCatchScreen' component={ViewCatchScreen}/>
                     <Stack.Screen name='ViewLocationScreen' component={ViewLocationScreen}/>
                 </Stack.Group>

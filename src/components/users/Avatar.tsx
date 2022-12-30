@@ -13,6 +13,7 @@ interface Props {
     onPress?: () => void
     size?: number
     loading?: boolean
+    elevated?: boolean
 }
 
 const Avatar = ({ 
@@ -24,6 +25,7 @@ const Avatar = ({
     style, 
     onPress, 
     size=64, 
+    elevated=false
 }: Props): JSX.Element => {
 
     return (
@@ -35,31 +37,31 @@ const Avatar = ({
                 <PaperAvatar.Image 
                     size={size}
                     source={{ uri }} 
-                    style={[styles.avatar, style]}
+                    style={[(elevated ? styles.elevation : {}), style]}
                 />
             : fullname ? 
                 <PaperAvatar.Text 
                     size={size}
                     label={fullNameToInitials(fullname)} 
-                    style={[styles.avatar, style]}
+                    style={[(elevated ? styles.elevation : {}), style]}
                 />
             : firstname && lastname ? 
                 <PaperAvatar.Text 
                     size={size}
                     label={fullNameToInitials(`${firstname} ${lastname}`)} 
-                    style={[styles.avatar, style]}
+                    style={[(elevated ? styles.elevation : {}), style]}
                 />
             : firstname ? 
                 <PaperAvatar.Text 
                     size={size}
                     label={firstname.charAt(0)} 
-                    style={[styles.avatar, style]}
+                    style={[(elevated ? styles.elevation : {}), style]}
                 />
             : 
                 <PaperAvatar.Icon 
                     size={size}
-                    icon='account' 
-                    style={[styles.avatar, style]}
+                    icon={'account'} 
+                    style={[(elevated ? styles.elevation : {}), style]}
                 /> 
         }
         </Pressable>
@@ -69,7 +71,14 @@ const Avatar = ({
 export default Avatar;
 
 const styles = StyleSheet.create({
-    avatar: {
-
+    elevation: {
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 5,
+        },
+        shadowOpacity: 0.34,
+        shadowRadius: 6.27,
+        elevation: 10,
     }
 })

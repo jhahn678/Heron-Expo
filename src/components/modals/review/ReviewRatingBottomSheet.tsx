@@ -1,31 +1,36 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useRef } from "react";
 import { StyleSheet, View } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
 import RatingInput from "../../ratings/RatingInput";
 import { Button, ProgressBar, Text } from "react-native-paper";
 
-const ReviewRatingBottomSheet = () => {
+interface Props {
+    visible: boolean
+    onSubmit: () => void
+    onClose: () => void
+}
+
+const ReviewRatingBottomSheet = ({ onSubmit, onClose, visible }: Props) => {
 
     const ref = useRef<BottomSheet | null>(null)
     
     const name = useReviewModalStore(store => store.name)
     const rating = useReviewModalStore(store => store.rating)
-    const visible = useReviewModalStore(store => store.ratingVisible)
     const setRating = useReviewModalStore(store => store.setRating)
-    const setVisible = useReviewModalStore(store => store.setRatingVisible)
-    const setNextVisible = useReviewModalStore(store => store.setBodyVisible)
 
-    const handleOnClose = () => { if(visible) setVisible(false) };
-    const handleNext = () => { if(ref.current) ref.current.close(); setNextVisible(true); };
-    useEffect(() => { if(ref.current) visible ? ref.current.expand(): ref.current.close() },[visible])
+    const handleSubmit = () => {
+        if(ref.current) ref.current.close();
+        onSubmit();
+    }
     
+    if(!visible) return null;
+
     return (
         <BottomSheet 
             ref={ref}
-            index={visible ? 0 : -1} 
             snapPoints={[320]}
-            onClose={handleOnClose}
+            onClose={onClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}
         >
@@ -44,7 +49,7 @@ const ReviewRatingBottomSheet = () => {
                 </View>
                 <Button 
                     style={styles.button}
-                    onPress={handleNext}
+                    onPress={handleSubmit}
                     mode={"contained"} 
                     disabled={rating === null}
                     theme={{ roundness: 1 }}

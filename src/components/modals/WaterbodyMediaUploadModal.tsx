@@ -5,7 +5,7 @@ import BottomSheet from '@gorhom/bottom-sheet'
 import BottomSheetImageInput from "../inputs/BottomSheetImageInput";
 import { useModalStore } from "../../store/modal/useModalStore";
 import Backdrop from "./Backdrop";
-import { useAddWaterbodyMediaMutation } from "../../hooks/mutations/useAddWaterbodyMedia";
+import { useAddWaterbodyMedia } from "../../hooks/mutations/useAddWaterbodyMedia";
 import { useImageStore } from "../../store/image/useImageStore";
 import { useUploadImages } from "../../hooks/mutations/useUploadImages";
 import { useBottomSheetStore } from "../../store/modal/useBottomSheetStore";
@@ -25,7 +25,7 @@ const WaterbodyMediaUploadModal = ({ visible, setVisible }: Props) => {
     const { uploadToS3 } = useUploadImages()
     const images = useImageStore(state => state.images)
     const clearImages = useImageStore(state => state.clearImages)
-    const [saveImages] = useAddWaterbodyMediaMutation(waterbody)
+    const [saveImages] = useAddWaterbodyMedia(waterbody)
 
     const modal = useModalStore(state => ({
         setError: state.setError,

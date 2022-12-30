@@ -1,4 +1,4 @@
-import { Dimensions, StyleSheet, View } from "react-native";
+import { StyleSheet, View } from "react-native";
 import React, { useState } from "react";
 import { RootStackScreenProps } from "../../types/navigation";
 import { useCheckUsernameAvailability } from "../../hooks/queries/useCheckUsernameAvailability";
@@ -7,7 +7,6 @@ import { useChangeUsername } from "../../hooks/mutations/useChangeUsername";
 import { useAuth } from "../../store/auth/useAuth";
 import { theme } from "../../config/theme";
 import { useModalStore } from "../../store/modal/useModalStore";
-const { width } = Dimensions.get('screen')
 
 
 const UsernameAuthScreen = ({ navigation }: RootStackScreenProps<'UsernameAuthScreen'>) => {
@@ -16,14 +15,13 @@ const UsernameAuthScreen = ({ navigation }: RootStackScreenProps<'UsernameAuthSc
 
     const setUser = useAuth(store => store.setDetails)
     const setSnack = useModalStore(store => store.setSnack)
-    const setAuthenticated = useAuth(store => store.setAuthenticated)
 
     const username = useCheckUsernameAvailability(input)
 
     const { changeUsername, loading } = useChangeUsername({
         onSuccess: ({ username }) => {
-            setUser({ username }); setAuthenticated(true);
-            setSnack('Account created successfully')
+            setUser({ username }); 
+            navigation.navigate('UserDetailsAuthScreen')
         },
         onError: () => {
             setSnack('Error saving username')
@@ -80,7 +78,7 @@ const UsernameAuthScreen = ({ navigation }: RootStackScreenProps<'UsernameAuthSc
                                 "#fff" : theme.colors.surfaceVariant
                         } 
                     }}
-                >Get Started</Button>
+                >Next</Button>
                 </Card.Content>
             </Card>
         </View>

@@ -6,15 +6,12 @@ import { useModalStore } from "../../store/modal/useModalStore";
 import { useApolloClient } from "@apollo/client";
 import { navigationRef } from "../../navigation/navigationRef";
 
-interface Props {
-    visible: boolean
-    dismiss: () => void
-}
+const LogoutModal = () => {
 
-const LogoutModal = ({ visible, dismiss }: Props) => {
-
-    const { signOut } = useAuth()
-    const setLogoutVisible = useModalStore(store => store.setLogout)
+    const signOut = useAuth(store => store.signOut)
+    const dismiss = useModalStore(state => state.dismiss)
+    const setVisible = useModalStore(store => store.setLogout)
+    const visible = useModalStore(state => state.logout)
     const shouldGoBack = useModalStore(store => store.onLogoutGoBack)
     const apolloClient = useApolloClient()
     
@@ -22,7 +19,7 @@ const LogoutModal = ({ visible, dismiss }: Props) => {
     const handleSignOut = async () => {
         await signOut();
         await apolloClient.clearStore()
-        setLogoutVisible({ visible: false })
+        setVisible({ visible: false })
         if(shouldGoBack) navigationRef.goBack()
     }
 

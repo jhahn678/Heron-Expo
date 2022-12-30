@@ -10,10 +10,13 @@ import { useGetUserProfile } from '../../../hooks/queries/useGetUserProfile'
 import { CatchQuery } from '../../../types/Catch'
 import { LocationQuery } from '../../../types/Location'
 import { MediaSource, ReviewQuery, RootStackScreenProps } from '../../../types/navigation'
-import BioSection from './sections/BioSection'
 import ProfileSection from '../MyProfileScreen/sections/ProfileSection'
-import HeaderSection from './sections/HeaderSection'
 import { nameOrUsername } from '../../../utils/conversions/nameOrUsername'
+import AvatarSection from './sections/AvatarSection'
+import UserDetailsSection from './sections/UserDetailsSection'
+import UserFollowsSection from './sections/UserFollowsSection'
+import { FollowType } from '../../../types/User'
+import UserProfileHeader from './sections/UserProfileHeader'
 
 const UserProfileScreen = ({ navigation, route }: RootStackScreenProps<'UserProfileScreen'>) => {
 
@@ -23,6 +26,25 @@ const UserProfileScreen = ({ navigation, route }: RootStackScreenProps<'UserProf
 
   const [refreshing, setRefreshing] = useState(false)
   const handleRefetch = () => { setRefreshing(true); refetch().then(() => setRefreshing(false)) }
+
+  const navigateEditProfile = () => navigation.navigate('EditProfileScreen')
+
+  const navigateImageScreen = () => {
+    if(data?.user?.avatar) navigation
+      .navigate('ViewImageScreen', { uri: data.user.avatar })
+  }
+
+  const navigateFollowers = () => {
+    navigation.navigate("ContactsListScreen", { 
+      id, type: FollowType.Followers
+    })
+  }
+
+  const navigateFollowing = () => {
+    navigation.navigate("ContactsListScreen", { 
+      id, type: FollowType.Following
+    })
+  }
 
   const navigateCatches = () => {
     if(id) navigation.navigate("CatchListScreen", { 
@@ -57,61 +79,64 @@ const UserProfileScreen = ({ navigation, route }: RootStackScreenProps<'UserProf
 
   return (
     <View style={styles.container}>
-      <HeaderSection 
-        data={data?.user} 
-        loading={loading} 
-        navigation={navigation}
-      />
       <ScrollView
         showsVerticalScrollIndicator={false}
-        refreshControl={<RefreshControl refreshing={refreshing} onRefresh={handleRefetch}/>}
-      >
-        <BioSection 
-          id={data?.user.id}
-          username={data?.user.username}
-          bio={data?.user.bio}
-          following={data?.user.am_following}
-        />
+        refreshControl={
+          <RefreshControl 
+            refreshing={refreshing} 
+            onRefresh={handleRefetch}/>
+        }>
+        <UserProfileHeader
+          data={data?.user}
+          onNavigateBack={navigation.goBack}/>
+        <AvatarSection 
+          data={data?.user}
+          loading={loading}
+          onPressAvatar={navigateImageScreen}/>
+        <UserDetailsSection
+          data={data?.user}
+          loading={loading}
+          onEditProfile={navigateEditProfile}/>
+        <UserFollowsSection  
+          totalFollowers={data?.user?.total_followers} 
+          totalFollowing={data?.user?.total_following}
+          onNavigateFollowers={navigateFollowers}
+          onNavigateFollowing={navigateFollowing}/>
         <ProfileSection 
           loading={loading}
           label={'Catches'} 
           onPress={navigateCatches}
           icon={<CatchIcon size={32}/>} 
-          value={data?.user.total_catches}
-        />
+          value={data?.user?.total_catches}
+          style={{ marginTop: 16 }}/>
         <ProfileSection 
           loading={loading}
           label={'Locations'} 
           onPress={navigateLocations}
           icon={<DockIcon size={32}/>} 
-          value={data?.user.total_locations}
-        />
+          value={data?.user?.total_locations}/>
         <ProfileSection 
           loading={loading}
           label={'Saved Locations'} 
           onPress={navigateSavedLocations}
           icon={<BookmarksIcon size={28}/>} 
-          value={data?.user.total_saved_locations}
-        />
+          value={data?.user?.total_saved_locations}/>
         <ProfileSection 
           loading={loading}
           label={'Reviews'} 
           onPress={navigateReviews}
           icon={<ReviewsIcon size={28}/>} 
-          value={data?.user.total_reviews}
-        />
+          value={data?.user?.total_reviews}/>
         <ProfileSection 
           loading={loading}
           label={'Media'} 
           onPress={navigateMedia}
           icon={<GalleryIcon size={28}/>} 
-          value={data?.user.total_media}
-        />
+          value={data?.user?.total_media}/>
         <ProfileSection      
           label={'Gear'} 
           icon={<TackleBoxIcon size={32}/>} 
-          value={'Coming soon'}
-        />
+          value={'Coming soon'}/>
       </ScrollView>
     </View>
   )

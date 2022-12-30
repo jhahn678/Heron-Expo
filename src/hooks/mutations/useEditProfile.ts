@@ -42,7 +42,7 @@ export interface EditProfileVars {
 
 export const useEditProfile = () => {
 
-    const { setDetails } = useAuth()
+    const setDetails = useAuth(store => store.setDetails)
 
     return useMutation<EditProfileRes, EditProfileVars>(EDIT_PROFILE, {
         refetchQueries: [{ query: GET_MY_PROFILE }, { query: GET_MY_PROFILE_TOTALS }],

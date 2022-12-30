@@ -1,10 +1,9 @@
 import * as AppleAuthentication from 'expo-apple-authentication';
 import { useEffect, useState } from 'react';
-import { Dimensions, StyleProp, StyleSheet, ViewStyle } from 'react-native'
+import { StyleProp, StyleSheet, ViewStyle } from 'react-native'
 import { useAppleLogin } from '../../hooks/mutations/useAppleLogin';
 import { useAuth } from '../../store/auth/useAuth';
 import { RootStackParams, RootStackScreenProps } from '../../types/navigation';
-const { width } = Dimensions.get('screen')
 
 interface Props {
   style?: StyleProp<ViewStyle>
@@ -28,15 +27,20 @@ const AppleLoginButton = ({ navigation, style }:Props) => {
           AppleAuthentication.AppleAuthenticationScope.FULL_NAME,
           AppleAuthentication.AppleAuthenticationScope.EMAIL,
         ]})
-        const res = await signInUser({ 
+        signInUser({
           apple_id: user,
           firstname: fullName?.givenName, 
           lastname: fullName?.familyName
         })
-        if(res) setUser(res, !res.account_created)
-        if(res && res.account_created === true) {
-          navigation.navigate('UsernameAuthScreen')
-        }
+        .then((res) => {
+          if(!res) return;
+          if(res.account_created || res.username.startsWith('u-')){
+            setUser(res, false);
+            navigation.navigate('UsernameAuthScreen');
+          }else{
+            setUser(res, true)
+          }
+        })
     }catch (e: any){
       if(e.code !== 'ERR_CANCELED') alert('Sign in failed')
     }

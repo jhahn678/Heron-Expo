@@ -13,19 +13,20 @@ import { waterbodyLocationLabel } from "../../../utils/conversions/waterbodyLoca
 interface Props {
     id: number
     data: GetWaterbody | undefined
+    refetch: () => void
     navigation:  ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
 }
 
-const HeaderSection = ({ navigation, data, id }: Props) => {
+const HeaderSection = ({ navigation, data, id, refetch }: Props) => {
 
     const isAuthenticated = useAuth(store => store.isAuthenticated)
     const showAuthModal = useModalStore(store => store.setAuth)
-    const showReviewModal = useReviewModalStore(store => store.showWaterbodyReview)
+    const startReview = useReviewModalStore(store => store.startWaterbodyReview)
 
     const handleReviews = () => {
         if(data && data.total_reviews === 0) {
             if(!isAuthenticated) return showAuthModal(true)
-            showReviewModal({ waterbody: id, name: data.name })
+            startReview({ waterbody: id, name: data.name, refetch })
         }else if(data){
             navigation.navigate('ReviewsScreen', { 
                 type: ReviewQuery.Waterbody, 

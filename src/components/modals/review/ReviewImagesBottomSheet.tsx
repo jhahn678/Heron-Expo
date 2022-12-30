@@ -1,33 +1,38 @@
-import { useEffect, useRef } from "react";
-import { StyleSheet, View } from "react-native";
+import { useRef } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 import { Text, Button, ProgressBar } from 'react-native-paper'
 import BottomSheet from '@gorhom/bottom-sheet'
-import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
 import BottomSheetImageInput from "../../inputs/BottomSheetImageInput";
-
+const { width } = Dimensions.get('screen')
 interface Props {
+    visible: boolean
     onSubmit: () => Promise<void>
+    onBack: () => void
+    onClose: () => void
 }
 
-const ReviewImagesBottomSheet = ({ onSubmit }: Props) => {
+const ReviewImagesBottomSheet = ({ visible, onSubmit, onBack, onClose }: Props) => {
 
     const ref = useRef<BottomSheet | null>(null)
-    const visible = useReviewModalStore(store => store.addImagesVisible)
-    const setVisible = useReviewModalStore(store => store.setAddImagesVisible) 
 
-    const handleOnClose = () => { if(visible) setVisible(false) };
-    useEffect(() => { if(ref.current) visible ? ref.current.expand(): ref.current.close() },[visible])
+    const handleBack = () => {
+        if(ref.current) ref.current.close();
+        onBack()
+    }
 
-    const handleSubmit = () => onSubmit().then(() => { ref.current?.close() })
+    const handleSubmit = () => {
+        if(ref.current) ref.current.close();
+        onSubmit();
+    }
+
+    if(!visible) return null;
 
     return (
         <BottomSheet
             ref={ref}
-            index={visible ? 0 : -1} 
             snapPoints={[380]}
-            onClose={handleOnClose}
-            animateOnMount={false}
-            enableContentPanningGesture={true}
+            onClose={onClose}
+            enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}
         >
             <View style={styles.container}>
@@ -39,12 +44,23 @@ const ReviewImagesBottomSheet = ({ onSubmit }: Props) => {
                     >Have any pictures to share?</Text>
                     <BottomSheetImageInput/>
                 </View>
-                <Button 
-                    onPress={handleSubmit}
-                    mode={"contained"} 
-                    style={styles.button}
-                    theme={{ roundness: 1 }}
-                >Submit Review</Button>
+                <View style={styles.buttons}>
+                    <Button 
+                        style={styles.button}
+                        onPress={handleBack}
+                        mode={"contained"} 
+                        icon={'arrow-left'}
+                        theme={{ roundness: 1 }}
+                    >Last</Button>
+                    <Button 
+                        onPress={handleSubmit}
+                        mode={"contained"} 
+                        style={styles.button}
+                        icon={'check'}
+                        contentStyle={{ flexDirection: 'row-reverse' }}
+                        theme={{ roundness: 1 }}
+                    >Save</Button>
+                </View>
             </View>
         </BottomSheet>
     );
@@ -63,9 +79,16 @@ const styles = StyleSheet.create({
     progress: {
         marginHorizontal: 40
     },
+    buttons: {
+        display: 'flex',
+        flexDirection: 'row',
+        alignItems: 'center',
+        justifyContent: 'space-between',
+        marginHorizontal: 24
+    },
     button: {
         height: 40,
-        marginHorizontal: 24
+        width: width / 2 - 48
     },
     title: {
         fontSize: 18,

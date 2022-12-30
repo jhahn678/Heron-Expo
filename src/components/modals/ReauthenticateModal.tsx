@@ -3,27 +3,25 @@ import { Dimensions, StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
 import { navigationRef } from '../../navigation/navigationRef'
 import { useAuth } from "../../store/auth/useAuth";
+import { useModalStore } from "../../store/modal/useModalStore";
 const { width } = Dimensions.get('window')
 
-interface Props {
-    visible: boolean
-    dismiss: () => void
-}
-
-const ReauthenticateModal = (props: Props) => {
+const ReauthenticateModal = () => {
 
     const resetAuth = useAuth(store => store.resetAuth)
+    const dismiss = useModalStore(state => state.dismiss)
+    const visible = useModalStore(state => state.reauthenticate)
 
     const navigateAuth = () => resetAuth().then(() => {
-        props.dismiss();
+        dismiss();
         navigationRef.navigate('LoginAuthScreen')
     })
 
     return (
         <Dialog 
-            visible={props.visible}
+            visible={visible}
             theme={{ roundness: 1 }}
-            onDismiss={props.dismiss}
+            onDismiss={dismiss}
             style={styles.container}>
             <Dialog.Title style={styles.title}>
                 An error occured 😕

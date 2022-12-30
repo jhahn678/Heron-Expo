@@ -1,26 +1,25 @@
 import React from "react";
 import { StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
+import { useModalStore } from "../../store/modal/useModalStore";
 
-interface Props {
-    visible: boolean
-    message: string | null
-    dismiss: () => void
-    onConfirm: (() => Promise<void>) | null
-}
+const ConfirmDeleteModal = () => {
 
-const ConfirmDeleteModal = (props: Props) => {
+    const dismiss = useModalStore(state => state.dismiss)
+    const visible = useModalStore(store => store.confirmDelete)
+    const message = useModalStore(store => store.confirmDeleteMessage)
+    const onConfirm = useModalStore(store => store.confirmDeleteCallback)
 
     const handleConfirm = () => {
-        if(props.onConfirm) 
-        props.onConfirm().then(props.dismiss)
+        if(onConfirm) 
+        onConfirm().then(() => dismiss())
     }
 
     return (
         <Dialog 
             theme={{ roundness: 1 }}
-            visible={props.visible}
-            onDismiss={props.dismiss}
+            visible={visible}
+            onDismiss={dismiss}
             style={styles.container}
         >
             <Dialog.Title style={styles.title}>
@@ -28,11 +27,11 @@ const ConfirmDeleteModal = (props: Props) => {
             </Dialog.Title>
             <Dialog.Content>
                 <Text style={styles.text}>
-                    {props.message}
+                    {message}
                 </Text>
             </Dialog.Content>
             <Dialog.Actions>
-                <Button onPress={props.dismiss}>Dismiss</Button>
+                <Button onPress={dismiss}>Dismiss</Button>
                 <Button onPress={handleConfirm}>Delete</Button>
             </Dialog.Actions>
         </Dialog>

@@ -33,7 +33,7 @@ export type UseSearchUsersRes = SearchUsersRes & {
 }
 
 export const useSearchUsers = (input: string) => {
-    const { id } = useAuth()
+    const id = useAuth(store => store.id)
     return useQuery<UseSearchUsersRes[], Error>({
         queryFn: () => searchUsers(input, id),
         queryKey: [input]

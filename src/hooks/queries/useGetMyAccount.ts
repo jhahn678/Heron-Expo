@@ -11,7 +11,7 @@ export interface AccountRes {
 
 export const useGetMyAccount = () => {
     
-    const { getAccessToken } = useAuth()
+    const getAccessToken = useAuth(store => store.getAccessToken)
 
     const fetchAccount = async () => {
         const token = await getAccessToken() 

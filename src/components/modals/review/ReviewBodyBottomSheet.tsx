@@ -1,44 +1,50 @@
-import React, { useEffect, useRef, useState } from "react";
-import { StyleSheet, View } from "react-native";
+import React, { useRef, useState } from "react";
+import { Dimensions, StyleSheet, View } from "react-native";
 import BottomSheet from "@gorhom/bottom-sheet";
 import { useReviewModalStore } from "../../../store/mutations/useReviewModalStore";
 import { Button, ProgressBar, TextInput, Text } from "react-native-paper";
+import globalStyles from "../../../globalStyles";
+const { width } = Dimensions.get('screen')
 
-const ReviewBodyBottomSheet = () => {
+interface Props {
+    visible: boolean
+    onSubmit: () => void
+    onBack: () => void
+    onClose: () => void
+}
+
+const ReviewBodyBottomSheet = ({ visible, onSubmit, onClose, onBack }: Props) => {
 
     const ref = useRef<BottomSheet | null>(null)
     const [input, setInput] = useState('')
-    const visible = useReviewModalStore(store => store.bodyVisible)
-    const closeModal = useReviewModalStore(store => store.reset)
     const setBody = useReviewModalStore(store => store.setBody)
-    const setVisible = useReviewModalStore(store => store.setBodyVisible)
-    const setNextVisible = useReviewModalStore(store => store.setAddImagesVisible)
 
-    const handleOnClose = () => { if(visible) setVisible(false); setInput('') }
-
-    const handleNext = () => { 
-        if(ref.current) ref.current.close(); 
-        setBody(input); 
-        setInput('')
-        setNextVisible(true);
+    const handleBack = () => {
+        if(ref.current) ref.current.close();
+        onBack()
     }
 
-    useEffect(() => { if(ref.current) visible ? ref.current.expand(): ref.current.close() },[visible])
+    const handleSubmit = () => {
+        if(ref.current) ref.current.close();
+        setBody(input); onSubmit();
+    }
+
+    if(!visible) return null;
 
     return (
         <BottomSheet 
-            ref={ref}
-            index={visible ? 0 : -1} 
+            ref={ref} 
             snapPoints={[400]}
-            onClose={handleOnClose}
-            animateOnMount={false}
+            onClose={onClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}
         >
             <View style={styles.container}>
                 <ProgressBar progress={.6} style={styles.progress}/>
                 <View>
-                    <Text style={styles.title} variant={"titleSmall"}>Tell us a little about it</Text>
+                    <Text style={styles.title} variant={"titleSmall"}>
+                        Tell us a little about it
+                    </Text>
                     <TextInput 
                         value={input}
                         onChangeText={setInput}
@@ -54,13 +60,27 @@ const ReviewBodyBottomSheet = () => {
                         mode='outlined'
                     />
                 </View>
-                <Button 
-                    style={styles.button}
-                    onPress={handleNext}
-                    mode="contained" 
-                    disabled={input.length < 10}
-                    theme={{ roundness: 1 }}
-                >Next</Button>
+                <View style={globalStyles.frsb}>
+                    <Button 
+                        style={styles.button}
+                        onPress={handleBack}
+                        mode={"contained"} 
+                        icon={'arrow-left'}
+                        theme={{ roundness: 1 }}
+                    >Last</Button>
+                    <Button 
+                        style={styles.button}
+                        onPress={handleSubmit}
+                        mode={"contained"} 
+                        disabled={input.length < 10}
+                        icon={'arrow-right'}
+                        contentStyle={{ flexDirection: 'row-reverse' }}
+                        theme={{ 
+                            roundness: 1, 
+                            colors: { surfaceDisabled: '#d9d9d9'} 
+                        }}
+                    >Next</Button>
+                </View>
             </View>
             
         </BottomSheet>
@@ -83,6 +103,7 @@ const styles = StyleSheet.create({
     },
     button: {
         height: 40,
+        width: width / 2 - 50
     },
     title: {
         fontSize: 18,

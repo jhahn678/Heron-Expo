@@ -4,14 +4,11 @@ import { Button, Dialog } from "react-native-paper";
 import { useModalStore } from "../../store/modal/useModalStore";
 import { useUnfollowUser } from "../../hooks/mutations/useFollowUser";
 
-interface Props {
-    visible: boolean
-    dismiss: () => void
-}
-
-const ManageContactModal = ({ visible, dismiss }: Props) => {
+const ManageContactModal = () => {
 
     const [unfollow] = useUnfollowUser()
+    const dismiss = useModalStore(state => state.dismiss)
+    const visible = useModalStore(store => store.manageContact)
 
     const store = useModalStore(store => ({ 
         id: store.manageContactUser,
@@ -24,7 +21,7 @@ const ManageContactModal = ({ visible, dismiss }: Props) => {
         if(!store.id) return;
         await unfollow({ variables: { id: store.id }})
         if(store.onConfirm) store.onConfirm();
-        dismiss()
+        dismiss();
     }
 
     return (

@@ -8,7 +8,6 @@ import { LocationQuery } from "./Location"
 import { FollowType } from "./User"
 import { LatLng } from "react-native-maps"
 
-
 export type RootStackParams = {
     HomeAuthScreen: { showBack: boolean } | undefined
     LoginAuthScreen: undefined
@@ -16,6 +15,7 @@ export type RootStackParams = {
     RegisterAuthScreenTwo: undefined
     RegisterAuthScreenThree: undefined
     UsernameAuthScreen: undefined
+    UserDetailsAuthScreen: undefined
     SavePasswordScreen: undefined
     ForgotPasswordScreen: undefined
     ResetPasswordScreen: { token: string }
@@ -136,23 +136,10 @@ export type MyPlacesTabsScreenProps<T extends keyof MyPlacesTabsParams> =
         BottomTabsScreenProps<'MyPlacesScreen'>
     >
 
-export type MyProfileTabsParams = {
-    ProfileTab: undefined
-    FriendsTab: undefined
-}
-
-export type MyProfileTabsScreenProps<T extends keyof MyProfileTabsParams> = 
-    CompositeScreenProps<
-        MaterialTopTabScreenProps<MyProfileTabsParams, T>,
-        BottomTabsScreenProps<'MyProfileScreen'>
-    >
-
-
 type CompositeNavProp = NavProp<
     RootStackParams & 
     BottomTabsParams & 
     ExploreStackParams & 
-    MyProfileTabsParams & 
     MyCatchesTabsParams &
     MyPlacesTabsParams
 >

@@ -10,7 +10,7 @@ import DetailsInputs from "./sections/DetailsInputs";
 
 const EditProfileScreen = ({ navigation }: RootStackScreenProps<'EditProfileScreen'>) => {
 
-    const { avatar } = useAuth()
+    const avatar = useAuth(store => store.avatar)
     const { data } = useGetMyProfile()
     const [showDialog, setShowDialog] = useState(false)
     const onAvatarPress = () => setShowDialog(true)

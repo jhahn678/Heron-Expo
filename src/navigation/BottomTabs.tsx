@@ -5,16 +5,16 @@ import IonIcon from 'react-native-vector-icons/Ionicons'
 import MCIcon from 'react-native-vector-icons/MaterialCommunityIcons'
 import MyCatchesTabs from "./MyCatchesTabs";
 import FishIcon from "../components/icons/FishIcon";
-import MyProfileTabs from "./MyProfileTabs";
 import { useAuth } from "../store/auth/useAuth";
 import PromptAuthenticationScreen from "../screens/auth/PromptAuthenticationScreen";
 import MyPlacesTabs from "./MyPlacesTabs";
 import { theme } from "../config/theme";
+import MyProfileScreen from "../screens/profile/MyProfileScreen/MyProfileScreen";
 
 
 const BottomTabs = (): JSX.Element => {
 
-    const { isAuthenticated } = useAuth()
+    const isAuthenticated = useAuth(store => store.isAuthenticated)
 
     const Tabs = createBottomTabNavigator<BottomTabsParams>();
 
@@ -53,7 +53,7 @@ const BottomTabs = (): JSX.Element => {
             />
             <Tabs.Screen 
                 name="MyProfileScreen" 
-                component={isAuthenticated ? MyProfileTabs : PromptAuthenticationScreen} 
+                component={isAuthenticated ? MyProfileScreen : PromptAuthenticationScreen} 
                 options={{ 
                     tabBarLabel: 'Profile',
                     tabBarIcon: ({ color, size }) => (

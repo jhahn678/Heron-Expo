@@ -3,13 +3,10 @@ import { StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
 import { useModalStore } from "../../store/modal/useModalStore";
 
-interface Props {
-    visible: boolean
-    dismiss: () => void
-}
+const ErrorModal = () => {
 
-const ErrorModal = (props: Props) => {
-    
+    const dismiss = useModalStore(state => state.dismiss)
+    const visible = useModalStore(state => state.error)
     const { message, title } = useModalStore(state => ({
         message: state.errorMessage,
         title: state.errorTitle
@@ -18,8 +15,8 @@ const ErrorModal = (props: Props) => {
     return (
         <Dialog 
             theme={{ roundness: 1 }}
-            visible={props.visible}
-            onDismiss={props.dismiss}
+            visible={visible}
+            onDismiss={dismiss}
             style={styles.container}
         >
             <Dialog.Title style={styles.title}>
@@ -31,7 +28,7 @@ const ErrorModal = (props: Props) => {
                 </Text>
             </Dialog.Content>
             <Dialog.Actions>
-                <Button onPress={props.dismiss}>Dismiss</Button>
+                <Button onPress={dismiss}>Dismiss</Button>
             </Dialog.Actions>
         </Dialog>
     );

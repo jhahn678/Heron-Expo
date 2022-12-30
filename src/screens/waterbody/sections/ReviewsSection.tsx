@@ -17,18 +17,31 @@ type Review = GetWaterbodyReview & { waterbody: Pick<IWaterbody, 'id' | 'name'> 
 const { width } = Dimensions.get('screen')
 
 interface Props {
-  navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
-  totalReviews: number | undefined
+  /** Waterbody ID */
   waterbody: number
-  averageRating: number | null | undefined
+  /** Refetch of waterbody query from parent element */
+  onRefetch: () => void
+  /** Waterbody name */
   name: string | undefined
+  /** Total review count from main waterbody query */
+  totalReviews: number | undefined
+  /** Average rating from main waterbody query */
+  averageRating: number | null | undefined
+  navigation: ExploreStackScreenProps<'WaterbodyScreen'>['navigation']
 }
 
-const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, name }: Props) => {
+const ReviewsSection = ({ 
+  name, 
+  waterbody, 
+  navigation,
+  totalReviews, 
+  averageRating, 
+  onRefetch 
+}: Props) => {
 
-  const { isAuthenticated } = useAuth()
+  const isAuthenticated = useAuth(store => store.isAuthenticated)
 
-  const { data, refetch } = useGetWaterbodyReviews({ id: waterbody, limit: 3 });
+  const { data, refetch: refetchReviews } = useGetWaterbodyReviews({ id: waterbody, limit: 3 });
 
   const [ratingCounts, setRatingCounts] = useState({ five: 0, four: 0, three: 0, two: 0, one: 0 })
   const [reviews, setReviews]= useState<Review[]>([])
@@ -36,17 +49,27 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
   const navigateUser = (id: number) => () => navigation.navigate('UserProfileScreen', { id })
   const navigateEdit = (id: number) => () => navigation.navigate('EditReviewScreen', { id })
   
-  const showReviewModal = useReviewModalStore(store => store.showWaterbodyReview)
+  const startReview = useReviewModalStore(store => store.startWaterbodyReview)
   const showAuthModal = useModalStore(store => store.setAuth)
 
-  const handleShowReview = () => {
+  const handleReviewRefetch = () => { refetchReviews(); onRefetch() }
+
+  const handleStartReview = () => {
     if(data) isAuthenticated ? 
-      showReviewModal({ waterbody, name: data.waterbody.name}) : 
-      showAuthModal(true)
+      startReview({ 
+        waterbody, 
+        name: data.waterbody.name,
+        refetch: handleReviewRefetch 
+      })
+      : showAuthModal(true)
   }
 
-  const navigateReviews = () => navigation.navigate('ReviewsScreen', { 
-    title: name, total: totalReviews, id: waterbody, type: ReviewQuery.Waterbody
+  const navigateReviews = () => navigation
+  .navigate('ReviewsScreen', { 
+    title: name, 
+    total: totalReviews, 
+    id: waterbody, 
+    type: ReviewQuery.Waterbody
   })
 
   useEffect(() => {
@@ -108,14 +131,16 @@ const ReviewsSection = ({ navigation, waterbody, totalReviews, averageRating, na
       <Button 
         mode="contained"
         style={styles.leaveReview}
-        onPress={handleShowReview}
+        onPress={handleStartReview}
         theme={{ roundness: 2 }}
       >Leave a review</Button>
 
       <View style={styles.listSection}>
         { reviews.map(x => (
           <WaterbodyReview 
-            key={x.id} data={x} refetch={refetch}
+            data={x} 
+            key={x.id} 
+            refetch={refetchReviews}
             navigateToEdit={navigateEdit(x.id)}
             navigateToUser={navigateUser(x.user.id)}
           /> 
@@ -137,7 +162,7 @@ export default ReviewsSection;
 
 const styles = StyleSheet.create({
   container: {
-    paddingBottom: 40
+    paddingBottom: 16
   },
   header: {
     width,

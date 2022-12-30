@@ -24,7 +24,7 @@ const { width } = Dimensions.get('window')
 
 const LocationsBottomSheet = () => {
 
-  const { id } = useAuth()
+  const id = useAuth(store => store.id)
   const focused = useIsFocused()
   const navigation = useNavigation<RootStackScreenProps<'ViewMapScreen'>['navigation']>();
   const [data, setData] = useState<GetLocationRes['location'] | null>(null);

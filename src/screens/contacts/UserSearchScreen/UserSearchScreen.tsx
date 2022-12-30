@@ -24,18 +24,18 @@ const SearchUsersScreen = ({ navigation }: RootStackScreenProps<'UserSearchScree
                 <Text style={styles.text}>Search Users</Text>
                 <Searchbar 
                     value={input} 
+                    autoFocus={true}
+                    style={styles.search}
                     onChangeText={setInput} 
-                    autoFocus
-                    icon={({ color, size }) => (
+                    theme={{ roundness: 6 }}
+                    placeholder={'Search by username'}
+                    icon={(args) => (
                         <Icon 
-                            name="arrow-left" 
-                            size={size} 
-                            color={color} 
+                            {...args}
+                            name="arrow-left"  
                             onPress={navigation.goBack}
                         />
                     )}
-                    style={styles.search}
-                    theme={{ roundness: 6 }}
                 />
             </Surface>
             { data ? data.length > 0 ?

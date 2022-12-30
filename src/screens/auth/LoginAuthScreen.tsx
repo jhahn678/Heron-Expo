@@ -17,7 +17,7 @@ const LoginAuthScreen = ({ navigation }: RootStackScreenProps<'LoginAuthScreen'>
 
   const [identifier, setIdentifier] = useState('')
   const [password, setPassword] = useState('')
-  const [secureTextEntry, setSecureTextEntry] = useState(false)
+  const [secureTextEntry, setSecureTextEntry] = useState(true)
   const handleSecureText = () => setSecureTextEntry(x => !x)
   const setSnack = useModalStore(store => store.setSnack)
 

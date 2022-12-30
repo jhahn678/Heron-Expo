@@ -1,6 +1,7 @@
 import { StyleProp, ViewStyle, View, StyleSheet } from "react-native";
 import { Card, Text, Button } from "react-native-paper";
 import Icon from 'react-native-vector-icons/MaterialCommunityIcons'
+import { useAuth } from "../../store/auth/useAuth";
 import FisherWomanFishing from "../svg/FisherwomanFishing";
 
 interface Props {
@@ -12,11 +13,14 @@ interface Props {
 
 const PromptNearbyCatch = ({ 
     caption="It looks like no catches have been logged in your area yet..",
-    buttonLabel="Log a local catch",
+    buttonLabel="Log the first catch",
     ...props
 }: Props) => {
+
+    const authenticated = useAuth(store => store.isAuthenticated)
+
     return (
-        <Card style={[styles.card, props.containerStyle]}>
+        <Card style={[{ paddingBottom: authenticated ? 12 : 24 }, props.containerStyle]}>
             <Card.Content style={styles.content}>
                 <View style={styles.image}>
                     <FisherWomanFishing style={styles.graphic}/>
@@ -25,15 +29,17 @@ const PromptNearbyCatch = ({
                     {caption}
                 </Text>
             </Card.Content>
-            <Button 
-                style={styles.button}
-                onPress={props.onPress}
-                mode={"contained-tonal"}
-                contentStyle={{ flexDirection: 'row-reverse' }}
-                theme={{ roundness: 1 }}
-                icon={({ color, size }) => (
-                    <Icon name={"map-outline"} size={size} color={color}/>
-                )}>{buttonLabel}</Button>
+            { authenticated &&
+                <Button 
+                    style={styles.button}
+                    onPress={props.onPress}
+                    mode={"contained-tonal"}
+                    contentStyle={{ flexDirection: 'row-reverse' }}
+                    theme={{ roundness: 1 }}
+                    icon={({ color, size }) => (
+                        <Icon name={"map-outline"} size={size} color={color}/>
+                    )}>{buttonLabel}</Button>
+            }
         </Card>
     );
 };
@@ -41,9 +47,6 @@ const PromptNearbyCatch = ({
 export default PromptNearbyCatch;
 
 const styles = StyleSheet.create({
-    card: {
-        paddingBottom: 12
-    },
     content: {
         marginHorizontal: 12,
         alignItems: 'center',

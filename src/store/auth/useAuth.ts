@@ -10,16 +10,24 @@ export interface TokenResponse {
 
 export interface AuthResponse extends TokenResponse{
     id: number,
-    firstname: string,
-    username: string, 
-    avatar: string, 
+    bio: string | null
+    city: string | null
+    state: string | null
+    avatar: string | null, 
+    username: string,
+    lastname: string | null 
+    firstname: string | null,
 }
 
 export interface AuthStore {
     id: number | null
-    firstname: string | null
-    username: string | null
+    bio: string | null
+    city: string | null
+    state: string | null
     avatar: string | null
+    username: string | null
+    lastname: string | null
+    firstname: string | null
     isAuthenticated: boolean,
     setUser: (data: AuthResponse, isAuthenticated?: boolean) => Promise<void>,
     setDetails: (args: { firstname?: string, username?: string, avatar?: string }) => void,
@@ -68,9 +76,13 @@ export interface AuthStore {
 
 export const useAuth = create<AuthStore>((set) => ({
     id: null,
-    firstname: null,
-    username: null,
+    bio: null,
+    city: null,
+    state: null,
     avatar: null,
+    username: null,
+    lastname: null,
+    firstname: null,
     isAuthenticated: false,
     setUser: async (data: AuthResponse, isAuthenticated=true) => {
         const { accessToken, refreshToken, ...user } = data;
@@ -91,8 +103,12 @@ export const useAuth = create<AuthStore>((set) => ({
         }finally{
             set({
                 id: null,
+                bio: null,
+                city: null,
+                state: null,
                 avatar: null,
                 username: null,
+                lastname: null,
                 firstname: null,
                 isAuthenticated: false
             })
@@ -155,8 +171,12 @@ export const useAuth = create<AuthStore>((set) => ({
         }finally{
             set({
                 id: null,
+                bio: null,
+                city: null,
+                state: null,
                 avatar: null,
                 username: null,
+                lastname: null,
                 firstname: null,
                 isAuthenticated: false
             })

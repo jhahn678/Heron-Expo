@@ -2,26 +2,24 @@ import React from "react";
 import { Dimensions, StyleSheet, Text } from "react-native";
 import { Button, Dialog } from "react-native-paper";
 import { navigationRef } from '../../navigation/navigationRef'
+import { useModalStore } from "../../store/modal/useModalStore";
 const { width } = Dimensions.get('window')
 
+const AuthModal = () => {
 
-interface Props {
-    visible: boolean
-    dismiss: () => void
-}
-
-const AuthModal = (props: Props) => {
+    const dismiss = useModalStore(state => state.dismiss)
+    const visible = useModalStore(state => state.auth)
 
     const navigateAuth = () => {
-        props.dismiss()
-        navigationRef.navigate('HomeAuthScreen')
+        dismiss();
+        navigationRef.navigate('HomeAuthScreen');
     }
 
     return (
         <Dialog 
             theme={{ roundness: 1 }}
-            visible={props.visible}
-            onDismiss={props.dismiss}
+            visible={visible}
+            onDismiss={dismiss}
             style={styles.container}
         >
             <Dialog.Title style={styles.title}>
@@ -34,13 +32,11 @@ const AuthModal = (props: Props) => {
                 </Text>
             </Dialog.Content>
             <Dialog.Actions>
-                <Button onPress={props.dismiss}>Dismiss</Button>
+                <Button onPress={dismiss}>Dismiss</Button>
                 <Button 
                     onPress={navigateAuth}
-                    icon='arrow-right' 
-                    contentStyle={{ 
-                        flexDirection: 'row-reverse'
-                    }}
+                    icon={'arrow-right'}
+                    contentStyle={{ flexDirection: 'row-reverse' }}
                 >Sign in
                 </Button>
             </Dialog.Actions>
@@ -55,7 +51,8 @@ const styles = StyleSheet.create({
         width: width * .9,
         alignSelf: 'center',
         position: 'relative',
-        bottom: 72
+        bottom: 72,
+        backgroundColor: '#fff'
     },
     title: {
         fontSize: 22,

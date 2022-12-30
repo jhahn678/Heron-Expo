@@ -151,6 +151,15 @@ export const apolloClient = new ApolloClient({
                                 return existing;
                             }
                         }
+                    },
+                    reviews: {
+                        keyArgs: [
+                            'id',
+                            'sort'
+                        ],
+                        merge: (existing=[], incoming) => ([
+                            ...existing, ...incoming
+                        ])
                     }
                 }
             },
@@ -181,14 +190,22 @@ export const apolloClient = new ApolloClient({
                     },
                     following: {
                         keyArgs: false,
-                        merge: (existing=[], incoming) => ([
-                            ...existing, ...incoming
+                        merge: (
+                            existing: { id: number }[]=[], 
+                            incoming: { id: number }[]=[]
+                        ) => ([
+                            ...existing,
+                            ...incoming.filter(x => !existing.some(y => y.id === x.id))
                         ])
                     },
                     followers: {
                         keyArgs: false,
-                        merge: (existing=[], incoming) => ([
-                            ...existing, ...incoming
+                        merge: (
+                            existing: { id: number }[]=[], 
+                            incoming: { id: number }[]=[]
+                        ) => ([
+                            ...existing,
+                            ...incoming.filter(x => !existing.some(y => y.id === x.id))
                         ])
                     }
                 }

@@ -1,34 +1,31 @@
 import create from 'zustand'
 
+
+interface StartReviewArgs {
+    name: string
+    waterbody: number
+    refetch: () => void
+}
+
 interface  ReviewModalStore {
+    /** Is review flow active */
+    active: boolean
     /** Name of waterbody */
     name: string | null
     /** ID of waterbody */
     waterbody: number | null
+    /** Refetch on completed */
+    refetch: (() => void) | null
     /** Initiates review bottomsheet UI  */
-    showWaterbodyReview: (args: { waterbody: number, name: string }) => void
-    /** Is first sheet visible */
-    ratingVisible: boolean
-    /** Set first sheet visible */
-    setRatingVisible: (value: boolean) => void
+    startWaterbodyReview: (args: StartReviewArgs) => void
     /** Rating value from user */
     rating: number | null
     /** Set value of rating */
     setRating: (value?: number | null) => void
-    /** Is second sheet visible */
-    bodyVisible: boolean
-    /** Set second sheet visible */
-    setBodyVisible: (value: boolean) => void
     /** Body text value */
     body: string | null
     /** Set text value */
     setBody: (value?: string) => void
-    /** Is third sheet visible */
-    addImagesVisible: boolean
-    /** Set third sheet visible */
-    setAddImagesVisible: (value: boolean) => void
-    conditionsVisible: boolean
-    setConditionsVisible: (value: boolean) => void
     conditions: string | null
     setConditions: (value: string | null) => void
     /** Get current input values */
@@ -39,29 +36,21 @@ interface  ReviewModalStore {
 export const useReviewModalStore = create<ReviewModalStore>((set, get) => ({
     name: null,
     waterbody: null,
-    showWaterbodyReview: ({ waterbody, name }) => set({ 
+    active: false,
+    refetch: null,
+    startWaterbodyReview:  ({ waterbody, name, refetch }) => set({ 
         name, 
-        waterbody, 
+        waterbody,
+        refetch,
+        active: true,
         rating: null,
-        ratingVisible: true,
         body: null,
-        bodyVisible: false,
-        addImagesVisible: false,
-        conditionsVisible: false,
         conditions: null,
     }),
     rating: null,
     setRating: rating => set({ rating: rating ? rating : null }),
-    ratingVisible: false,
-    setRatingVisible: ratingVisible => set({ ratingVisible }),
-    bodyVisible: false,
-    setBodyVisible: bodyVisible => set({ bodyVisible }),
     body: null,
     setBody: value => set({ body: value ? value : null }),
-    addImagesVisible: false,
-    setAddImagesVisible: addImagesVisible => set({ addImagesVisible }),
-    conditionsVisible: false,
-    setConditionsVisible: conditionsVisible => set({ conditionsVisible }),
     conditions: null,
     setConditions: conditions => set({ conditions }),
     getValues: () => {
@@ -70,14 +59,12 @@ export const useReviewModalStore = create<ReviewModalStore>((set, get) => ({
         return { waterbody, rating, text: body }
     },
     reset: () => set({
+        active: false,
         waterbody: null,
+        refetch: null,
         name: null,
         rating: null,
-        ratingVisible: false,
-        bodyVisible: false,
         body: null,
-        addImagesVisible: false,
-        conditionsVisible: false,
         conditions: null,
     }),
 }))

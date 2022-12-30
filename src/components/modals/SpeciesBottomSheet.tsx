@@ -1,20 +1,20 @@
+import Backdrop from './Backdrop'
+import IceFishing from '../svg/IceFishing';
 import React, { useEffect, useRef } from 'react'
 import { StyleSheet, View } from "react-native";
+import { Title, Text } from 'react-native-paper';
 import BottomSheet, { BottomSheetScrollView } from "@gorhom/bottom-sheet";
-import Backdrop from './Backdrop'
+import SpeciesBottomSheetLoader from '../loaders/SpeciesBottomSheetLoader';
 import { useBottomSheetStore } from '../../store/modal/useBottomSheetStore';
 import { useLazyGetWaterbodySpecies } from '../../hooks/queries/useGetWaterbodySpecies';
-import { Title, Text } from 'react-native-paper';
-import IceFishing from '../svg/IceFishing';
-import SpeciesBottomSheetLoader from '../loaders/SpeciesBottomSheetLoader';
 
 
 const SpeciesBottomSheet = () => {
 
     const ref = useRef<BottomSheet | null>(null)
     const setSpeciesRef = useBottomSheetStore(state => state.setSpeciesRef)
-    const isSpeciesOpen = useBottomSheetStore(state => state.isSpeciesOpen)
-    const closeSpecies = useBottomSheetStore(state => state.closeSpecies)
+    const visible = useBottomSheetStore(state => state.isSpeciesOpen)
+    const handleClose = useBottomSheetStore(state => state.closeSpecies)
     const waterbody = useBottomSheetStore(state => state.waterbody)
     const [fetchSpecies, { data }] = useLazyGetWaterbodySpecies()
 
@@ -26,15 +26,18 @@ const SpeciesBottomSheet = () => {
         setSpeciesRef(ref)
     },[ref])
 
+    if(!visible) return null;
+
     return (
         <BottomSheet 
-            style={{ paddingHorizontal: 16 }}
-            snapPoints={['40%']} index={-1} 
-            ref={ref} onClose={closeSpecies}
+            ref={ref} 
+            snapPoints={[400]}
+            onClose={handleClose}
             enablePanDownToClose={true}
             containerStyle={{ zIndex: 100 }}
-            backdropComponent={isSpeciesOpen ? (
-                () => <Backdrop onPress={closeSpecies}/>
+            style={{ paddingHorizontal: 16 }}
+            backdropComponent={visible ? (
+                () => <Backdrop onPress={handleClose}/>
             ) : null}
         >
         { 
@@ -42,7 +45,7 @@ const SpeciesBottomSheet = () => {
             <>
                 <Title style={styles.subtitle}>{data?.waterbody.all_species.length} species reported at</Title>
                 <Title style={styles.title}>{data?.waterbody.name}</Title>
-                <BottomSheetScrollView contentContainerStyle={{ paddingTop: 16, paddingBottom: 16}}>
+                <BottomSheetScrollView contentContainerStyle={{ paddingTop: 16, paddingBottom: 24 }}>
                 { data.waterbody.all_species.length > 0 ?  
                         data.waterbody.all_species.map(x => (
                             <View style={styles.row} key={`${x.species}${x.count}`}>

@@ -13,6 +13,7 @@ export interface BottomSheetStore {
     setWaterbodyUpload: (waterbody?: number | false) => void
     mediaGridUpload: boolean
     setMediaGridUpload: (waterbody?: number | false) => void
+    reset: () => void
 }
 
 export const useBottomSheetStore = create<BottomSheetStore>((set, get) => ({
@@ -40,4 +41,11 @@ export const useBottomSheetStore = create<BottomSheetStore>((set, get) => ({
         mediaGridUpload: Boolean(waterbody),
         waterbody: waterbody || null
     }),
+    reset: () => set({
+        waterbody: null,
+        speciesRef: null,
+        isSpeciesOpen: false,
+        waterbodyUpload: false,
+        mediaGridUpload: false,
+    })
 }))

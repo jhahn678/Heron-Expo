@@ -40,9 +40,13 @@ export enum FollowType {
 
 export interface SocialLoginRes {
     id: number,
-    avatar: string, 
     username: string, 
-    firstname: string,
+    bio: string | null
+    city: string | null
+    state: string | null
+    avatar: string | null
+    lastname: string | null
+    firstname: string | null
     accessToken: string,
     refreshToken: string,
     account_created: boolean

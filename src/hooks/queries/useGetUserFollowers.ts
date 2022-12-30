@@ -35,10 +35,8 @@ export interface GetUserFollowers {
 }
 
 export const useGetUserFollowers = ({ id, limit=20, skip=false }: { id: number, limit?: number, skip?: boolean }) => {
-    const notAuthenticated = useAuth(store => !store.isAuthenticated) 
     return useQuery<GetUserFollowers, UserFollowsVars>(GET_USER_FOLLOWERS, {
-        variables: { id, limit }, 
-        skip: notAuthenticated ? true : skip ? true : false
+        skip, variables: { id, limit } 
     })
 }
 

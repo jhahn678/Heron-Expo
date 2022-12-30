@@ -20,7 +20,7 @@ interface Vars {
 }
 
 export const useChangeAvatar = () => {
-    const { setDetails } = useAuth()
+    const setDetails = useAuth(store => store.setDetails)
     return useMutation<UseChangeAvatarRes, Vars>(CHANGE_AVATAR, {
         refetchQueries: [{ query: GET_MY_PROFILE }],
         onCompleted: ({ updateUserAvatar }) => setDetails({ 

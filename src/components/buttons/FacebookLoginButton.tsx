@@ -31,11 +31,16 @@ const FacebookLoginButton = ({ navigation, style }: Props) => {
     if (response?.type === 'success') {
       if(!response.authentication?.accessToken) return;
       const { accessToken } = response.authentication;
-      (async() => {
-        const res = await signInUser({ accessToken })
-        if(res) setUser(res, !res.account_created)
-        if(res && res.account_created) navigation.navigate('UsernameAuthScreen')
-      })()
+      signInUser({ accessToken })
+        .then((res) => {
+          if(!res) return;
+          if(res.account_created || res.username.startsWith('u-')){
+            setUser(res, false);
+            navigation.navigate('UsernameAuthScreen');
+          }else{
+            setUser(res, true)
+          }
+        })
     }
   }, [response]);
 
