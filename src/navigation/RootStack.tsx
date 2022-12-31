@@ -56,11 +56,11 @@ const RootStack = (): JSX.Element => {
                         <Stack.Screen name="LoginAuthScreen" component={LoginAuthScreen}
                             options={{ headerShown: true, headerTitle: 'Sign In'}}/>
                         <Stack.Screen name="RegisterAuthScreenOne" component={RegisterAuthScreenOne} 
-                            options={{ headerShown: true, headerTitle: 'Step 1 of 3' }}/>
+                            options={{ headerShown: true, headerTitle: 'Enter your name' }}/>
                         <Stack.Screen name="RegisterAuthScreenTwo" component={RegisterAuthScreenTwo}
-                            options={{ headerShown: true, headerTitle: 'Step 2 of 3' }}/>
+                            options={{ headerShown: true, headerTitle: 'Create your account' }}/>
                         <Stack.Screen name="RegisterAuthScreenThree" component={RegisterAuthScreenThree}
-                            options={{ headerShown: true, headerTitle: 'Step 3 of 3' }}/>
+                            options={{ headerShown: true, headerTitle: 'Complete your profile' }}/>
                         <Stack.Screen name='UsernameAuthScreen' component={UsernameAuthScreen} 
                             options={{ headerShown: true, headerBackVisible: false, headerTitle: 'Choose a username' }}/>
                         <Stack.Screen name='UserDetailsAuthScreen' component={UserDetailsAuthScreen} 
@@ -83,7 +83,6 @@ const RootStack = (): JSX.Element => {
                 <Stack.Screen name='ViewImageScreen' component={ViewImageScreen}/>
                 <Stack.Screen name='CatchListScreen' component={CatchListScreen}/>
                 <Stack.Screen name='LocationListScreen' component={LocationListScreen}/>
-                <Stack.Screen name='EditProfileScreen' component={EditProfileScreen}/>
                 <Stack.Screen name='SettingsScreen' component={SettingsScreen}/>
                 <Stack.Screen name='ContactsListScreen' component={ContactsListScreen}/>
                 <Stack.Screen name="EditCatchScreen" component={EditCatchScreen}/>
@@ -105,6 +104,8 @@ const RootStack = (): JSX.Element => {
                         options={{ headerTitle: 'Change Password' }}/>
                     <Stack.Screen name="ChangeEmailScreen" component={ChangeEmailScreen}
                         options={{ headerTitle: "Account Email" }}/>
+                    <Stack.Screen name='EditProfileScreen' component={EditProfileScreen}
+                        options={{ headerTitle: 'Edit Profile' }}/>
                 </Stack.Group>
             </Stack.Navigator>
         </NavigationContainer>

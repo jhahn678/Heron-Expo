@@ -40,7 +40,7 @@ const WaterbodyInput = ({ selectedWaterbody, setWaterbody, title="Add a Fishery"
     const handleShowNearest = (value: boolean) => () => setShowNearestWaterbodies(value)
 
     const { data: initialResults } = useGetNearestWaterbodies()
-    const { data: results } = useAutoCompleteWaterbodies(input)
+    const { data: results } = useAutoCompleteWaterbodies({ input, limit: 4 })
 
     return (
         <KeyboardAvoidingView style={styles.container}>

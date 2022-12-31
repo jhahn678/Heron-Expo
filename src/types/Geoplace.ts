@@ -1,7 +1,4 @@
 import { Point } from 'geojson'
-import { AdminOneName } from './AdminOne'
-
-
 export interface IGeoplace {
     id: number
     oid: string
@@ -10,14 +7,22 @@ export interface IGeoplace {
     fcode: string
     country: string
     ccode: string
-    admin_one: AdminOneName | null
+    admin_one: string
     admin_two: string | null
     weight: number
     geom: Point
 }
 
-
 export interface AutocompleteGeoplace extends IGeoplace {
     type: 'GEOPLACE'
     rank: number
+}
+
+export enum Fclass {
+    /** Places, cities, villages, etc. */
+    P = 'P',
+    /** Land, parks, areas, etc. */
+    L = 'L',
+    /** Administrative, country, state, county, etc. */
+    A = 'A'
 }

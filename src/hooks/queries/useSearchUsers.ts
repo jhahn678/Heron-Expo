@@ -36,6 +36,6 @@ export const useSearchUsers = (input: string) => {
     const id = useAuth(store => store.id)
     return useQuery<UseSearchUsersRes[], Error>({
         queryFn: () => searchUsers(input, id),
-        queryKey: [input]
+        queryKey: ['users', input]
     })
 }

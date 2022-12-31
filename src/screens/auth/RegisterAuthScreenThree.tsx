@@ -1,8 +1,8 @@
-import { Dimensions, StyleSheet, View } from 'react-native'
 import { useState } from 'react'
+import { Dimensions, StyleSheet, View } from 'react-native'
 import { RootStackScreenProps } from '../../types/navigation'
 import { useRegistrationStore } from '../../store/auth/useRegistrationStore'
-import { TextInput, Button, Card, Text } from 'react-native-paper'
+import { TextInput, Button, Card } from 'react-native-paper'
 import { useAuth } from '../../store/auth/useAuth'
 import EditProfilePictureDialog from '../../components/modals/EditProfilePictureDialog'
 import AvatarSection from '../profile/EditProfileScreen/sections/AvatarSection'
@@ -11,8 +11,9 @@ import { theme } from '../../config/theme'
 import { useImageStore } from '../../store/image/useImageStore'
 import { useUploadImages } from '../../hooks/mutations/useUploadImages'
 import { useChangeAvatar } from '../../hooks/mutations/useChangeAvatar'
-import LoadingBackdrop from '../../components/loaders/LoadingBackdrop'
 import { useModalStore } from '../../store/modal/useModalStore'
+import AutocompleteLocationInput from '../../components/inputs/AutocompleteLocationInput'
+import { AutocompleteGeoplace } from '../../types/Geoplace'
 const { height, width } = Dimensions.get('window')
 
 const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterAuthScreenThree'>) => {
@@ -31,13 +32,30 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
     password: store.password
   }))
 
+  const [place, setPlace] = useState<AutocompleteGeoplace | null>(null)
+
+  const handleSetPlace = (data: AutocompleteGeoplace) => {
+    setPlace(data); 
+    if(data.fcode === 'ADM1') {
+      setCity(undefined); setState(data.admin_one)
+    }else{
+      setCity(data.name); setState(data.admin_one)
+    }
+  }
+
+  const handleClearPlace = () => { 
+    setPlace(null); 
+    setCity(undefined); 
+    setState(undefined);
+  }
+
   const reset = useRegistrationStore(store => store.reset)
   const setUser = useAuth(state => state.setUser);
   const { uploadToS3 } = useUploadImages()
   const [addAvatar] = useChangeAvatar()
   const image = useImageStore(store => store.images[0])
   const clearImages = useImageStore(store => store.clearImages)
-  const [loading, setLoading] = useState(false)
+  const setLoading = useModalStore(store => store.setLoading)
   const { createAccount } = useCreateAccount();
   const setSnack = useModalStore(store => store.setSnack)
 
@@ -63,32 +81,17 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
     <View style={styles.container}>
       <Card style={styles.card}>
         <Card.Content>
-          <Text variant={"titleMedium"} style={styles.title}>
-            Complete your profile
-          </Text>
           <AvatarSection 
             avatar={undefined}
             onAvatarPress={onAvatarPress}
             fullName={`${store.firstname} ${store.lastname}`} 
           />
           <View style={styles.row}>
-            <TextInput
-              value={city} 
-              mode={"flat"}
-              label={'City'}
-              autoFocus={true} 
-              placeholder={'City'}
-              onChangeText={setCity} 
-              style={[styles.input, { flex: 1, marginRight: 4 }]}
-            />
-            <TextInput 
-              value={state} 
-              label={'State'}
-              mode={"flat"}
-              placeholder={'State'}
-              onChangeText={setState} 
-              style={[styles.input, { flex: 1, marginLeft: 4 }]}
-            />
+            <AutocompleteLocationInput 
+              selectedPlace={place}
+              onSelect={handleSetPlace} 
+              onClearSelected={handleClearPlace}
+              containerStyle={[styles.input, { flex: 1 }]}/>
           </View>
           <TextInput 
             value={bio} 
@@ -112,7 +115,6 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'RegisterA
         visible={showDialog} 
         setVisible={setShowDialog}
       />
-      {loading && <LoadingBackdrop loaderStyle={styles.loader}/>}
     </View>
   )
 }
@@ -127,10 +129,6 @@ const styles = StyleSheet.create({
   card: {
     borderColor: theme.colors.primaryContainer,
     borderWidth: 1
-  },
-  title: {
-    marginBottom: 16,
-    marginTop: 4
   },
   input: {
     marginBottom: 12,
@@ -155,8 +153,4 @@ const styles = StyleSheet.create({
   rowItem: {
     flex: 1
   },
-  loader: {
-    position: 'absolute',
-    top: 150
-  }
 })

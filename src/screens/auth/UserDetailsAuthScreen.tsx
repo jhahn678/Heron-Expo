@@ -11,11 +11,12 @@ import { useUploadImages } from '../../hooks/mutations/useUploadImages'
 import { useChangeAvatar } from '../../hooks/mutations/useChangeAvatar'
 import { useModalStore } from '../../store/modal/useModalStore'
 import { useEditProfile, EditProfileVars } from '../../hooks/mutations/useEditProfile'
+import AutocompleteLocationInput from '../../components/inputs/AutocompleteLocationInput'
+import { AutocompleteGeoplace } from '../../types/Geoplace'
 const { height, width } = Dimensions.get('window')
 
-type DetailsUpdate =  { [K in keyof EditProfileVars['details']]: string }
-
-interface DetailsState {
+export type DetailsUpdate =  { [K in keyof EditProfileVars['details']]: string }
+export interface DetailsState {
     bio: string
     city: string
     state: string
@@ -23,7 +24,7 @@ interface DetailsState {
     firstname: string
 }
 
-const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'UserDetailsAuthScreen'>) => {
+const UserDetailsAuthScreen = ({ navigation }: RootStackScreenProps<'UserDetailsAuthScreen'>) => {
 
     const auth = useAuth()
     const onAvatarPress = () => setShowDialog(true)
@@ -38,6 +39,18 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'UserDetai
     })
 
     const handleSetDetails = (update: DetailsUpdate) => setDetails(state => ({ ...state, ...update }))
+
+    const [place, setPlace] = useState<AutocompleteGeoplace | null>(null)
+
+    const handleSetPlace = (data: AutocompleteGeoplace) => {
+      setPlace(data); 
+      if(data.fcode === 'ADM1') {
+        handleSetDetails({ state: data.admin_one })
+      }else{
+        handleSetDetails({ city: data.name, state: data.admin_one })
+      }
+    }
+    const handleClearPlace = () => { setPlace(null); handleSetDetails({ city: '', state: '' }) }
 
     const [addAvatar] = useChangeAvatar()
     const [editProfile] = useEditProfile()
@@ -95,23 +108,11 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'UserDetai
             />
           </View>
           <View style={styles.row}>
-            <TextInput
-              mode={"flat"}
-              label={'City'}
-              autoFocus={true} 
-              placeholder={'City'}
-              value={details.city} 
-              onChangeText={city => handleSetDetails({ city })} 
-              style={[styles.input, { flex: 1, marginRight: 4 }]}
-            />
-            <TextInput 
-              mode={"flat"}
-              label={'State'}
-              placeholder={'State'}
-              value={details.state} 
-              style={[styles.input, { flex: 1, marginLeft: 4 }]}
-              onChangeText={state => handleSetDetails({ state })} 
-            />
+            <AutocompleteLocationInput 
+              selectedPlace={place}
+              onSelect={handleSetPlace} 
+              onClearSelected={handleClearPlace}
+              containerStyle={[styles.input, { flex: 1}]}/>
           </View>
           <TextInput 
             mode={"flat"}
@@ -139,7 +140,7 @@ const RegisterAuthScreenThree = ({ navigation }: RootStackScreenProps<'UserDetai
   )
 }
 
-export default RegisterAuthScreenThree
+export default UserDetailsAuthScreen
 
 const styles = StyleSheet.create({
   container: {
@@ -149,10 +150,6 @@ const styles = StyleSheet.create({
   card: {
     borderColor: theme.colors.primaryContainer,
     borderWidth: 1
-  },
-  title: {
-    marginBottom: 16,
-    marginTop: 4
   },
   input: {
     marginBottom: 12,

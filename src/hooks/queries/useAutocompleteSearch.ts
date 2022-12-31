@@ -1,5 +1,5 @@
 import { axios } from "../../config/axios"
-import { AutocompleteGeoplace } from "../../types/Geoplace"
+import { AutocompleteGeoplace, Fclass } from "../../types/Geoplace"
 import { AutocompleteWaterbody } from "../../types/Waterbody"
 import { useQueries, useQuery, UseQueryResult } from '@tanstack/react-query'
 import { useEffect, useState } from "react"
@@ -8,7 +8,7 @@ import { useLocationStore } from "../../store/location/useLocationStore"
 
 export type AutocompleteResult = AutocompleteGeoplace | AutocompleteWaterbody
 
-interface UseAutocompleteArgs {
+export interface UseAutocompleteArgs {
     input: string
     longitude: number | null
     latitude: number | null
@@ -24,7 +24,7 @@ export interface AutocompleteQuery {
 
 
 export const autocompleteWaterbodies = async ({
-    value, longitude, latitude, limit 
+    value, longitude, latitude, limit
 }: AutocompleteQuery): Promise<AutocompleteWaterbody[]> => {
     let endpoint = `/autocomplete/waterbodies?value=${value}`
     if(longitude && latitude) endpoint += `&lnglat=${longitude},${latitude}`
@@ -33,20 +33,19 @@ export const autocompleteWaterbodies = async ({
     return res.data;
 }
 
-const autocompleteGeoplaces = async ({
-    value, longitude, latitude, limit
-}: AutocompleteQuery ): Promise<AutocompleteGeoplace[]> => {
+export const autocompleteGeoplaces = async ({
+    value, longitude, latitude, limit, fclass
+}: AutocompleteQuery & { fclass?: Fclass[] }): Promise<AutocompleteGeoplace[]> => {
     let endpoint = `/autocomplete/geoplaces?value=${value}`
     if(longitude && latitude) endpoint += `&lnglat=${longitude},${latitude}`
+    if(fclass && fclass.length > 0) endpoint += `&fclass=${fclass.join(',')}`
     if(limit) endpoint += `&limit=${limit}}`
     const res = await axios.get(endpoint)
     return res.data;
 }
 
 
-export const useAutoCompleteSearch = ({
-    input, longitude, latitude 
-}: UseAutocompleteArgs) => {
+export const useAutoCompleteSearch = ({ input, longitude, latitude }: UseAutocompleteArgs) => {
 
     const value = useThrottleInputValue({ input })
     const [enabled, setEnabled] = useState(false)
@@ -130,7 +129,7 @@ export const useAutoCompleteSearch = ({
     }
 }
 
-export const useAutoCompleteWaterbodies = (input: string) => {
+export const useAutoCompleteWaterbodies = ({ input, limit=4 } : { input: string, limit?: number }) => {
 
     const { longitude, latitude } = useLocationStore(store => ({
         latitude: store.latitude,
@@ -139,16 +138,35 @@ export const useAutoCompleteWaterbodies = (input: string) => {
 
     const value = useThrottleInputValue({ input })
 
-    useEffect(() => setEnabled(input.length > 0),[input])
-
-    const [enabled, setEnabled] = useState(false)
-
     return useQuery({
         queryKey: ['waterbodies', value, longitude, latitude ],
         queryFn: () => autocompleteWaterbodies({ 
-            value, longitude, latitude, limit: 4 
+            value, longitude, latitude, limit
         }),
-        enabled
+        enabled: input.length > 0
     })
+}
 
+
+
+interface GeoplaceAutocompleteArgs { 
+    input: string, 
+    limit?: number, 
+    fclass?: Fclass[]
+}
+
+export const useAutoCompleteGeoplaces = ({ input, limit=4, fclass=[] }: GeoplaceAutocompleteArgs) => {
+
+    const { longitude, latitude } = useLocationStore(store => ({
+        latitude: store.latitude,
+        longitude: store.longitude
+    }))
+
+    const value = useThrottleInputValue({ input })
+
+    return useQuery({
+        enabled: input.length > 0,
+        queryKey: ['geoplaces', value, longitude, latitude, fclass.join(',')],
+        queryFn: () => autocompleteGeoplaces({ value, longitude, latitude, limit, fclass })
+    })
 }

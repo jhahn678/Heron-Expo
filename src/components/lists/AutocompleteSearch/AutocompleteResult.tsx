@@ -38,7 +38,7 @@ const AutocompleteResult = ({ data, navigation }: Props) => {
       <Card.Content style={styles.content}>
       { 
         data.type === 'GEOPLACE' ? 
-        data.fcode === 'PRK' ?
+        data.fclass === 'L' ?
           <MCIcon name='park' size={32}/> :
           <IonIcon name='flag-outline' size={32}/> :
           <FAIcon name='water' size={32}/>
