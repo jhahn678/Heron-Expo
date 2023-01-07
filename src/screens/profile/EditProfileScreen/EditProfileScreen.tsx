@@ -80,7 +80,7 @@ const EditProfileScreen = ({ navigation }: RootStackScreenProps<'EditProfileScre
         setSnack('Profile saved');
         navigation.goBack();
     }
-    console.log(details)
+
     return (
         <View style={styles.container}>
             <Card style={styles.card}>

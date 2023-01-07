@@ -10,6 +10,7 @@ import { useChangeAvatar } from "../../../../hooks/mutations/useChangeAvatar";
 import { useUploadImages } from "../../../../hooks/mutations/useUploadImages";
 import { ErrorType } from "../../../../utils/conversions/mapErrorTypeToDetails";
 import { GetMyProfileTotalsRes } from '../../../../hooks/queries/useGetMyProfile'
+import { useIsFocused } from "@react-navigation/native";
 const { width } = Dimensions.get("screen");
 
 interface Props {
@@ -20,6 +21,7 @@ interface Props {
 
 const AvatarSection = ({ data, loading, onPressAvatar }: Props) => {
 
+    const isFocused = useIsFocused()
     const setSnack = useModalStore(store => store.setSnack)
     const setError = useModalStore(store => store.setError)
     const [changeUserAvatar] = useChangeAvatar();
@@ -38,7 +40,7 @@ const AvatarSection = ({ data, loading, onPressAvatar }: Props) => {
     }
 
     useEffect(() => {
-        if(image) handleChangeAvatar(image)
+        if(image && isFocused) handleChangeAvatar(image)
     },[image])
 
     return (
